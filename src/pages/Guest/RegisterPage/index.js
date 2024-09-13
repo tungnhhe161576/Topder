@@ -6,7 +6,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { CloseOutlined, GoogleOutlined } from "@ant-design/icons";
 const RegisterPage = () => {
   const [form] = Form.useForm();
-  const [loading, setLoading] = useState(false);
   const nav = useNavigate();
 
   return (
