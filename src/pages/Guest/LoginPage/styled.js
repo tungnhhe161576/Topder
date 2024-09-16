@@ -82,19 +82,26 @@ export const LoginContainer = styled.div`
   .forgot-password {
     color: blue;
     cursor: pointer;
-    align-self: end;
-    /* margin-left: 20px; */
-    margin-top: -8px;
+    margin-left: 150px;
   }
 
   .submit {
     background-color: #ff7c08 !important;
     margin-top: 30px;
     font-weight: 600;
-    width: 150px;
     height: 40px;
     justify-items: center;
     width: 90%;
+    align-self: center;
+  }
+
+  .submit-register {
+    background-color: #ff7c08 !important;
+    margin: 30px auto;
+    font-weight: 600;
+    height: 40px;
+    width: 90%;
+    justify-items: center;
     align-self: center;
   }
 

@@ -6,8 +6,14 @@ export const getRegexEmail = () => {
 }
 
 export const getRegexPassowrd = () => {
-  const re = /^[A-Z][a-zA-Z0-9]{5,}$/
+  const re = /^(?=.*[A-Z])(?=.*[a-z])(?!(.*\d.*\d))[A-Za-z\d]{6}$/
   return re
+}
+
+export const getRegexPhoneNumber = () => {
+  const phoneRegex = /^(0|\+?\d{1,3})\d{9,10}$/;
+  
+  return phoneRegex;
 }
 
 export function getRegexNumber() {
