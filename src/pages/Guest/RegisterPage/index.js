@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Col, Form, Input, Row } from "antd";
 import LeftSide from "../../../components/LeftSideLogin";
 import { LoginContainer } from "../LoginPage/styled";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { CloseOutlined } from "@ant-design/icons";
 
 
@@ -10,6 +10,10 @@ const RegisterPage = () => {
     const [form] = Form.useForm();
     const [loaing, setLoading] = useState(false)
     const nav = useNavigate();
+    const location = useLocation();
+
+    console.log("location", location);
+    
 
     return (
         <LoginContainer>
@@ -19,7 +23,7 @@ const RegisterPage = () => {
                 <Col span={12} className="right-side">
                     <div className="d-flex-end mt-60 mr-40">
                         <Button type="primary" shape="round" style={{ width: "120px", backgroundColor: "#ff7c08" }} onClick={() => {nav("/login")}}>
-                            <span className="fs-18 fw-600">Đăng ký</span>
+                            <span className="fs-18 fw-600">Đăng nhập</span>
                         </Button>
 
                         <Link to="/">

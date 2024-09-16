@@ -61,12 +61,16 @@ export const CommonLayoutContainer = styled.div`
     }
 
     .nav {
-        width: 90%;
-        height: 90px;
+        width: 100%;
+        /* height: 90px;
         margin: auto;
         display: flex;
-        justify-content: space-between;
-        
+        justify-content: space-between; */
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: linear-gradient(to right, #fff6ee 0%, white 50%, #fff6ee 100%);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
         .logo-topder img{
             width: 100%px;
@@ -120,14 +124,26 @@ export const CommonLayoutContainer = styled.div`
     .image-container img {
         height: 100%;
         width: 100%;
-        opacity: 0.7;
+        opacity: 0.8;
+        z-index: 1;
+    }
+
+    .image-container .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
         z-index: 1;
     }
 
     .text-image-container {
+        z-index: 2;
         position: absolute;
         top: 50%;
-        left: 10%;
+        padding-left: 30%;
+        /* left: 10%; */
         transform: translate(-50%, -50%);
         color: black; 
         font-size: 50px; 

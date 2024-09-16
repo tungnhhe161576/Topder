@@ -5,6 +5,6 @@ export const getBreadcrumbItems = (routes, location) => {
 
     return matchedRoutes.map(route => ({
         path: route.pathname,
-        breadcrumbName: route.route.breadcrumbName || '',
+        title: route.route.title || '',
     }));
 };

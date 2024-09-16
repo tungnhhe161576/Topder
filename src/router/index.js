@@ -15,22 +15,22 @@ const router = createBrowserRouter([
         path: '/',
         element: <App/>,
         errorElement: <ErrorPage />,
-        breadcrumbName: '',
+        title: '',
         children: [
             {
                 path: '',
                 element: <HomePage/> ,
-                breadcrumbName: '',
+                title: '',
             },
             {
                 path: 'login',
                 element: <LoginPage/>,
-                breadcrumbName: 'Đăng Nhập',
+                title: 'Đăng Nhập',
             },
             {
                 path: 'register',
                 element: <RegisterPage/>,
-                breadcrumbName: 'Đăng Ký',
+                title: 'Đăng Ký',
                 children: [
                     {}
                 ]
@@ -38,22 +38,22 @@ const router = createBrowserRouter([
             {
                 path: 'about-us',
                 element: <AboutUs/>,
-                breadcrumbName: 'Về Chúng Tôi',
+                title: 'Về Chúng Tôi',
             },
             {
                 path: 'blog',
                 element: <Blog/>,
-                breadcrumbName: 'Blog',
+                title: 'Blog',
             },
             {
                 path: 'restaurant',
                 element: <Restaurant/>,
-                breadcrumbName: 'Nhà Hàng - Dịch Vụ',
+                title: 'Nhà Hàng - Dịch Vụ',
             },
             {
                 path: 'contact',
                 element: <Contact/>,
-                breadcrumbName: 'Liên Hệ',
+                title: 'Liên Hệ',
             },
         ]
     }
