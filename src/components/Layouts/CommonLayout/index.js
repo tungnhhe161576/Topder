@@ -1,18 +1,17 @@
-import React from 'react'
-import { CommonLayoutContainer } from './styled'
-import Header from './Header'
+import React from "react";
+import { CommonLayoutContainer } from "./styled";
+import Header from "./Header";
+import Footer from "./Footer";
 
+const CommonLayout = ({ children }) => {
+  return (
+    <CommonLayoutContainer>
+      <Header />
 
-const CommonLayout = ( {children} ) => {
-    return (
-        <CommonLayoutContainer>
-            <Header/>
+      <div className="children">{children}</div>
+      <Footer />
+    </CommonLayoutContainer>
+  );
+};
 
-            <div className='children'>
-                {children}
-            </div>
-        </CommonLayoutContainer>
-    )
-}
-
-export default CommonLayout
+export default CommonLayout;
