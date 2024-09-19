@@ -24,7 +24,7 @@ const RestaurantItem = () => {
                 <div className='hard'></div>
                 <div className='option'>
                     <div className='booking' onClick={() => nav('/')}> 
-                        <span className='pl-55 pr-55'>Đặt bàn ngay</span>
+                        <span>Đặt bàn ngay</span>
                     </div>
                     <div className='drop-heart'>
                         <HeartOutlined style={{color: '#ff7c08'}}/>

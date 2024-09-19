@@ -76,6 +76,10 @@ export const HomeContainer = styled.div`
     }
 
     .session4 {
+        margin-bottom: 100px;
+    }
+
+    .session5 {
 
     }
 `

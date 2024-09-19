@@ -54,7 +54,6 @@ export const AboutUsContainer = styled.div`
             .check img {
                 width: 40px;
                 height: 40px;
-                border-radius: inherit;
             }
         }
     }

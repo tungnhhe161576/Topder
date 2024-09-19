@@ -27,10 +27,10 @@ const HomePage = () => {
                     </div>
                     <div className='mt-20'>
                         <Row gutter={[30, 24]}>
-                            <Col xs={12} sm={12} md={6} lg={6} xl={6}><RestaurantItem/></Col>
-                            <Col xs={12} sm={12} md={6} lg={6} xl={6}><RestaurantItem/></Col>
-                            <Col xs={12} sm={12} md={6} lg={6} xl={6}><RestaurantItem/></Col>
-                            <Col xs={12} sm={12} md={6} lg={6} xl={6}><RestaurantItem/></Col>
+                            <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem/></Col>
+                            <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem/></Col>
+                            <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem/></Col>
+                            <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem/></Col>
                         </Row>
                     </div>
                 </div>
@@ -75,10 +75,10 @@ const HomePage = () => {
                     </div>
                     <div>
                         <Row gutter={[30, 24]}>
-                            <Col xs={12} sm={12} md={6} lg={6} xl={6}><RestaurantItem/></Col>
-                            <Col xs={12} sm={12} md={6} lg={6} xl={6}><RestaurantItem/></Col>
-                            <Col xs={12} sm={12} md={6} lg={6} xl={6}><RestaurantItem/></Col>
-                            <Col xs={12} sm={12} md={6} lg={6} xl={6}><RestaurantItem/></Col>
+                            <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem/></Col>
+                            <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem/></Col>
+                            <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem/></Col>
+                            <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem/></Col>
                         </Row>
                     </div>
                 </div>
@@ -96,15 +96,31 @@ const HomePage = () => {
                     </div>
                     <div>
                         <Row gutter={[30, 24]}>
-                            <Col xs={12} sm={12} md={6} lg={6} xl={6}><RestaurantItem/></Col>
-                            <Col xs={12} sm={12} md={6} lg={6} xl={6}><RestaurantItem/></Col>
-                            <Col xs={12} sm={12} md={6} lg={6} xl={6}><RestaurantItem/></Col>
-                            <Col xs={12} sm={12} md={6} lg={6} xl={6}><RestaurantItem/></Col>
+                            <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem/></Col>
+                            <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem/></Col>
+                            <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem/></Col>
+                            <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem/></Col>
                         </Row>
                     </div>
                 </div>
 
-                <div className='session5'></div>
+                <div className='session5'>
+                    <div className='mb-10'> 
+                        <span className='mr-10 heading'> News & Blogs </span> 
+                        <img src={logo} alt='logo'/> 
+                    </div>
+                    <div className='d-flex justify-content-space-between align-items-center mb-30'>
+                        <span className='title'>Bác Blog Mới Nhất</span>
+                        <Button style={{width: '150px', height: '40px'}} onClick={() => nav('/blog')}>
+                            Xem nhiều hơn
+                        </Button>
+                    </div>
+                    <div>
+                        <Row gutter={[30, 24]}>
+                            <Col xs={12} sm={12} md={12} lg={6} xl={6}>Blog</Col>
+                        </Row>
+                    </div>
+                </div>
             </HomeContainer>
         </CommonLayout>
     )

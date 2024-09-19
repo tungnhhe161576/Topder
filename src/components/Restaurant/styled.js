@@ -19,6 +19,7 @@ export const RestaurantItemContainer = styled.div `
             cursor: pointer;
             transition: transform 0.3s;
             border-bottom: 1px solid black;
+            height: 200px;
         }
 
         .image-detail:hover {
@@ -38,7 +39,7 @@ export const RestaurantItemContainer = styled.div `
             font-size: 16px;
             font-weight: bold;
             font-style: italic;
-            top: 37%;
+            top: 39%;
             right: 0;
             display: flex;
             justify-content: center;
@@ -58,7 +59,7 @@ export const RestaurantItemContainer = styled.div `
             width: 100%;
             text-align: center;
             position: absolute;
-            top: 49%;
+            top: 50%;
             cursor: pointer;
             transition: transform 0.1s ease;
         }
@@ -81,16 +82,21 @@ export const RestaurantItemContainer = styled.div `
             border-bottom: 32px solid #d36606;
             position: absolute;
             top: 70%;
-            left: -5%;
+            margin-left: -18px;
         }
 
         .option {
             position: absolute;
+            width: 100%;
             top: 77%;
             display: flex;
             justify-content: space-between;
 
             .booking {
+                position: absolute;;
+                right: 5%;
+                width: 70%;
+                left: 0%;
                 background: #ff7c08;
                 color: white;
                 font-size: 18px;
@@ -111,7 +117,9 @@ export const RestaurantItemContainer = styled.div `
             }
     
             .drop-heart {
-                margin-right: -35%;
+                position: absolute;;
+                right: 5%;
+                /* margin-left: 80px; */
                 height: 40px;
                 width: 40px;
                 border-radius: 5px;

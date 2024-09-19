@@ -10,6 +10,8 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 const { TextArea } = Input;
+
+
 const Contact = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
@@ -25,6 +27,8 @@ const Contact = () => {
       setLoading(false);
     }
   };
+
+
   return (
     <CommonLayout>
       <ContactContainer>
@@ -146,6 +150,8 @@ const Contact = () => {
             </Button>
           </div>
         </div>
+
+        
         <div className="contact-map">
           <iframe
             title="Google Map"
