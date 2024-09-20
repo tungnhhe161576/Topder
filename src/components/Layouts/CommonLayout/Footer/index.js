@@ -77,14 +77,14 @@ const Footer = () => {
               </div>
               <div
                 className="d-flex mb-20"
-                onClick={() => nav("/privacy_policy")}
+                onClick={() => nav("/privacy-policy")}
               >
                 <div className="item"></div>
                 <div>Chính sách bảo mật</div>
               </div>
               <div
                 className="d-flex mb-20"
-                onClick={() => nav("/terms_condition")}
+                onClick={() => nav("/terms-condition")}
               >
                 <div className="item"></div>
                 <div>Điều khoản và điều kiện</div>

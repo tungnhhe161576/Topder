@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-import { LoginContainer } from "./styled";
+import { LoginContainer } from "../LoginPage/styled";
 import LeftSide from "../../../components/LeftSideLogin";
-import { Button, Checkbox, Col, Form, Input, Row } from "antd";
+import { Button, Col, Form, Input, Row } from "antd";
 import { Link, useNavigate } from "react-router-dom";
-import { CloseOutlined, GoogleOutlined } from "@ant-design/icons";
+import { CloseOutlined } from "@ant-design/icons";
 import { getRegexEmail } from "../../../lib/stringUtils";
 
-const LoginPage = () => {
+const ForgotPassword = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const nav = useNavigate();
 
-  const handleLoginByForm = async () => {
+  const handleForgotPassByForm = async () => {
     try {
       setLoading(true);
       const values = await form.validateFields();
@@ -35,10 +35,10 @@ const LoginPage = () => {
               shape="round"
               style={{ width: "120px", backgroundColor: "#ff7c08" }}
               onClick={() => {
-                nav("/register");
+                nav("/login");
               }}
             >
-              <span className="fs-18 fw-600">Đăng ký</span>
+              <span className="fs-18 fw-600">Đăng Nhập</span>
             </Button>
             <Link to="/">
               <div className="button-close">
@@ -48,7 +48,7 @@ const LoginPage = () => {
           </div>
 
           <div className="title">
-            <span className="side1">Đăng nhập</span>
+            <span className="side1">Quên Mật Khẩu</span>
             <span className="side2">Chào mừng bạn đã đến với TOPDER!</span>
           </div>
 
@@ -68,32 +68,6 @@ const LoginPage = () => {
               >
                 <Input placeholder="Email" />
               </Form.Item>
-              <Form.Item
-                className="mb-10"
-                name="password"
-                rules={[
-                  { required: true, message: "Hãy nhập mật khẩu của bạn" },
-                ]}
-                label={<span className="fw-600"> Mật khẩu </span>}
-              >
-                <Input.Password placeholder="Mật khẩu" />
-              </Form.Item>
-
-              <Form.Item
-                name="remember"
-                valuePropName="checked"
-                className="ml-20"
-              >
-                <Checkbox className="fw-600">Ghi nhớ tài khoản</Checkbox>
-                <span
-                  className="forgot-password fs-16 fw-600 primary-color"
-                  onClick={() => {
-                    nav("/forgot-password");
-                  }}
-                >
-                  * Quên mật khẩu?
-                </span>
-              </Form.Item>
             </Form>
 
             {/* <div className="forgot-password fs-16 fw-600 primary-color">
@@ -101,23 +75,15 @@ const LoginPage = () => {
                     </div> */}
 
             <Button
-              onClick={handleLoginByForm}
+              onClick={handleForgotPassByForm}
               htmlType="submit"
               loading={loading}
               type="primary"
               className="submit"
               shape="round"
             >
-              Đăng nhập
+              Tiếp tục
             </Button>
-
-            <div className="or mt-10">Hoặc</div>
-
-            <div className="others-login mt-20">
-              <Button shape="round">
-                tiếp tục với <GoogleOutlined className="fs-20" />
-              </Button>
-            </div>
           </div>
         </Col>
       </Row>
@@ -125,4 +91,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default ForgotPassword;

@@ -12,6 +12,7 @@ import RestaurantItem from "../components/RestaurantItem";
 import BlogItem from "../components/BlogItem";
 import PrivacyPolicy from "../pages/Guest/PrivacyPolicy";
 import TermAndConditon from "../pages/Guest/TermsAndCondition";
+import ForgotPassword from "../pages/Guest/ForgotPassword";
 
 const router = createBrowserRouter([
   {
@@ -37,17 +38,22 @@ const router = createBrowserRouter([
         children: [{}],
       },
       {
+        path: "forgot-password",
+        element: <ForgotPassword />,
+        title: "Forgot Password",
+      },
+      {
         path: "about-us",
         element: <AboutUs />,
         title: "Về Chúng Tôi",
       },
       {
-        path: "privacy_policy",
+        path: "privacy-policy",
         element: <PrivacyPolicy />,
         title: "Chính sách bảo mật",
       },
       {
-        path: "terms_condition",
+        path: "terms-condition",
         element: <TermAndConditon />,
         title: "Điều khoản và điều kiện",
       },
