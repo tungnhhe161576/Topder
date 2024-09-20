@@ -3,10 +3,11 @@ import CommonLayout from '../../../components/Layouts/CommonLayout'
 import { HomeContainer } from './styled'
 import { Button, Col, Row } from 'antd'
 import logo from '../../../assets/images/mini-logo.jpg'
-import RestaurantItem from '../../../components/Restaurant'
+import RestaurantItem from '../../../components/RestaurantItem'
 import { useNavigate } from 'react-router-dom'
 import image1 from '../../../assets/images/Image1.png'
 import image2 from '../../../assets/images/image2.png'
+import BlogItem from '../../../components/BlogItem'
 
 const HomePage = () => {
     const nav = useNavigate()
@@ -26,7 +27,7 @@ const HomePage = () => {
                         </Button>
                     </div>
                     <div className='mt-20'>
-                        <Row gutter={[30, 24]}>
+                        <Row gutter={[30, 24]} className="d-dlex justify-content-center">
                             <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem/></Col>
                             <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem/></Col>
                             <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem/></Col>
@@ -74,7 +75,7 @@ const HomePage = () => {
                         </Button>
                     </div>
                     <div>
-                        <Row gutter={[30, 24]}>
+                        <Row gutter={[30, 24]} className="d-dlex justify-content-center">
                             <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem/></Col>
                             <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem/></Col>
                             <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem/></Col>
@@ -95,7 +96,7 @@ const HomePage = () => {
                         </Button>
                     </div>
                     <div>
-                        <Row gutter={[30, 24]}>
+                        <Row gutter={[30, 24]} className="d-dlex justify-content-center">
                             <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem/></Col>
                             <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem/></Col>
                             <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem/></Col>
@@ -116,8 +117,11 @@ const HomePage = () => {
                         </Button>
                     </div>
                     <div>
-                        <Row gutter={[30, 24]}>
-                            <Col xs={12} sm={12} md={12} lg={6} xl={6}>Blog</Col>
+                        <Row gutter={[30, 24]} className="d-dlex justify-content-center">
+                            <Col xs={12} sm={12} md={12} lg={6} xl={6}> <BlogItem/> </Col>
+                            {/* <Col xs={12} sm={12} md={12} lg={6} xl={6}> <BlogItem/> </Col>
+                            <Col xs={12} sm={12} md={12} lg={6} xl={6}> <BlogItem/> </Col>
+                            <Col xs={12} sm={12} md={12} lg={6} xl={6}> <BlogItem/> </Col> */}
                         </Row>
                     </div>
                 </div>

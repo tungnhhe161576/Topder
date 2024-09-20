@@ -4,6 +4,7 @@ import { AboutUsContainer } from "./styled";
 import logo from "../../../assets/images/mini-logo.jpg";
 import checked from "../../../assets/images/checked.jpg";
 import image from "../../../assets/images/about-us-image.png";
+import image2 from "../../../assets/images/about-us-image2.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBurger, faHeadset, faLightbulb, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { TruckOutlined, RedEnvelopeOutlined, RubyOutlined } from "@ant-design/icons";
@@ -103,22 +104,24 @@ const AboutUs = () => {
             </div>
 
             <div className="session3">
-                <div className="d-flex">
-                    <span className="fs-24 fw-700" style={{ color: "#f57d21", fontStyle: "italic", fontFamily: "Nerko One" }}>
-                        Topder
-                    </span>
-                    <span className="ml-10"> 
-                        <img src={logo} alt="logo" /> 
-                    </span>
-                </div>
-                <div style={{ color: "#16123a", fontSize: "26px", fontWeight: "800" }} className="mt-5">
-                    Tại Sao Nên Chọn Chúng Tôi
-                </div>
-                <div className="mt-15 d-flex">
-                    <div className="left-side-session3">
+                <div  className="left">
+                    <div>
+                        <span className="fs-24 fw-700" style={{ color: "#f57d21", fontStyle: "italic", fontFamily: "Nerko One" }}>
+                            Topder
+                        </span>
+                        <span className="ml-10"> 
+                            <img src={logo} alt="logo" /> 
+                        </span>
+                    </div>
+                    <div className="fs-26 fw-800 mt-6 mb-20"  style={{ color: "#16123a" }}>
+                        Tại Sao Nên Chọn Chúng Tôi
+                    </div>
+                    <div>
                         Topder là lựa chọn hàng đầu cho những ai muốn có một trải nghiệm đặt bàn ăn uống thuận tiện, hiệu quả và đáng nhớ
-                        <div className="item mt-30">
-                            <div className="child-item">
+                    </div>
+                    <div className=" left-side-session3">
+                        <div className="item">
+                            <div className="child-item mt-20">
                                 <div className="round-icon">
                                     <FontAwesomeIcon className="white fs-25" icon={faBurger} />
                                 </div>
@@ -133,7 +136,7 @@ const AboutUs = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="child-item ml-20">
+                            <div className="child-item mt-20 ml-20">
                                 <div className="round-icon">
                                     <TruckOutlined className="white fs-25" />
                                 </div>
@@ -148,7 +151,7 @@ const AboutUs = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="child-item mt-10">
+                            <div className="child-item mt-20">
                                 <div className="round-icon">
                                     <RedEnvelopeOutlined className="white fs-25" />
                                 </div>
@@ -163,7 +166,7 @@ const AboutUs = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="child-item ml-20 mt-10">
+                            <div className="child-item mt-20 ml-20">
                                 <div className="round-icon">
                                     <FontAwesomeIcon className="white fs-25" icon={faHeadset} />
                                 </div>
@@ -180,7 +183,10 @@ const AboutUs = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="right-side-session3"></div>
+                </div>
+                
+                <div className="right-side-session3">
+                    <img src={image2} alt="image2"/>
                 </div>
             </div>
         </AboutUsContainer>

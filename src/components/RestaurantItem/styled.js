@@ -5,11 +5,11 @@ export const RestaurantItemContainer = styled.div `
     height: 440px;
     background: #fff;
     position: relative;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
     
     .brand-image {
-        border-radius: 5px;
+        border-radius: 10px;
         overflow: hidden;
         
         .image-detail {
@@ -23,7 +23,7 @@ export const RestaurantItemContainer = styled.div `
         }
 
         .image-detail:hover {
-            transform: scale(1.05);
+            transform: scale(1.09);
         }
     }
     

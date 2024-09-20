@@ -8,7 +8,8 @@ import AboutUs from '../pages/Guest/AboutUs'
 import Blog from '../pages/Guest/Blog'
 import Restaurant from '../pages/Guest/Restaurant'
 import Contact from '../pages/Guest/Contact'
-import RestaurantItem from '../components/Restaurant'
+import RestaurantItem from '../components/RestaurantItem'
+import BlogItem from '../components/BlogItem'
 
 
 const router = createBrowserRouter([
@@ -57,9 +58,8 @@ const router = createBrowserRouter([
                 title: 'Liên Hệ',
             },
             {
-                path: 'restaurant-item',
-                element: <RestaurantItem/>,
-                // title: 'Liên Hệ',
+                path: 'blog-item',
+                element: <BlogItem/>,
             },
         ]
     }

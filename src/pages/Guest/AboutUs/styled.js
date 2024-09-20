@@ -63,7 +63,6 @@ export const AboutUsContainer = styled.div`
         display: flex;
 
         .background {
-            /* background-image: url('https://www.shutterstock.com/image-photo/hands-food-sprinkle-on-dish-260nw-2488467481.jpg'); */
             background-repeat: no-repeat;
             background-size: 100% auto;
             width: 100%; 
@@ -106,12 +105,17 @@ export const AboutUsContainer = styled.div`
         width: 90%;
         margin: 50px auto;
         padding-left: 20px;
+        display: flex;
+        flex-wrap: wrap;
+
+        .left {
+            flex:  2;
+        }
 
         .left-side-session3 {
             .item {
                 display: flex;
                 flex-wrap: wrap;
-                width: 70%
             }
 
             .child-item {
@@ -131,7 +135,6 @@ export const AboutUsContainer = styled.div`
 
                 .content {
                     width: 400px;
-                    /* height: 100px; */
                     background: #f1f0fa;
                     border-left: solid 2px #f57d21;
                     border-radius: 10px;
@@ -139,6 +142,19 @@ export const AboutUsContainer = styled.div`
                     z-index: 1;
                     transform: skew(-15deg);
                 }
+            }
+        }
+
+        .right-side-session3 {
+            flex: 1;
+
+            img {
+                width: 120%;
+                height: 120%;
+                object-fit: cover;
+                z-index: 2;
+                margin-left: -150px;
+                margin-top: -60px;
             }
         }
     }
