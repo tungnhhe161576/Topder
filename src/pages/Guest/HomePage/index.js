@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import CommonLayout from '../../../components/Layouts/CommonLayout'
 import { HomeContainer } from './styled'
 import { Button, Col, Row } from 'antd'
@@ -8,9 +8,14 @@ import { useNavigate } from 'react-router-dom'
 import image1 from '../../../assets/images/Image1.png'
 import image2 from '../../../assets/images/image2.png'
 import BlogItem from '../../../components/BlogItem'
+import ModalRequestLogin from '../../../components/Modal/RequestLogin'
+import ModalBookingTable from '../../../components/Modal/Booking'
 
 const HomePage = () => {
     const nav = useNavigate()
+    const [openRequestLogin, setOpenRequestLogin] = useState(false)
+    const [openModalBooking, setOpenModalBooking] = useState(false)
+    const [text, setText] = useState('')
 
     return (
         <CommonLayout>
@@ -27,11 +32,11 @@ const HomePage = () => {
                         </Button>
                     </div>
                     <div className='mt-20'>
-                        <Row gutter={[30, 24]} className="d-dlex justify-content-center">
-                            <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem/></Col>
-                            <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem/></Col>
-                            <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem/></Col>
-                            <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem/></Col>
+                        <Row gutter={[30, 24]} className="d-flex justify-content-center">
+                            <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem setOpenRequestLogin={setOpenRequestLogin} setOpenModalBooking={setOpenModalBooking} setText={setText}/></Col>
+                            <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem setOpenRequestLogin={setOpenRequestLogin} setOpenModalBooking={setOpenModalBooking} setText={setText}/></Col>
+                            <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem setOpenRequestLogin={setOpenRequestLogin} setOpenModalBooking={setOpenModalBooking} setText={setText}/></Col>
+                            <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem setOpenRequestLogin={setOpenRequestLogin} setOpenModalBooking={setOpenModalBooking} setText={setText}/></Col>
                         </Row>
                     </div>
                 </div>
@@ -75,7 +80,7 @@ const HomePage = () => {
                         </Button>
                     </div>
                     <div>
-                        <Row gutter={[30, 24]} className="d-dlex justify-content-center">
+                        <Row gutter={[30, 24]} className="d-flex justify-content-center">
                             <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem/></Col>
                             <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem/></Col>
                             <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem/></Col>
@@ -96,7 +101,7 @@ const HomePage = () => {
                         </Button>
                     </div>
                     <div>
-                        <Row gutter={[30, 24]} className="d-dlex justify-content-center">
+                        <Row gutter={[30, 24]} className="d-flex justify-content-center">
                             <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem/></Col>
                             <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem/></Col>
                             <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem/></Col>
@@ -117,7 +122,7 @@ const HomePage = () => {
                         </Button>
                     </div>
                     <div>
-                        <Row gutter={[30, 24]} className="d-dlex justify-content-center">
+                        <Row gutter={[30, 24]} className="d-flex justify-content-center">
                             <Col xs={12} sm={12} md={12} lg={6} xl={6}> <BlogItem/> </Col>
                             {/* <Col xs={12} sm={12} md={12} lg={6} xl={6}> <BlogItem/> </Col>
                             <Col xs={12} sm={12} md={12} lg={6} xl={6}> <BlogItem/> </Col>
@@ -126,6 +131,22 @@ const HomePage = () => {
                     </div>
                 </div>
             </HomeContainer>
+
+            {!!openRequestLogin && (
+                <ModalRequestLogin
+                    open={openRequestLogin}
+                    onCancel={() => setOpenRequestLogin(false)}
+                    text={text}
+                    />
+                )}
+
+            {!!openModalBooking && (
+                <ModalBookingTable
+                    open={openModalBooking}
+                    onCancel={() => setOpenModalBooking(false)}
+                    text={text}
+                />
+            )}
         </CommonLayout>
     )
 }

@@ -1,11 +1,23 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { RestaurantItemContainer } from './styled'
 import { useNavigate } from 'react-router-dom'
 import { Rate } from 'antd'
 import { HeartOutlined } from '@ant-design/icons';
 
-const RestaurantItem = () => {
+const RestaurantItem = ( {setOpenRequestLogin, setOpenModalBooking, setText} ) => {
     const nav = useNavigate()
+    const flag = true
+
+    const handleOptionOpen =() => {
+        if (!flag) {
+            setOpenModalBooking(true)
+            setText("Booking")
+        } else {
+            setOpenRequestLogin(true)
+            setText("Bạn cần đăng nhập trước khi đặt bàn")
+        }
+    }
+    
 
     return (
         <RestaurantItemContainer>
@@ -23,10 +35,10 @@ const RestaurantItem = () => {
                 </div>
                 <div className='hard'></div>
                 <div className='option'>
-                    <div className='booking' onClick={() => nav('/')}> 
+                    <div className='booking' onClick={() => handleOptionOpen()}> 
                         <span>Đặt bàn ngay</span>
                     </div>
-                    <div className='drop-heart'>
+                    <div className='drop-heart' onClick={() => {setOpenRequestLogin(true); setText("Bạn cần đăng nhập trước khi thích nhà hàng này")}}>
                         <HeartOutlined style={{color: '#ff7c08'}}/>
                     </div>
                 </div>
