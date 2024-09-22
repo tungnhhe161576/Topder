@@ -8,12 +8,11 @@ import AboutUs from "../pages/Guest/AboutUs";
 import Blog from "../pages/Guest/Blog";
 import Restaurant from "../pages/Guest/Restaurant";
 import Contact from "../pages/Guest/Contact";
-import RestaurantItem from "../components/RestaurantItem";
-import BlogItem from "../components/BlogItem";
 import PrivacyPolicy from "../pages/Guest/PrivacyPolicy";
 import TermAndConditon from "../pages/Guest/TermsAndCondition";
 import ForgotPassword from "../pages/Guest/ForgotPassword";
-import RegisterRestaurant from "../pages/Guest/RegisterRestaurant";
+import RegisterRestaurant from "../pages/Restaurant/RegisterRestaurant";
+import RestaurantDetail from "../pages/Guest/Restaurant/RestaurantDetail";
 
 const router = createBrowserRouter([
   {
@@ -74,8 +73,9 @@ const router = createBrowserRouter([
         title: "Liên Hệ",
       },
       {
-        path: "blog-item",
-        element: <BlogItem />,
+        path: "restaurant-detail",
+        element: <RestaurantDetail/>,
+        title: "Chi tiết nhà hàng",
       },
       {
         path: "restaurant/register",
