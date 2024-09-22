@@ -13,6 +13,7 @@ import BlogItem from "../components/BlogItem";
 import PrivacyPolicy from "../pages/Guest/PrivacyPolicy";
 import TermAndConditon from "../pages/Guest/TermsAndCondition";
 import ForgotPassword from "../pages/Guest/ForgotPassword";
+import RegisterRestaurant from "../pages/Guest/RegisterRestaurant";
 
 const router = createBrowserRouter([
   {
@@ -75,6 +76,11 @@ const router = createBrowserRouter([
       {
         path: "blog-item",
         element: <BlogItem />,
+      },
+      {
+        path: "restaurant/register",
+        element: <RegisterRestaurant />,
+        title: "Đăng kí nhà hàng",
       },
     ],
   },
