@@ -10,9 +10,10 @@ import Restaurant from "../pages/Guest/Restaurant";
 import Contact from "../pages/Guest/Contact";
 import PrivacyPolicy from "../pages/Guest/PrivacyPolicy";
 import TermAndConditon from "../pages/Guest/TermsAndCondition";
-import ForgotPassword from "../pages/Guest/ForgotPassword";
+import ForgotPassword from "../pages/User/ForgotPassword";
 import RegisterRestaurant from "../pages/Restaurant/RegisterRestaurant";
 import RestaurantDetail from "../pages/Guest/Restaurant/RestaurantDetail";
+import BlogDetail from "../pages/Guest/Blog/BlogDetail";
 
 const router = createBrowserRouter([
   {
@@ -74,13 +75,18 @@ const router = createBrowserRouter([
       },
       {
         path: "restaurant-detail",
-        element: <RestaurantDetail/>,
+        element: <RestaurantDetail />,
         title: "Chi tiết nhà hàng",
       },
       {
         path: "restaurant/register",
         element: <RegisterRestaurant />,
         title: "Đăng kí nhà hàng",
+      },
+      {
+        path: "blog-detail",
+        element: <BlogDetail />,
+        title: "Chi tiết Blog",
       },
     ],
   },

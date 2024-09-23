@@ -58,6 +58,10 @@ const Header = () => {
         return "Blog";
       case "/contact":
         return "Liên Hệ";
+      case "/blog-detail":
+        return "Chi tiết Blog";
+      case "/restaurant-detail":
+        return "Chi tiết nhà hàng";
       default:
         return "Trang chủ";
     }
