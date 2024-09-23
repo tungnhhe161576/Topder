@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { LoginContainer } from "../LoginPage/styled";
+import { LoginContainer } from "../../Guest/LoginPage/styled";
 import LeftSide from "../../../components/LeftSideLogin";
 import { Button, Col, Form, Input, Row } from "antd";
 import { Link, useNavigate } from "react-router-dom";
