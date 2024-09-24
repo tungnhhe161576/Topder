@@ -58,4 +58,62 @@ export const BlogContainer = styled.div`
   .custom-pagination .ant-pagination-next {
     padding: 0 10px;
   }
+
+  .menu_search_area {
+    background: #eef6eb;
+    border-radius: 50px;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-top: 5px;
+  }
+
+  .menu_search .ant-input {
+    border-radius: 25px;
+    border: 1px solid #ddd;
+    width: 98%;
+    height: 40px;
+    margin-left: 15px;
+    margin-top: 10px !important;
+  }
+
+  .menu_search .ant-select-selector {
+    border-radius: 25px !important;
+    padding: 10px 20px;
+    border: 1px solid #ddd !important;
+    width: 100%;
+    height: 40px !important;
+  }
+
+  .menu_search .ant-select {
+    width: 100%;
+  }
+
+  .menu_search button {
+    background-color: #ff7c08 !important;
+    font-weight: 600;
+    height: 40px;
+    width: 250px;
+    border-radius: 25px;
+    margin-right: 10px;
+    margin-top: 10px !important;
+    cursor: pointer;
+  }
+
+  .menu_search button:hover {
+    background-color: #ff9933 !important;
+  }
+
+  @media (max-width: 768px) {
+    .menu_search_area {
+      flex-direction: column;
+      padding: 10px;
+    }
+
+    .menu_search .ant-input,
+    .menu_search .ant-select-selector,
+    .menu_search button {
+      margin-bottom: 10px;
+      width: 100%;
+    }
+  }
 `;
