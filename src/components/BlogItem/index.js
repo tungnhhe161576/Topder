@@ -1,7 +1,7 @@
 import { BlogItemContainer } from "./styled";
 import blogImage from "../../assets/images/8.3.jpg";
 import dat from "../../assets/images/Dat.jpg";
-import { Avatar, Col, Divider, Row } from "antd";
+import { Avatar, Divider } from "antd";
 import { useNavigate } from "react-router-dom";
 
 const BlogItem = () => {

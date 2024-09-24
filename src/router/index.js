@@ -14,6 +14,12 @@ import ForgotPassword from "../pages/User/ForgotPassword";
 import RegisterRestaurant from "../pages/Restaurant/RegisterRestaurant";
 import RestaurantDetail from "../pages/Guest/Restaurant/RestaurantDetail";
 import BlogDetail from "../pages/Guest/Blog/BlogDetail";
+import Profile from "../pages/User/UserProfile/Profile";
+import HistoryBooking from "../pages/User/UserProfile/HistoryBooking";
+import Whishlist from "../pages/User/UserProfile/Whishlist";
+import Rate from "../pages/User/UserProfile/Rate";
+import ChangePassword from "../pages/User/UserProfile/ChangePassword";
+import AuthenticationPhone from "../pages/User/UserProfile/AuthenticationPhone";
 
 const router = createBrowserRouter([
   {
@@ -87,6 +93,43 @@ const router = createBrowserRouter([
         path: "blog-detail",
         element: <BlogDetail />,
         title: "Chi tiết Blog",
+      },
+      {
+        path: "user-profile",
+        // element: <Profile/>,
+        children: [
+          {
+            path: "",
+            element: <Profile/>,
+            title: "",
+          },
+          {
+            path: "history-booking",
+            element: <HistoryBooking/>,
+            title: "Lịch sử đặt bàn",
+          },
+          {
+            path: "wishlist",
+            element: <Whishlist/>,
+            title: "Nhà hàng yêu thích",
+          },
+          {
+            path: "rates",
+            element: <Rate/>,
+            title: "Đánh giá",
+          },
+          {
+            path: "change-password",
+            element: <ChangePassword/>,
+            title: "Đổi mật khẩu",
+          },
+          {
+            path: "authentication-phone",
+            element: <AuthenticationPhone/>,
+            title: "Xác thực số điện thoại",
+          },
+        ],
+        title: "Thông tin cá nhân",
       },
     ],
   },

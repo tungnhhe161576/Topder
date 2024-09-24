@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { LoginContainer } from "../../Guest/LoginPage/styled";
 import LeftSide from "../../../components/LeftSideLogin";
 import { Button, Col, Form, Input, Row } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { CloseOutlined } from "@ant-design/icons";
 import { getRegexEmail } from "../../../lib/stringUtils";
+import { LoginContainer } from "../../Guest/LoginPage/styled";
 
 const ForgotPassword = () => {
   const [form] = Form.useForm();
