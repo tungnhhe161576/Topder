@@ -5,7 +5,7 @@ const AuthenticationPhone = () => {
     return (  
         <ProfileUserLayout>
             <AuthenticationPhoneContainer>
-                Authentication phone
+                Authentication Phone 
             </AuthenticationPhoneContainer>
         </ProfileUserLayout>
     );

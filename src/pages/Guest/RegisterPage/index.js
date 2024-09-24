@@ -130,7 +130,7 @@ const RegisterPage = () => {
                             <Form.Item
                                 name="confirmPassword"
                                 rules={[
-                                    { required: true, message: "Hãy điền tên đăng nhập của bạn" },
+                                    { required: true, message: "Hãy nhập lại mật khẩu" },
                                     ({ getFieldValue }) => ({
                                         validator(_, value) {
                                         if (!value || getFieldValue('password') === value) {
