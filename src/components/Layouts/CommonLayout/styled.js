@@ -59,10 +59,6 @@ export const CommonLayoutContainer = styled.div`
 
     .nav {
         width: 100%;
-        /* height: 90px;
-            margin: auto;
-            display: flex;
-            justify-content: space-between; */
         position: sticky;
         top: 0;
         z-index: 100;
@@ -70,45 +66,44 @@ export const CommonLayoutContainer = styled.div`
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
         .logo-topder img {
-        width: 100%;
-        height: 100%;
-        cursor: pointer;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
         }
 
         .list {
-        align-self: center;
-        display: flex;
-        justify-content: space-between;
+            display: flex;
+            justify-content: space-evenly;
 
-        span {
-            padding: 0 15px;
-            font-size: 20px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-            transform-origin: center bottom;
-            border-color: transparent !important;
-            box-shadow: none !important;
-        }
+            span {
+                padding: 0 15px;
+                font-size: 20px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: transform 0.3s ease;
+                transform-origin: center bottom;
+                border-color: transparent !important;
+                box-shadow: none !important;
+            }
 
-        span:hover {
-            color: #ff7a33;
-            transform: scale(1.05);
-        }
+            span:hover {
+                color: #ff7a33;
+                transform: scale(1.05);
+            }
         }
 
         .user-info {
-        align-self: center;
+            align-self: center;
         }
 
         .lo-re {
-        font-size: 20px;
-        cursor: pointer;
+            font-size: 20px;
+            cursor: pointer;
         }
 
         .login:hover,
         .register:hover {
-        color: #ff7a33;
+            color: #ff7a33;
         }
     }
 
@@ -140,22 +135,21 @@ export const CommonLayoutContainer = styled.div`
         z-index: 2;
         position: absolute;
         top: 50%;
-        padding-left: 30%;
-        /* left: 10%; */
-        transform: translate(-50%, -50%);
+        margin-left: 100px;
+        transform: translate(0, -30%);
         color: black;
         font-size: 50px;
         font-weight: bold;
         text-align: center;
-
+        
         .bread {
-        font-size: 16px;
-        font-weight: bold;
-        cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
         }
 
         .bread:hover {
-        font-weight: 700;
+            font-weight: 700;
         }
     }
 
