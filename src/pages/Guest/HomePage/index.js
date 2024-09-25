@@ -33,10 +33,10 @@ const HomePage = () => {
                     </div>
                     <div className='mt-20'>
                         <Row gutter={[30, 24]} className="d-flex justify-content-center">
-                            <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem setOpenRequestLogin={setOpenRequestLogin} setOpenModalBooking={setOpenModalBooking} setText={setText}/></Col>
-                            <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem setOpenRequestLogin={setOpenRequestLogin} setOpenModalBooking={setOpenModalBooking} setText={setText}/></Col>
-                            <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem setOpenRequestLogin={setOpenRequestLogin} setOpenModalBooking={setOpenModalBooking} setText={setText}/></Col>
-                            <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem setOpenRequestLogin={setOpenRequestLogin} setOpenModalBooking={setOpenModalBooking} setText={setText}/></Col>
+                            <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem setOpenRequestLogin={setOpenRequestLogin} setOpenModalBooking={setOpenModalBooking} setText={setText} isWishlist={false}/></Col>
+                            <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem setOpenRequestLogin={setOpenRequestLogin} setOpenModalBooking={setOpenModalBooking} setText={setText} isWishlist={false}/></Col>
+                            <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem setOpenRequestLogin={setOpenRequestLogin} setOpenModalBooking={setOpenModalBooking} setText={setText} isWishlist={false}/></Col>
+                            <Col xs={12} sm={12} md={12} lg={6} xl={6}><RestaurantItem setOpenRequestLogin={setOpenRequestLogin} setOpenModalBooking={setOpenModalBooking} setText={setText} isWishlist={false}/></Col>
                         </Row>
                     </div>
                 </div>

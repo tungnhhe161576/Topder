@@ -4,17 +4,21 @@ import { useNavigate } from 'react-router-dom'
 import { Rate } from 'antd'
 import { HeartOutlined } from '@ant-design/icons';
 
-const RestaurantItem = ( {setOpenRequestLogin, setOpenModalBooking, setText} ) => {
+const RestaurantItem = ( {setOpenRequestLogin, setOpenModalBooking, setText, isWishlist } ) => {
     const nav = useNavigate()
     const flag = true
 
     const handleOptionOpen =() => {
-        if (!flag) {
-            setOpenModalBooking(true)
-            setText("Booking")
+        if (!isWishlist) {
+            if (!flag) {
+                setOpenModalBooking(true)
+                setText("Booking")
+            } else {
+                setOpenRequestLogin(true)
+                setText("Bạn cần đăng nhập trước khi đặt bàn")
+            }
         } else {
-            setOpenRequestLogin(true)
-            setText("Bạn cần đăng nhập trước khi đặt bàn")
+            nav('/')
         }
     }
     
@@ -36,17 +40,26 @@ const RestaurantItem = ( {setOpenRequestLogin, setOpenModalBooking, setText} ) =
                 <div className='hard'></div>
                 <div className='option'>
                     <div className='booking' onClick={() => handleOptionOpen()}> 
-                        <span>Đặt bàn ngay</span>
+                        {
+                            !isWishlist 
+                                ? <span>Đặt bàn ngay</span> 
+                                : <span>Xem chi tiết</span>
+                        }
                     </div>
-                    <div 
-                        className='drop-heart' 
-                        onClick={() => {
-                            setOpenRequestLogin(true); 
-                            setText("Bạn cần đăng nhập trước khi thích nhà hàng này")
-                        }}
-                    >
-                        <HeartOutlined style={{color: '#ff7c08'}}/>
-                    </div>
+                    {
+                        !isWishlist 
+                            ? <div 
+                                    className='drop-heart' 
+                                    onClick={() => {
+                                        setOpenRequestLogin(true); 
+                                        setText("Bạn cần đăng nhập trước khi thích nhà hàng này")
+                                    }}
+                                >
+                                    <HeartOutlined style={{color: '#ff7c08'}}/>
+                                </div>
+                            : <></>
+                    }
+                    
                 </div>
             </div>
         </RestaurantItemContainer>   
