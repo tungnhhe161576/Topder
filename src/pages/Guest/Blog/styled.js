@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const BlogContainer = styled.div`
   width: 90%;
   margin: auto;
-  margin-top: 100px;
+  margin-top: 60px;
 
   .pagination {
     display: flex;
@@ -60,19 +60,18 @@ export const BlogContainer = styled.div`
   }
 
   .menu_search_area {
-    background: #eef6eb;
     border-radius: 50px;
+    margin-bottom: 15px;
     align-items: center;
-    margin-bottom: 30px;
     padding-top: 5px;
   }
 
   .menu_search .ant-input {
     border-radius: 25px;
     border: 1px solid #ddd;
-    width: 98%;
+    width: 100%;
     height: 40px;
-    margin-left: 15px;
+    margin-left: 30pxpx;
     margin-top: 10px !important;
   }
 
@@ -92,7 +91,7 @@ export const BlogContainer = styled.div`
     background-color: #ff7c08 !important;
     font-weight: 600;
     height: 40px;
-    width: 250px;
+    width: 100%;
     border-radius: 25px;
     margin-right: 10px;
     margin-top: 10px !important;
