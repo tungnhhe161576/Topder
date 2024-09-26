@@ -30,14 +30,14 @@ const Blog = () => {
       <BlogContainer>
         <div className="menu_search_area">
           <Form className="menu_search_area">
-            <Row gutter={16} justify="space-between" align="middle">
-              <Col xs={24} sm={12} md={12} lg={12}>
+            <Row gutter={16} justify="center" align="middle">
+              <Col span={8}>
                 <Form.Item className="menu_search">
                   <Input placeholder="Tìm tên Blog" className="search-input" />
                 </Form.Item>
               </Col>
 
-              <Col xs={12} sm={8} md={8} lg={8}>
+              <Col span={5}>
                 <Form.Item className="menu_search">
                   <Select
                     defaultValue="default"
@@ -45,17 +45,13 @@ const Blog = () => {
                     style={{ width: "100%" }}
                   >
                     <Option value="default">Loại Blog</Option>
-                    <Option value="popularity">Sort by popularity</Option>
-                    <Option value="rating">Sort by average rating</Option>
-                    <Option value="latest">Sort by latest</Option>
-                    <Option value="low-high">Sort by price: low to high</Option>
-                    <Option value="high-low">Sort by price: high to low</Option>
+                    <Option value="popularity">Sự Kiện</Option>
+                    <Option value="rating">Văn hóa</Option>
                   </Select>
                 </Form.Item>
               </Col>
 
-              {/* Search button */}
-              <Col xs={12} sm={4} md={4} lg={4}>
+              <Col span={2}>
                 <Form.Item className="menu_search">
                   <Button
                     type="primary"
@@ -70,7 +66,7 @@ const Blog = () => {
           </Form>
         </div>
         <div>
-          <Row gutter={[48, 32]} className="d-flex justify-content-center">
+          <Row gutter={[24, 32]} className="d-flex justify-content-center">
             {currentBlogs.map((blog) => (
               <Col key={blog.id} xs={12} sm={12} md={12} lg={6} xl={6}>
                 <BlogItem content={blog.content} />

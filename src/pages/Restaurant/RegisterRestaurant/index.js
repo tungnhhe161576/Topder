@@ -9,6 +9,7 @@ import {
   TimePicker,
   Form,
   Image,
+  InputNumber,
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
@@ -67,7 +68,7 @@ const RegisterRestaurant = () => {
     // </button>
     <button
       style={{
-        border: "2px dashed #ff7c08",
+        border: "2px dashed #333",
         borderRadius: "8px",
         padding: "10px 20px",
         display: "flex",
@@ -79,11 +80,9 @@ const RegisterRestaurant = () => {
       }}
       type="button"
       onMouseOver={(e) => {
-        e.target.style.backgroundColor = "#ff9933";
         e.target.style.boxShadow = "0 6px 10px rgba(0, 0, 0, 0.15)";
       }}
       onMouseOut={(e) => {
-        e.target.style.backgroundColor = "white";
         e.target.style.color = "black";
         e.target.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)";
       }}
@@ -413,6 +412,47 @@ const RegisterRestaurant = () => {
                   }}
                   format="HH:mm"
                   disabledTime={disabledCloseTime}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={[24, 16]}>
+            <Col xs={24} sm={24} md={12} lg={12} style={{ padding: "0 16px" }}>
+              <Form.Item
+                name="price"
+                label="Giá đặt bàn"
+                rules={[
+                  { required: true, message: "Vui lòng nhập giá đặt bàn" },
+                  { type: "number", min: 1, message: "Giá phải lớn hơn 0" },
+                ]}
+              >
+                <InputNumber
+                  style={{
+                    width: "100%",
+                  }}
+                  placeholder="Giá đặt bàn"
+                />
+              </Form.Item>
+            </Col>
+
+            <Col xs={24} sm={24} md={12} lg={12} style={{ padding: "0 16px" }}>
+              <Form.Item
+                name="maxCapacity"
+                label="Số lượng người tối đa có thể chứa"
+                rules={[
+                  { required: true, message: "Vui lòng nhập số lượng người" },
+                  {
+                    type: "number",
+                    min: 1,
+                    message: "Số lượng người phải lớn hơn 0",
+                  },
+                ]}
+              >
+                <InputNumber
+                  style={{
+                    width: "100%",
+                  }}
+                  placeholder="Số lượng người"
                 />
               </Form.Item>
             </Col>
