@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import CommonLayout from "../../../components/Layouts/CommonLayout";
-import { Col, Row, Pagination } from "antd";
+import { Col, Row, Pagination, Select, Input, Button, Form } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { BlogContainer } from "./styled";
 import BlogItem from "../../../components/BlogItem";
+
+const { Option } = Select;
 
 const Blog = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -26,11 +28,48 @@ const Blog = () => {
   return (
     <CommonLayout>
       <BlogContainer>
+        <div className="menu_search_area">
+          <Form className="menu_search_area">
+            <Row gutter={16} justify="center" align="middle">
+              <Col span={8}>
+                <Form.Item className="menu_search">
+                  <Input placeholder="Tìm tên Blog" className="search-input" />
+                </Form.Item>
+              </Col>
+
+              <Col span={5}>
+                <Form.Item className="menu_search">
+                  <Select
+                    defaultValue="default"
+                    className="nice-select"
+                    style={{ width: "100%" }}
+                  >
+                    <Option value="default">Loại Blog</Option>
+                    <Option value="popularity">Sự Kiện</Option>
+                    <Option value="rating">Văn hóa</Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+
+              <Col span={2}>
+                <Form.Item className="menu_search">
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    className="search-button"
+                  >
+                    Search
+                  </Button>
+                </Form.Item>
+              </Col>
+            </Row>
+          </Form>
+        </div>
         <div>
-          <Row gutter={[24, 24]} className="d-flex justify-content-center">
-            {currentBlogs.map((blog, index) => (
+          <Row gutter={[24, 32]} className="d-flex justify-content-center">
+            {currentBlogs.map((blog) => (
               <Col key={blog.id} xs={12} sm={12} md={12} lg={6} xl={6}>
-                <BlogItem content={blog.content} />{" "}
+                <BlogItem content={blog.content} />
               </Col>
             ))}
           </Row>
