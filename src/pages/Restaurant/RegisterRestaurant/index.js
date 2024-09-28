@@ -9,6 +9,7 @@ import {
 	TimePicker,
 	Form,
 	Image,
+	InputNumber,
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
@@ -33,7 +34,7 @@ const RegisterRestaurant = () => {
 	const [form] = Form.useForm();
 	const [loading, setLoading] = useState(false);
 	const [openTime, setOpenTime] = useState(null);
-	//   const nav = useNavigate();
+	const nav = useNavigate();
 
 	//images
 	const [previewOpen, setPreviewOpen] = useState(false);
@@ -50,21 +51,46 @@ const RegisterRestaurant = () => {
 	const handleChange = ({ fileList: newFileList }) =>
 		setFileList(newFileList);
 	const uploadButton = (
+		// <button
+		// 	style={{
+		// 		border: "2px dashed #ff7c08",
+		// 		background: "none",
+		// 	}}
+		// 	type="button"
+		// >
+		// 	<PlusOutlined />
+		// 	<div
+		// 		style={{
+		// 			marginTop: 8,
+		// 		}}
+		// 	>
+		// 		Upload
+		// 	</div>
+		// </button>
 		<button
 			style={{
-				border: "2px dashed #ff7c08",
-				background: "none",
+				border: "2px dashed #333",
+				borderRadius: "8px",
+				padding: "10px 20px",
+				display: "flex",
+				justifyContent: "center",
+				alignItems: "center",
+				cursor: "pointer",
+				transition: "all 0.3s ease",
+				boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
 			}}
 			type="button"
+			onMouseOver={(e) => {
+				e.target.style.boxShadow = "0 6px 10px rgba(0, 0, 0, 0.15)";
+			}}
+			onMouseOut={(e) => {
+				e.target.style.color = "black";
+				e.target.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)";
+			}}
 		>
-			<PlusOutlined />
-			<div
-				style={{
-					marginTop: 8,
-				}}
-			>
-				Upload
-			</div>
+			<PlusOutlined
+				style={{ backgroundColor: "transparent", color: "black" }}
+			/>
 		</button>
 	);
 
@@ -132,7 +158,12 @@ const RegisterRestaurant = () => {
 		<RegisterRestaurantContainer>
 			<div className="register-form-container">
 				<header className="header-logo">
-					<img width={150} src={logo} alt="Logo" />
+					<img
+						width={150}
+						src={logo}
+						alt="Logo"
+						onClick={() => nav("/")}
+					/>
 				</header>
 
 				<h2 className="primary">Đăng Ký - Nhà Hàng</h2>
@@ -142,9 +173,16 @@ const RegisterRestaurant = () => {
 					name="register"
 					onFinish={onFinish}
 					layout="vertical"
+					className="form-register"
 				>
-					<Row gutter={16}>
-						<Col span={12}>
+					<Row gutter={[24, 16]}>
+						<Col
+							xs={24}
+							sm={24}
+							md={12}
+							lg={12}
+							style={{ padding: "0 16px" }}
+						>
 							<Form.Item
 								name="restaurantName"
 								label="Tên Nhà Hàng"
@@ -155,11 +193,21 @@ const RegisterRestaurant = () => {
 									},
 								]}
 							>
-								<Input placeholder="Tên Nhà Hàng" />
+								<Input
+									style={{
+										width: "100%",
+									}}
+									placeholder="Tên Nhà Hàng"
+								/>
 							</Form.Item>
 						</Col>
-
-						<Col span={12}>
+						<Col
+							xs={24}
+							sm={24}
+							md={12}
+							lg={12}
+							style={{ padding: "0 16px" }}
+						>
 							<Form.Item
 								name="ownerName"
 								label="Tên Chủ Nhà Hàng"
@@ -171,13 +219,18 @@ const RegisterRestaurant = () => {
 									},
 								]}
 							>
-								<Input placeholder="Tên Chủ Nhà Hàng" />
+								<Input
+									style={{
+										width: "100%",
+									}}
+									placeholder="Tên Chủ Nhà Hàng"
+								/>
 							</Form.Item>
 						</Col>
 					</Row>
 
-					<Row gutter={16}>
-						<Col span={12}>
+					<Row gutter={[24, 16]}>
+						<Col xs={24} sm={24} md={12} lg={12}>
 							<Form.Item
 								name="logo"
 								label="Logo hoặc Ảnh Trang Đầu"
@@ -211,7 +264,7 @@ const RegisterRestaurant = () => {
 							</Form.Item>
 						</Col>
 
-						<Col span={12}>
+						<Col xs={24} sm={24} md={12} lg={12}>
 							<Form.Item
 								name="address"
 								label="Địa Chỉ"
@@ -222,13 +275,17 @@ const RegisterRestaurant = () => {
 									},
 								]}
 							>
-								<Input placeholder="Địa Chỉ" />
+								<Input
+									style={{
+										width: "100%",
+									}}
+									placeholder="Địa Chỉ"
+								/>
 							</Form.Item>
 						</Col>
 					</Row>
-
-					<Row gutter={16}>
-						<Col span={12}>
+					<Row gutter={[24, 16]}>
+						<Col xs={24} sm={24} md={12} lg={12}>
 							<Form.Item
 								name="phone"
 								label="Số Điện Thoại"
@@ -243,11 +300,15 @@ const RegisterRestaurant = () => {
 									},
 								]}
 							>
-								<Input placeholder="Số Điện Thoại" />
+								<Input
+									style={{
+										width: "100%",
+									}}
+									placeholder="Số Điện Thoại"
+								/>
 							</Form.Item>
 						</Col>
-
-						<Col span={12}>
+						<Col xs={24} sm={24} md={12} lg={12}>
 							<Form.Item
 								name="email"
 								label="Email"
@@ -262,13 +323,17 @@ const RegisterRestaurant = () => {
 									},
 								]}
 							>
-								<Input placeholder="Email" />
+								<Input
+									style={{
+										width: "100%",
+									}}
+									placeholder="Email"
+								/>
 							</Form.Item>
 						</Col>
 					</Row>
-
-					<Row gutter={16}>
-						<Col span={12}>
+					<Row gutter={[24, 16]}>
+						<Col xs={24} sm={24} md={12} lg={12}>
 							<Form.Item
 								name="city"
 								label="Thành Phố"
@@ -282,7 +347,7 @@ const RegisterRestaurant = () => {
 								<Select
 									showSearch
 									style={{
-										width: 250,
+										width: "100%",
 									}}
 									placeholder="Thành Phố"
 									optionFilterProp="label"
@@ -309,7 +374,7 @@ const RegisterRestaurant = () => {
 							</Form.Item>
 						</Col>
 
-						<Col span={12}>
+						<Col xs={24} sm={24} md={12} lg={12}>
 							<Form.Item
 								name="restaurantType"
 								label="Loại Nhà Hàng"
@@ -351,12 +416,12 @@ const RegisterRestaurant = () => {
 						</Col>
 					</Row>
 
-					<Row gutter={16}>
-						<Col span={12}>
+					<Row gutter={[24, 16]}>
+						<Col xs={24} sm={24} md={12} lg={12}>
 							<Form.Item
 								name="openTime"
 								label="Thời Gian Mở Cửa"
-								style={{ width: 250 }}
+								style={{ width: "100%" }}
 								rules={[
 									{
 										required: true,
@@ -367,17 +432,19 @@ const RegisterRestaurant = () => {
 							>
 								<TimePicker
 									placeholder="Thời Gian Mở Cửa"
+									style={{
+										width: "100%",
+									}}
 									format="HH:mm"
 									onChange={handleOpenTimeChange}
 								/>
 							</Form.Item>
 						</Col>
-
-						<Col span={12}>
+						<Col xs={24} sm={24} md={12} lg={12}>
 							<Form.Item
 								name="closeTime"
 								label="Thời Gian Đóng Cửa"
-								style={{ width: 250 }}
+								style={{ width: "100%" }}
 								rules={[
 									{
 										required: true,
@@ -388,15 +455,80 @@ const RegisterRestaurant = () => {
 							>
 								<TimePicker
 									placeholder="Thời Gian Đóng Cửa"
+									style={{
+										width: "100%",
+									}}
 									format="HH:mm"
 									disabledTime={disabledCloseTime}
 								/>
 							</Form.Item>
 						</Col>
 					</Row>
-
-					<Row gutter={16}>
-						<Col span={12}>
+					<Row gutter={[24, 16]}>
+						<Col
+							xs={24}
+							sm={24}
+							md={12}
+							lg={12}
+							style={{ padding: "0 16px" }}
+						>
+							<Form.Item
+								name="price"
+								label="Giá đặt bàn"
+								rules={[
+									{
+										required: true,
+										message: "Vui lòng nhập giá đặt bàn",
+									},
+									{
+										type: "number",
+										min: 1,
+										message: "Giá phải lớn hơn 0",
+									},
+								]}
+							>
+								<InputNumber
+									style={{
+										width: "100%",
+									}}
+									placeholder="Giá đặt bàn"
+								/>
+							</Form.Item>
+						</Col>
+						<Col
+							xs={24}
+							sm={24}
+							md={12}
+							lg={12}
+							style={{ padding: "0 16px" }}
+						>
+							<Form.Item
+								name="maxCapacity"
+								label="Số lượng người tối đa có thể chứa"
+								rules={[
+									{
+										required: true,
+										message: "Vui lòng nhập số lượng người",
+									},
+									{
+										type: "number",
+										min: 1,
+										message:
+											"Số lượng người phải lớn hơn 0",
+									},
+								]}
+							>
+								<InputNumber
+									style={{
+										width: "100%",
+									}}
+									placeholder="Số lượng người"
+								/>
+							</Form.Item>
+						</Col>
+					</Row>
+					<Row gutter={[24, 16]}>
+						<Col xs={24} sm={24} md={12} lg={12}>
 							<Form.Item
 								name="password"
 								label="Mật Khẩu"
@@ -411,11 +543,16 @@ const RegisterRestaurant = () => {
 									},
 								]}
 							>
-								<Input.Password placeholder="Mật Khẩu" />
+								<Input.Password
+									style={{
+										width: "100%",
+									}}
+									placeholder="Mật Khẩu"
+								/>
 							</Form.Item>
 						</Col>
 
-						<Col span={12}>
+						<Col xs={24} sm={24} md={12} lg={12}>
 							<Form.Item
 								name="confirmPassword"
 								label="Nhập Lại Mật Khẩu"
@@ -443,7 +580,12 @@ const RegisterRestaurant = () => {
 									}),
 								]}
 							>
-								<Input.Password placeholder="Nhập Lại Mật Khẩu" />
+								<Input.Password
+									style={{
+										width: "100%",
+									}}
+									placeholder="Nhập Lại Mật Khẩu"
+								/>
 							</Form.Item>
 						</Col>
 
