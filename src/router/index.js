@@ -20,6 +20,10 @@ import Whishlist from "../pages/User/UserProfile/Whishlist";
 import Rate from "../pages/User/UserProfile/Rate";
 import ChangePassword from "../pages/User/UserProfile/ChangePassword";
 import AuthenticationPhone from "../pages/User/UserProfile/AuthenticationPhone";
+import Dashboard from "../pages/Restaurant/RestaurantManage/Dashboard";
+import ManageRestaurant from "../pages/Restaurant/RestaurantManage/ManageRestaurant";
+import ManageOrder from "../pages/Restaurant/RestaurantManage/ManageOrder";
+import ManageRate from "../pages/Restaurant/RestaurantManage/ManageRate";
 
 const router = createBrowserRouter([
   {
@@ -70,7 +74,7 @@ const router = createBrowserRouter([
         title: "Blog",
       },
       {
-        path: "restaurant",
+        path: "restaurant-view",
         element: <Restaurant />,
         title: "Nhà Hàng - Dịch Vụ",
       },
@@ -94,6 +98,8 @@ const router = createBrowserRouter([
         element: <BlogDetail />,
         title: "Chi tiết Blog",
       },
+
+      // User
       {
         path: "user-profile",
         // element: <Profile/>,
@@ -130,6 +136,31 @@ const router = createBrowserRouter([
           },
         ],
         title: "Thông tin cá nhân",
+      },
+
+      // Restaurent
+      {
+        path: "restaurant",
+        // element: ,
+        title: "Quản lý nhà hàng",
+        children: [
+          {
+            path: "dashboard",
+            element: <Dashboard/>,
+          },
+          {
+            path: "manage-restaurant",
+            element: <ManageRestaurant/>,
+          },
+          {
+            path: "manage-order",
+            element: <ManageOrder/>,
+          },
+          {
+            path: "manage-rate",
+            element: <ManageRate/>,
+          },
+        ]
       },
     ],
   },

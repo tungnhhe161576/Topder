@@ -27,7 +27,9 @@ const Rate = () => {
                     <div className="list">
                         {
                             Array(total).fill().slice(startIndex, startIndex + itemPerPage).map((_, index) => 
-                                <RateItem/>
+                                <div key={index}>
+                                    <RateItem/>
+                                </div>
                             )
                         }
                     </div>

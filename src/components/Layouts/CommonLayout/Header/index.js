@@ -13,6 +13,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { getNav, setActiveButton } from "../../../../redux/Slice/navSlice";
 import image from "../../../../assets/images/foot-image.png";
+import logo2 from "../../../../assets/images/Logo2.png";
 
 const IconFont = createFromIconfontCN({
   scriptUrl: "//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js",
@@ -92,16 +93,16 @@ const Header = () => {
                 <div className="header-content">
                     <div className="parallelogram">
                         <span>
-                            <MailOutlined style={{ transform: "skew(0deg)" }} />
-                            topder.vn@gmail.com
+                            <MailOutlined style={{ transform: "skew(0deg)" }} /> 
+                            {" "}topder.vn@gmail.com
                         </span>
                         <span>
                             <PhoneOutlined style={{ transform: "skew(0deg)" }} /> 
-                            0828 290 092
+                            {" "}0828 290 092
                         </span>
                         <span>
                             <PhoneOutlined style={{ transform: "skew(0deg)" }} />
-                            0931 589 123
+                            {" "}0931 589 123
                         </span>
                     </div>
                     <div className="contact-icon">
@@ -121,7 +122,7 @@ const Header = () => {
                     <Row className="d-flex justify-content-center align-items-center">
                         <Col xs={6} sm={6} md={3} lg={3} xl={3}>
                             <div className="logo-topder" onClick={() => nav("/")}>
-                                <img src="/Logo2.png" alt="logo-topder" />
+                                <img src={logo2} alt="logo-topder" />
                             </div>
                         </Col>
                         <Col xs={15} sm={15} md={18} lg={18} xl={18}>
