@@ -10,7 +10,7 @@ export const ProfileContainer = styled.div `
         background-color: #ff7c08;
         display: flex;
         flex-direction: column;
-        height: 630px;
+        height: 680px;
         
         .avatar {
             align-self: center;
@@ -47,7 +47,7 @@ export const ProfileContainer = styled.div `
                     border-radius: 50%;
                     background-color: #fff;
                     bottom: 90px;
-                    right: 15px;
+                    right: 35px;
                     z-index: 2;
                     cursor: pointer;
                 }
@@ -122,6 +122,6 @@ export const ProfileContainer = styled.div `
     .right {
         background-color: #f3f7fb;
         overflow-x: scroll;
-        height: 630px;
+        height: 680px;
     }
 `

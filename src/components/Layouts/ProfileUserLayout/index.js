@@ -2,8 +2,9 @@ import { Col, Image, Row } from "antd";
 import CommonLayout from "../CommonLayout";
 import { ProfileContainer } from "./styled";
 import avatar from '../../../assets/images/Dat.jpg'
-import { UserOutlined, ReconciliationFilled, StarFilled, HeartFilled, LogoutOutlined, UserSwitchOutlined, CameraOutlined, PhoneOutlined } from '@ant-design/icons'
+import { UserOutlined, ReconciliationFilled, StarFilled, HeartFilled, LogoutOutlined, UserSwitchOutlined, CameraOutlined, PhoneOutlined, WalletOutlined } from '@ant-design/icons'
 import { useLocation, useNavigate } from "react-router-dom";
+import { formatNumberToK } from "../../../lib/stringUtils";
 
 
 const ProfileUserLayout = ( {children} ) => {
@@ -34,8 +35,11 @@ const ProfileUserLayout = ( {children} ) => {
                                         <CameraOutlined className="fs-20"/>
                                     </div>
                                 </div>
-                                <div className="name white fw-700 fs-20 mt-30">
+                                <div className="name white fw-700 fs-20 mt-20">
                                     Đỗ Văn Đạt
+                                </div>
+                                <div className="white fw-700 fs-18 mt-5">
+                                    Số dư ví: <span style={{color: 'black'}}> {formatNumberToK(1000000)} </span> 
                                 </div>
                             </div>
                             <div className="menu">
@@ -103,6 +107,17 @@ const ProfileUserLayout = ( {children} ) => {
                                     </div>
                                     <div className="item-name">
                                         Xác thực điện thoại
+                                    </div>
+                                </div>
+                                <div 
+                                    className={`menu-item ${isActive('/user-profile/user-wallet') ? 'active' : ''}`} 
+                                    onClick={() => nav('/user-profile/user-wallet')}
+                                >
+                                    <div className="icon">
+                                        <WalletOutlined />
+                                    </div>
+                                    <div className="item-name">
+                                        Ví của tôi
                                     </div>
                                 </div>
                                 <div className="menu-item" onClick={handleLogout}>

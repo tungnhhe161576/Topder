@@ -24,6 +24,7 @@ import Dashboard from "../pages/Restaurant/RestaurantManage/Dashboard";
 import ManageRestaurant from "../pages/Restaurant/RestaurantManage/ManageRestaurant";
 import ManageOrder from "../pages/Restaurant/RestaurantManage/ManageOrder";
 import ManageRate from "../pages/Restaurant/RestaurantManage/ManageRate";
+import Wallet from "../pages/User/UserProfile/Wallet";
 
 const router = createBrowserRouter([
   {
@@ -102,7 +103,6 @@ const router = createBrowserRouter([
       // User
       {
         path: "user-profile",
-        // element: <Profile/>,
         children: [
           {
             path: "",
@@ -133,6 +133,11 @@ const router = createBrowserRouter([
             path: "authentication-phone",
             element: <AuthenticationPhone/>,
             title: "Xác thực số điện thoại",
+          },
+          {
+            path: "user-wallet",
+            element: <Wallet/>,
+            title: "Ví",
           },
         ],
         title: "Thông tin cá nhân",
