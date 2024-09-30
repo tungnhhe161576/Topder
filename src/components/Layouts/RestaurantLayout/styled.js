@@ -2,16 +2,20 @@ import styled from 'styled-components'
 
 export const RestaurantLayoutContainer = styled.div `
     width: 100%;
-    height: 100vh;
     background-color: #f4f5f7;
 
     .header {
-        height: 60px;
+        height: 80px;
         padding: 20px 30px 0 30px;
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 20px;
+        position: sticky;
+        top: 0;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        z-index: 100;
+        background-color: #f4f5f7;
 
         .logo {
             width: 150px;
@@ -39,6 +43,8 @@ export const RestaurantLayoutContainer = styled.div `
 
     .body-layout {
         display: flex;
+        width: 100%;
+        padding-bottom: 80px;
         
         .left-side {
             width: 15%;
@@ -81,7 +87,7 @@ export const RestaurantLayoutContainer = styled.div `
     
         .children {
             margin-left: 50px;
-            width: 75%;
+            width: 80%;
         }
     }
 `

@@ -138,7 +138,7 @@ const Header = () => {
                                     style={activeButton === "restaurant" ? { color: "#f07d22" } : {}}
                                     onClick={() => {
                                         handleButtonClick("restaurant");
-                                        nav("/restaurant");
+                                        nav("/restaurant-view");
                                     }}
                                 > Nhà Hàng - Dịch Vụ </span>
                                 <span style={activeButton === "about-us" ? { color: "#f07d22" } : {}} >
