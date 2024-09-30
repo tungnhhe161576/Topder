@@ -138,4 +138,86 @@ export const HistoryContainer = styled.div `
         padding: 0 10px;
     }
 
+
+    .form-order-detail  {
+        background-color: #fff;
+        border-radius: 10px;
+        width: 100%;
+        height: 550px;
+
+        .return-button {
+            margin: 30px 0 0 20px;
+            height: 40px;
+            width: 100px;
+            border: none;
+        }
+
+        .return-button:hover {
+            background-color: #d87735;
+            color: white;
+        }
+
+        .step-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #4caf50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        :where(.css-dev-only-do-not-override-14i19y2).ant-steps .ant-steps-item-finish>.ant-steps-item-container>.ant-steps-item-tail::after {
+            background-color: #28a745 !important;
+            height: 3px;
+        }
+        :where(.css-dev-only-do-not-override-14i19y2).ant-steps .ant-steps-item-process>.ant-steps-item-container>.ant-steps-item-tail::after {
+            background-color: gray !important;
+            height: 3px;
+        }
+        :where(.css-dev-only-do-not-override-14i19y2).ant-steps .ant-steps-item-wait>.ant-steps-item-container>.ant-steps-item-tail::after {
+            background-color: gray !important;
+            height: 3px;
+        }
+        
+        :where(.css-dev-only-do-not-override-14i19y2).ant-steps.ant-steps-label-vertical .ant-steps-item-tail {
+            padding: 0 !important;
+            /* margin: 0 !important; */
+        }
+
+        .ant-steps-item-wait .step-icon {
+            background-color: gray !important ;
+        }
+
+        .info {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 30px;
+            margin-left: 50px;
+        }
+
+        table tr th {
+            border-left: 1px solid #ddd;
+            text-align: center;
+        }
+        
+        table tr td {
+            border-left: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+            text-align: center;
+        }
+
+        table th:first-child {
+            width: 150px;
+        }
+        table th:nth-child(2) {
+            width: 100px;
+        }
+        table th:nth-child(3) {
+            width: 120px;
+        }
+        table th:nth-child(4){
+            width: 120px;
+        }
+    }
 `

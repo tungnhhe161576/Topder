@@ -25,6 +25,7 @@ import ManageRestaurant from "../pages/Restaurant/RestaurantManage/ManageRestaur
 import ManageOrder from "../pages/Restaurant/RestaurantManage/ManageOrder";
 import ManageRate from "../pages/Restaurant/RestaurantManage/ManageRate";
 import Wallet from "../pages/User/UserProfile/Wallet";
+import OrderDetail from "../pages/User/UserProfile/HistoryBooking/OrderDetail";
 
 const router = createBrowserRouter([
   {
@@ -90,7 +91,7 @@ const router = createBrowserRouter([
         title: "Chi tiết nhà hàng",
       },
       {
-        path: "restaurant/register",
+        path: "restaurant-register",
         element: <RegisterRestaurant />,
         title: "Đăng kí nhà hàng",
       },
@@ -113,6 +114,13 @@ const router = createBrowserRouter([
             path: "history-booking",
             element: <HistoryBooking/>,
             title: "Lịch sử đặt bàn",
+            // children: [
+            //   {
+            //     path: "order-detail/1",
+            //     element: <OrderDetail/>,
+            //     title: "Chi tiết đơn hàng",
+            //   }
+            // ]
           },
           {
             path: "wishlist",
@@ -146,7 +154,6 @@ const router = createBrowserRouter([
       // Restaurent
       {
         path: "restaurant",
-        // element: ,
         title: "Quản lý nhà hàng",
         children: [
           {
