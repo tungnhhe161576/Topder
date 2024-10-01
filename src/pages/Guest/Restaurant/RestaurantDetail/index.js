@@ -107,7 +107,7 @@ const RestaurantDetail = () => {
                                     </div>
                                 </div>
                                 <div>
-                                    <Button className='bg-primary added-like' shape='round'>
+                                    <Button className='added-like' shape='round'>
                                         Thêm vào yêu thích
                                     </Button>
                                 </div>

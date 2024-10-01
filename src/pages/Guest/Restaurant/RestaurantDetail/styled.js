@@ -21,12 +21,13 @@ export const RestaurantDetailContainer = styled.div `
             font-size: 15px;
             width: 220px;
             height: 44px;
+            background-color: #ff7c08;
         }
 
         .added-like:hover {
             background-color: #ff9933 !important;
             border: none;
-            color: white;
+            color: white !important;
         }
 
         .album-image {
@@ -117,11 +118,12 @@ export const RestaurantDetailContainer = styled.div `
         .rating-button {
             border: none;
             height: 40px;
+            background-color: #ff7c08;
         }
 
         .rating-button:hover {
             background: #ff9933 !important;
-            color: white;
+            color: white !important;
         }
     }
 
