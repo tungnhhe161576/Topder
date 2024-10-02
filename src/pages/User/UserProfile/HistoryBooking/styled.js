@@ -161,28 +161,19 @@ export const HistoryContainer = styled.div `
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background-color: #4caf50;
+            background-color: #4bac4f;
             display: flex;
             justify-content: center;
             align-items: center;
         }
-
-        :where(.css-dev-only-do-not-override-14i19y2).ant-steps .ant-steps-item-finish>.ant-steps-item-container>.ant-steps-item-tail::after {
-            background-color: #28a745 !important;
-            height: 3px;
-        }
-        :where(.css-dev-only-do-not-override-14i19y2).ant-steps .ant-steps-item-process>.ant-steps-item-container>.ant-steps-item-tail::after {
-            background-color: gray !important;
-            height: 3px;
-        }
-        :where(.css-dev-only-do-not-override-14i19y2).ant-steps .ant-steps-item-wait>.ant-steps-item-container>.ant-steps-item-tail::after {
-            background-color: gray !important;
-            height: 3px;
-        }
         
-        :where(.css-dev-only-do-not-override-14i19y2).ant-steps.ant-steps-label-vertical .ant-steps-item-tail {
-            padding: 0 !important;
-            /* margin: 0 !important; */
+        :where(.css-dev-only-do-not-override-14qglws).ant-steps.ant-steps-label-vertical .ant-steps-item-tail {
+            padding: 0;
+        }
+
+        :where(.css-dev-only-do-not-override-14qglws).ant-steps .ant-steps-item-finish>.ant-steps-item-container>.ant-steps-item-tail::after {
+            background-color: #4bac4f;
+            height: 3px;
         }
 
         .ant-steps-item-wait .step-icon {

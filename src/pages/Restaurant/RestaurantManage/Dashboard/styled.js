@@ -55,13 +55,28 @@ export const DashboardContainer = styled.div `
                 padding: 15px 25px;
                 background-color: #fff;
             }
-            .select {
-                border: none;
-                width: 120px;
-                background: #f1f1f1;
+            .item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: #c5ced9 1px solid;
+                height: 80px;
             }
-            .select:hover {
-                border: none
+            .ant-select-selector {
+                border: none !important; 
+                box-shadow: none !important;
+                background-color: #f1f1f1;
+                font-size: 18px;
+            }
+            .ant-select-selector:hover {
+                border-color: transparent !important;
+            }
+            .ant-select-focused .ant-select-selector {
+                border-color: transparent !important;
+                box-shadow: none !important; 
+            }
+            .ant-select-dropdown {
+                box-shadow: none !important; 
             }
         }
 
@@ -83,17 +98,16 @@ export const DashboardContainer = styled.div `
                     cursor: pointer;
                 }
             }
-            .wait, .accept, .process, .done {
+            .wait, .accept, .process, .done, .cancel {
                 border-bottom: 1px solid #c5ced9;
                 padding-left: 15px;
-                height: 70px;
+                height: 100px;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
             }
             .cancel {
-                height: 70px;
-                padding-left: 15px;
+                border: none;
             }
             .click-to-view {
                 cursor: pointer;

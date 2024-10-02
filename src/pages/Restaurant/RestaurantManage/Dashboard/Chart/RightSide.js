@@ -30,7 +30,7 @@ const RightSide = () => {
         return () => {
           chart.destroy();
         };
-      }, []);
+    }, []);
 
     
 
