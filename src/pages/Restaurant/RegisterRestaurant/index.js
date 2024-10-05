@@ -163,6 +163,7 @@ const RegisterRestaurant = () => {
 						src={logo}
 						alt="Logo"
 						onClick={() => nav("/")}
+						style={{ cursor: "pointer" }}
 					/>
 				</header>
 
