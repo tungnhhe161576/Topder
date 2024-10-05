@@ -4,10 +4,15 @@ import { Col, Row, Pagination, Select, Input, Button, Form } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { RestaurantContainer } from "./styled";
 import RestaurantItem from "../../../components/RestaurantItem";
+import ModalRequestLogin from "../../../components/Modal/RequestLogin";
+import ModalBookingTable from "../../../components/Modal/Booking";
 const { Option } = Select;
 
 const Restaurant = () => {
 	const [currentPage, setCurrentPage] = useState(1);
+	const [openRequestLogin, setOpenRequestLogin] = useState(false);
+	const [openModalBooking, setOpenModalBooking] = useState(false);
+	const [text, setText] = useState("");
 	const totalRest = 19;
 	const itemPerPage = 8;
 
@@ -91,8 +96,14 @@ const Restaurant = () => {
 							.map((_, index) => (
 								<Col xs={12} sm={12} md={12} lg={6} xl={6}>
 									<RestaurantItem
-										setText={""}
-										isWishlist={true}
+										setOpenRequestLogin={
+											setOpenRequestLogin
+										}
+										setOpenModalBooking={
+											setOpenModalBooking
+										}
+										setText={setText}
+										isWishlist={false}
 									/>
 								</Col>
 							))}
@@ -137,6 +148,21 @@ const Restaurant = () => {
 					</Row>
 				</div>
 			</RestaurantContainer>
+			{!!openRequestLogin && (
+				<ModalRequestLogin
+					open={openRequestLogin}
+					onCancel={() => setOpenRequestLogin(false)}
+					text={text}
+				/>
+			)}
+
+			{!!openModalBooking && (
+				<ModalBookingTable
+					open={openModalBooking}
+					onCancel={() => setOpenModalBooking(false)}
+					text={text}
+				/>
+			)}
 		</CommonLayout>
 	);
 };

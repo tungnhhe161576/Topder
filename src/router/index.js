@@ -28,154 +28,154 @@ import Wallet from "../pages/User/UserProfile/Wallet";
 import OrderDetail from "../pages/User/UserProfile/HistoryBooking/OrderDetail";
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-    errorElement: <ErrorPage />,
-    title: "",
-    children: [
-      {
-        path: "",
-        element: <HomePage />,
-        title: "",
-      },
-      {
-        path: "login",
-        element: <LoginPage />,
-        title: "Đăng Nhập",
-      },
-      {
-        path: "register",
-        element: <RegisterPage />,
-        title: "Đăng Ký",
-        children: [{}],
-      },
-      {
-        path: "forgot-password",
-        element: <ForgotPassword />,
-        title: "Forgot Password",
-      },
-      {
-        path: "about-us",
-        element: <AboutUs />,
-        title: "Về Chúng Tôi",
-      },
-      {
-        path: "privacy-policy",
-        element: <PrivacyPolicy />,
-        title: "Chính sách bảo mật",
-      },
-      {
-        path: "terms-condition",
-        element: <TermAndConditon />,
-        title: "Điều khoản và điều kiện",
-      },
-      {
-        path: "blog",
-        element: <Blog />,
-        title: "Blog",
-      },
-      {
-        path: "restaurant-view",
-        element: <Restaurant />,
-        title: "Nhà Hàng - Dịch Vụ",
-      },
-      {
-        path: "contact",
-        element: <Contact />,
-        title: "Liên Hệ",
-      },
-      {
-        path: "restaurant-detail",
-        element: <RestaurantDetail />,
-        title: "Chi tiết nhà hàng",
-      },
-      {
-        path: "restaurant-register",
-        element: <RegisterRestaurant />,
-        title: "Đăng kí nhà hàng",
-      },
-      {
-        path: "blog-detail",
-        element: <BlogDetail />,
-        title: "Chi tiết Blog",
-      },
+	{
+		path: "/",
+		element: <App />,
+		errorElement: <ErrorPage />,
+		title: "",
+		children: [
+			{
+				path: "",
+				element: <HomePage />,
+				title: "",
+			},
+			{
+				path: "login",
+				element: <LoginPage />,
+				title: "Đăng Nhập",
+			},
+			{
+				path: "register",
+				element: <RegisterPage />,
+				title: "Đăng Ký",
+				children: [{}],
+			},
+			{
+				path: "forgot-password",
+				element: <ForgotPassword />,
+				title: "Forgot Password",
+			},
+			{
+				path: "about-us",
+				element: <AboutUs />,
+				title: "Về Chúng Tôi",
+			},
+			{
+				path: "privacy-policy",
+				element: <PrivacyPolicy />,
+				title: "Chính sách bảo mật",
+			},
+			{
+				path: "terms-condition",
+				element: <TermAndConditon />,
+				title: "Điều khoản và điều kiện",
+			},
+			{
+				path: "blog",
+				element: <Blog />,
+				title: "Blog",
+			},
+			{
+				path: "restaurant-view",
+				element: <Restaurant />,
+				title: "Nhà Hàng - Dịch Vụ",
+			},
+			{
+				path: "contact",
+				element: <Contact />,
+				title: "Liên Hệ",
+			},
+			{
+				path: "restaurant-detail",
+				element: <RestaurantDetail />,
+				title: "Chi tiết nhà hàng",
+			},
+			{
+				path: "restaurant-register",
+				element: <RegisterRestaurant />,
+				title: "Đăng kí nhà hàng",
+			},
+			{
+				path: "blog-detail",
+				element: <BlogDetail />,
+				title: "Chi tiết Blog",
+			},
 
-      // User
-      {
-        path: "user-profile",
-        children: [
-          {
-            path: "",
-            element: <Profile/>,
-            title: "",
-          },
-          {
-            path: "history-booking",
-            element: <HistoryBooking/>,
-            title: "Lịch sử đặt bàn",
-            // children: [
-            //   {
-            //     path: "order-detail/1",
-            //     element: <OrderDetail/>,
-            //     title: "Chi tiết đơn hàng",
-            //   }
-            // ]
-          },
-          {
-            path: "wishlist",
-            element: <Whishlist/>,
-            title: "Nhà hàng yêu thích",
-          },
-          {
-            path: "rates",
-            element: <Rate/>,
-            title: "Đánh giá",
-          },
-          {
-            path: "change-password",
-            element: <ChangePassword/>,
-            title: "Đổi mật khẩu",
-          },
-          {
-            path: "authentication-phone",
-            element: <AuthenticationPhone/>,
-            title: "Xác thực số điện thoại",
-          },
-          {
-            path: "user-wallet",
-            element: <Wallet/>,
-            title: "Ví",
-          },
-        ],
-        title: "Thông tin cá nhân",
-      },
+			// User
+			{
+				path: "user-profile",
+				children: [
+					{
+						path: "",
+						element: <Profile />,
+						title: "",
+					},
+					{
+						path: "history-booking",
+						element: <HistoryBooking />,
+						title: "Lịch sử đặt bàn",
+						// children: [
+						//   {
+						//     path: "order-detail/1",
+						//     element: <OrderDetail/>,
+						//     title: "Chi tiết đơn hàng",
+						//   }
+						// ]
+					},
+					{
+						path: "wishlist",
+						element: <Whishlist />,
+						title: "Nhà hàng yêu thích",
+					},
+					{
+						path: "rates",
+						element: <Rate />,
+						title: "Đánh giá",
+					},
+					{
+						path: "change-password",
+						element: <ChangePassword />,
+						title: "Đổi mật khẩu",
+					},
+					{
+						path: "authentication-phone",
+						element: <AuthenticationPhone />,
+						title: "Xác thực số điện thoại",
+					},
+					{
+						path: "user-wallet",
+						element: <Wallet />,
+						title: "Ví",
+					},
+				],
+				title: "Thông tin cá nhân",
+			},
 
-      // Restaurent
-      {
-        path: "restaurant",
-        title: "Quản lý nhà hàng",
-        children: [
-          {
-            path: "dashboard",
-            element: <Dashboard/>,
-          },
-          {
-            path: "manage-restaurant",
-            element: <ManageRestaurant/>,
-          },
-          {
-            path: "manage-order",
-            element: <ManageOrder/>,
-          },
-          {
-            path: "manage-rate",
-            element: <ManageRate/>,
-          },
-        ]
-      },
-    ],
-  },
+			// Restaurent
+			{
+				path: "restaurant",
+				title: "Quản lý nhà hàng",
+				children: [
+					{
+						path: "dashboard",
+						element: <Dashboard />,
+					},
+					{
+						path: "manage-restaurant",
+						element: <ManageRestaurant />,
+					},
+					{
+						path: "manage-order",
+						element: <ManageOrder />,
+					},
+					{
+						path: "manage-rate",
+						element: <ManageRate />,
+					},
+				],
+			},
+		],
+	},
 ]);
 
 export default router;
