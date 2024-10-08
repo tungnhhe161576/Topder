@@ -12,10 +12,12 @@ export const FooterContainer = styled.div `
         display: inline-block;
 
         .image-container {
-            background-size: cover;
-            background-position: center;
-            width: 100%;
-            height: 100%;
+            & img{
+                width: 100%;
+                height: 540px;
+                background-size: cover;
+                background-position: center;
+            }
         }
         
         .overlay {
