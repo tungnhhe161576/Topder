@@ -3,6 +3,7 @@ import styled from 'styled-components'
 export const RestaurantDetailContainer = styled.div `
     width: 90%;
     margin: auto;
+    position: relative;
 
     .information {
         margin-top: 50px;
@@ -128,13 +129,15 @@ export const RestaurantDetailContainer = styled.div `
     }
 
     .booking {
-        .left-side {
+        /* .left-side {
             width: 0;
             height: 0;
             border-style: solid;
             border-width: 702px 300px 0px 0px; 
             border-color: transparent #ef7d22 transparent transparent;
-        }
+        } */
+            position: sticky;
+            top: 60px;
 
         .form-booking {
             background: #ef7d22;
@@ -151,11 +154,11 @@ export const RestaurantDetailContainer = styled.div `
     
             .button-submit:hover {
                 background: #3e367d !important;
+                color: white;
             }
 
             .input {
-                height: 50px;
-
+                height: 40px;
             }
         }
     }

@@ -146,10 +146,17 @@ export const HistoryContainer = styled.div `
         height: 550px;
 
         .return-button {
+            background-color: #fa8c16;
+            color: #fff;
             margin: 30px 0 0 20px;
             height: 40px;
-            width: 100px;
+            width: 120px;
             border: none;
+        }
+
+        .return-button:hover {
+            background-color: #ff7f0e !important;
+            color: #fff !important;
         }
 
         .return-button:hover {

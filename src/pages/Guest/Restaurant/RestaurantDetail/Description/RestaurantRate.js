@@ -23,7 +23,7 @@ const RestaurantRate = ( {rateCount} ) => {
 
     return (  
         <Row gutter={[40, 0]} className="mt-20">
-            <Col xs={24} sm={24} md={16} lg={16} xl={16}>
+            <Col xs={24} sm={24} md={13} lg={13} xl={13}>
                 <div className="fs-22 fw-600 mt-10 mb-15"> {rateCount} Đánh giá </div>
                 {Array(3).fill().map((_, index) => (
                     <div className="rating-container mb-20">
@@ -45,7 +45,7 @@ const RestaurantRate = ( {rateCount} ) => {
             </Col>
 
 
-            <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+            <Col xs={24} sm={24} md={11} lg={11} xl={11}>
                 <div className="fs-22 fw-600 mt-10 mb-15"> Đánh giá </div>
 
                 <div className="rating-form">

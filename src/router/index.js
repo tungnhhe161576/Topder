@@ -25,7 +25,6 @@ import ManageRestaurant from "../pages/Restaurant/RestaurantManage/ManageRestaur
 import ManageOrder from "../pages/Restaurant/RestaurantManage/ManageOrder";
 import ManageRate from "../pages/Restaurant/RestaurantManage/ManageRate";
 import Wallet from "../pages/User/UserProfile/Wallet";
-import OrderDetail from "../pages/User/UserProfile/HistoryBooking/OrderDetail";
 
 const router = createBrowserRouter([
 	{

@@ -314,7 +314,7 @@ const ManageOrder = () => {
 			<ManageOrderContainer>
 				<div className="d-flex justify-content-space-between align-items-center">
 					<div>
-						<h3 class="card-title card-title-dash">Đơn Hàng</h3>
+						<h3 className="card-title card-title-dash">Đơn Hàng</h3>
 					</div>
 					<div className="d-flex-end">
 						<Button type="primary" className="white fs-15">

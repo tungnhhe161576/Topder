@@ -35,7 +35,7 @@ const OrderDetail = ( {setIsDetail} ) => {
         <div className="form-order-detail">
             <Button
                 shape="round"
-                className="bg-primary white fs-16 return-button"
+                className="fs-16 fw-500 return-button"
                 onClick={() => setIsDetail(false)}
             >
                 Trở về
