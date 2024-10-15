@@ -98,6 +98,10 @@ export const CommonLayoutContainer = styled.div`
             align-self: center;
         }
 
+        .user {
+            cursor: pointer;
+        }
+
         .lo-re {
             font-size: 20px;
             cursor: pointer;

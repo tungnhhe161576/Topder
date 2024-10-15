@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Col, Dropdown, Row } from "antd";
+import { Avatar, Col, Dropdown, Row } from "antd";
 import { useNavigate } from "react-router-dom";
 import {
   MailOutlined,
@@ -13,6 +13,7 @@ import image from "../../../../assets/images/foot-image.png";
 import image2 from "../../../../assets/images/blog-item.jpg";
 import image3 from "../../../../assets/images/8.3.jpg";
 import logo2 from "../../../../assets/images/Logo2.png";
+import { userInfor } from "../../../../redux/Slice/userSlice";
 
 
 const IconFont = createFromIconfontCN({
@@ -23,6 +24,9 @@ const Header = () => {
     const nav = useNavigate();
     const dispatch = useDispatch();
     const activeButton = useSelector(getNav);
+    const user = useSelector(userInfor)
+    console.log("user", user);
+    
     const itemsDropdown = [
         {
             key: '1',
@@ -34,6 +38,20 @@ const Header = () => {
             key: '2',
             label: (
                 <span className="fs-16 fw-600" onClick={() => nav('/terms-condition')}>Điều khoản và điều kiện</span>
+            ),
+        },
+    ];
+    const itemsDropdownProfile = [
+        {
+            key: '1',
+            label: (
+                <span className="fs-16 fw-600" onClick={() => nav(`/user-profile/${user?.uid}`)}>Thông tin cá nhân</span>
+            ),
+        },
+            {
+            key: '2',
+            label: (
+                <span className="fs-16 fw-600" onClick={() => handleLogout}>Đăng xuất</span>
             ),
         },
     ];
@@ -100,6 +118,9 @@ const Header = () => {
         }
     }, [])
 
+    const handleLogout = async () => {
+        console.log("abc");
+    }
         
     return (
         <>
@@ -188,16 +209,28 @@ const Header = () => {
                         </Col>
                         <Col xs={3} sm={3} md={3} lg={3} xl={3}>
                             <div className="user-info">
-                                <div className="lo-re">
-                                    <span className="login" onClick={() => nav("/login")}>
-                                        Đăng Nhập
-                                    </span>
-                                    /
-                                    <span className="register" onClick={() => nav("/register")}>
-                                        Đăng Ký
-                                    </span>
-                                </div>
-                                {/* <div></div> */}
+                                {
+                                    !user 
+                                        ? 
+                                        <div className="lo-re">
+                                            <span className="login" onClick={() => nav("/login")}>
+                                                Đăng Nhập
+                                            </span>
+                                            /
+                                            <span className="register" onClick={() => nav("/register")}>
+                                                Đăng Ký
+                                            </span>
+                                        </div>
+                                        : <div className="user">
+                                                <Dropdown
+                                                    menu={{
+                                                        items: itemsDropdownProfile,
+                                                    }}
+                                                >
+                                                    <Avatar src={user?.image} size={56}/>
+                                                </Dropdown>
+                                        </div>
+                                }
                             </div>
                         </Col>
                     </Row> 
