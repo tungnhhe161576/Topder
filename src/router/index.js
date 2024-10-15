@@ -85,7 +85,7 @@ const router = createBrowserRouter([
 				title: "Liên Hệ",
 			},
 			{
-				path: "restaurant-detail",
+				path: "restaurant-detail/:restaurantId",
 				element: <RestaurantDetail />,
 				title: "Chi tiết nhà hàng",
 			},

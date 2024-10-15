@@ -3,6 +3,7 @@ import { RestaurantItemContainer } from "./styled";
 import { useNavigate } from "react-router-dom";
 import { Rate } from "antd";
 import { HeartOutlined } from "@ant-design/icons";
+import { formatNumberToK } from "../../lib/stringUtils";
 
 const RestaurantItem = ({
 	data,
@@ -32,11 +33,11 @@ const RestaurantItem = ({
 		<RestaurantItemContainer>
 			<div
 				className="brand-image"
-				onClick={() => nav("/restaurant-detail")}
+				onClick={() => nav("/restaurant-detail/" + data?.uid)}
 			>
 				<img
 					className="image-detail"
-					src="https://insanelygoodrecipes.com/wp-content/uploads/2020/07/Cup-Of-Creamy-Coffee.png"
+					src={data?.logo}
 					alt="Brand-image"
 				/>
 			</div>
@@ -59,6 +60,14 @@ const RestaurantItem = ({
 				<div className="rate">
 					<Rate style={{ color: "#ff7c08" }} value={data?.star} disabled /> -
 					({data?.totalFeedbacks} đánh giá)
+				</div>
+				<div className="price fs-18 fw-600 primary">
+					<div>
+						<span style={{color: 'black'}}>Giá bàn: </span> {formatNumberToK(data?.price)}
+					</div>
+					<div>
+					 	{data?.discount > 0 ? (<><span style={{color: 'black'}}> Giảm giá: </span> <span>{data?.discount} %</span></>)  : ''}
+					</div>
 				</div>
 				<div className="hard"></div>
 				<div className="option">

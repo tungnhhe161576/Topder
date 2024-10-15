@@ -77,12 +77,12 @@ const Header = () => {
             }
             setSlider();
 
-            nextBtn.onClick = () => {
+            nextBtn.onclick = () => {
                 active = active + 1 > lastPosition ? 0 : active + 1;
                 carousel.style.setProperty('--calculation', 1);
                 setSlider();
             }
-            prevBtn.onClick = () => {
+            prevBtn.onclick = () => {
                 active = active - 1 < firstPosition ? lastPosition : active - 1;
                 carousel.style.setProperty('--calculation', -1);
                 setSlider();
@@ -92,7 +92,7 @@ const Header = () => {
                 }, 5000);
             }
             dots.forEach((item, position) => {
-                item.onClick = () => {
+                item.onclick = () => {
                     active = position;
                     setSlider();
                 }

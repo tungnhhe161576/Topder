@@ -11,8 +11,10 @@ export const RestaurantDetailContainer = styled.div `
         .image-container {
             img {
                 background-size: cover;
+                /* background-size: cover; */
+                background-position: center;
                 width: 100%;
-                height: 100%;
+                max-height: 500px;
             }
         }
 
@@ -42,6 +44,7 @@ export const RestaurantDetailContainer = styled.div `
                 white-space: nowrap;
                 max-width: 100%;
                 overflow-x: auto;
+                
             }
 
             button {
@@ -129,15 +132,8 @@ export const RestaurantDetailContainer = styled.div `
     }
 
     .booking {
-        /* .left-side {
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 702px 300px 0px 0px; 
-            border-color: transparent #ef7d22 transparent transparent;
-        } */
-            position: sticky;
-            top: 60px;
+        position: sticky;
+        top: 60px;
 
         .form-booking {
             background: #ef7d22;
@@ -160,6 +156,19 @@ export const RestaurantDetailContainer = styled.div `
             .input {
                 height: 40px;
             }
+        }
+
+        .choose {
+            width: 150px;
+            height: 40px;
+            background-color: #5d70e6;
+            color: white;
+            border: none;
+        }
+
+        .choose:hover {
+            color: white !important;
+            background-color: #4f65ed !important;
         }
     }
     

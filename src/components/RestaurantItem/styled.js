@@ -71,8 +71,15 @@ export const RestaurantItemContainer = styled.div `
 
         .rate {
             position: absolute;
-            top: 66%;
+            top: 60%;
             left: 22%;
+        }
+
+        .price {
+            position: absolute;
+            top: 68%;
+            padding-left: 40px;
+            width: 100%;
         }
 
         .hard {
@@ -81,14 +88,14 @@ export const RestaurantItemContainer = styled.div `
             border-left: 18px solid transparent;
             border-bottom: 32px solid #d36606;
             position: absolute;
-            top: 70%;
+            top: 77%;
             margin-left: -18px;
         }
 
         .option {
             position: absolute;
             width: 100%;
-            top: 77%;
+            top: 84%;
             display: flex;
             justify-content: space-between;
 
