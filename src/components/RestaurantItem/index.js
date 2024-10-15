@@ -5,6 +5,7 @@ import { Rate } from "antd";
 import { HeartOutlined } from "@ant-design/icons";
 
 const RestaurantItem = ({
+	data,
 	setOpenRequestLogin,
 	setOpenModalBooking,
 	setText,
@@ -47,18 +48,17 @@ const RestaurantItem = ({
 						nav("/");
 					}}
 				>
-					<span className="pl-15 pr-15"> Quán cà phê | Trà sữa </span>
+					<span className="pl-15 pr-15"> {data?.categoryName} </span>
 				</div>
 				<div
 					className="brand-name"
 					onClick={() => nav("/restaurant-detail")}
 				>
-					{" "}
-					Mer.Coffee & Tea{" "}
+					{data?.nameRes}
 				</div>
 				<div className="rate">
-					<Rate style={{ color: "#ff7c08" }} value={5} disabled /> -
-					(5 đánh giá)
+					<Rate style={{ color: "#ff7c08" }} value={data?.star} disabled /> -
+					({data?.totalFeedbacks} đánh giá)
 				</div>
 				<div className="hard"></div>
 				<div className="option">

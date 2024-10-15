@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const BlogItemContainer = styled.div`
   width: 100%;
-  height: 440px;
+  height: 450px;
   background: #fff;
   position: relative;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -84,7 +84,8 @@ export const BlogItemContainer = styled.div`
       margin-top: 20px;
       margin-left: 30px;
       margin-bottom: 10px;
-      width: 70%;
+      width: 80%;
+      height: 80px;
       line-height: 1.5em;
       font-size: 20px;
       font-weight: 700;

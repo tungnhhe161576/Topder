@@ -77,12 +77,12 @@ const Header = () => {
             }
             setSlider();
 
-            nextBtn.onclick = () => {
+            nextBtn.onClick = () => {
                 active = active + 1 > lastPosition ? 0 : active + 1;
                 carousel.style.setProperty('--calculation', 1);
                 setSlider();
             }
-            prevBtn.onclick = () => {
+            prevBtn.onClick = () => {
                 active = active - 1 < firstPosition ? lastPosition : active - 1;
                 carousel.style.setProperty('--calculation', -1);
                 setSlider();
@@ -92,7 +92,7 @@ const Header = () => {
                 }, 5000);
             }
             dots.forEach((item, position) => {
-                item.onclick = () => {
+                item.onClick = () => {
                     active = position;
                     setSlider();
                 }
@@ -206,21 +206,21 @@ const Header = () => {
 
             <div className="carousel">
                 <div className="list">
-                    <div class="item ">
+                    <div className="item ">
                         <figure>
                             <img src={image} alt="img"/>
                         </figure>
-                        <div class="content">
-                            <p class="category" onclick={() => nav('/restaurant-view')}>
+                        <div className="content">
+                            <p className="category" onClick={() => nav('/restaurant-view')}>
                                 Cà phê | Trà sữa 
                             </p>
                             <h2>
                                 Mer.Coffee & Tea
                             </h2>
-                            <p class="description">
+                            <p className="description">
                                 Menu 4 món bánh kem hương vị, nhiệt đới mới toanh tại Mer. cả nhà đã update chưa? Ai thử cũng "nghiện" - vậy mà có Hommies vẫn chưa đu trand Bánh Kem tại Mer sao ?
                             </p>
-                            <div class="more">
+                            <div className="more">
                                 <button onClick={() => nav('/restaurant-detail')}>
                                     Đặt bàn
                                 </button>
@@ -230,63 +230,63 @@ const Header = () => {
                             </div>
                         </div>
                     </div>
-                    <div class="item ">
+                    <div className="item ">
                         <figure>
                             <img src={image2} alt="img"/>
                         </figure>
-                        <div class="content">
-                            <p class="category">
+                        <div className="content">
+                            <p className="category">
                                 Cà phê | Trà sữa 
                             </p>
                             <h2>
                                 Mer.Coffee & Tea
                             </h2>
-                            <p class="description">
+                            <p className="description">
                                 Menu 4 món bánh kem hương vị, nhiệt đới mới toanh tại Mer. cả nhà đã update chưa? Ai thử cũng "nghiện" - vậy mà có Hommies vẫn chưa đu trand Bánh Kem tại Mer sao ?
                             </p>
-                            <div class="more">
+                            <div className="more">
                                 <button>
                                     Đặt bàn
                                 </button>
                                 <button>
-                                    <i class="fa-solid fa-play"></i> Xem chi tiết
+                                    <i className="fa-solid fa-play"></i> Xem chi tiết
                                 </button>
                             </div>
                         </div>
                     </div>
-                    <div class="item ">
+                    <div className="item ">
                         <figure>
                             <img src={image3} alt="img"/>
                         </figure>
-                        <div class="content">
-                            <p class="category">
+                        <div className="content">
+                            <p className="category">
                                 Cà phê | Trà sữa 
                             </p>
                             <h2>
                                 Mer.Coffee & Tea
                             </h2>
-                            <p class="description">
+                            <p className="description">
                                 Menu 4 món bánh kem hương vị, nhiệt đới mới toanh tại Mer. cả nhà đã update chưa? Ai thử cũng "nghiện" - vậy mà có Hommies vẫn chưa đu trand Bánh Kem tại Mer sao ?
                             </p>
-                            <div class="more">
+                            <div className="more">
                                 <button>
                                     Đặt bàn
                                 </button>
                                 <button>
-                                    <i class="fa-solid fa-play"></i> Xem chi tiết
+                                    <i className="fa-solid fa-play"></i> Xem chi tiết
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="arrows">
+                <div className="arrows">
                     <button id="prev"> {'<'} </button>
                     <button id="next"> {'>'} </button>
                 </div>
-                <div class="indicators">
-                    <div class="number">02</div>
+                <div className="indicators">
+                    <div className="number">02</div>
                     <ul>
-                        <li class="active"></li>
+                        <li className="active"></li>
                         <li></li>
                         <li></li>
                     </ul>
