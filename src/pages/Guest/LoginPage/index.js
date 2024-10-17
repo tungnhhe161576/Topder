@@ -23,12 +23,16 @@ const LoginPage = () => {
             setLoading(true);
             const values = await form.validateFields();
             const res = await UserService.loginApi(values)
-            console.log("res", res);
             localStorage.setItem('token', res.data.token)
             dispatch(setUserInformation(res.data.userInfo));
             dispatch(setAccessToken(res.data.token));
             toast("Đăng nhập thành công!");
-            nav('/')
+
+            if(res.data.userInfo.role === 'Customer') {
+                nav('/')
+            } else if (res.data.userInfo.role === 'Restaurant') {
+                nav('/restaurant/dashboard')
+            }
         } catch (error) {
             if (error.response && error.response.status === 401) {
                 toast.error(error.response.data.message || "Đăng nhập thất bại. Vui lòng thử lại.");

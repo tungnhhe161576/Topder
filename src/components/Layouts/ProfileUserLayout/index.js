@@ -1,27 +1,91 @@
-import { Col, Image, Row } from "antd";
+import { Button, Col, Form, Image, message, Row, Upload } from "antd";
 import CommonLayout from "../CommonLayout";
 import { ProfileContainer } from "./styled";
-import avatar from '../../../assets/images/Dat.jpg'
 import { UserOutlined, ReconciliationFilled, StarFilled, HeartFilled, LogoutOutlined, UserSwitchOutlined, CameraOutlined, PhoneOutlined, WalletOutlined } from '@ant-design/icons'
 import { useLocation, useNavigate } from "react-router-dom";
 import { formatNumberToK } from "../../../lib/stringUtils";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUserInformation, userInfor } from "../../../redux/Slice/userSlice";
+import { useEffect, useState } from "react";
+import UserService from "../../../services/UserService";
+import ImageService from "../../../services/ImageService";
 
 
 const ProfileUserLayout = ( {children} ) => {
     const nav = useNavigate()
     const location = useLocation();
+    const user = useSelector(userInfor)
+    const [avatar, setAvatar] = useState(null)
+    const dispatch  = useDispatch()
+    const [loading, setLoading] = useState(false)
+    const [form] = Form.useForm()
 
     const isActive = (path) => location.pathname === path;
+
+    useEffect(() => {
+        if (user && user?.image) {
+            setAvatar(user.image);
+        }
+    }, [user]);
 
     const handleLogout = async () => {
         try {
             
         } catch (error) {
             console.log(error);
+        } finally {
+            setLoading(false)
         }
     } 
 
+    const handleBeforeUpload = (file) => {
+        const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"]
+        const isAllowedType = allowedImageTypes.includes(file.type)
+        if (!isAllowedType) {
+          message.open({
+            content: 'Vui lòng chọn file hình ảnh đúng định dạng (JPG, PNG, GIF).',
+            type: 'error',
+            style: {
+                marginTop: '20vh',
+            },
+          })
+        } else {
+          setAvatar(URL.createObjectURL(file))
+        }
+        return isAllowedType ? false : Upload.LIST_IGNORE
+    }
 
+    const handleUpdateAvatar = async () => {
+        try {
+            setLoading(true)
+            const values = await form.validateFields()
+            const file = values.avatar.file;
+            const formData = new FormData();
+            formData.append("file", file);
+
+            const getImage = await ImageService.uploadImage(formData)
+            setAvatar(getImage.url)
+
+            const res = await UserService.updateProfile({
+                Uid: user.uid,
+                Image: getImage.url
+            })
+            message.open({
+                content: res.message,
+                type: 'success',
+                style: {
+                    marginTop: '20vh',
+                },
+            })
+
+            dispatch(updateUserInformation({ image: getImage.url }));
+        } catch (error) {
+            console.error("Error updating avatar:", error)
+        } finally {
+            setLoading(false)
+        }
+    }
+    
     return (  
         <CommonLayout>
             <ProfileContainer>
@@ -32,11 +96,52 @@ const ProfileUserLayout = ( {children} ) => {
                                 <div className="img-container">
                                     <Image src={avatar} alt="avatar"/>
                                     <div className="cam">
-                                        <CameraOutlined className="fs-20"/>
+                                        <Form form={form}>
+                                            <Form.Item
+                                                name="avatar"
+                                                className="m-0 p-0"
+                                            >
+                                                <Upload.Dragger
+                                                    className="dragger"
+                                                    beforeUpload={file => handleBeforeUpload(file)}
+                                                    style={{ width: '100%', height: '150px', border: 'none' }}
+                                                    accept="image/*"
+                                                    multiple={false}
+                                                    maxCount={1}
+                                                    fileList={[]}
+                                                >
+                                                    <CameraOutlined className="fs-20"/>
+                                                </Upload.Dragger>
+                                            </Form.Item>
+                                        </Form>
                                     </div>
                                 </div>
+                                {
+                                    avatar !== user?.image 
+                                        ? 
+                                            <div className="d-flex justify-content-center mt-15">
+                                                <Button 
+                                                    className="mr-5 fs-12 fw-500 pl-20 pr-20" 
+                                                    shape="round"
+                                                    type="primary"
+                                                    onClick={() => handleUpdateAvatar()}
+                                                    loading={loading}
+                                                >
+                                                    Lưu
+                                                </Button>
+                                                <Button 
+                                                    onClick={() => setAvatar(user?.image)}
+                                                    className="fs-12 fw-500 white out-image"
+                                                    style={{backgroundColor: 'gray', border: 'none'}}
+                                                    shape="round"
+                                                >
+                                                    Thoát
+                                                </Button>
+                                            </div>
+                                        : <></>
+                                }
                                 <div className="name white fw-700 fs-20 mt-20">
-                                    Đỗ Văn Đạt
+                                    {user?.name}
                                 </div>
                                 <div className="white fw-700 fs-18 mt-5">
                                     Số dư ví: <span style={{color: 'black'}}> {formatNumberToK(1000000)} </span> 

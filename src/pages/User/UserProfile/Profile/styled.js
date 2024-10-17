@@ -7,11 +7,13 @@ export const ProfileContainer = styled.div `
     .title {
         .button {
             border: none;
+            background-color:#ff7c08;
+            color: #fff;
         }
 
         .button:hover {
             background-color: #ff9933 !important;
-            color: white;
+            color: white !important;
         }
     }
 
@@ -42,12 +44,13 @@ export const ProfileContainer = styled.div `
 
         .save{
             border: none;
+            background-color: #ff7c08;
             color: white;
             width: 80px;
         }
         .save:hover {
-            background-color: #ff9933;
-            color: white;
+            background-color: #ff9933 !important;
+            color: white !important;
         }
         .cancel {
             color: white;
@@ -56,8 +59,8 @@ export const ProfileContainer = styled.div `
             background-color: gray;
         }
         .cancel:hover {
-            background-color: #b9b5b5;
-            color: white;
+            background-color: #b9b5b5 !important;
+            color: white !important;
         }
     }
 

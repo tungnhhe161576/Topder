@@ -13,7 +13,8 @@ import image from "../../../../assets/images/foot-image.png";
 import image2 from "../../../../assets/images/blog-item.jpg";
 import image3 from "../../../../assets/images/8.3.jpg";
 import logo2 from "../../../../assets/images/Logo2.png";
-import { userInfor } from "../../../../redux/Slice/userSlice";
+import { setUserInformation, userInfor } from "../../../../redux/Slice/userSlice";
+import { setAccessToken } from "../../../../redux/Slice/accessTokenSlice";
 
 
 const IconFont = createFromIconfontCN({
@@ -25,7 +26,7 @@ const Header = () => {
     const dispatch = useDispatch();
     const activeButton = useSelector(getNav);
     const user = useSelector(userInfor)
-    console.log("user", user);
+
     
     const itemsDropdown = [
         {
@@ -45,13 +46,13 @@ const Header = () => {
         {
             key: '1',
             label: (
-                <span className="fs-16 fw-600" onClick={() => nav(`/user-profile/${user?.uid}`)}>Thông tin cá nhân</span>
+                <span className="fs-16 fw-600" onClick={() => nav(`/user-profile`)}>Thông tin cá nhân</span>
             ),
         },
             {
             key: '2',
             label: (
-                <span className="fs-16 fw-600" onClick={() => handleLogout}>Đăng xuất</span>
+                <span className="fs-16 fw-600" onClick={() => handleLogout()}>Đăng xuất</span>
             ),
         },
     ];
@@ -118,8 +119,11 @@ const Header = () => {
         }
     }, [])
 
-    const handleLogout = async () => {
-        console.log("abc");
+    const handleLogout = () => {
+        localStorage.removeItem('token')
+        dispatch(setAccessToken(null));  
+        dispatch(setUserInformation(null))
+        nav('/login')
     }
         
     return (

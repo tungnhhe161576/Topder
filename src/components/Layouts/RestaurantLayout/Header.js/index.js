@@ -1,9 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 import logo from '../../../../assets/images/Logo2.png'
 import { SearchOutlined, MailOutlined, BellOutlined, UserOutlined } from '@ant-design/icons';
+import { useSelector } from 'react-redux';
+import { userInfor } from '../../../../redux/Slice/userSlice';
 
 const Header = () => {
     const nav = useNavigate()
+    const user = useSelector(userInfor)
+    console.log("user", user);
+    
     
     return (  
         <div className='header'>

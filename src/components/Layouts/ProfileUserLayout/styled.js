@@ -10,13 +10,13 @@ export const ProfileContainer = styled.div `
         background-color: #ff7c08;
         display: flex;
         flex-direction: column;
-        height: 680px;
+        height: 730px;
         
         .avatar {
             align-self: center;
             padding-top: 30px;
             position: relative;
-            height: 250px;
+            height: 300px;
 
             .img-container {
                 width: 150px;
@@ -46,7 +46,7 @@ export const ProfileContainer = styled.div `
                     align-items: center;
                     border-radius: 50%;
                     background-color: #fff;
-                    bottom: 90px;
+                    bottom: 140px;
                     right: 35px;
                     z-index: 2;
                     cursor: pointer;
@@ -55,6 +55,11 @@ export const ProfileContainer = styled.div `
                 .cam:hover {
                     background-color: #f2eded;
                 }
+            }
+            .out-image:hover {
+                border: none !important;
+                color: white !important;
+                background-color: #b9b8b8 !important;
             }
 
             .name {
@@ -122,6 +127,6 @@ export const ProfileContainer = styled.div `
     .right {
         background-color: #f3f7fb;
         overflow-x: scroll;
-        height: 680px;
+        height: 730px;
     }
 `

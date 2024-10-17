@@ -1,45 +1,66 @@
-import { Button, DatePicker, Form, Input, Radio } from "antd";
+import { Button, DatePicker, Form, Input, message, Radio } from "antd";
 import ProfileUserLayout from "../../../../components/Layouts/ProfileUserLayout";
 import { ProfileContainer } from "./styled";
-import { getRegexEmail, getRegexPhoneNumber } from "../../../../lib/stringUtils";
-import { useState } from "react";
+import { getRegexPhoneNumber } from "../../../../lib/stringUtils";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUserInformation, userInfor } from "../../../../redux/Slice/userSlice";
+import SpinCustom from "../../../../components/Common/SpinCustom";
+import UserService from "../../../../services/UserService";
 
 const Profile = () => {
     const [form] = Form.useForm()
     const [isEdit, setIsEdit] = useState(false)
     const [loading, setLoading] = useState(false)
-
-    let data = {
-        name: 'Đỗ Văn Đạt',
-        email: 'datdvhe161664@fpt.edu.vn',
-        phoneNumber: '0968519615',
-        date: dayjs('2002/11/16').format('DD-MM-YYYY'),
-        gender: 1,
-    }
+    const user = useSelector(userInfor)
+    const dispatch = useDispatch()
     
     const handleEditInfo = async () => {
         try {
             setLoading(true)
             const values = await form.validateFields()
-            data = {
+            const updatedUser = {
                 ...values,
-                name: values?.name,
-                email: values?.email,
-                phoneNumber: values?.email,
-                date: dayjs(values?.date?.$d).format('DD-MM-YYYY'),
+                dob: values?.dob ? dayjs(values?.dob).format('YYYY-MM-DD') : null,
                 gender: values?.gender,
-            }
-
-            console.log("after data", data);
+            };
             
+            const res = await UserService.updateProfile({
+                Uid: user.uid,
+                Name: updatedUser.name,
+                Phone: updatedUser.phone,
+                Dob: updatedUser.dob,
+                Gender: updatedUser.gender,
+            })
+            message.open({
+                content: res.message,
+                type: 'success',
+                style: {
+                    marginTop: '20vh',
+                },
+            })
+            dispatch(updateUserInformation(updatedUser))
             setIsEdit(false)
         } catch (error) {
-            console.log(error);
+            message.open({
+                error: error.message,
+                type: 'success',
+            })
         } finally {
             setLoading(false)
         }
     }
+
+    useEffect(() => {
+        if (user && (user.uid || user.id)) {
+            form.setFieldsValue({
+                ...user,
+                dob: user.dob ? dayjs(user.dob, 'YYYY-MM-DD') : null,
+                // gender: user.gender === 'Male' ? 'Nam' : (user.gender === 'Female' ? 'Nữ' : 'Khác')
+            });
+        }
+    }, [user, form]);
 
     return (  
         <ProfileUserLayout>
@@ -47,136 +68,104 @@ const Profile = () => {
                 <div className="title d-flex justify-content-space-between align-items-center fw-600 fs-24">
                     <div>Thông tin cá nhân</div>
                     <div className="">
-                        <Button className="bg-primary white button" shape="round" 
+                        <Button className="button" shape="round" 
                             onClick={() => {
                                 setIsEdit(true)
-                                form.setFieldsValue({
-                                    name: data.name,
-                                    email: data.email,
-                                    phoneNumber: data.phoneNumber,
-                                    date: dayjs(data.date, 'DD-MM-YYYY'),
-                                    gender: data.gender,
-                                })
                             }}
                         >
                             Chỉnh sửa
                         </Button>
                     </div>
                 </div>
+
                 <div className="form">
-                    <Form 
-                        form={form} 
-                        labelCol={{ span: 3 }}
-                        wrapperCol={{ span: 18 }}
-                        className="p-40"
-                    >
-                        <Form.Item
-                            name='name'
-                            label= { <span className='fs-17 fw-600 d-flex justify-content-start'> Tên </span> }
-                            rules={[
-                                { required: true, message: "Hãy nhập tên của bạn" },
-                            ]}
-                            className="form-item"
+                    <SpinCustom spinning={loading}>
+                        <Form 
+                            form={form} 
+                            labelCol={{ span: 3 }}
+                            wrapperCol={{ span: 18 }}
+                            className="p-40"
                         >
-                            <Input className="input fs-16" defaultValue={data?.name} placeholder="Tên" disabled={!isEdit ? true : false}/>
-                        </Form.Item>
+                            <Form.Item
+                                name='name'
+                                label= { <span className='fs-17 fw-600 d-flex justify-content-start'> Tên </span> }
+                                rules={[
+                                    { required: true, message: "Hãy nhập tên của bạn" },
+                                ]}
+                                className="form-item"
+                            >
+                                <Input className="input fs-16" placeholder="Tên" disabled={!isEdit ? true : false}/>
+                            </Form.Item>
 
-                        <Form.Item
-                            name='email'
-                            label= { <span className='fs-17 fw-600 d-flex justify-content-start'> Email: </span> }
-                            rules={[
-                                { required: true, message: "Hãy nhập email của bạn" },
-                                { pattern: getRegexEmail(), message: "Email sai định dạng" },
-                            ]}
-                            className="form-item"
-                        >
-                            <Input className="input fs-16" defaultValue={data.email} placeholder="Email" disabled={!isEdit ? true : false}/>
-                        </Form.Item>
-
-                        <Form.Item
-                            name='phoneNumber'
-                            label= { <span className='fs-17 fw-600 d-flex justify-content-start'> Số điện thoại </span> }
-                            rules={[
-                                { required: true, message: "Hãy nhập số điện thoại của bạn" },
-                                { pattern: getRegexPhoneNumber(), message: "Số điện thoại sai định dạng" },
-                            ]}
-                            className="form-item"
-                        >
-                            <Input className="input fs-16" defaultValue={data?.phoneNumber} placeholder="Tên" disabled={!isEdit ? true : false}/>
-                        </Form.Item>
-                        
-                        {
-                            isEdit === false ? 
-                                (
-                                    <Form.Item
-                                        name='gender'
-                                        label= { <span className='fs-17 fw-600 d-flex justify-content-start'> Giới tính </span> }
-                                        rules={[
-                                            { required: true, message: "Hãy chọn giới tính của bạn" },
-                                        ]}
-                                        className="form-item"
-                                    >
-                                        <Input className="input fs-16" defaultValue={data?.gender === 1 ? 'Nam' : data?.gender === 2 ? 'Nữ' : 'Khác'}  placeholder="Giới tính" disabled/>
-                                    </Form.Item>
-                                ) : 
-                                (
-                                    <Form.Item
-                                        name="gender"
-                                        rules={[
-                                            { required: true, message: "Hãy chọn giới tính" },
-                                        ]}
-                                        label={<span className='fs-17 fw-600 d-flex justify-content-start'> Giới tính </span>}
-                                    >
-                                        <Radio.Group>
-                                            <Radio value={1}>Nam</Radio>
-                                            <Radio value={2}>Nữ</Radio>
-                                            <Radio value={3}>Khác</Radio>
-                                        </Radio.Group>
-                                    </Form.Item>
-                                )
-                        }
-
-                        {
-                            isEdit === false ? 
-                                (
-                                    <Form.Item
-                                        name='date'
-                                        label= { <span className='fs-17 fw-600 d-flex justify-content-start'> Ngày sinh </span> }
-                                        rules={[
-                                            { required: true, message: "Hãy chọn ngày sinh của bạn" },
-                                        ]}
-                                    >
-                                        <Input className="input fs-16" defaultValue={data?.date} placeholder="Ngày sinh" disabled/>
-                                    </Form.Item>
-                                ) : 
-                                (
-                                    <Form.Item
-                                        name="date"
-                                        rules={[
-                                            { required: true, message: "Hãy chọn ngày sinh" },
-                                        ]}
-                                        label={<span className='fs-17 fw-600 d-flex justify-content-start'> Ngày sinh </span>}
-                                    >
-                                        <DatePicker/>
-                                    </Form.Item>
-                                )
-                        }
-
-                        {
-                            isEdit && (
-                                <Form.Item>
-                                    <div className="d-flex justify-content-start">
-                                        <Button className="bg-primary save mr-15" shape="round" onClick={handleEditInfo}>
-                                            Lưu
-                                        </Button>
-                                        <Button shape="round" className="cancel" onClick={() => setIsEdit(false)}>
-                                            Thoát
-                                        </Button>
-                                    </div>
+                            <Form.Item
+                                name='phone'
+                                label= { <span className='fs-17 fw-600 d-flex justify-content-start'> Số điện thoại </span> }
+                                rules={[
+                                    { required: true, message: "Hãy nhập số điện thoại của bạn" },
+                                    { pattern: getRegexPhoneNumber(), message: "Số điện thoại sai định dạng" },
+                                ]}
+                                className="form-item"
+                            >
+                                <Input className="input fs-16"  placeholder="Tên" disabled={!isEdit ? true : false}/>
+                            </Form.Item>
+                            
+                            {isEdit === false ? (
+                                <Form.Item
+                                    name='gender'
+                                    label={ <span className='fs-17 fw-600 d-flex justify-content-start'> Giới tính </span> }
+                                    rules={[{ required: true, message: "Hãy chọn giới tính của bạn" }]}
+                                    className="form-item"
+                                >
+                                    <Input className="input fs-16" placeholder="Giới tính" disabled/>
                                 </Form.Item>
-                            )
-                        }
-                    </Form>
+                            ) : (
+                                <Form.Item
+                                    name="gender"
+                                    rules={[{ required: true, message: "Hãy chọn giới tính" }]}
+                                    label={<span className='fs-17 fw-600 d-flex justify-content-start'> Giới tính </span>}
+                                >
+                                    <Radio.Group>
+                                        <Radio value={'Male'}>Nam</Radio>
+                                        <Radio value={'Female'}>Nữ</Radio>
+                                        <Radio value={'Other'}>Khác</Radio>
+                                    </Radio.Group>
+                                </Form.Item>
+                            )}
+
+                            {isEdit === false ? (
+                                <Form.Item
+                                    name='dob'
+                                    label={ <span className='fs-17 fw-600 d-flex justify-content-start'>Ngày sinh</span> }
+                                    rules={[{ required: true, message: "Hãy chọn ngày sinh của bạn" }]}
+                                >
+                                    <Input className="input fs-16" placeholder="Ngày sinh" disabled />
+                                </Form.Item>
+                            ) : (
+                                <Form.Item
+                                    name="dob"
+                                    rules={[{ required: true, message: "Hãy chọn ngày sinh" }]}
+                                    label={<span className='fs-17 fw-600 d-flex justify-content-start'>Ngày sinh</span>}
+                                >
+                                    <DatePicker format="DD-MM-YYYY"/>
+                                </Form.Item>
+                            )}       
+
+                            {
+                                isEdit && (
+                                    <Form.Item>
+                                        <div className="d-flex justify-content-start">
+                                            <Button className="save mr-15" shape="round" onClick={handleEditInfo}>
+                                                Lưu
+                                            </Button>
+                                            <Button shape="round" className="cancel" onClick={() => setIsEdit(false)}>
+                                                Thoát
+                                            </Button>
+                                        </div>
+                                    </Form.Item>
+                                )
+                            }
+                        </Form>
+                    </SpinCustom>
                 </div>
             </ProfileContainer>
         </ProfileUserLayout>
