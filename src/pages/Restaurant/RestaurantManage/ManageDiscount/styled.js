@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const ManageRestaurantContainer = styled.div`
+export const ManagementDiscountContainer = styled.div`
 	width: 100%;
 	height: calc(100vh - 200px);
 	.body {
