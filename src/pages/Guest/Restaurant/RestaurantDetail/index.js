@@ -105,156 +105,74 @@ const RestaurantDetail = () => {
 							{/* thong tin nha hang */}
 							<div className="information">
 								<div className="fs-26 fw-700 mb-20">
-									{" "}
-									Thông tin cửa hàng{" "}
+									Thông tin cửa hàng
 								</div>
 								<Row gutter={[16, 16]}>
-									<Col
-										xs={20}
-										sm={20}
-										md={12}
-										lg={14}
-										xl={14}
-									>
+									<Col xs={20} sm={20} md={12} lg={14} xl={14} >
 										<div className="image-container">
-											<img
-												src={
-													restaurantDetail?.images[
-														currentIndex
-													]?.imageUrl
-												}
-												alt="restaurant-image"
-											/>
+											<img src={ restaurantDetail?.images[currentIndex]?.imageUrl} alt="restaurant-image" />
 										</div>
 										<div className="album-image">
-											<div
-												className="prev mr-5"
-												onClick={prevImage}
-											>
+											<div className="prev mr-5" onClick={prevImage}>
 												<button> {"<"} </button>
 											</div>
-											<Row
-												gutter={[5, 0]}
-												className="row w-100"
-											>
-												{restaurantDetail?.images?.map(
-													(_, index) => (
-														<Col
-															span={5}
-															key={index}
-														>
-															<div
-																className="image-item"
-																style={
-																	currentIndex ===
-																	index
-																		? {
-																				border: "5px #ef7d22 solid",
-																		  }
-																		: {}
-																}
-															>
-																<Image
-																	className="img"
-																	src={
-																		restaurantDetail
-																			?.images[
-																			index
-																		]
-																			?.imageUrl
-																	}
-																/>
+											<Row gutter={[5, 0]} className="row w-100" >
+												{
+													restaurantDetail?.images?.map( (_, index) => (
+														<Col span={5} key={index} >
+															<div className="image-item" style={currentIndex === index ? { border: "5px #ef7d22 solid", } : {}}>
+																<Image className="img" src={restaurantDetail?.images[index]?.imageUrl} />
 															</div>
 														</Col>
-													)
-												)}
+												))}
 											</Row>
-											<div
-												className="next"
-												onClick={nextImage}
-											>
+											<div className="next" onClick={nextImage}>
 												<button> {">"} </button>
 											</div>
 										</div>
 									</Col>
 
-									<Col
-										xs={15}
-										sm={15}
-										md={12}
-										lg={10}
-										xl={10}
-									>
+									<Col xs={15} sm={15} md={12} lg={10} xl={10} >
 										<div className="pl-20">
 											<div className="name fw-700 fs-26 mb-16">
-												{" "}
-												{restaurantDetail?.nameRes}{" "}
+												{restaurantDetail?.nameRes}
 											</div>
 											<div className="rate mb-5">
-												<Rate
-													className="primary fs-14"
-													value={
-														restaurantDetail?.star
-													}
-													disabled
-												/>{" "}
-												- (
-												{
-													restaurantDetail?.totalFeedbacks
-												}{" "}
-												đánh giá)
+												<Rate className="primary fs-14" value={restaurantDetail?.star} disabled />
+												- ({ restaurantDetail?.totalFeedbacks } đánh giá)
 											</div>
 											<div className="name fw-500 fs-16 mb-20">
-												{" "}
-												Loại cửa hàng:{" "}
-												{
-													restaurantDetail?.categoryName
-												}{" "}
+												Loại cửa hàng: {restaurantDetail?.categoryName}
 											</div>
 											<div className="action-time mb-8">
 												<div className="fs-16 fw-600 mb-5">
 													Giờ hoạt động
 												</div>
 												<div>
-													Mở cửa:{" "}
-													{restaurantDetail?.openTime}
+													Mở cửa: {restaurantDetail?.openTime}
 												</div>
 												<div>
-													Đóng cửa:{" "}
-													{
-														restaurantDetail?.closeTime
-													}
+													Đóng cửa: {restaurantDetail?.closeTime}
 												</div>
 											</div>
 											<div className="fs-16 fw-500 mb-20">
-												Giá đặt bàn:{" "}
+												Giá đặt bàn:
 												<span className="primary">
-													{formatNumberToK(
-														restaurantDetail?.price
-													)}
+													{formatNumberToK(restaurantDetail?.price)}
 												</span>
 											</div>
 											<div className="address mb-20">
 												<div className="fs-16 fw-600 mb-5">
 													Địa chỉ
 												</div>
-												<div>
-													{restaurantDetail?.address}
-												</div>
+												<div> {restaurantDetail?.address} </div>
 											</div>
 											<div className="short-des mb-30">
 												<div className="fs-16 fw-600 mb-5">
 													Mô tả ngắn gọn:
 												</div>
-												<div
-													style={{
-														fontStyle: "italic",
-													}}
-												>
-													{" "}
-													{
-														restaurantDetail?.subdescription
-													}{" "}
+												<div style={{fontStyle: "italic"}}>
+													{restaurantDetail?.subdescription}
 												</div>
 											</div>
 											<div>
@@ -287,15 +205,9 @@ const RestaurantDetail = () => {
 								/>
 								<div>
 									{selectedOption === "description" ? (
-										<RestaurantDescription
-											description={
-												restaurantDetail?.description
-											}
-										/>
+										<RestaurantDescription description={restaurantDetail?.description}/>
 									) : (
-										<RestaurantRate
-											restaurantDetail={restaurantDetail}
-										/>
+										<RestaurantRate restaurantDetail={restaurantDetail}/>
 									)}
 								</div>
 							</div>
@@ -312,50 +224,28 @@ const RestaurantDetail = () => {
 												Đặt bàn
 											</div>
 											<Divider className="bg-white mt-10 mb-20" />
-											<Form
-												form={form}
-												layout="vertical"
-												className=""
-											>
-												<Row
-													gutter={[24, 0]}
-													className="d-flex justify-content-center"
-												>
+											<Form form={form} layout="vertical" >
+												<Row gutter={[24, 0]} className="d-flex justify-content-center" >
 													<Col span={10}>
 														<Form.Item
 															name="name"
 															label={
 																<span className="fs-14 white ml-8">
-																	{" "}
-																	Tên người
-																	nhận bàn{" "}
+																	Tên người nhận bàn
 																</span>
 															}
 															rules={[
 																{
 																	required: true,
 																	message: (
-																		<span
-																			style={{
-																				color: "black",
-																				marginLeft:
-																					"15px",
-																			}}
-																		>
-																			Hãy
-																			nhập
-																			tên
-																			của
-																			bạn!
+																		<span style={{color: "black", marginLeft: "15px"}} >
+																			Hãy nhập tên của bạn!
 																		</span>
 																	),
 																},
 															]}
 														>
-															<Input
-																className="input"
-																placeholder="Nhập tên"
-															/>
+															<Input className="input" placeholder="Nhập tên" />
 														</Form.Item>
 													</Col>
 													<Col span={10}>
@@ -363,59 +253,29 @@ const RestaurantDetail = () => {
 															name="phonenumber"
 															label={
 																<span className="fs-14 white ml-8">
-																	{" "}
-																	Số điện
-																	thoại người
-																	nhận{" "}
+																	Số điện thoại người nhận
 																</span>
 															}
 															rules={[
 																{
 																	required: true,
 																	message: (
-																		<span
-																			style={{
-																				color: "black",
-																				marginLeft:
-																					"15px",
-																			}}
-																		>
-																			Hãy
-																			nhập
-																			số
-																			điện
-																			thoại
-																			của
-																			bạn!
+																		<span style={{color: "black", marginLeft: "15px" }}>
+																			Hãy nhập số điện thoại của bạn!
 																		</span>
 																	),
 																},
 																{
-																	pattern:
-																		getRegexPhoneNumber(),
+																	pattern: getRegexPhoneNumber(),
 																	message: (
-																		<span
-																			style={{
-																				color: "black",
-																				marginLeft:
-																					"15px",
-																			}}
-																		>
-																			Số
-																			điện
-																			thoại
-																			sai
-																			định
-																			dạng
+																		<span style={{color: "black", marginLeft: "15px"}}>
+																			Số điện thoại sai định dạng
 																		</span>
 																	),
 																},
 															]}
 														>
-															<Input
-																className="input"
-																placeholder="Nhập số điện thoại"
-															/>
+															<Input className="input" placeholder="Nhập số điện thoại"/>
 														</Form.Item>
 													</Col>
 													<Col span={10}>
@@ -423,62 +283,37 @@ const RestaurantDetail = () => {
 															name="date"
 															label={
 																<span className="fs-14 white ml-8">
-																	{" "}
-																	Ngày nhận{" "}
+																	Ngày nhận
 																</span>
 															}
 															rules={[
 																{
 																	required: true,
 																	message: (
-																		<span
-																			style={{
-																				color: "black",
-																				marginLeft:
-																					"15px",
-																			}}
-																		>
-																			Hãy
-																			chọn
-																			ngày
-																			nhận!
+																		<span style={{color: "black", marginLeft: "15px" }}>
+																			Hãy chọn ngày nhận!
 																		</span>
 																	),
 																},
 															]}
 														>
-															<DatePicker
-																className="input"
-																placeholder="Chọn ngày"
-															/>
+															<DatePicker className="input" placeholder="Chọn ngày"/>
 														</Form.Item>
 													</Col>
 													<Col span={10}>
 														<Form.Item
 															name="time"
 															label={
-																<span className="fs-14 white ml-8">
-																	{" "}
-																	Chọn giờ đặt
-																	bàn{" "}
+																<span className="fs-14 white ml-8"> 
+																	Chọn giờ đặt bàn
 																</span>
 															}
 															rules={[
 																{
 																	required: true,
 																	message: (
-																		<span
-																			style={{
-																				color: "black",
-																				marginLeft:
-																					"15px",
-																			}}
-																		>
-																			Hãy
-																			chọn
-																			giờ
-																			cụ
-																			thể!
+																		<span style={{ color: "black", marginLeft: "15px" }}>
+																			Hãy chọn giờ cụ thể!
 																		</span>
 																	),
 																},
@@ -489,113 +324,71 @@ const RestaurantDetail = () => {
 																placeholder="Chọn giờ"
 																className="input"
 																format="HH:mm"
-																showTime={{
-																	format: "HH:mm",
-																}}
-															>
-																{" "}
-															</DatePicker>
+																showTime={{format: "HH:mm"}}
+															/>
 														</Form.Item>
 													</Col>
 													<Col span={10}>
 														<Form.Item
 															name="numberAdult"
 															label={
-																<span className="fs-14 white ml-8">
-																	{" "}
-																	Số người lớn{" "}
+																<span className="fs-14 white ml-8"> 
+																	Số người lớn
 																</span>
 															}
 															rules={[
 																{
 																	required: true,
 																	message: (
-																		<span
-																			style={{
-																				color: "black",
-																				marginLeft:
-																					"15px",
-																			}}
-																		>
-																			Hãy
-																			nhập
-																			số
-																			người
-																			lớn!
+																		<span style={{color: "black", marginLeft: "15px"}}>
+																			Hãy nhập số người lớn!
 																		</span>
 																	),
 																},
 															]}
 														>
-															<InputNumber
-																min={0}
-																className="input w-100"
-																placeholder="Nhập số người lớn"
-															/>
+															<InputNumber min={0} className="input w-100" placeholder="Nhập số người lớn"/>
 														</Form.Item>
 													</Col>
 													<Col span={10}>
 														<Form.Item
 															name="numberChildren"
 															label={
-																<span className="fs-14 white ml-8">
-																	{" "}
-																	Số trẻ em{" "}
+																<span className="fs-14 white ml-8"> 
+																	Số trẻ em
 																</span>
 															}
 															rules={[
 																{
 																	required: true,
 																	message: (
-																		<span
-																			style={{
-																				color: "black",
-																				marginLeft:
-																					"15px",
-																			}}
-																		>
-																			Hãy
-																			nhập
-																			số
-																			trẻ
-																			em!
+																		<span style={{color: "black", marginLeft: "15px"}}>
+																			Hãy nhập số trẻ em!
 																		</span>
 																	),
 																},
 															]}
 														>
-															<InputNumber
-																min={0}
-																className="input w-100"
-																placeholder="Nhập số trẻ em"
-															/>
+															<InputNumber min={0} className="input w-100" placeholder="Nhập số trẻ em" />
 														</Form.Item>
 													</Col>
 													<Col span={20}>
 														<Form.Item
 															name="require"
 															label={
-																<span className="fs-16 white ml-8">
-																	{" "}
-																	Yêu cầu{" "}
+																<span className="fs-16 white ml-8"> 
+																	Yêu cầu
 																</span>
 															}
 														>
-															<TextArea
-																rows={6}
-																placeholder="Yêu cầu"
-															/>
+															<TextArea rows={6} placeholder="Yêu cầu" />
 														</Form.Item>
 													</Col>
 													<div className="d-flex justify-content-center">
 														<Form.Item name="chooseTable">
 															<Button
 																className="choose fs-16 fw-500 mr-10"
-																onClick={() =>
-																	setOpenModalChooseTable(
-																		true
-																	)
-																}
+																onClick={() => setOpenModalChooseTable(true)}
 															>
 																Chọn bàn
 															</Button>
@@ -603,11 +396,7 @@ const RestaurantDetail = () => {
 														<Form.Item name="ChooseFoods">
 															<Button
 																className="choose fs-16 fw-500"
-																onClick={() =>
-																	setOpenModalChooseFood(
-																		true
-																	)
-																}
+																onClick={() => setOpenModalChooseFood(true)}
 															>
 																Chọn món ăn
 															</Button>
@@ -617,9 +406,7 @@ const RestaurantDetail = () => {
 														<Button
 															className="button-submit w-100"
 															htmlType="submit"
-															onClick={
-																handleSubmitFormBooking
-															}
+															onClick={() => handleSubmitFormBooking()}
 														>
 															Đặt bàn
 														</Button>
@@ -638,10 +425,7 @@ const RestaurantDetail = () => {
 				<div className="related-restaurant">
 					<div className="fs-26 fw-700"> Cửa hàng liên quan </div>
 					<div>
-						<Row
-							gutter={[24, 24]}
-							className="d-dlex justify-content-center"
-						>
+						<Row gutter={[24, 24]} className="d-dlex justify-content-center">
 							<Col xs={12} sm={12} md={6} lg={6} xl={6}>
 								<RelatedRestaurant />
 							</Col>
