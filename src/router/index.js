@@ -25,6 +25,7 @@ import ManageRestaurant from "../pages/Restaurant/RestaurantManage/ManageRestaur
 import ManageOrder from "../pages/Restaurant/RestaurantManage/ManageOrder";
 import ManageRate from "../pages/Restaurant/RestaurantManage/ManageRate";
 import Wallet from "../pages/User/UserProfile/Wallet";
+import ManagementDiscount from "../pages/Restaurant/RestaurantManage/ManageDiscount";
 
 const router = createBrowserRouter([
 	{
@@ -170,6 +171,10 @@ const router = createBrowserRouter([
 					{
 						path: "manage-rate",
 						element: <ManageRate />,
+					},
+					{
+						path: "manage-discount",
+						element: <ManagementDiscount />,
 					},
 				],
 			},

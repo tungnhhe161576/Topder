@@ -13,6 +13,7 @@ import {
 import RestaurantLayout from "../../../../components/Layouts/RestaurantLayout";
 import { FileAddOutlined } from "@ant-design/icons";
 import { ManageOrderContainer } from "./styled";
+import ModalCustom from "../../../../components/Common/ModalCustom";
 
 const { Option } = Select;
 
@@ -195,11 +196,6 @@ const ManageOrder = () => {
 	// Cột cho bảng
 	const columns = [
 		{
-			title: "ID",
-			dataIndex: "id",
-			key: "id",
-		},
-		{
 			title: "Tên Người Đặt",
 			dataIndex: "nameOrderer",
 			key: "nameOrderer",
@@ -224,33 +220,33 @@ const ManageOrder = () => {
 			dataIndex: "orderDate",
 			key: "orderDate",
 		},
-		{
-			title: "Lịch Sử Trạng Thái",
-			dataIndex: "history",
-			key: "history",
-			render: (history) => (
-				<Space direction="vertical">
-					{history.map((item, index) => (
-						<Tag
-							key={index}
-							className={
-								item.status === "Chấp Nhận"
-									? "tag-accepted"
-									: item.status === "Đã Nhận Bàn"
-									? "tag-received"
-									: item.status === "Thành Công"
-									? "tag-success"
-									: item.status === "Hủy"
-									? "tag-cancelled"
-									: "tag-default"
-							}
-						>
-							{item.status}: {item.time}
-						</Tag>
-					))}
-				</Space>
-			),
-		},
+		// {
+		// 	title: "Lịch Sử Trạng Thái",
+		// 	dataIndex: "history",
+		// 	key: "history",
+		// 	render: (history) => (
+		// 		<Space direction="vertical">
+		// 			{history.map((item, index) => (
+		// 				<Tag
+		// 					key={index}
+		// 					className={
+		// 						item.status === "Chấp Nhận"
+		// 							? "tag-accepted"
+		// 							: item.status === "Đã Nhận Bàn"
+		// 							? "tag-received"
+		// 							: item.status === "Thành Công"
+		// 							? "tag-success"
+		// 							: item.status === "Hủy"
+		// 							? "tag-cancelled"
+		// 							: "tag-default"
+		// 					}
+		// 				>
+		// 					{item.status}: {item.time}
+		// 				</Tag>
+		// 			))}
+		// 		</Space>
+		// 	),
+		// },
 		{
 			title: "Trạng Thái",
 			dataIndex: "status",
@@ -283,7 +279,9 @@ const ManageOrder = () => {
 			key: "updateStatus",
 			render: (_, record) => (
 				<span>
-					<span style={{ marginRight: 10 }}>{record.status}</span>
+					<div>
+						<span style={{ marginRight: 10 }}>{record.status}</span>
+					</div>
 					<Button
 						className="btn-status"
 						type="default"
@@ -312,138 +310,147 @@ const ManageOrder = () => {
 	return (
 		<RestaurantLayout>
 			<ManageOrderContainer>
-				<div className="d-flex justify-content-space-between align-items-center">
+				<div className="body">
+					<div className="d-flex justify-content-space-between align-items-center">
+						<div>
+							<h3 className="card-title card-title-dash">
+								Đơn Hàng
+							</h3>
+						</div>
+						<div className="d-flex-end">
+							<Button type="primary" className="white fs-15">
+								<FileAddOutlined /> Xuất file excel
+							</Button>
+						</div>
+					</div>
 					<div>
-						<h3 className="card-title card-title-dash">Đơn Hàng</h3>
+						<Row
+							justify="center"
+							gutter={[16, 16]}
+							className="search-container"
+						>
+							<Col>
+								<label>Tháng/Năm</label>
+								<DatePicker
+									picker="month"
+									style={{ marginRight: "10px" }}
+									placeholder="----/--"
+								/>
+								<Button onClick={() => onSearchByMonth()}>
+									Tìm Kiếm
+								</Button>
+							</Col>
+							<Col>
+								<label>Ngày/Tháng/Năm</label>
+								<DatePicker
+									style={{ marginRight: "10px" }}
+									placeholder="mm/dd/yyyy"
+								/>
+								<Button onClick={() => onSearchByDate()}>
+									Tìm Kiếm
+								</Button>
+							</Col>
+						</Row>
 					</div>
-					<div className="d-flex-end">
-						<Button type="primary" className="white fs-15">
-							<FileAddOutlined /> Xuất file excel
-						</Button>
-					</div>
-				</div>
-				<div>
-					<Row
-						justify="center"
-						gutter={[16, 16]}
-						className="search-container"
-					>
-						<Col>
-							<label>Tháng/Năm</label>
-							<DatePicker
-								picker="month"
-								style={{ marginRight: "10px" }}
-								placeholder="----/--"
+
+					<Row justify="center">
+						<Col xs={24} sm={24} md={24} lg={24} xl={24}>
+							<div className="status-bar">
+								{Object.keys(statusCounts).map((status) => (
+									<Tag
+										key={status}
+										className={
+											status === "Chờ Duyệt"
+												? "tag-waiting"
+												: status === "Chấp Nhận"
+												? "tag-accepted"
+												: status === "Đã Nhận Bàn"
+												? "tag-received"
+												: status === "Thành Công"
+												? "tag-success"
+												: "tag-cancelled"
+										}
+									>
+										{status}: {statusCounts[status]}
+									</Tag>
+								))}
+							</div>
+
+							<Table
+								columns={columns}
+								dataSource={data}
+								pagination={{
+									pageSize: 4,
+									position: ["bottomCenter"],
+								}}
 							/>
-							<Button onClick={() => onSearchByMonth()}>
-								Tìm Kiếm
-							</Button>
-						</Col>
-						<Col>
-							<label>Ngày/Tháng/Năm</label>
-							<DatePicker
-								style={{ marginRight: "10px" }}
-								placeholder="mm/dd/yyyy"
-							/>
-							<Button onClick={() => onSearchByDate()}>
-								Tìm Kiếm
-							</Button>
+
+							<ModalCustom
+								title="Chi Tiết Đơn Hàng"
+								visible={isModalVisible}
+								onOk={handleOk}
+								onCancel={handleCancel}
+								footer={null}
+							>
+								{selectedOrder && (
+									<div className="order-detail">
+										<h3>Chi Tiết Đơn Hàng</h3>
+										<table>
+											<thead>
+												<tr>
+													<th>
+														Ngày/Tháng/Năm Nhận Bàn
+													</th>
+													<th>Thời Gian Nhận Bàn</th>
+													<th>Số Người Lớn</th>
+													<th>Số Trẻ Nhỏ</th>
+													<th>Ghi Chú</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>
+														{
+															selectedOrder
+																.details
+																.dateReceived
+														}
+													</td>
+													<td>
+														{
+															selectedOrder
+																.details
+																.timeReceived
+														}
+													</td>
+													<td>
+														{
+															selectedOrder
+																.details.adults
+														}
+													</td>
+													<td>
+														{
+															selectedOrder
+																.details
+																.children
+														}
+													</td>
+													<td>
+														{
+															selectedOrder
+																.details.notes
+														}
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								)}
+							</ModalCustom>
 						</Col>
 					</Row>
 				</div>
-
-				<Row justify="center">
-					<Col xs={24} sm={24} md={24} lg={24} xl={24}>
-						<div className="status-bar">
-							{Object.keys(statusCounts).map((status) => (
-								<Tag
-									key={status}
-									className={
-										status === "Chờ Duyệt"
-											? "tag-waiting"
-											: status === "Chấp Nhận"
-											? "tag-accepted"
-											: status === "Đã Nhận Bàn"
-											? "tag-received"
-											: status === "Thành Công"
-											? "tag-success"
-											: "tag-cancelled"
-									}
-								>
-									{status}: {statusCounts[status]}
-								</Tag>
-							))}
-						</div>
-
-						<Table
-							columns={columns}
-							dataSource={data}
-							pagination={{
-								pageSize: 4,
-								position: ["bottomCenter"],
-							}}
-						/>
-
-						<Modal
-							title="Chi Tiết Đơn Hàng"
-							visible={isModalVisible}
-							onOk={handleOk}
-							onCancel={handleCancel}
-							footer={null}
-						>
-							{selectedOrder && (
-								<div className="order-detail">
-									<h3>Chi Tiết Đơn Hàng</h3>
-									<table>
-										<thead>
-											<tr>
-												<th>Ngày/Tháng/Năm Nhận Bàn</th>
-												<th>Thời Gian Nhận Bàn</th>
-												<th>Số Người Lớn</th>
-												<th>Số Trẻ Nhỏ</th>
-												<th>Ghi Chú</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-												<td>
-													{
-														selectedOrder.details
-															.dateReceived
-													}
-												</td>
-												<td>
-													{
-														selectedOrder.details
-															.timeReceived
-													}
-												</td>
-												<td>
-													{
-														selectedOrder.details
-															.adults
-													}
-												</td>
-												<td>
-													{
-														selectedOrder.details
-															.children
-													}
-												</td>
-												<td>
-													{
-														selectedOrder.details
-															.notes
-													}
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
-							)}
-						</Modal>
-					</Col>
-				</Row>
 			</ManageOrderContainer>
 		</RestaurantLayout>
 	);
