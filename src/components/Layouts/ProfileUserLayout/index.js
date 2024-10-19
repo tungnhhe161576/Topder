@@ -5,10 +5,11 @@ import { UserOutlined, ReconciliationFilled, StarFilled, HeartFilled, LogoutOutl
 import { useLocation, useNavigate } from "react-router-dom";
 import { formatNumberToK } from "../../../lib/stringUtils";
 import { useDispatch, useSelector } from "react-redux";
-import { updateUserInformation, userInfor } from "../../../redux/Slice/userSlice";
+import { setUserInformation, updateUserInformation, userInfor } from "../../../redux/Slice/userSlice";
 import { useEffect, useState } from "react";
 import UserService from "../../../services/UserService";
 import ImageService from "../../../services/ImageService";
+import { setAccessToken } from "../../../redux/Slice/accessTokenSlice";
 
 
 const ProfileUserLayout = ( {children} ) => {
@@ -28,15 +29,12 @@ const ProfileUserLayout = ( {children} ) => {
         }
     }, [user]);
 
-    const handleLogout = async () => {
-        try {
-            
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setLoading(false)
-        }
-    } 
+    const handleLogout = () => {
+        localStorage.removeItem('token')
+        dispatch(setAccessToken(null));  
+        dispatch(setUserInformation(null))
+        nav('/login')
+    }
 
     const handleBeforeUpload = (file) => {
         const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"]
@@ -225,7 +223,7 @@ const ProfileUserLayout = ( {children} ) => {
                                         Ví của tôi
                                     </div>
                                 </div>
-                                <div className="menu-item" onClick={handleLogout}>
+                                <div className="menu-item" onClick={() => handleLogout()}>
                                     <div className="icon">
                                         <LogoutOutlined />
                                     </div>

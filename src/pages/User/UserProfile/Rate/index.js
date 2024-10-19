@@ -7,6 +7,7 @@ import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 
 const Rate = () => {
     const [currentPage, setCurrentPage] = useState(1);
+    const [feedbacks, setFeedbacks] = useState([])
 
     const total = 10;
     const itemPerPage = 3;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CommonLayout from "../../../components/Layouts/CommonLayout";
 import { Col, Row, Pagination, Select, Input, Button, Form } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
@@ -6,62 +6,103 @@ import { RestaurantContainer } from "./styled";
 import RestaurantItem from "../../../components/RestaurantItem";
 import ModalRequestLogin from "../../../components/Modal/RequestLogin";
 import ModalBookingTable from "../../../components/Modal/Booking";
+import GuestService from "../../../services/GuestService";
+import SpinCustom from "../../../components/Common/SpinCustom";
 const { Option } = Select;
 
 const Restaurant = () => {
-	const [currentPage, setCurrentPage] = useState(1);
+	const [form] = Form.useForm();
 	const [openRequestLogin, setOpenRequestLogin] = useState(false);
 	const [openModalBooking, setOpenModalBooking] = useState(false);
+	const [loading, setLoading] = useState(false);
 	const [text, setText] = useState("");
-	const totalRest = 19;
-	const itemPerPage = 8;
+	const [data, setData] = useState([])
+	const [category, setCategory] = useState([])
+	const [dataSearch, setDataSearch] = useState({
+		name: '',
+		address: '',
+		provinceCity: undefined,
+		district: undefined,
+		commune: undefined,
+		restaurantCategory: undefined,
+		minPrice: undefined,
+		maxPrice: undefined,
+		maxCapacity: undefined,
+		pageNumber: 1,
+		pageSize: 8,
+	}) 
+	
+	const getAllRestaurantCategory = async () => {
+		try {
+            const res = await GuestService.getAllRestaurantCategory()
+			setCategory(res)
+        } catch (error) {
+            console.log(error)
+        }
+	}
 
-	// const blogItems = new Array(totalBlogs).fill(null).map((_, index) => ({
-	// 	id: index + 1,
-	// 	content: `Blog Content ${index + 1}`,
-	// }));
-
-	const startIndex = (currentPage - 1) * itemPerPage;
-	// const currentBlogs = blogItems.slice(startIndex, startIndex + blogsPerPage);
-
-	const onPageChange = (page) => {
-		setCurrentPage(page);
+	const getAllRestaurants = async () => {
+		try {
+			const formValues = await form.validateFields();
+			setDataSearch(prev => ({
+				...prev,
+				restaurantCategory: formValues.category,
+				name: formValues.name
+			}));
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				setLoading(true);
+				const res = await GuestService.getAllRestaurants(dataSearch);
+				setData(res?.items);
+			} catch (error) {
+				console.log(error);
+			} finally {
+				setLoading(false);
+			}
+		};
+	
+		fetchData();
+	}, [dataSearch]);
+	
+
+	useEffect(() => {
+		getAllRestaurantCategory()
+	}, [dataSearch])
+	
 	return (
 		<CommonLayout>
 			<RestaurantContainer>
-				<Form className="menu_search_area">
+				<Form form={form} className="menu_search_area">
 					<Row gutter={16} justify="center" align="middle">
 						<Col span={8}>
-							<Form.Item className="menu_search">
-								<Input
-									placeholder="Tìm tên nhà hàng"
-									className="search-input"
-								/>
+							<Form.Item name="name" className="menu_search">
+								<Input placeholder="Nhập tên nhà hàng " className="search-input" />
 							</Form.Item>
 						</Col>
 
 						<Col span={5}>
-							<Form.Item className="menu_search">
-								<Select
-									defaultValue="default"
-									className="nice-select"
-									style={{ width: "100%" }}
-								>
-									<Option value="default">
-										Loại nhà hàng
-									</Option>
-									<Option value="popularity">Quán ăn</Option>
-									<Option value="rating">
-										Quán Trà Sữa | Cà Phê
-									</Option>
+							<Form.Item name="category" className="menu_search">
+								<Select className="nice-select w-100" allowClear  placeholder="Select a person">
+									{
+										category?.map(c => (
+											<Option key={c?.categoryRestaurantId} value={c?.categoryRestaurantId}>
+                                                {c?.categoryRestaurantName}
+                                            </Option>
+										))
+									}
 								</Select>
 							</Form.Item>
 						</Col>
 						<Col span={5}>
 							<Form.Item className="menu_search">
 								<Select
+									allowClear
 									defaultValue="default"
 									className="nice-select"
 									style={{ width: "100%" }}
@@ -78,6 +119,7 @@ const Restaurant = () => {
 									type="primary"
 									htmlType="submit"
 									className="search-button"
+									onClick={() => getAllRestaurants()}
 								>
 									Search
 								</Button>
@@ -85,67 +127,31 @@ const Restaurant = () => {
 						</Col>
 					</Row>
 				</Form>
-				<div>
-					<Row
-						gutter={[30, 32]}
-						className="d-flex justify-content-center"
-					>
-						{Array(totalRest)
-							.fill()
-							.slice(startIndex, startIndex + itemPerPage)
-							.map((_, index) => (
-								<Col xs={12} sm={12} md={12} lg={6} xl={6}>
-									<RestaurantItem
-										setOpenRequestLogin={
-											setOpenRequestLogin
-										}
-										setOpenModalBooking={
-											setOpenModalBooking
-										}
-										setText={setText}
-										isWishlist={false}
-									/>
-								</Col>
-							))}
-						{/* {currentBlogs.map((blog) => (
-							<Col
-								key={blog.id}
-								xs={12}
-								sm={12}
-								md={12}
-								lg={6}
-								xl={6}
+				<div className="list">
+					<SpinCustom spinning={loading}>
+						{
+						data?.length === 0
+							? <div className="fs-18 fw-500 d-flex justify-content-center w-100 red mt-30">Không có dữ liệu</div>
+							: <Row
+								gutter={[30, 32]}
+								className="d-flex justify-content-center"
 							>
-								<RestaurantItem content={blog.content} />
-							</Col>
-						))} */}
-					</Row>
-					<Row
-						justify="center"
-						align="middle"
-						style={{ marginTop: 50 }}
-						className="pagination"
-					>
-						<Col span={12}>
-							<Pagination
-								className="custom-pagination"
-								itemRender={(page, type, originalElement) => {
-									if (type === "prev") {
-										return <LeftOutlined />;
-									}
-									if (type === "next") {
-										return <RightOutlined />;
-									}
-									return originalElement;
-								}}
-								defaultCurrent={1}
-								current={currentPage}
-								pageSize={itemPerPage}
-								total={totalRest}
-								onChange={onPageChange}
-							/>
-						</Col>
-					</Row>
+								{
+									data?.map((r) => (
+										<Col key={r?.uid} xs={12} sm={12} md={12} lg={6} xl={6}>
+											<RestaurantItem
+												setOpenRequestLogin={setOpenRequestLogin}
+												setOpenModalBooking={setOpenModalBooking}
+												data={r}
+												setText={setText}
+												isWishlist={false}
+											/>
+										</Col>
+									))
+								}
+							</Row>
+						}
+					</SpinCustom>
 				</div>
 			</RestaurantContainer>
 			{!!openRequestLogin && (

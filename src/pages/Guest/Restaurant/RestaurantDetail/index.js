@@ -76,6 +76,9 @@ const RestaurantDetail = () => {
         { label: 'Đánh giá', value: 'rate' }
     ];
 
+    console.log(restaurantDetail);
+    
+
     return (
         <CommonLayout>
             <RestaurantDetailContainer>
@@ -130,9 +133,7 @@ const RestaurantDetail = () => {
                                             </div>
                                             <div className='short-des mb-30'>
                                                 <div className='fs-16 fw-600 mb-5'>Mô tả ngắn gọn:</div>
-                                                <div style={{fontStyle: 'italic'}}>Menu 4 món bánh kem hương vị, nhiệt đới mới toanh tại <span className='fw-600'>Mer</span>. cả nhà đã update chưa?
-                                                    Ai thử cũng "nghiện" - vậy mà có Hommies vẫn chưa đu trand Bánh Kem tại <span className='fw-600'>Mer</span> sao ?
-                                                </div>
+                                                <div style={{fontStyle: 'italic'}}> {restaurantDetail?.subdescription} </div>
                                             </div>
                                             <div>
                                                 <Button className='added-like' shape='round'>
@@ -158,8 +159,8 @@ const RestaurantDetail = () => {
                                 <Divider style={{marginTop: '-2px'}} className='bg-primary mb-20'/>
                                 <div>
                                     {selectedOption === 'description' 
-                                        ? <RestaurantDescription description={"Bánh Trà Thêm Quà ..."}/>
-                                        : <RestaurantRate rateCount={"3"}/>
+                                        ? <RestaurantDescription description={restaurantDetail?.description}/>
+                                        : <RestaurantRate restaurantDetail={restaurantDetail}/>
                                     }
                                 </div>
                             </div>

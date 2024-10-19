@@ -1,12 +1,15 @@
 import { Avatar, Button, Col, Form, Pagination, Rate, Row } from "antd";
 import dat from '../../../../../assets/images/Dat.jpg'
 import TextArea from "antd/es/input/TextArea";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import GuestService from "../../../../../services/GuestService";
+import SpinCustom from "../../../../../components/Common/SpinCustom";
 
-const RestaurantRate = ( {rateCount} ) => {
+const RestaurantRate = ( {restaurantDetail} ) => {
     const [form] = Form.useForm()
     const [loading, setLoading] = useState(false)
+    const [feedbacks, setFeedbacks] = useState([])
     const nav = useNavigate()
 
     const handleSubmitFormDating = async () => {
@@ -21,28 +24,56 @@ const RestaurantRate = ( {rateCount} ) => {
         }
     }
 
+    const getAllFeedback = async () => {
+        try {
+            setLoading(true)
+            const res = await GuestService.getAllFeedBack(restaurantDetail?.uid)
+            console.log(res);
+            setFeedbacks(res?.items)
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    useEffect(() => {
+        getAllFeedback()
+    }, [])
+
     return (  
         <Row gutter={[40, 0]} className="mt-20">
-            <Col xs={24} sm={24} md={13} lg={13} xl={13}>
-                <div className="fs-22 fw-600 mt-10 mb-15"> {rateCount} Đánh giá </div>
-                {Array(3).fill().map((_, index) => (
-                    <div className="rating-container mb-20">
-                        <div className="pl-20" style={{cursor: 'pointer'}} onClick={() => nav('/')}>
-                            <Avatar size={68} src={<img src={dat} alt="avatar" />} />
-                        </div>
-                        <div className="ml-20 w-100">
-                            <div className="fs-18 fw-600 mb-5" style={{cursor: 'pointer'}} onClick={() => nav('/')}>Đỗ Văn Đạt</div>
-                            <div className="primary fs-13 mb-10">12/06/2024</div>
-                            <div className="mb-15"><Rate className='primary fs-14' value={5} disabled/></div>
-                            <div className="w-70">Đồ uống ngon</div>
-                        </div>
-                    </div>
-                ))}
+            <SpinCustom spinning={loading}>
+                <Col xs={24} sm={24} md={13} lg={13} xl={13} style={{ minWidth: '500px' }}>
+                    <div className="fs-22 fw-600 mt-10 mb-15"> {restaurantDetail?.totalFeedbacks} Đánh giá </div>
+                    {
+                        feedbacks?.length === 0
+                            ? <div>Không có dữ liệu</div>
+                            : (
+                                <>
+                                    {feedbacks?.map((_, index) => (
+                                        <div key={index} className="rating-container mb-20">
+                                            <div className="pl-20" style={{cursor: 'pointer'}} onClick={() => nav('/')}>
+                                                <Avatar size={68} src={<img src={dat} alt="avatar" />} />
+                                            </div>
+                                            <div className="ml-20 w-100">
+                                                <div className="fs-18 fw-600 mb-5" style={{cursor: 'pointer'}} onClick={() => nav('/')}>Đỗ Văn Đạt</div>
+                                                <div className="primary fs-13 mb-10">12/06/2024</div>
+                                                <div className="mb-15"><Rate className='primary fs-14' value={5} disabled/></div>
+                                                <div className="w-70">Đồ uống ngon</div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                
+                                    <div className="pagination">
+                                        <Pagination className="custom-pagination" defaultCurrent={1} total={50} />
+                                    </div>
+                                </>
+                            )
+                    }
 
-                <div className="pagination">
-                    <Pagination className="custom-pagination" defaultCurrent={1} total={50} />
-                </div>
-            </Col>
+                </Col>
+            </SpinCustom>
 
 
             <Col xs={24} sm={24} md={11} lg={11} xl={11}>

@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { Rate } from "antd";
 import { HeartOutlined } from "@ant-design/icons";
 import { formatNumberToK } from "../../lib/stringUtils";
+import { useSelector } from "react-redux";
+import { userInfor } from "../../redux/Slice/userSlice";
+import UserService from "../../services/UserService";
 
 const RestaurantItem = ({
 	data,
@@ -13,21 +16,30 @@ const RestaurantItem = ({
 	isWishlist,
 }) => {
 	const nav = useNavigate();
-	const flag = true;
+	const user = useSelector(userInfor)
 
 	const handleOptionOpen = () => {
-		if (!isWishlist) {
-			if (!flag) {
-				setOpenModalBooking(true);
-				setText("Booking");
-			} else {
-				setOpenRequestLogin(true);
-				setText("Bạn cần đăng nhập trước khi đặt bàn");
-			}
+		if (!!user) {
+			setOpenModalBooking(true);
+			setText("Booking");
 		} else {
-			nav("/restaurant-detail");
+			setOpenRequestLogin(true);
+			setText("Bạn cần đăng nhập trước khi đặt bàn");
+		}
+		if (isWishlist) {
+			nav("/restaurant-detail/" + data?.uid);
 		}
 	};
+
+	const handleLikeRestaurant = async () => {
+		try {
+			const res = await UserService.createWishList({customerId: user?.uid, uid: data?.uid})
+			console.log("res", res);
+			
+		} catch (error) {
+			console.log(error);
+		}
+	}
 
 	return (
 		<RestaurantItemContainer>
@@ -46,14 +58,14 @@ const RestaurantItem = ({
 				<div
 					className="brand-category"
 					onClick={() => {
-						nav("/");
+						nav("/restaurant-view");
 					}}
 				>
 					<span className="pl-15 pr-15"> {data?.categoryName} </span>
 				</div>
 				<div
 					className="brand-name"
-					onClick={() => nav("/restaurant-detail")}
+					onClick={() => nav("/restaurant-detail" + data?.uid)}
 				>
 					{data?.nameRes}
 				</div>
@@ -81,12 +93,7 @@ const RestaurantItem = ({
 					{!isWishlist ? (
 						<div
 							className="drop-heart"
-							onClick={() => {
-								setOpenRequestLogin(true);
-								setText(
-									"Bạn cần đăng nhập trước khi thích nhà hàng này"
-								);
-							}}
+							onClick={() => handleLikeRestaurant()}
 						>
 							<HeartOutlined style={{ color: "#ff7c08" }} />
 						</div>
