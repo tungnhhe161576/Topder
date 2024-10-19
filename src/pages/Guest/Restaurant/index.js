@@ -21,9 +21,9 @@ const Restaurant = () => {
 	const [dataSearch, setDataSearch] = useState({
 		name: '',
 		address: '',
-		provinceCity: undefined,
-		district: undefined,
-		commune: undefined,
+		provinceCity: '',
+		district: '',
+		commune: '',
 		restaurantCategory: undefined,
 		minPrice: undefined,
 		maxPrice: undefined,

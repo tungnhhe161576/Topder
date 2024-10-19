@@ -23,7 +23,7 @@ const Profile = () => {
             const updatedUser = {
                 ...values,
                 dob: values?.dob ? dayjs(values?.dob).format('YYYY-MM-DD') : null,
-                gender: values?.gender,
+                gender: values?.gender === 'Nam' ? 'Male' : (values?.gender === 'Nữ' ? 'Female' : 'Other'),
             };
             
             const res = await UserService.updateProfile({
@@ -57,7 +57,7 @@ const Profile = () => {
             form.setFieldsValue({
                 ...user,
                 dob: user.dob ? dayjs(user.dob, 'YYYY-MM-DD') : null,
-                // gender: user.gender === 'Male' ? 'Nam' : (user.gender === 'Female' ? 'Nữ' : 'Khác')
+                gender: user.gender === 'Male' ? 'Nam' : (user.gender === 'Female' ? 'Nữ' : 'Khác')
             });
         }
     }, [user, form]);
@@ -125,21 +125,22 @@ const Profile = () => {
                                     label={<span className='fs-17 fw-600 d-flex justify-content-start'> Giới tính </span>}
                                 >
                                     <Radio.Group>
-                                        <Radio value={'Male'}>Nam</Radio>
-                                        <Radio value={'Female'}>Nữ</Radio>
-                                        <Radio value={'Other'}>Khác</Radio>
+                                        <Radio value={'Nam'}>Nam</Radio>
+                                        <Radio value={'Nữ'}>Nữ</Radio>
+                                        <Radio value={'Khác'}>Khác</Radio>
                                     </Radio.Group>
                                 </Form.Item>
                             )}
 
-                            {isEdit === false ? (
-                                <Form.Item
-                                    name='dob'
-                                    label={ <span className='fs-17 fw-600 d-flex justify-content-start'>Ngày sinh</span> }
-                                    rules={[{ required: true, message: "Hãy chọn ngày sinh của bạn" }]}
-                                >
-                                    <Input className="input fs-16" placeholder="Ngày sinh" disabled />
-                                </Form.Item>
+                            {!isEdit ? (
+                                <div className="d-flex align-items-center">
+                                    <div className="fs-17 fw-600" style={{marginRight: '85px'}}>
+                                        Ngày sinh:
+                                    </div>
+                                    <div className="fs-15">
+                                        {dayjs(user?.dob).format('DD-MM-YYYY')}
+                                    </div>
+                                </div>
                             ) : (
                                 <Form.Item
                                     name="dob"

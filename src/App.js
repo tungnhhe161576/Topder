@@ -15,7 +15,11 @@ function App() {
                 dispatch(setUserInformation(user)); 
             }
         }
-    }, [dispatch]);
+    }, []);
+
+    const getInfo = async () => {
+
+    }
     
     return (
         <div>
