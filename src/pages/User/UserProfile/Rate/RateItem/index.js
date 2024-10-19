@@ -1,20 +1,24 @@
 import { Rate } from 'antd';
-import restaurantImg from '../../../../../assets/images/blog-item.jpg'
+import dayjs from 'dayjs';
+import { useNavigate } from 'react-router-dom';
 
-const RateItem = () => {
+const RateItem = ( {rate} ) => {
+    const nav = useNavigate()
+
+
     return (  
         <div className="rate-container">
-            <div className="image-container">
-                <img src={restaurantImg} alt="restaurant-image"/>
+            <div className="image-container" onClick={() => nav('/restaurant-detail/' + rate?.restaurantId)}>
+                <img src={rate?.restaurantImage} alt="restaurant-image"/>
             </div>
             <div className='detail'>
-                <div className='name'> Mer.Coffee & Tea </div>
-                <div className='date'> 13/06/2024 </div>
+                <div className='name' onClick={() => nav('/restaurant-detail/' + rate?.restaurantId)}> {rate?.restaurantName} </div>
+                <div className='date'> {dayjs(rate?.createDate).format('DD-MM-YYYY')} </div>
                 <div className='vote'>
-                    <Rate className='fs-13' style={{color: '#ff7c08'}} value={5} disabled/>
+                    <Rate className='fs-13' style={{color: '#ff7c08'}} value={rate?.star} disabled/>
                 </div>
                 <div className='content'>
-                    Đồ uống ngon, ok
+                    {rate?.content}
                 </div>
             </div>
         </div>

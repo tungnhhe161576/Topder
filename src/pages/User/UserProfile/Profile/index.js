@@ -134,7 +134,7 @@ const Profile = () => {
 
                             {!isEdit ? (
                                 <div className="d-flex align-items-center">
-                                    <div className="fs-17 fw-600" style={{marginRight: '85px'}}>
+                                    <div className="fs-17 fw-600" style={{marginRight: '50px'}}>
                                         Ngày sinh:
                                     </div>
                                     <div className="fs-15">

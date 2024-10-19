@@ -1,26 +1,43 @@
-import { Avatar, Button, Col, Form, Pagination, Rate, Row } from "antd";
+import { Avatar, Button, Col, Form, message, Pagination, Rate, Row } from "antd";
 import dat from '../../../../../assets/images/Dat.jpg'
 import TextArea from "antd/es/input/TextArea";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import GuestService from "../../../../../services/GuestService";
 import SpinCustom from "../../../../../components/Common/SpinCustom";
+import UserService from "../../../../../services/UserService";
+import { useSelector } from "react-redux";
+import { userInfor } from "../../../../../redux/Slice/userSlice";
 
 const RestaurantRate = ( {restaurantDetail} ) => {
     const [form] = Form.useForm()
     const [loading, setLoading] = useState(false)
     const [feedbacks, setFeedbacks] = useState([])
     const nav = useNavigate()
+    const user = useSelector(userInfor)
 
     const handleSubmitFormDating = async () => {
         try {
             setLoading(true)
             const values = await form.validateFields()
-            console.log("values", values);
+            const res = await UserService.createFeedback({
+                customerId: user?.uid,
+                restaurantId: restaurantDetail?.uid,
+                star: values?.rate,
+                content: values?.content
+            })
+            message.open({
+                content: res,
+                type: 'success',
+                style: {
+                    marginTop: '10vh',
+                },
+            })
         } catch (error) {
             
         } finally {
             setLoading(true)
+            form.resetFields()
         }
     }
 
@@ -38,7 +55,7 @@ const RestaurantRate = ( {restaurantDetail} ) => {
     }
 
     useEffect(() => {
-        getAllFeedback()
+        // getAllFeedback()
     }, [])
 
     return (  
@@ -48,7 +65,7 @@ const RestaurantRate = ( {restaurantDetail} ) => {
                     <div className="fs-22 fw-600 mt-10 mb-15"> {restaurantDetail?.totalFeedbacks} Đánh giá </div>
                     {
                         feedbacks?.length === 0
-                            ? <div>Không có dữ liệu</div>
+                            ? <div className="fs-18 red fw-500 d-flex justify-content-center">Không có dữ liệu</div>
                             : (
                                 <>
                                     {feedbacks?.map((_, index) => (
@@ -87,7 +104,7 @@ const RestaurantRate = ( {restaurantDetail} ) => {
                                 { required: true, message: "Hãy chọn số sao!"},
                             ]}
                         >
-                            <span className="fs-18">Xếp hạng:</span> <Rate allowHalf className='primary' onChange={(value) => form.setFieldsValue({ rate: value })}/>
+                            <span className="fs-18">Xếp hạng:</span> <Rate className='primary' onChange={(value) => form.setFieldsValue({ rate: value })}/>
                         </Form.Item> 
                         <Form.Item 
                             name='content'
@@ -97,7 +114,7 @@ const RestaurantRate = ( {restaurantDetail} ) => {
                         >
                             <TextArea rows={4} placeholder="Đánh giá của bạn" />
                         </Form.Item> 
-                        <Form.Item>
+                        <Form.Item name="button">
                             <Button 
                                 className="white bg-primary fw-600 fs-16 rating-button w-30"
                                 htmlType="submit"

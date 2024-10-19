@@ -96,8 +96,6 @@ const RestaurantDetail = () => {
 		{ label: "Đánh giá", value: "rate" },
 	];
 
-	console.log(restaurantDetail);
-
 	return (
 		<CommonLayout>
 			<RestaurantDetailContainer>

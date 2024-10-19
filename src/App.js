@@ -4,21 +4,25 @@ import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { setUserInformation } from './redux/Slice/userSlice';
 import { jwtDecode } from "jwt-decode"
+import UserService from './services/UserService';
 
 function App() {
     const dispatch = useDispatch();
     
     useEffect(() => {
         if (!!localStorage.getItem('token')) {
-            const user = jwtDecode(localStorage.getItem('token'))
-            if (!!user) {
-                dispatch(setUserInformation(user)); 
-            }
+            getInfo()
         }
     }, []);
 
     const getInfo = async () => {
-
+        try {
+            const user = jwtDecode(localStorage.getItem('token'))
+            const res = await UserService.getCurrentUser(user?.uid)
+            dispatch(setUserInformation(res))
+        } catch (error) {
+            console.log(error);
+        }
     }
     
     return (
