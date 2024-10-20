@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	Row,
 	Col,
@@ -10,6 +10,7 @@ import {
 	Form,
 	Image,
 	InputNumber,
+	message,
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +22,8 @@ import {
 } from "../../../lib/stringUtils";
 import logo from "../../../assets/images/logo.png";
 import dayjs from "dayjs";
-
+import axios from "axios";
+import UserService from "../../../services/UserService";
 const getBase64 = (file) =>
 	new Promise((resolve, reject) => {
 		const reader = new FileReader();
@@ -35,11 +37,97 @@ const RegisterRestaurant = () => {
 	const [loading, setLoading] = useState(false);
 	const [openTime, setOpenTime] = useState(null);
 	const nav = useNavigate();
+	const [categories, setCategories] = useState([]);
 
 	//images
 	const [previewOpen, setPreviewOpen] = useState(false);
 	const [previewImage, setPreviewImage] = useState("");
 	const [fileList, setFileList] = useState([]);
+
+	const [cities, setCities] = useState([]);
+	const [districts, setDistricts] = useState([]);
+	const [wards, setWards] = useState([]);
+
+	const [selectedCity, setSelectedCity] = useState(null);
+	const [selectedDistrict, setSelectedDistrict] = useState(null);
+	const [selectedWard, setSelectedWard] = useState(null);
+
+	const getCities = async () => {
+		try {
+			const response = await axios.get(
+				"https://esgoo.net/api-tinhthanh/1/0.htm"
+			);
+			const data = response.data;
+			if (data.error === 0) {
+				setCities(data.data);
+			}
+		} catch (error) {
+			console.error("Error fetching cities:", error);
+		}
+	};
+
+	// Hàm để lấy dữ liệu quận huyện
+	const getDistricts = async (cityId) => {
+		try {
+			const response = await axios.get(
+				`https://esgoo.net/api-tinhthanh/2/${cityId}.htm`
+			);
+			const data = response.data;
+			if (data.error === 0) {
+				setSelectedCity(cityId);
+				setDistricts(data.data);
+			}
+		} catch (error) {
+			console.error("Error fetching districts:", error);
+		}
+	};
+
+	// Hàm để lấy dữ liệu phường xã
+	const getWards = async (districtId) => {
+		try {
+			const response = await axios.get(
+				`https://esgoo.net/api-tinhthanh/3/${districtId}.htm`
+			);
+			const data = response.data;
+			if (data.error === 0) {
+				setSelectedDistrict(districtId);
+				setWards(data.data);
+			}
+		} catch (error) {
+			console.error("Error fetching wards:", error);
+		}
+	};
+
+	useEffect(() => {
+		getCities();
+	}, []);
+
+	useEffect(() => {
+		if (selectedCity) {
+			getDistricts(selectedCity);
+		}
+	}, [selectedCity]);
+
+	useEffect(() => {
+		if (selectedDistrict) {
+			getWards(selectedDistrict);
+		}
+	}, [selectedDistrict]);
+
+	// Lấy thông tin người dùng từ Redux
+	useEffect(() => {
+		const fetchCategories = async () => {
+			try {
+				const response = await UserService.categoryResApi();
+				setCategories(response);
+			} catch (error) {
+				console.error("Failed to fetch categories:", error);
+			}
+		};
+
+		fetchCategories();
+	}, []);
+	console.log("user", categories);
 
 	const handlePreview = async (file) => {
 		if (!file.url && !file.preview) {
@@ -51,22 +139,6 @@ const RegisterRestaurant = () => {
 	const handleChange = ({ fileList: newFileList }) =>
 		setFileList(newFileList);
 	const uploadButton = (
-		// <button
-		// 	style={{
-		// 		border: "2px dashed #ff7c08",
-		// 		background: "none",
-		// 	}}
-		// 	type="button"
-		// >
-		// 	<PlusOutlined />
-		// 	<div
-		// 		style={{
-		// 			marginTop: 8,
-		// 		}}
-		// 	>
-		// 		Upload
-		// 	</div>
-		// </button>
 		<button
 			style={{
 				border: "2px dashed #333",
@@ -127,6 +199,7 @@ const RegisterRestaurant = () => {
 
 	const onFinish = (values) => {
 		console.log("Form values: ", values);
+		form.resetFields();
 	};
 
 	//submit the form
@@ -135,20 +208,30 @@ const RegisterRestaurant = () => {
 			setLoading(true);
 			const values = await form.validateFields();
 			const data = {
-				// restaurantName: values.restaurantName,
-				// ownerName: values.ownerName,
-				// logo: values.logo[0].originFileObj,
-				// address: values.address,
-				// phoneNumber: values.phoneNumber,
-				// email: values.email,
-				// password: values.password,
-				timeOpen: dayjs(values.timeOpen).format("HH:mm"),
-				timeClose: dayjs(values.timeClose).format("HH:mm"),
+				...values,
+				uid: 0,
+				openTime: dayjs(values?.openTime).format("HH:mm"),
+				closeTime: dayjs(values?.closeTime).format("HH:mm"),
 			};
-			console.log("form: ", data);
-			console.log("data: ", data);
+			const res = await UserService.registerRestaurant({
+				...data,
+				File: fileList[0].originFileObj,
+			});
+			message.open({
+				content: res.message,
+				type: "Bạn đã đăng ký nhà hàng thành công.",
+				style: {
+					marginTop: "20vh",
+				},
+			});
+			setTimeout(() => {
+				nav("/login");
+			}, 3000);
 		} catch (error) {
-			console.log(error);
+			message.open({
+				error: error.message,
+				type: "errorr",
+			});
 		} finally {
 			setLoading(false);
 		}
@@ -185,7 +268,7 @@ const RegisterRestaurant = () => {
 							style={{ padding: "0 16px" }}
 						>
 							<Form.Item
-								name="restaurantName"
+								name="nameRes"
 								label="Tên Nhà Hàng"
 								rules={[
 									{
@@ -210,7 +293,7 @@ const RegisterRestaurant = () => {
 							style={{ padding: "0 16px" }}
 						>
 							<Form.Item
-								name="ownerName"
+								name="nameOwner"
 								label="Tên Chủ Nhà Hàng"
 								rules={[
 									{
@@ -235,7 +318,7 @@ const RegisterRestaurant = () => {
 							<Form.Item
 								name="logo"
 								label="Logo hoặc Ảnh Trang Đầu"
-								valuePropName="fileList"
+								value="fileList"
 							>
 								<Upload
 									action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
@@ -334,50 +417,101 @@ const RegisterRestaurant = () => {
 						</Col>
 					</Row>
 					<Row gutter={[24, 16]}>
+						{/* Tỉnh/Thành phố */}
 						<Col xs={24} sm={24} md={12} lg={12}>
 							<Form.Item
-								name="city"
-								label="Thành Phố"
+								label="Chọn Tỉnh Thành"
+								name="provinceCity"
 								rules={[
 									{
 										required: true,
-										message: "Vui lòng chọn thành phố",
+										message: "Vui lòng chọn tỉnh thành!",
 									},
 								]}
 							>
 								<Select
-									showSearch
-									style={{
-										width: "100%",
-									}}
-									placeholder="Thành Phố"
-									optionFilterProp="label"
-									filterSort={(optionA, optionB) =>
-										(optionA?.label ?? "")
-											.toLowerCase()
-											.localeCompare(
-												(
-													optionB?.label ?? ""
-												).toLowerCase()
-											)
-									}
-									options={[
-										{
-											value: "1",
-											label: "Hà Nội",
-										},
-										{
-											value: "2",
-											label: "Hồ Chí Minh",
-										},
-									]}
-								/>
+									placeholder="Chọn Tỉnh Thành"
+									style={{ width: "100%" }}
+									onChange={(value) => setSelectedCity(value)}
+									value={selectedCity}
+								>
+									{cities.map((city) => (
+										<Select.Option
+											key={city.id}
+											value={city.id}
+										>
+											{city.full_name}
+										</Select.Option>
+									))}
+								</Select>
 							</Form.Item>
 						</Col>
 
+						{/* Quận/Huyện */}
 						<Col xs={24} sm={24} md={12} lg={12}>
 							<Form.Item
-								name="restaurantType"
+								label="Chọn Quận Huyện"
+								name="district"
+								rules={[
+									{
+										required: true,
+										message: "Vui lòng chọn quận huyện!",
+									},
+								]}
+							>
+								<Select
+									placeholder="Chọn Quận Huyện"
+									style={{ width: "100%" }}
+									onChange={(value) =>
+										setSelectedDistrict(value)
+									}
+									value={selectedDistrict}
+								>
+									{districts.map((district) => (
+										<Select.Option
+											key={district.id}
+											value={district.id}
+										>
+											{district.full_name}
+										</Select.Option>
+									))}
+								</Select>
+							</Form.Item>
+						</Col>
+					</Row>
+					<Row gutter={[24, 16]}>
+						{/* Phường/Xã */}
+						<Col xs={24} sm={24} md={12} lg={12}>
+							<Form.Item
+								label="Chọn Phường Xã"
+								name="commune"
+								rules={[
+									{
+										required: true,
+										message: "Vui lòng chọn phường xã!",
+									},
+								]}
+							>
+								<Select
+									placeholder="Chọn Phường Xã"
+									style={{ width: "100%" }}
+									onChange={(value) => setSelectedWard(value)}
+									value={selectedWard}
+								>
+									{wards.map((ward) => (
+										<Select.Option
+											key={ward.id}
+											value={ward.id}
+										>
+											{ward.full_name}
+										</Select.Option>
+									))}
+								</Select>
+							</Form.Item>
+						</Col>
+						<Col xs={24} sm={24} md={12} lg={12}>
+							<Form.Item
+								name="categoryRestaurantId"
 								label="Loại Nhà Hàng"
 								rules={[
 									{
@@ -386,37 +520,32 @@ const RegisterRestaurant = () => {
 									},
 								]}
 							>
-								<Select
-									showSearch
-									style={{
-										width: "100%",
-									}}
-									placeholder="Loại Nhà Hàng"
-									optionFilterProp="label"
-									filterSort={(optionA, optionB) =>
-										(optionA?.label ?? "")
-											.toLowerCase()
-											.localeCompare(
-												(
-													optionB?.label ?? ""
-												).toLowerCase()
-											)
-									}
-									options={[
-										{
-											value: "1",
-											label: "Quán trà sữa và cà phê",
-										},
-										{
-											value: "2",
-											label: "Nhà hàng gia đình",
-										},
-									]}
-								/>
+								<Select placeholder="Chọn loại nhà hàng">
+									{Array.isArray(categories) &&
+									categories.length > 0 ? (
+										categories.map((category) => (
+											<Select.Option
+												key={
+													category?.categoryRestaurantId
+												}
+												value={
+													category?.categoryRestaurantId
+												}
+											>
+												{
+													category.categoryRestaurantName
+												}
+											</Select.Option>
+										))
+									) : (
+										<Select.Option disabled>
+											Không có loại nhà hàng nào
+										</Select.Option>
+									)}
+								</Select>
 							</Form.Item>
 						</Col>
 					</Row>
-
 					<Row gutter={[24, 16]}>
 						<Col xs={24} sm={24} md={12} lg={12}>
 							<Form.Item
