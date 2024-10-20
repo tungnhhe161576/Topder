@@ -37,8 +37,6 @@ const HomePage = () => {
 		getData();
 	}, []);
 
-	console.log("data", data);
-
 	return (
 		<CommonLayout>
 			<HomeContainer>

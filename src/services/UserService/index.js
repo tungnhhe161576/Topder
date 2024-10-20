@@ -11,6 +11,7 @@ import {
 	apiGetListRestaurants,
 	apiRegisterRestaurant,
 	apiDeleteFeedback,
+	apiDeleteWishList,
 } from "./urls";
 const categoryResApi = (body) => http.get(apiGetListRestaurants, body);
 const loginApi = (body) => http.post(apiLogin, body);
@@ -22,6 +23,7 @@ const updateProfile = (body) =>
 	});
 const getWishLish = (userId) => http.get(`${apiGetListWishList}/${userId}`);
 const createWishList = (body) => http.post(apiAddWishList, body);
+const deleteWishlist = (customerId, wishlistId ) => http.delete(`${apiDeleteWishList}/${customerId}/${wishlistId}`);
 const getCurrentUser = (uid) => http.get(`${apigetCurrentUser}/${uid}`);
 const getFeedbacks = (customerId) =>
 	http.get(`${apiGetFeedback}?customerId=${customerId}`);
@@ -45,6 +47,7 @@ const UserService = {
 	createFeedback,
 	categoryResApi,
 	registerRestaurant,
+	deleteWishlist,
 };
 
 export default UserService;

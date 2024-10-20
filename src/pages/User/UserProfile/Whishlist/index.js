@@ -28,8 +28,10 @@ const Whishlist = () => {
     }
 
     useEffect(() => {
-        getData();
-    }, [])
+        if (user?.uid) {
+			getData()
+		}
+    }, [user])
 
     const itemPerPage = 2;
     const onPageChange = (page) => {
@@ -55,7 +57,7 @@ const Whishlist = () => {
                                         <SpinCustom spinning={loading}>
                                             <div>
                                                 {data?.slice(startIndex, startIndex + itemPerPage)?.map((r, index) =>
-                                                    <Col key={index} xs={24} sm={24} md={20} lg={12} xl={9}>
+                                                    <Col key={index} xs={24} sm={24} md={24} lg={24} xl={24}>
                                                         <RestaurantItem data={r}  setText={''} isWishlist={true}/>
                                                     </Col>
                                                 )}

@@ -7,8 +7,6 @@ import { RequestLoginContainer } from './styled'
 
 const ModalRequestLogin = ({open, onCancel, text}) => {
     const nav = useNavigate()
-    console.log("text:", text);
-    
     
     const footer = () => {
         return (

@@ -10,6 +10,7 @@ import {
 	Image,
 	Input,
 	InputNumber,
+	message,
 	Rate,
 	Row,
 	Segmented,
@@ -28,6 +29,10 @@ import GuestService from "../../../../services/GuestService";
 import SpinCustom from "../../../../components/Common/SpinCustom";
 import ModalChooseTable from "./Modal/ModalChooseTable";
 import ModalChooseFood from "./Modal/ModalChooseFood";
+import ModalRequestLogin from "../../../../components/Modal/RequestLogin";
+import { useSelector } from "react-redux";
+import { userInfor } from "../../../../redux/Slice/userSlice";
+import UserService from "../../../../services/UserService";
 
 const RestaurantDetail = () => {
 	const [selectedOption, setSelectedOption] = useState("description");
@@ -38,9 +43,15 @@ const RestaurantDetail = () => {
 	const [openModalChooseTable, setOpenModalChooseTable] = useState(false);
 	const [tableNumber, setTableNumber] = useState([]);
 	const [openModalChooseFood, setOpenModalChooseFood] = useState(false);
+	const [openRequestLogin, setOpenRequestLogin] = useState(false);
+	const [text, setText] = useState("");
 	const [foods, setFoods] = useState([]);
+	const [wishlist, setWishList] = useState([]);
+	const [isLiked, setIsLiked] = useState(false);
+	const [isLikedButton, setIsLikedButton] = useState(false);
 	const { restaurantId } = useParams();
 	const [form] = Form.useForm();
+	const user = useSelector(userInfor)
 
 	//api get data chi tiet nha hang
 	const getDataRestaurantDetail = async () => {
@@ -55,7 +66,6 @@ const RestaurantDetail = () => {
 		}
 	};
 
-
     const getAllRelatedRestaurant = async () => {
         try {
             setLoading(true)
@@ -68,10 +78,30 @@ const RestaurantDetail = () => {
         }
     }
 
+	const getWishlist = async () => {
+        try {
+            setLoading(true);
+            const res = await UserService.getWishLish(user?.uid)
+            setWishList(res)
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false)
+        }
+    }
+
 	useEffect(() => {
 		getDataRestaurantDetail()
-		getAllRelatedRestaurant()
-	}, []);
+		if (user?.uid) {
+			getWishlist()
+		}
+	}, [user]);
+
+	useEffect(() => {
+		if (restaurantDetail?.categoryRestaurantId) {
+			getAllRelatedRestaurant();
+		}
+	}, [restaurantDetail]);
 
 	//goi api submit dat ban
 	const handleSubmitFormBooking = async () => {
@@ -92,6 +122,59 @@ const RestaurantDetail = () => {
 			setLoading(false);
 		}
 	};
+
+	useEffect(() => {
+		if (wishlist) {
+			setIsLiked(wishlist.find(item => item.restaurantId === restaurantDetail?.uid))
+			setIsLikedButton(wishlist.some(item => item.restaurantId === restaurantDetail?.uid))
+		}
+	}, [restaurantDetail, wishlist]);
+
+	const handleAddWishList = async () => {
+		try {
+			if (!user) {
+				setOpenRequestLogin(true)
+				setText("Bạn phải đăng nhập trước khi thêm nhà hàng này vào yêu thích")
+			} else {
+				await UserService.createWishList({
+					customerId: user?.uid,
+					restaurantId: restaurantId
+				})
+				setIsLikedButton(true)
+				message.open({
+					content: "Thêm thành công",
+					type: "success",
+					style: {
+						marginTop: "10vh",
+					},
+				});
+
+				await getWishlist();
+			}
+		} catch (error) {
+			console.log(error);
+			
+		} 
+	}
+
+	const handleDeleteWishlist = async () => { 
+		try {
+			setLoading(true);
+			await UserService.deleteWishlist(user?.uid, isLiked?.wishlistId)
+			setIsLikedButton(false)
+			message.open({
+				content: "Xóa thành công",
+				type: "success",
+				style: {
+					marginTop: "10vh",
+				},
+			});
+		} catch (error) {
+			console.log(error);
+		} finally {
+			setLoading(false);
+		}
+	}
 
 	//xu ly slider hinh anh nha hang
 	const nextImage = () => {
@@ -191,12 +274,25 @@ const RestaurantDetail = () => {
 												</div>
 											</div>
 											<div>
-												<Button
-													className="added-like"
-													shape="round"
-												>
-													Thêm vào yêu thích
-												</Button>
+												{
+													!isLikedButton 
+														? <Button
+															className="added-like"
+															shape="round"
+															onClick={() => handleAddWishList()}
+														>
+		
+															Thêm vào yêu thích
+														</Button>
+														: <Button
+															className="added-like"
+															shape="round"
+															onClick={() => handleDeleteWishlist()}
+														>
+															Xóa khỏi yêu thích
+														</Button>
+		
+												}
 											</div>
 										</div>
 									</Col>
@@ -441,22 +537,19 @@ const RestaurantDetail = () => {
 					<div className="fs-26 fw-700"> Cửa hàng liên quan </div>
 					<div>
 						<Row gutter={[24, 24]} className="d-dlex justify-content-center">
-						{
-						relatedRestaurant.length === 0
-							? <div className="red fw-500 fs-18 d-flex justify-content-center">Không có dữ liệu</div>
-							:  <>
-								{
-									relatedRestaurant.slice(0, 3)?.map((r, index) => ( 
-										<Col key={index} xs={12} sm={12} md={6} lg={6} xl={6}>
-											<RelatedRestaurant data={r} />
-										</Col>
-									))
-								}
-							</>
-							
-							
-						}
-							
+							{
+							relatedRestaurant.length === 0
+								? <div className="red fw-500 fs-18 d-flex justify-content-center">Không có dữ liệu</div>
+								:  <>
+									{
+										relatedRestaurant.slice(0, 3)?.map((r, index) => ( 
+											<Col key={index} xs={12} sm={12} md={6} lg={6} xl={6}>
+												<RelatedRestaurant data={r} />
+											</Col>
+										))
+									}
+								</>
+							}
 						</Row>
 					</div>
 				</div>
@@ -474,6 +567,13 @@ const RestaurantDetail = () => {
 					open={openModalChooseFood}
 					onCancel={() => setOpenModalChooseFood(false)}
 					setFoods={setFoods}
+				/>
+			)}
+			{!!openRequestLogin && (
+				<ModalRequestLogin
+					open={openRequestLogin}
+					onCancel={() => setOpenRequestLogin(false)}
+					text={text}
 				/>
 			)}
 		</CommonLayout>

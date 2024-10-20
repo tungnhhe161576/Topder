@@ -19,15 +19,16 @@ const RestaurantItem = ({
 	const user = useSelector(userInfor)
 
 	const handleOptionOpen = () => {
-		if (!!user) {
-			setOpenModalBooking(true);
-			setText("Booking");
-		} else {
-			setOpenRequestLogin(true);
-			setText("Bạn cần đăng nhập trước khi đặt bàn");
-		}
 		if (isWishlist) {
-			nav("/restaurant-detail/" + data?.uid);
+			nav("/restaurant-detail/" + data?.restaurantId);
+		} else {
+			if (!!user) {
+				setOpenModalBooking(true);
+				setText("Booking");
+			} else {
+				setOpenRequestLogin(true);
+				setText("Bạn cần đăng nhập trước khi đặt bàn");
+			}
 		}
 	};
 
@@ -65,12 +66,12 @@ const RestaurantItem = ({
 				</div>
 				<div
 					className="brand-name"
-					onClick={() => nav("/restaurant-detail" + data?.uid)}
+					onClick={() => nav("/restaurant-detail/" + data?.uid)}
 				>
 					{data?.nameRes}
 				</div>
 				<div className="rate">
-					<Rate style={{ color: "#ff7c08" }} value={data?.star/data?.totalFeedbacks} disabled /> -
+					<Rate style={{ color: "#ff7c08" }} value={data?.star} disabled /> -
 					({data?.totalFeedbacks} đánh giá)
 				</div>
 				<div className="price fs-18 fw-600 primary">
