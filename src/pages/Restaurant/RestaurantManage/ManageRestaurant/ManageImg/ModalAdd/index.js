@@ -13,6 +13,7 @@ const AddImageModal = ({ visible, onCancel, onAdd }) => {
 		if (file.status === "done" || file.originFileObj) {
 			const newImageUrl = URL.createObjectURL(file.originFileObj);
 			setNewImage(newImageUrl); // Lưu URL của file đã tải lên
+			console.log("img", newImageUrl);
 		}
 	};
 
