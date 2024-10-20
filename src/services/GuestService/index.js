@@ -7,6 +7,7 @@ import {
     apiGetAllRestaurants,
     apiGetAllRestaurantCategory,
     apiGetAllFeedback,
+	apiGetRelatedRestaurants,
 } from './urls'
 
 const apiHomePageData = body => http.get(apiGetDataInHomePage, body)
@@ -28,6 +29,7 @@ const getAllRestaurants = body => {
 const getAllRestaurantCategory = body => http.get(apiGetAllRestaurantCategory, body)
 
 const getAllFeedBack = restaurantId => http.get(`${apiGetAllFeedback}/${restaurantId}` )
+const getRelatedRestaurant = (restaurantId, categoryRestaurantId) => http.get(`${apiGetRelatedRestaurants}/${restaurantId}/${categoryRestaurantId}`)
 
 const GuestService = {
     apiHomePageData,
@@ -35,6 +37,7 @@ const GuestService = {
     getAllRestaurants,
     getAllRestaurantCategory,
     getAllFeedBack,
+    getRelatedRestaurant,
 }
 
 export default GuestService

@@ -6,3 +6,4 @@ export const apiGetAllRestaurants = "Restaurant/ServiceForCustomerSite"
 export const apiGetAllRestaurantCategory = "CategoryRestaurant/GetExistingCategoriesRestaurant"
 
 export const apiGetAllFeedback = "Feedback/GetFeedbackForRestaurantDetail"
+export const apiGetRelatedRestaurants = "Restaurant/GetRelateRestaurant"

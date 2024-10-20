@@ -1,6 +1,6 @@
 import { Button, Rate } from "antd";
 
-const RelatedRestaurant = () => {
+const RelatedRestaurant = ( {data} ) => {
     return (  
         <div className="related-restaurant-container">
             <div className="image-container">
@@ -14,7 +14,7 @@ const RelatedRestaurant = () => {
                     <Rate className='primary fs-14' value={5} disabled/> - (5 đánh giá)
                 </div>
                 <div className="button-booking">
-                    <Button className="bg-primary button" shape="round">
+                    <Button className="button" shape="round">
                         Đặt bàn
                     </Button>
                 </div>

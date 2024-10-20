@@ -70,7 +70,7 @@ const RestaurantItem = ({
 					{data?.nameRes}
 				</div>
 				<div className="rate">
-					<Rate style={{ color: "#ff7c08" }} value={data?.star} disabled /> -
+					<Rate style={{ color: "#ff7c08" }} value={data?.star/data?.totalFeedbacks} disabled /> -
 					({data?.totalFeedbacks} đánh giá)
 				</div>
 				<div className="price fs-18 fw-600 primary">

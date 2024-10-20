@@ -93,6 +93,11 @@ export const RestaurantDetailContainer = styled.div `
             border-radius: 10px;
             padding-top: 20px;
             padding-bottom: 30px;
+
+            .options {
+                align-self: start;
+                cursor: pointer;
+            }
         }
 
         .pagination {
@@ -235,12 +240,13 @@ export const RestaurantDetailContainer = styled.div `
                         border: none;
                         height: 35px;
                         width: 100px;
-                        font-weight: bold;
+                        font-weight: 500;
+                        background-color: #ff7c08;
                     }
 
                     .button:hover {
-                        background-color: #ff9933;
-
+                        background-color: #ff9933 !important;
+                        color: white !important;
                     }
                 }
             }

@@ -34,6 +34,7 @@ const RestaurantDetail = () => {
 	const [loading, setLoading] = useState(false);
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [restaurantDetail, setRestaurantDetail] = useState();
+	const [relatedRestaurant, setRelatedRestaurant] = useState([])
 	const [openModalChooseTable, setOpenModalChooseTable] = useState(false);
 	const [tableNumber, setTableNumber] = useState([]);
 	const [openModalChooseFood, setOpenModalChooseFood] = useState(false);
@@ -54,8 +55,22 @@ const RestaurantDetail = () => {
 		}
 	};
 
+
+    const getAllRelatedRestaurant = async () => {
+        try {
+            setLoading(true)
+            const res = await GuestService.getRelatedRestaurant(restaurantId, restaurantDetail?.categoryRestaurantId)
+            setRelatedRestaurant(res)
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false)
+        }
+    }
+
 	useEffect(() => {
-		getDataRestaurantDetail();
+		getDataRestaurantDetail()
+		getAllRelatedRestaurant()
 	}, []);
 
 	//goi api submit dat ban
@@ -426,15 +441,22 @@ const RestaurantDetail = () => {
 					<div className="fs-26 fw-700"> Cửa hàng liên quan </div>
 					<div>
 						<Row gutter={[24, 24]} className="d-dlex justify-content-center">
-							<Col xs={12} sm={12} md={6} lg={6} xl={6}>
-								<RelatedRestaurant />
-							</Col>
-							<Col xs={12} sm={12} md={6} lg={6} xl={6}>
-								<RelatedRestaurant />
-							</Col>
-							<Col xs={12} sm={12} md={6} lg={6} xl={6}>
-								<RelatedRestaurant />
-							</Col>
+						{
+						relatedRestaurant.length === 0
+							? <div className="red fw-500 fs-18 d-flex justify-content-center">Không có dữ liệu</div>
+							:  <>
+								{
+									relatedRestaurant.slice(0, 3)?.map((r, index) => ( 
+										<Col key={index} xs={12} sm={12} md={6} lg={6} xl={6}>
+											<RelatedRestaurant data={r} />
+										</Col>
+									))
+								}
+							</>
+							
+							
+						}
+							
 						</Row>
 					</div>
 				</div>

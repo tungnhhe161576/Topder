@@ -31,11 +31,12 @@ const Whishlist = () => {
         getData();
     }, [])
 
-    const total = data?.length;
     const itemPerPage = 2;
     const onPageChange = (page) => {
         setCurrentPage(page);
     };
+    const startIndex = (currentPage - 1) * itemPerPage;
+    console.log("data", data);
     
 
     return (  
@@ -52,32 +53,34 @@ const Whishlist = () => {
                                 : (
                                     <>
                                         <SpinCustom spinning={loading}>
-                                            {data?.map((r, index) =>
-                                                <Col key={index} xs={24} sm={24} md={20} lg={12} xl={9}>
-                                                    <RestaurantItem data={r}  setText={''} isWishlist={true}/>
-                                                </Col>
-                                            )}
+                                            <div>
+                                                {data?.slice(startIndex, startIndex + itemPerPage)?.map((r, index) =>
+                                                    <Col key={index} xs={24} sm={24} md={20} lg={12} xl={9}>
+                                                        <RestaurantItem data={r}  setText={''} isWishlist={true}/>
+                                                    </Col>
+                                                )}
+                                            </div>
+                                            <div className="pagination">
+                                                <Pagination
+                                                    className="custom-pagination pb-20"
+                                                    itemRender={(page, type, originalElement) => {
+                                                        if (type === "prev") {
+                                                            return <LeftOutlined />;
+                                                        }
+                                                        if (type === "next") {
+                                                            return <RightOutlined />;
+                                                        }
+                                                        return originalElement;
+                                                    }}
+                                                    defaultCurrent={1}
+                                                    current={currentPage}
+                                                    pageSize={itemPerPage}
+                                                    total={data?.length}
+                                                    onChange={onPageChange}
+                                                />
+                                            </div>
                                         </SpinCustom>
                                         
-                                        <div className="pagination">
-                                            <Pagination
-                                                className="custom-pagination pb-20"
-                                                itemRender={(page, type, originalElement) => {
-                                                    if (type === "prev") {
-                                                        return <LeftOutlined />;
-                                                    }
-                                                    if (type === "next") {
-                                                        return <RightOutlined />;
-                                                    }
-                                                    return originalElement;
-                                                }}
-                                                defaultCurrent={1}
-                                                current={currentPage}
-                                                pageSize={itemPerPage}
-                                                total={total}
-                                                onChange={onPageChange}
-                                            />
-                                        </div>
                                     </>
                                 )
                         }

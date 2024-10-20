@@ -31,7 +31,6 @@ const Rate = () => {
         getFeedbacks()
     }, [])
 
-    const total = feedbacks.length;
     const itemPerPage = 3;
     const startIndex = (currentPage - 1) * itemPerPage;
 
@@ -78,7 +77,7 @@ const Rate = () => {
                                                 defaultCurrent={1}
                                                 current={currentPage}
                                                 pageSize={itemPerPage}
-                                                total={total}
+                                                total={feedbacks.length}
                                                 onChange={onPageChange}
                                             />
                                         </div>

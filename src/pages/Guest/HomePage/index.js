@@ -62,7 +62,7 @@ const HomePage = () => {
 								gutter={[30, 24]}
 								className="d-flex justify-content-center"
 							>
-								{data?.newRestaurants?.$values?.map(
+								{data?.newRestaurants?.map(
 									(r, index) => (
 										<Col
 											key={index}
@@ -74,12 +74,8 @@ const HomePage = () => {
 										>
 											<RestaurantItem
 												data={r}
-												setOpenRequestLogin={
-													setOpenRequestLogin
-												}
-												setOpenModalBooking={
-													setOpenModalBooking
-												}
+												setOpenRequestLogin={setOpenRequestLogin}
+												setOpenModalBooking={setOpenModalBooking}
 												setText={setText}
 												isWishlist={false}
 											/>
@@ -174,7 +170,7 @@ const HomePage = () => {
 								gutter={[30, 24]}
 								className="d-flex justify-content-center"
 							>
-								{data?.topBookingRestaurants?.$values?.map(
+								{data?.topBookingRestaurants?.map(
 									(r, index) => (
 										<Col
 											key={index}
@@ -221,7 +217,7 @@ const HomePage = () => {
 								gutter={[30, 24]}
 								className="d-flex justify-content-center"
 							>
-								{data?.topRatingRestaurant?.$values?.map(
+								{data?.topRatingRestaurant?.map(
 									(r, index) => (
 										<Col
 											key={index}
@@ -271,7 +267,7 @@ const HomePage = () => {
 								gutter={[30, 24]}
 								className="d-flex justify-content-center"
 							>
-								{data?.blogs?.$values?.map((b, index) => (
+								{data?.blogs?.map((b, index) => (
 									<Col
 										key={index}
 										xs={12}

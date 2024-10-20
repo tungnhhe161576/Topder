@@ -10,6 +10,7 @@ import {
 	apiCreateFeedback,
 	apiGetListRestaurants,
 	apiRegisterRestaurant,
+	apiDeleteFeedback,
 } from "./urls";
 const categoryResApi = (body) => http.get(apiGetListRestaurants, body);
 const loginApi = (body) => http.post(apiLogin, body);
@@ -25,6 +26,7 @@ const getCurrentUser = (uid) => http.get(`${apigetCurrentUser}/${uid}`);
 const getFeedbacks = (customerId) =>
 	http.get(`${apiGetFeedback}?customerId=${customerId}`);
 const createFeedback = (body) => http.post(apiCreateFeedback, body);
+const deleteFeedback = feedbackId => http.delete(`${apiDeleteFeedback}/${feedbackId}`)
 const registerRestaurant = (body) =>
 	http.post(apiRegisterRestaurant, body, {
 		headers: {
@@ -37,6 +39,7 @@ const UserService = {
 	updateProfile,
 	getWishLish,
 	createWishList,
+	deleteFeedback,
 	getCurrentUser,
 	getFeedbacks,
 	createFeedback,
