@@ -38,10 +38,11 @@ const RestaurantRate = ( {restaurantDetail} ) => {
                     marginTop: '10vh',
                 },
             })
+            await getAllFeedback()
         } catch (error) {
-            
+            console.log(error);
         } finally {
-            setLoading(true)
+            setLoading(false)
             form.resetFields()
         }
     }
@@ -85,7 +86,7 @@ const RestaurantRate = ( {restaurantDetail} ) => {
         <Row gutter={[40, 0]} className="mt-20">
             <SpinCustom spinning={loading}>
                 <Col xs={24} sm={24} md={13} lg={13} xl={13} style={{ minWidth: '500px' }}>
-                    <div className="fs-22 fw-600 mt-10 mb-15"> {restaurantDetail?.totalFeedbacks} Đánh giá </div>
+                    <div className="fs-22 fw-600 mt-10 mb-15"> {feedbacks.length} Đánh giá </div>
                     {
                         feedbacks?.length === 0
                             ? <div className="fs-18 red fw-500 d-flex justify-content-center">Không có dữ liệu</div>

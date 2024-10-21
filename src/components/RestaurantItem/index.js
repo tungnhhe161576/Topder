@@ -20,7 +20,7 @@ const RestaurantItem = ({
 
 	const handleOptionOpen = () => {
 		if (isWishlist) {
-			nav("/restaurant-detail/" + data?.restaurantId);
+			nav("/restaurant-detail/" + data?.uid);
 		} else {
 			if (!!user) {
 				setOpenModalBooking(true);
@@ -34,8 +34,8 @@ const RestaurantItem = ({
 
 	const handleLikeRestaurant = async () => {
 		try {
-			const res = await UserService.createWishList({customerId: user?.uid, uid: data?.uid})
-			console.log("res", res);
+			// const res = await UserService.createWishList({customerId: user?.uid, uid: data?.uid})
+			// console.log("res", res);
 			
 		} catch (error) {
 			console.log(error);

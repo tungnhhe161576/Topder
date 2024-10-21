@@ -115,7 +115,7 @@ const RestaurantDetail = () => {
 				ChooseTable: tableNumber,
 				ChooseFoods: foods,
 			};
-			console.log("data: ", date);
+			// console.log("data: ", date);
 		} catch (error) {
 			console.log(error);
 		} finally {
@@ -125,22 +125,22 @@ const RestaurantDetail = () => {
 
 	useEffect(() => {
 		if (wishlist) {
-			setIsLiked(wishlist.find(item => item.restaurantId === restaurantDetail?.uid))
-			setIsLikedButton(wishlist.some(item => item.restaurantId === restaurantDetail?.uid))
+			setIsLiked(wishlist.find(item => item.uid === restaurantDetail?.uid))
+			setIsLikedButton(wishlist.some(item => item.uid === restaurantDetail?.uid))
 		}
 	}, [restaurantDetail, wishlist]);
 
 	const handleAddWishList = async () => {
 		try {
 			if (!user) {
-				setOpenRequestLogin(true)
+				setOpenRequestLogin(false)
 				setText("Bạn phải đăng nhập trước khi thêm nhà hàng này vào yêu thích")
 			} else {
 				await UserService.createWishList({
 					customerId: user?.uid,
 					restaurantId: restaurantId
 				})
-				setIsLikedButton(true)
+				setIsLikedButton(false)
 				message.open({
 					content: "Thêm thành công",
 					type: "success",
@@ -253,10 +253,16 @@ const RestaurantDetail = () => {
 													Đóng cửa: {restaurantDetail?.closeTime}
 												</div>
 											</div>
-											<div className="fs-16 fw-500 mb-20">
-												Giá đặt bàn:
+											<div className="fs-16 fw-500">
+												Giá đặt bàn: {" "}
 												<span className="primary">
 													{formatNumberToK(restaurantDetail?.price)}
+												</span>
+											</div>
+											<div className="fs-16 fw-500 mb-15">
+												Giá món ăn từ: {" "}
+												<span className="primary">
+													{formatNumberToK(restaurantDetail?.minPriceMenu)} - {formatNumberToK(restaurantDetail?.maxPriceMenu)} 
 												</span>
 											</div>
 											<div className="address mb-20">
