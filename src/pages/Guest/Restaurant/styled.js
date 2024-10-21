@@ -5,6 +5,53 @@ export const RestaurantContainer = styled.div`
 	margin: auto;
 	margin-top: 60px;
 
+	.dropdown {
+		height: 38px;
+		width: 100%;
+		border: 1px solid #ddd;
+		border-radius: 50px;
+		margin-bottom: 13px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		cursor: pointer;
+	}
+	.fill {
+		background-color: #fff;
+	}
+	.filled {
+		background-color: #fa8c16;
+		color: #fff;
+	}
+
+	.ant-input-number {
+		height: 40px;
+		border-radius: 50px !important;
+		border: 1px solid #ddd !important; 
+		width: 100%;
+		margin-bottom: -10px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	/* .search-price {
+		background-color: #fff;
+		display: flex;
+		height: 40px;
+		border: 1px solid #ddd;
+		align-items: center;
+		border-radius: 50px;
+		margin-bottom: -8px;
+		.slider {
+			justify-items: start;
+			padding-left: 10px;
+		}
+		.field-input {
+			width: 150px;
+			justify-items: end;
+		}
+	} */
+
 	.pagination {
 		display: flex;
 		justify-content: left;
