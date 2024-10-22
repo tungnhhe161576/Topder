@@ -26,6 +26,8 @@ import ManageOrder from "../pages/Restaurant/RestaurantManage/ManageOrder";
 import ManageRate from "../pages/Restaurant/RestaurantManage/ManageRate";
 import Wallet from "../pages/User/UserProfile/Wallet";
 import ManagementDiscount from "../pages/Restaurant/RestaurantManage/ManageDiscount";
+import VerifyOTP from "../pages/User/VerifyOTP";
+import ResetPassword from "../pages/User/ResetPassword";
 
 const router = createBrowserRouter([
 	{
@@ -53,7 +55,17 @@ const router = createBrowserRouter([
 			{
 				path: "forgot-password",
 				element: <ForgotPassword />,
-				title: "Forgot Password",
+				title: "Quên Mật Khẩu",
+			},
+			{
+				path: "verify-otp",
+				element: <VerifyOTP />,
+				title: "OTP",
+			},
+			{
+				path: "reset-password",
+				element: <ResetPassword />,
+				title: "Đặt Lại Mật Khẩu Mới",
 			},
 			{
 				path: "about-us",

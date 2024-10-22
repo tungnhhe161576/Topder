@@ -199,8 +199,8 @@ const ManageInfomation = () => {
 			title: "Hình Ảnh Chính",
 			dataIndex: "mainImage",
 			key: "mainImage",
-			render: (text) => (
-				<img src={text} alt="Main" style={{ width: 70, height: 70 }} />
+			render: (mainImage) => (
+				<img src={mainImage} alt="Main" width={80} />
 			),
 		},
 		{

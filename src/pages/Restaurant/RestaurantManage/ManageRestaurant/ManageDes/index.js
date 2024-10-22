@@ -1,9 +1,10 @@
 import { useSelector } from "react-redux";
 import { ManageDesContainer } from "./styled";
 import { userInfor } from "../../../../../redux/Slice/userSlice";
-import { Button, Col, Form, Input, Modal, Row, Table } from "antd";
+import { Button, Form, message, Modal, Table } from "antd";
 import { Editor } from "@tinymce/tinymce-react";
 import { useState } from "react";
+import UserService from "../../../../../services/UserService";
 
 const ManageDescription = () => {
 	const [isModalVisible, setIsModalVisible] = useState(false);
@@ -12,6 +13,7 @@ const ManageDescription = () => {
 	// Lấy dữ liệu từ Redux store
 	const user = useSelector(userInfor);
 	const { description, subdescription } = user;
+	const [loading, setLoading] = useState(false);
 	const [dataSource, setDataSource] = useState([
 		{
 			key: "1",
@@ -33,26 +35,32 @@ const ManageDescription = () => {
 		setIsModalVisible(true);
 	};
 
-	const handleOk = () => {
-		form.validateFields()
-			.then((values) => {
-				setDataSource([
-					{
-						key: "1",
-						type: "Sub-Description",
-						content: values.subdescription,
-					},
-					{
-						key: "2",
-						type: "Description",
-						content: values.description,
-					},
-				]);
-				setIsModalVisible(false);
-			})
-			.catch((info) => {
-				console.log("Validate Failed:", info);
+	const handleOk = async () => {
+		try {
+			setLoading(true);
+			const values = await form.validateFields();
+
+			const res = await UserService.updateDescription({
+				RestaurantId: user.uid,
+				...values,
 			});
+			message.open({
+				content: res || "Chỉnh sửa mô tả | chi tiết thành công.",
+				type: "success",
+				style: {
+					marginTop: "20vh",
+				},
+			});
+			setDataSource(values);
+			setIsModalVisible(false);
+		} catch (error) {
+			message.open({
+				error: error.message,
+				type: "error",
+			});
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	const handleCancel = () => {
@@ -100,6 +108,7 @@ const ManageDescription = () => {
 				width={1000}
 				okText="Chỉnh sửa"
 				cancelText="Hủy"
+				loading={loading}
 			>
 				<Form form={form} layout="vertical">
 					<Form.Item
@@ -166,7 +175,6 @@ const ManageDescription = () => {
 										)
 									),
 							}}
-							initialValue="Welcome to TinyMCE!"
 						/>
 					</Form.Item>
 
@@ -234,7 +242,6 @@ const ManageDescription = () => {
 										)
 									),
 							}}
-							initialValue="Welcome to TinyMCE!"
 						/>
 					</Form.Item>
 				</Form>
