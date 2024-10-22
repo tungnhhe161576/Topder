@@ -218,15 +218,15 @@ const RegisterRestaurant = () => {
 				File: fileList[0].originFileObj,
 			});
 			message.open({
-				content: res.message,
-				type: "Bạn đã đăng ký nhà hàng thành công.",
+				content: res || "Đăng ký nhà hàng thành công.",
+				type: "success",
 				style: {
 					marginTop: "20vh",
 				},
 			});
 			setTimeout(() => {
 				nav("/login");
-			}, 3000);
+			}, 2000);
 		} catch (error) {
 			message.open({
 				error: error.message,
@@ -612,8 +612,8 @@ const RegisterRestaurant = () => {
 									},
 									{
 										type: "number",
-										min: 1,
-										message: "Giá phải lớn hơn 0",
+										min: 0,
+										message: "Giá phải lớn hơn hoặc bằng 0",
 									},
 								]}
 							>

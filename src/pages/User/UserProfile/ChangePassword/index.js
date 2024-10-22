@@ -130,6 +130,7 @@ const ChangePassword = () => {
 								shape="round"
 								htmlType="submit"
 								onClick={handleChangePassword}
+								loading={loading}
 							>
 								Xác nhận
 							</Button>

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Upload, Modal, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+import ImageService from "../../../../../../services/ImageService";
 
 const EditImageModal = ({ visible, onCancel, onEdit, currentImage }) => {
 	const [image, setImage] = useState(currentImage);
 	const [fileList, setFileList] = useState([]);
+	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 		setImage(currentImage);
@@ -25,12 +27,25 @@ const EditImageModal = ({ visible, onCancel, onEdit, currentImage }) => {
 			}
 		}
 	};
-
-	const handleOk = () => {
+	console.log("currentImage:", currentImage);
+	const handleOk = async () => {
 		if (image) {
-			onEdit(image); // Cập nhật ảnh sau khi chỉnh sửa
-			setFileList([]); // Reset file list sau khi chỉnh sửa
-			message.success("Đã cập nhật hình ảnh!");
+			try {
+				setLoading(true);
+				const body = {
+					imageId: currentImage.imageId,
+					restaurantId: currentImage.restaurantId,
+					imageUrl: image,
+				};
+				await ImageService.updatedImageRes(body);
+				onEdit(image);
+				setFileList([]);
+				message.success("Đã cập nhật hình ảnh thành công!");
+			} catch (error) {
+				message.error("Có lỗi xảy ra khi cập nhật hình ảnh!");
+			} finally {
+				setLoading(false);
+			}
 		} else {
 			message.error("Vui lòng tải lên hình ảnh!");
 		}
@@ -42,15 +57,16 @@ const EditImageModal = ({ visible, onCancel, onEdit, currentImage }) => {
 			visible={visible}
 			onOk={handleOk}
 			onCancel={onCancel}
-			width={700}
+			width={500}
 			okText="Chỉnh sửa"
 			cancelText="Hủy"
+			loading={loading}
 		>
 			<Upload
 				listType="picture-card"
 				fileList={fileList}
 				onChange={handleImageUpload}
-				beforeUpload={() => false} // Ngăn việc upload ngay lập tức
+				beforeUpload={() => false}
 			>
 				{fileList.length === 0 && (
 					<div>
