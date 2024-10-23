@@ -6,6 +6,7 @@ export const ModalChooseFoodContainer = styled.div `
     .menu {
         .food-detail {
             display: flex;
+            
             .food-img {
                 padding-top: 5px;
             }

@@ -109,6 +109,7 @@ const RestaurantDetail = () => {
 			setLoading(true);
 			const formValues = await form.validateFields();
 			const menu = foods.map(({ menuId, quantity }) => ({ menuId, quantity }));
+			const table = tables.map((t) => (t.tableId));
 			const data = {
 				customerId: user?.uid,
 				restaurantId: restaurantId,
@@ -125,7 +126,7 @@ const RestaurantDetail = () => {
 				numberChild: formValues?.numberChild,
 				contentReservation: formValues?.contentReservation,
 				orderMenus: menu,
-				tableIds: tables,
+				tableIds: table,
 			};
 			console.log("data: ", data);
 		} catch (error) {

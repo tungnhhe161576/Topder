@@ -61,12 +61,12 @@ const ModalChooseFood = ({open, onCancel, foods, setFoods, restaurantId}) => {
                         onChange={(e) => handleSelectFood(e.target.value)}
                     >
                         {m?.menusOfCategoryMenu?.map(f => (
-                            <div className="d-flex flex-column" style={{flex: 1}}>
+                            <div className="d-flex flex-column" style={{flex: 1}} key={f?.menuId}>
                                 <div className="item">
                                     <Radio 
                                         className={`ml-5 mb-10 ${selectedFoods?.find(i => i?.menuId === f?.menuId) ? 'selected' : ''}`} 
                                         value={f} 
-                                        key={f?.menuId} 
+                                        // key={f?.menuId} 
                                         style={{height: '120px'}}
                                     >
                                         <div className="food-detail w-100">
