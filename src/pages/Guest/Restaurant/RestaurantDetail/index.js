@@ -27,12 +27,12 @@ import RelatedRestaurant from "./RelatedRestaurant";
 import { useParams } from "react-router-dom";
 import GuestService from "../../../../services/GuestService";
 import SpinCustom from "../../../../components/Common/SpinCustom";
-import ModalChooseTable from "./Modal/ModalChooseTable";
-import ModalChooseFood from "./Modal/ModalChooseFood";
 import ModalRequestLogin from "../../../../components/Modal/RequestLogin";
 import { useSelector } from "react-redux";
 import { userInfor } from "../../../../redux/Slice/userSlice";
 import UserService from "../../../../services/UserService";
+import ModalChooseFood from "./Modal/ChooseFood";
+import ModalChooseTable from "./Modal/ChooseTable";
 
 const RestaurantDetail = () => {
 	const [selectedOption, setSelectedOption] = useState("description");
@@ -41,7 +41,7 @@ const RestaurantDetail = () => {
 	const [restaurantDetail, setRestaurantDetail] = useState();
 	const [relatedRestaurant, setRelatedRestaurant] = useState([])
 	const [openModalChooseTable, setOpenModalChooseTable] = useState(false);
-	const [tableNumber, setTableNumber] = useState([]);
+	const [tables, setTables] = useState([]);
 	const [openModalChooseFood, setOpenModalChooseFood] = useState(false);
 	const [openRequestLogin, setOpenRequestLogin] = useState(false);
 	const [text, setText] = useState("");
@@ -107,15 +107,27 @@ const RestaurantDetail = () => {
 	const handleSubmitFormBooking = async () => {
 		try {
 			setLoading(true);
-			const values = await form.validateFields();
-			const date = {
-				...values,
-				date: dayjs(values?.date?.$d).format("DD-MM-YYYY"),
-				time: dayjs(values?.time?.$d).format("HH:mm"),
-				ChooseTable: tableNumber,
-				ChooseFoods: foods,
+			const formValues = await form.validateFields();
+			const menu = foods.map(({ menuId, quantity }) => ({ menuId, quantity }));
+			const data = {
+				customerId: user?.uid,
+				restaurantId: restaurantId,
+				discountId: undefined,
+				categoryRoomId: undefined,
+				nameReceiver: formValues.nameReceiver,
+				phoneReceiver: formValues.phoneReceiver,
+				timeReservation: {
+					hours: formValues?.time?.$H,
+					minutes: formValues?.time?.$m,
+				},
+				dateReservation: formValues?.date?.$d,
+				numberPerson: formValues?.numberPerson,
+				numberChild: formValues?.numberChild,
+				contentReservation: formValues?.contentReservation,
+				orderMenus: menu,
+				tableIds: tables,
 			};
-			// console.log("data: ", date);
+			console.log("data: ", data);
 		} catch (error) {
 			console.log(error);
 		} finally {
@@ -345,7 +357,7 @@ const RestaurantDetail = () => {
 												<Row gutter={[24, 0]} className="d-flex justify-content-center" >
 													<Col span={10}>
 														<Form.Item
-															name="name"
+															name="nameReceiver"
 															label={
 																<span className="fs-14 white ml-8">
 																	Tên người nhận bàn
@@ -367,7 +379,7 @@ const RestaurantDetail = () => {
 													</Col>
 													<Col span={10}>
 														<Form.Item
-															name="phonenumber"
+															name="phoneReceiver"
 															label={
 																<span className="fs-14 white ml-8">
 																	Số điện thoại người nhận
@@ -447,7 +459,7 @@ const RestaurantDetail = () => {
 													</Col>
 													<Col span={10}>
 														<Form.Item
-															name="numberAdult"
+															name="numberPerson"
 															label={
 																<span className="fs-14 white ml-8"> 
 																	Số người lớn
@@ -469,7 +481,7 @@ const RestaurantDetail = () => {
 													</Col>
 													<Col span={10}>
 														<Form.Item
-															name="numberChildren"
+															name="numberChild"
 															label={
 																<span className="fs-14 white ml-8"> 
 																	Số trẻ em
@@ -491,7 +503,7 @@ const RestaurantDetail = () => {
 													</Col>
 													<Col span={20}>
 														<Form.Item
-															name="require"
+															name="contentReservation"
 															label={
 																<span className="fs-16 white ml-8"> 
 																	Yêu cầu
@@ -565,7 +577,9 @@ const RestaurantDetail = () => {
 				<ModalChooseTable
 					open={openModalChooseTable}
 					onCancel={() => setOpenModalChooseTable(false)}
-					setTableNumber={setTableNumber}
+					setTables={setTables}
+					tables={tables}
+					restaurantId={restaurantId}
 				/>
 			)}
 			{!!openModalChooseFood && (
@@ -573,6 +587,8 @@ const RestaurantDetail = () => {
 					open={openModalChooseFood}
 					onCancel={() => setOpenModalChooseFood(false)}
 					setFoods={setFoods}
+					foods={foods}
+					restaurantId={restaurantId}
 				/>
 			)}
 			{!!openRequestLogin && (

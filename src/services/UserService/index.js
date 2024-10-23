@@ -17,6 +17,8 @@ import {
 	apiVerifyOTP,
 	apiResetPassword,
 	apiChangePassword,
+	apiGetMenu,
+	apiGetTable,
 } from "./urls";
 const categoryResApi = (body) => http.get(apiGetListRestaurants, body);
 const loginApi = (body) => http.post(apiLogin, body);
@@ -52,6 +54,10 @@ const forgotPassword = (email) =>
 const verifyOTP = (body) => http.post(apiVerifyOTP, body);
 const resetPassword = (body) => http.post(apiResetPassword, body);
 const changePassword = (body) => http.post(apiChangePassword, body);
+
+const getMenu = (restaurantId) => http.get(`${apiGetMenu}/${restaurantId}`)
+const getTable = (restaurantId) => http.get(`${apiGetTable}/${restaurantId}`)
+
 const UserService = {
 	loginApi,
 	updateProfile,
@@ -69,6 +75,8 @@ const UserService = {
 	verifyOTP,
 	resetPassword,
 	changePassword,
+	getMenu,
+	getTable,
 };
 
 export default UserService;
