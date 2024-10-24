@@ -439,30 +439,58 @@ const RestaurantDetail = () => {
 													</Col>
 													<Col span={10}>
 														<Form.Item
-															name="time"
-															label={
-																<span className="fs-14 white ml-8"> 
-																	Chọn giờ đặt bàn
-																</span>
-															}
-															rules={[
-																{
-																	required: true,
-																	message: (
-																		<span style={{ color: "black", marginLeft: "15px" }}>
-																			Hãy chọn giờ cụ thể!
-																		</span>
-																	),
-																},
-															]}
+															noStyle
+															shouldUpdate
 														>
-															<DatePicker
-																picker="time"
-																placeholder="Chọn giờ"
-																className="input"
-																format="HH:mm"
-																showTime={{format: "HH:mm"}}
-															/>
+															{({ getFieldValue }) => {
+																const selectedDate = getFieldValue('date');
+																return selectedDate ? (
+																	<Form.Item
+																		name="time"
+																		label={
+																			<span className="fs-14 white ml-8">
+																				Giờ đặt bàn
+																			</span>
+																		}
+																		rules={[
+																			{
+																				required: true,
+																				message: (
+																					<span style={{color: "black", marginLeft: "15px" }}>
+																						Hãy chọn giờ cụ thể!
+																					</span>
+																				),
+																			},
+																		]}
+																	>
+																		<DatePicker
+																			picker="time"
+																			placeholder="Chọn giờ"
+																			className="input"
+																			format="HH:mm"
+																			showTime={{
+																				format: "HH:mm",
+																				disabledHours: () => {
+																					const apiStartTime = dayjs('08:00:00', 'HH:mm:ss')
+																					const apiEndTime = dayjs('23:00:00', 'HH:mm:ss')
+																					const startHour = apiStartTime.hour()
+																					const endHour = apiEndTime.hour()
+																					const disabledHours = []
+													
+																					for (let i = 0; i < startHour; i++) {
+																						disabledHours.push(i)
+																					}
+																					for (let i = endHour + 1; i < 24; i++) {
+																						disabledHours.push(i)
+																					}
+													
+																					return disabledHours;
+																				},
+																			}}
+																		/>
+																	</Form.Item>
+																) : null
+															}}
 														</Form.Item>
 													</Col>
 													<Col span={10}>

@@ -39,7 +39,7 @@ const ModalCalFee = ({open, onCancel, restaurantId, userId, totalPrice, form}) =
 				categoryRoomId: null,
 				nameReceiver: open.nameReceiver,
 				phoneReceiver: open.phoneReceiver,
-				timeReservation:  dayjs(open?.timeReservation).format('HH:mm'),
+				timeReservation:  dayjs(open?.timeReservation).format('HH:mm:ss'),
 				dateReservation: dayjs(open?.dateReservation),
 				numberPerson: open?.numberPerson,
 				numberChild: open?.numberChild,
