@@ -33,6 +33,7 @@ import { userInfor } from "../../../../redux/Slice/userSlice";
 import UserService from "../../../../services/UserService";
 import ModalChooseFood from "./Modal/ChooseFood";
 import ModalChooseTable from "./Modal/ChooseTable";
+import ModalCalFee from "./Modal/ModalCalFee";
 
 const RestaurantDetail = () => {
 	const [selectedOption, setSelectedOption] = useState("description");
@@ -44,8 +45,10 @@ const RestaurantDetail = () => {
 	const [tables, setTables] = useState([]);
 	const [openModalChooseFood, setOpenModalChooseFood] = useState(false);
 	const [openRequestLogin, setOpenRequestLogin] = useState(false);
+	const [openModalCalFee, setOpenModalCalFee] = useState(false);
 	const [text, setText] = useState("");
 	const [foods, setFoods] = useState([]);
+	const [totalAmount, setTotalAmount] = useState();
 	const [wishlist, setWishList] = useState([]);
 	const [isLiked, setIsLiked] = useState(false);
 	const [isLikedButton, setIsLikedButton] = useState(false);
@@ -103,13 +106,20 @@ const RestaurantDetail = () => {
 		}
 	}, [restaurantDetail]);
 
-	//goi api submit dat ban
+	//form dat ban
 	const handleSubmitFormBooking = async () => {
 		try {
 			setLoading(true);
-			const formValues = await form.validateFields();
 			const menu = foods.map(({ menuId, quantity }) => ({ menuId, quantity }));
 			const table = tables.map((t) => (t.tableId));
+			const total = await UserService.calTotalOrder({
+				customerId: user?.uid,
+				restaurantId: restaurantId,
+				orderMenus: menu
+			})
+			setTotalAmount(total)
+			
+			const formValues = await form.validateFields();
 			const data = {
 				customerId: user?.uid,
 				restaurantId: restaurantId,
@@ -117,18 +127,15 @@ const RestaurantDetail = () => {
 				categoryRoomId: undefined,
 				nameReceiver: formValues.nameReceiver,
 				phoneReceiver: formValues.phoneReceiver,
-				timeReservation: {
-					hours: formValues?.time?.$H,
-					minutes: formValues?.time?.$m,
-				},
+				timeReservation:  formValues?.time,
 				dateReservation: formValues?.date?.$d,
 				numberPerson: formValues?.numberPerson,
-				numberChild: formValues?.numberChild,
+				numberChild: formValues?.numberChild ? formValues?.numberChild : 0,
 				contentReservation: formValues?.contentReservation,
 				orderMenus: menu,
 				tableIds: table,
 			};
-			console.log("data: ", data);
+			setOpenModalCalFee(data)
 		} catch (error) {
 			console.log(error);
 		} finally {
@@ -488,16 +495,16 @@ const RestaurantDetail = () => {
 																	Số trẻ em
 																</span>
 															}
-															rules={[
-																{
-																	required: true,
-																	message: (
-																		<span style={{color: "black", marginLeft: "15px"}}>
-																			Hãy nhập số trẻ em!
-																		</span>
-																	),
-																},
-															]}
+															// rules={[
+															// 	{
+															// 		required: true,
+															// 		message: (
+															// 			<span style={{color: "black", marginLeft: "15px"}}>
+															// 				Hãy nhập số trẻ em!
+															// 			</span>
+															// 		),
+															// 	},
+															// ]}
 														>
 															<InputNumber min={0} className="input w-100" placeholder="Nhập số trẻ em" />
 														</Form.Item>
@@ -590,6 +597,16 @@ const RestaurantDetail = () => {
 					setFoods={setFoods}
 					foods={foods}
 					restaurantId={restaurantId}
+				/>
+			)}
+			{!!openModalCalFee && (
+				<ModalCalFee
+					open={openModalCalFee}
+					onCancel={() => setOpenModalCalFee(false)}
+					restaurantId={restaurantDetail?.uid}
+					userId={user?.uid}
+					totalPrice={totalAmount}
+					form={form}
 				/>
 			)}
 			{!!openRequestLogin && (

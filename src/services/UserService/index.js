@@ -19,6 +19,9 @@ import {
 	apiChangePassword,
 	apiGetMenu,
 	apiGetTable,
+	apiCalTotalOrder,
+	apiGetAllDiscount,
+	apiCreateOrder,
 } from "./urls";
 const categoryResApi = (body) => http.get(apiGetListRestaurants, body);
 const loginApi = (body) => http.post(apiLogin, body);
@@ -57,6 +60,9 @@ const changePassword = (body) => http.post(apiChangePassword, body);
 
 const getMenu = (restaurantId) => http.get(`${apiGetMenu}/${restaurantId}`)
 const getTable = (restaurantId) => http.get(`${apiGetTable}/${restaurantId}`)
+const calTotalOrder = (body) => http.post(apiCalTotalOrder, body)
+const getAllDiscount = (restaurantId, customerId, totalPrice) => http.get(`${apiGetAllDiscount}/${restaurantId}/${customerId}/${totalPrice}`)
+const createOrder = (body) => http.post (apiCreateOrder, body)
 
 const UserService = {
 	loginApi,
@@ -77,6 +83,9 @@ const UserService = {
 	changePassword,
 	getMenu,
 	getTable,
+	calTotalOrder,
+	getAllDiscount,
+	createOrder,
 };
 
 export default UserService;

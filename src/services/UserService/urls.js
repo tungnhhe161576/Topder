@@ -16,3 +16,6 @@ export const apiResetPassword = "User/ResetPassword";
 export const apiChangePassword = "User/ChangePassword";
 export const apiGetMenu = "Menu/GetMenuListForCustomer"
 export const apiGetTable = "RestaurantTables/GetTableList"
+export const apiCalTotalOrder = "Order/CalculateTotalAmountFreDiscount"
+export const apiGetAllDiscount = "Discount/GetAvailableDiscount"
+export const apiCreateOrder = "Order/Create"
