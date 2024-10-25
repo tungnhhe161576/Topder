@@ -1,32 +1,33 @@
 import { Button, Steps } from "antd";
 import { CheckOutlined, StopOutlined } from '@ant-design/icons';
+import dayjs from "dayjs";
 
-const OrderDetail = ( {setIsDetail} ) => {
+const OrderDetail = ( {setIsDetail, detail} ) => {
     
     const items = [
         {
           title: <span className='fs-15 fw-600'>Đang chờ</span>,
-          status: 'finish',
+          status: detail?.createdAt ? 'finish' : 'wait',
           icon: <div className="step-icon"><CheckOutlined className="white fw-600"/></div>
         },
         {
           title: <span className='fs-15 fw-600'>Chấp nhận</span>,
-          status: 'finish',
+          status: detail?.confirmedAt ? 'finish' : 'wait',
           icon: <div className="step-icon"><CheckOutlined className="white fw-600"/></div>
         },
         {
           title: <span className='fs-15 fw-600'>Đã nhận bàn</span>,
-          status: 'finish',
+          status: detail?.paidAt ? 'finish' : 'wait',
           icon: <div className="step-icon"><CheckOutlined className="white fw-600"/></div>
         },
         {
           title: <span className='fs-15 fw-600'>Hoàn thành</span>,
-          status: 'process',
+          status: detail?.completedAt ? 'finish' : 'wait',
           icon: <div className="step-icon"><CheckOutlined className="white fw-600"/></div>
         },
         {
           title: <span className='fs-15 fw-600'>Hủy</span>,
-          status: 'wait',
+          status: detail?.cancelledAt ? 'finish' : 'wait',
           icon: <div className="step-icon"><StopOutlined className="white fw-600"/></div>
         },
     ];
@@ -54,15 +55,15 @@ const OrderDetail = ( {setIsDetail} ) => {
             <div className="info">
                 <div>
                     <span className="fs-16 mr-50">Tên:</span>
-                    <span className="fs-16 primary">Đỗ Văn Đạt</span>
+                    <span className="fs-16 primary">{detail?.nameReceiver}</span>
                 </div>
                 <div>
                     <span className="fs-16 mr-48">SĐT:</span>
-                    <span className="fs-16">0772260719</span>
+                    <span className="fs-16">{detail?.phoneReceiver}</span>
                 </div>
                 <div>
                     <span className="fs-16 mr-10">Ngày đặt:</span>
-                    <span className="fs-16 primary">12/06/2024</span>
+                    <span className="fs-16 primary">{dayjs(detail?.dateReservation).format('DD-MM-YYYY')}</span>
                 </div>
             </div>
 
@@ -79,11 +80,11 @@ const OrderDetail = ( {setIsDetail} ) => {
                     </thead>
                     <tbody>
                         <tr>
-                            <td className="d-flex justify-content-center"> 13/06/2024 </td>
-                            <td> 08:00 </td>
-                            <td> 1 </td>
-                            <td> 0 </td>
-                            <td> tổ chức sinh nhật </td>
+                            <td className="d-flex justify-content-center"> {dayjs(detail?.dateReservation).format('DD-MM-YYYY')} </td>
+                            <td> {dayjs(detail?.timeReservation, "HH:mm:ss").format('HH:mm')} </td>
+                            <td> {detail?.numberPerson} </td>
+                            <td> {detail?.numberChild} </td>
+                            <td> {detail?.contentReservation ? detail?.contentReservation : 'Không có'} </td>
                         </tr>
                     </tbody>
                 </table>
