@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CommonLayout from "../../../components/Layouts/CommonLayout";
-import { Col, Row, Select, Input, Button, Form, Slider, InputNumber, Dropdown } from "antd";
+import { Col, Row, Select, Input, Button, Form, Slider, InputNumber, Dropdown, message } from "antd";
 import { RestaurantContainer } from "./styled";
 import RestaurantItem from "../../../components/RestaurantItem";
 import ModalRequestLogin from "../../../components/Modal/RequestLogin";
@@ -38,6 +38,41 @@ const Restaurant = () => {
 		pageNumber: 1,
 		pageSize: 8,
 	}) 
+	const inputRef = useRef(null);
+
+	//set up xử lý tìm kiếm bằng giọng nói
+	useEffect(() => {
+		const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+		recognition.lang = 'vi-VN';
+		recognition.interimResults = true;
+		const handleVoiceSearch = () => {
+			recognition.start();
+			if (inputRef.current) {
+				inputRef.current.focus();
+			}
+		};
+		recognition.onresult = (event) => {
+			const transcript = Array.from(event.results)
+				.map(result => result[0].transcript)
+				.join('');
+			if (event.results[0].isFinal) {
+				form.setFieldsValue({ name: transcript });
+				handleSearch();
+			} else {
+				form.setFieldsValue({ name: transcript });
+			}
+		};
+		recognition.onerror = (event) => {
+			message.open({
+				content: 'Lỗi nhận diện giọng nói',
+				type: 'error',
+				style: {
+					marginTop: '10vh',
+				},
+			});
+		};
+		document.getElementById('voice-search-btn').onclick = handleVoiceSearch;
+	}, []);
 	
 	const getAllRestaurantCategory = async () => {
 		try {
@@ -71,6 +106,14 @@ const Restaurant = () => {
 			console.error("Error fetching wards:", error);
 		}
 	};
+	
+	const handleCityChange = (value, option) => {
+		getDistricts(option?.key)
+	};
+	const handleDistrictChange = (value, option) => {
+		getCommune(option?.key)
+	};
+	
 	useEffect(() => {
 		getAllRestaurantCategory()
 		getCities()
@@ -113,13 +156,7 @@ const Restaurant = () => {
 		fetchData();
 	}, [dataSearch]);
 
-	const handleCityChange = (value, option) => {
-		getDistricts(option?.key)
-	};
-	const handleDistrictChange = (value, option) => {
-		getCommune(option?.key)
-	};
-	
+	// slider của giá tiền
 	const items = [
 		{
 		  label: <div style={{width: '300px'}}>
@@ -157,12 +194,13 @@ const Restaurant = () => {
 				{/* form search */}
 				<Form form={form} className="menu_search_area">
 					<Row gutter={20} className="d-flex justify-content-center align-items-cemter">
+					{/* <Button id="voice-search-btn">🎤</Button> */}
 						<Col span={22}>
 							<Row gutter={[16, 0]} justify="center" align="middle">
 								{/* text */}
 								<Col span={9}>
-									<Form.Item name="name" className="menu_search">
-										<Input placeholder="Nhập tên nhà hàng " className="search-input" />
+									<Form.Item name="name" className="search-text">
+										<Input allowClear ref={inputRef} placeholder="Nhập tên nhà hàng " className="input-text" addonAfter={<span className="voice-search" id="voice-search-btn">🎤</span>}/>
 									</Form.Item>
 								</Col>
 								{/* category */}
@@ -209,7 +247,6 @@ const Restaurant = () => {
 										<InputNumber placeholder="Sức chứa"/>
 									</Form.Item>
 								</Col>
-
 								{/* tỉnh */}
 								<Col span={10}>
 									<Form.Item name="address" className="menu_search">
@@ -301,7 +338,7 @@ const Restaurant = () => {
 				</Form>
 
 				{/* list restaurant */}
-				<div className="list">
+				<div className="list mt-30">
 					<SpinCustom spinning={loading}>
 						{
 						data?.length === 0

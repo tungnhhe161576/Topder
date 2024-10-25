@@ -34,23 +34,6 @@ export const RestaurantContainer = styled.div`
 		justify-content: center;
 		align-items: center;
 	}
-	/* .search-price {
-		background-color: #fff;
-		display: flex;
-		height: 40px;
-		border: 1px solid #ddd;
-		align-items: center;
-		border-radius: 50px;
-		margin-bottom: -8px;
-		.slider {
-			justify-items: start;
-			padding-left: 10px;
-		}
-		.field-input {
-			width: 150px;
-			justify-items: end;
-		}
-	} */
 
 	.pagination {
 		display: flex;
@@ -67,6 +50,27 @@ export const RestaurantContainer = styled.div`
 		height: 40px;
 		margin: 0 5px;
 	}
+	:where(.css-dev-only-do-not-override-14qglws).ant-input-group-wrapper-outlined .ant-input-group-addon {
+		border-top-right-radius: 25px;
+		border-bottom-right-radius: 25px;
+		background-color: #fff;
+		cursor: pointer;
+	}
+	:where(.css-dev-only-do-not-override-14qglws).ant-input-group-wrapper-outlined .ant-input-group-addon:hover {
+		background-color: #ddd;
+	}
+	:where(.css-dev-only-do-not-override-14qglws).ant-input-outlined:hover {
+		border-color: #ddd;
+	}
+
+	.ant-input-affix-wrapper {
+		border-radius: 25px;
+	}
+	.search-text {
+		margin-bottom: 15px;
+	}
+
+	
 
 	.custom-pagination .ant-pagination-item-active {
 		background-color: #fa8c16;
