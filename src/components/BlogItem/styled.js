@@ -32,7 +32,7 @@ export const BlogItemContainer = styled.div`
 
   .blog-content {
     .blog-category {
-      width: 100px;
+      width: 150px;
       background: #ff7c08;
       color: white;
       height: 8%;
@@ -41,7 +41,7 @@ export const BlogItemContainer = styled.div`
       font-weight: bold;
       font-style: italic;
       top: 43%;
-      right: 30px;
+      right: 20px;
       display: flex;
       justify-content: center;
       align-items: center;

@@ -48,45 +48,41 @@ const Whishlist = () => {
                     Yêu thích   
                 </div>
                 <div className="list-wishlist">
-                    <Row gutter={[30, 20]} className="d-flex justify-content-start">
-                        {
-                            data?.length === 0 
-                                ? <span className="fw-500 fs-20 m-auto w-90" style={{color: 'red'}}>Không có dữ liệu</span>
-                                : (
-                                    <>
-                                        <SpinCustom spinning={loading}>
-                                            <div>
-                                                {data?.slice(startIndex, startIndex + itemPerPage)?.map((r, index) =>
-                                                    <Col key={index} xs={24} sm={24} md={24} lg={24} xl={24}>
-                                                        <RestaurantItem data={r}  setText={''} isWishlist={true}/>
-                                                    </Col>
-                                                )}
-                                            </div>
-                                            <div className="pagination">
-                                                <Pagination
-                                                    className="custom-pagination pb-20"
-                                                    itemRender={(page, type, originalElement) => {
-                                                        if (type === "prev") {
-                                                            return <LeftOutlined />;
-                                                        }
-                                                        if (type === "next") {
-                                                            return <RightOutlined />;
-                                                        }
-                                                        return originalElement;
-                                                    }}
-                                                    defaultCurrent={1}
-                                                    current={currentPage}
-                                                    pageSize={itemPerPage}
-                                                    total={data?.length}
-                                                    onChange={onPageChange}
-                                                />
-                                            </div>
-                                        </SpinCustom>
-                                        
-                                    </>
-                                )
-                        }
-                    </Row>
+                    <SpinCustom spinning={loading}>
+                    {
+                        data?.length === 0 
+                            ? <span className="fw-500 fs-20 m-auto w-90" style={{color: 'red'}}>Không có dữ liệu</span>
+                            : <>
+                                <Row gutter={[30, 20]} className="d-flex justify-content-start">
+                                    {data?.slice(startIndex, startIndex + itemPerPage)?.map((r, index) =>
+                                        <Col key={index} xs={12} sm={12} md={10} lg={9} xl={9}>
+                                            <RestaurantItem data={r}  setText={''} isWishlist={true}/>
+                                        </Col>
+                                    )}
+                                </Row>
+                                <div className="pagination">
+                                    <Pagination
+                                        className="custom-pagination pb-20"
+                                        itemRender={(page, type, originalElement) => {
+                                            if (type === "prev") {
+                                                return <LeftOutlined />;
+                                            }
+                                            if (type === "next") {
+                                                return <RightOutlined />;
+                                            }
+                                            return originalElement;
+                                        }}
+                                        defaultCurrent={1}
+                                        current={currentPage}
+                                        pageSize={itemPerPage}
+                                        total={data?.length}
+                                        onChange={onPageChange}
+                                    />
+                                </div>
+                            </>
+                            
+                    }
+                    </SpinCustom>
                 </div>
             </WhishlistContainer>
         </ProfileUserLayout>

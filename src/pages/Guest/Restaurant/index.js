@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import CommonLayout from "../../../components/Layouts/CommonLayout";
-import { Col, Row, Pagination, Select, Input, Button, Form, Slider, InputNumber, Dropdown } from "antd";
+import { Col, Row, Select, Input, Button, Form, Slider, InputNumber, Dropdown } from "antd";
 import { RestaurantContainer } from "./styled";
 import RestaurantItem from "../../../components/RestaurantItem";
 import ModalRequestLogin from "../../../components/Modal/RequestLogin";
@@ -79,7 +79,6 @@ const Restaurant = () => {
 	const handleSearch = async () => {
 		try {
 			const formValues = await form.validateFields();
-			console.log(formValues);
 			const priceValues = formValues.price ? formValues.price : [minPrice, maxPrice];
 			
 			setDataSearch(prev => ({

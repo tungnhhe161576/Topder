@@ -7,3 +7,5 @@ export const apiGetAllRestaurantCategory = "CategoryRestaurant/GetExistingCatego
 
 export const apiGetAllFeedback = "Feedback/GetFeedbackForRestaurantDetail"
 export const apiGetRelatedRestaurants = "Restaurant/GetRelateRestaurant"
+export const apiGetAllBlog = "Blog/GetBlogListForCustomer"
+export const apiGetAllBlogCategory = "BlogGroup/GetExistingBlogGroups"
