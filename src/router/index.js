@@ -3,7 +3,7 @@ import App from "../App";
 import LoginPage from "../pages/Guest/LoginPage";
 import RegisterPage from "../pages/Guest/RegisterPage";
 import HomePage from "../pages/Guest/HomePage";
-import ErrorPage from "../pages/ErrorPage/ErrorPage";
+import ErrorPage from "../pages/ErrorPage";
 import AboutUs from "../pages/Guest/AboutUs";
 import Blog from "../pages/Guest/Blog";
 import Restaurant from "../pages/Guest/Restaurant";
@@ -28,13 +28,34 @@ import Wallet from "../pages/User/UserProfile/Wallet";
 import ManagementDiscount from "../pages/Restaurant/RestaurantManage/ManageDiscount";
 import VerifyOTP from "../pages/User/VerifyOTP";
 import ResetPassword from "../pages/User/ResetPassword";
+import React from 'react'
+import UserRoutes from './UserRouter'
+import GuestRoutes from "./GuestRouter";
+import RestaurantRoutes from "./RestautantRouter";
+import SpinCustom from "../components/Common/SpinCustom";
 
-const router = createBrowserRouter([
+const LazyLoadingComponent = ({ children }) => {
+    return (
+		<React.Suspense
+			fallback={
+				<div className="loading-center" style={{ display: 'flex', justifyContent: 'center', height: '100vh', alignItems: 'center' }}>
+					<SpinCustom />
+				</div>
+			}
+		>
+			{children}
+		</React.Suspense>
+    )
+}
+
+export const router = [
+	//Guest
 	{
-		path: "/",
-		element: <App />,
-		errorElement: <ErrorPage />,
-		title: "",
+		element: (
+			<LazyLoadingComponent>
+				<GuestRoutes/>
+			</LazyLoadingComponent>
+		),
 		children: [
 			{
 				path: "",
@@ -112,86 +133,95 @@ const router = createBrowserRouter([
 				element: <BlogDetail />,
 				title: "Chi tiết Blog",
 			},
+		]
+	},
 
-			// User
+    // User
+    {
+		element: (
+			<LazyLoadingComponent>
+				<UserRoutes/>
+			</LazyLoadingComponent>
+		),
+		children: [
 			{
-				path: "user-profile",
-				children: [
-					{
-						path: "",
-						element: <Profile />,
-						title: "",
-					},
-					{
-						path: "history-booking",
-						element: <HistoryBooking />,
-						title: "Lịch sử đặt bàn",
-						// children: [
-						//   {
-						//     path: "order-detail/1",
-						//     element: <OrderDetail/>,
-						//     title: "Chi tiết đơn hàng",
-						//   }
-						// ]
-					},
-					{
-						path: "wishlist",
-						element: <Whishlist />,
-						title: "Nhà hàng yêu thích",
-					},
-					{
-						path: "rates",
-						element: <Rate />,
-						title: "Đánh giá",
-					},
-					{
-						path: "change-password",
-						element: <ChangePassword />,
-						title: "Đổi mật khẩu",
-					},
-					{
-						path: "authentication-phone",
-						element: <AuthenticationPhone />,
-						title: "Xác thực số điện thoại",
-					},
-					{
-						path: "user-wallet",
-						element: <Wallet />,
-						title: "Ví",
-					},
-				],
-				title: "Thông tin cá nhân",
+				path: "",
+				element: <Profile />,
+				title: "",
 			},
-
-			// Restaurent
 			{
-				path: "restaurant",
-				title: "Quản lý nhà hàng",
-				children: [
-					{
-						path: "dashboard",
-						element: <Dashboard />,
-					},
-					{
-						path: "manage-restaurant",
-						element: <ManageRestaurant />,
-					},
-					{
-						path: "manage-order",
-						element: <ManageOrder />,
-					},
-					{
-						path: "manage-rate",
-						element: <ManageRate />,
-					},
-					{
-						path: "manage-discount",
-						element: <ManagementDiscount />,
-					},
-				],
+				path: "history-booking",
+				element: <HistoryBooking />,
+				title: "Lịch sử đặt bàn",
+			},
+			{
+				path: "wishlist",
+				element: <Whishlist />,
+				title: "Nhà hàng yêu thích",
+			},
+			{
+				path: "rates",
+				element: <Rate />,
+				title: "Đánh giá",
+			},
+			{
+				path: "change-password",
+				element: <ChangePassword />,
+				title: "Đổi mật khẩu",
+			},
+			{
+				path: "authentication-phone",
+				element: <AuthenticationPhone />,
+				title: "Xác thực số điện thoại",
+			},
+			{
+				path: "user-wallet",
+				element: <Wallet />,
+				title: "Ví",
+			},
+		],
+    },
+
+	//Restaurant
+	{
+		path: "restaurant",
+		element: (
+			<LazyLoadingComponent>
+				<RestaurantRoutes/>
+			</LazyLoadingComponent>
+	  	),
+
+		children: [
+			{
+				path: "dashboard",
+				element: <Dashboard />,
+			},
+			{
+				path: "manage-restaurant",
+				element: <ManageRestaurant />,
+			},
+			{
+				path: "manage-order",
+				element: <ManageOrder />,
+			},
+			{
+				path: "manage-rate",
+				element: <ManageRate />,
+			},
+			{
+				path: "manage-discount",
+				element: <ManagementDiscount />,
 			},
 		],
 	},
-]);
 
-export default router;
+	//all nếu sai đường dẫn
+	{
+		path: "*",
+		element: (
+		  <LazyLoadingComponent>
+			<ErrorPage />
+		  </LazyLoadingComponent>
+		)
+	}
+  ]

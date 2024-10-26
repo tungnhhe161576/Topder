@@ -1,10 +1,11 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useRoutes } from 'react-router-dom';
 import './App.css';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { setUserInformation } from './redux/Slice/userSlice';
 import { jwtDecode } from "jwt-decode"
 import UserService from './services/UserService';
+import { router } from './router';
 
 function App() {
     const dispatch = useDispatch();
@@ -24,10 +25,13 @@ function App() {
             console.log(error);
         }
     }
+
+    const routes = useRoutes(router)
+    
     
     return (
         <div>
-            <Outlet/>
+            {routes}
         </div>
     );
 }
