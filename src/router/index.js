@@ -1,5 +1,3 @@
-import { createBrowserRouter } from "react-router-dom";
-import App from "../App";
 import LoginPage from "../pages/Guest/LoginPage";
 import RegisterPage from "../pages/Guest/RegisterPage";
 import HomePage from "../pages/Guest/HomePage";
@@ -51,6 +49,7 @@ const LazyLoadingComponent = ({ children }) => {
 export const router = [
 	//Guest
 	{
+		path: '/',
 		element: (
 			<LazyLoadingComponent>
 				<GuestRoutes/>
@@ -138,6 +137,7 @@ export const router = [
 
     // User
     {
+		path: "user-profile",
 		element: (
 			<LazyLoadingComponent>
 				<UserRoutes/>

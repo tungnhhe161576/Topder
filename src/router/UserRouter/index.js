@@ -4,6 +4,7 @@ import ErrorPage from '../../pages/ErrorPage'
 const UserRoutes = () => {
     
     return (
+        
         <>
         {
             !!localStorage.getItem('token') &&
