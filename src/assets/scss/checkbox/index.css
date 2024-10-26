@@ -1,0 +1,7 @@
+.checkbox-more-line .ant-checkbox-checked::after {
+  border: none !important;
+}
+.checkbox-more-line span {
+  align-self: flex-start;
+  margin-top: 3px;
+}/*# sourceMappingURL=index.css.map */

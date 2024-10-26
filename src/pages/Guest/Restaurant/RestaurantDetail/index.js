@@ -52,6 +52,8 @@ const RestaurantDetail = () => {
 	const [wishlist, setWishList] = useState([]);
 	const [isLiked, setIsLiked] = useState(false);
 	const [isLikedButton, setIsLikedButton] = useState(false);
+	const [date, setDate] = useState();
+	const [time, setTime] = useState();
 	const { restaurantId } = useParams();
 	const [form] = Form.useForm();
 	const user = useSelector(userInfor)
@@ -363,6 +365,7 @@ const RestaurantDetail = () => {
 											<Divider className="bg-white mt-10 mb-20" />
 											<Form form={form} layout="vertical" >
 												<Row gutter={[24, 0]} className="d-flex justify-content-center" >
+													{/* name */}
 													<Col span={10}>
 														<Form.Item
 															name="nameReceiver"
@@ -385,6 +388,7 @@ const RestaurantDetail = () => {
 															<Input className="input" placeholder="Nhập tên" />
 														</Form.Item>
 													</Col>
+													{/* phone number */}
 													<Col span={10}>
 														<Form.Item
 															name="phoneReceiver"
@@ -415,6 +419,7 @@ const RestaurantDetail = () => {
 															<Input className="input" placeholder="Nhập số điện thoại"/>
 														</Form.Item>
 													</Col>
+													{/* ngay */}
 													<Col span={10}>
 														<Form.Item
 															name="date"
@@ -434,9 +439,10 @@ const RestaurantDetail = () => {
 																},
 															]}
 														>
-															<DatePicker className="input" placeholder="Chọn ngày"/>
+															<DatePicker onChange={(e) => setDate(e)} className="input" placeholder="Chọn ngày"/>
 														</Form.Item>
 													</Col>
+													{/* gio */}
 													<Col span={10}>
 														<Form.Item
 															noStyle
@@ -487,12 +493,14 @@ const RestaurantDetail = () => {
 																					return disabledHours;
 																				},
 																			}}
+																			onChange={(e) => setTime(e)}
 																		/>
 																	</Form.Item>
 																) : null
 															}}
 														</Form.Item>
 													</Col>
+													{/* so nguoi lon */}
 													<Col span={10}>
 														<Form.Item
 															name="numberPerson"
@@ -515,6 +523,7 @@ const RestaurantDetail = () => {
 															<InputNumber min={0} className="input w-100" placeholder="Nhập số người lớn"/>
 														</Form.Item>
 													</Col>
+													{/* so tre em */}
 													<Col span={10}>
 														<Form.Item
 															name="numberChild"
@@ -537,6 +546,7 @@ const RestaurantDetail = () => {
 															<InputNumber min={0} className="input w-100" placeholder="Nhập số trẻ em" />
 														</Form.Item>
 													</Col>
+													{/* yeu cau */}
 													<Col span={20}>
 														<Form.Item
 															name="contentReservation"
@@ -616,6 +626,8 @@ const RestaurantDetail = () => {
 					setTables={setTables}
 					tables={tables}
 					restaurantId={restaurantId}
+					date={date}
+					time={time}
 				/>
 			)}
 			{!!openModalChooseFood && (

@@ -10,6 +10,7 @@ import { userInfor } from "../../../../redux/Slice/userSlice";
 import UserService from "../../../../services/UserService";
 import SpinCustom from "../../../../components/Common/SpinCustom";
 import dayjs from "dayjs";
+import ModalChooseOptionPayment from "./Modal/OptionPayment";
 
 const HistoryBooking = () => {
     const nav = useNavigate()
@@ -17,6 +18,7 @@ const HistoryBooking = () => {
     const [orderHistory, setOrderHistory] = useState([])
     const [orderDetail, setOrderDetail] = useState()
     const [isDetail, setIsDetail] = useState(false)
+    const [openModalOptionPayment, setOpenModalOpenPayment] = useState(false)
     const [currentPage, setCurrentPage] = useState(1);
     const user = useSelector(userInfor) 
 
@@ -32,8 +34,11 @@ const HistoryBooking = () => {
         }
     }
     useEffect(() => {
-        getHistoryOrder()
-    }, [])
+        if (user?.uid) {
+			getHistoryOrder()
+		}
+    }, [user])
+
 
     const itemPerPage = 5;
     const startIndex = (currentPage - 1) * itemPerPage;
@@ -99,26 +104,30 @@ const HistoryBooking = () => {
                                                     <td className="fs-16">{dayjs(o?.dateReservation).format('DD-MM-YYYY')}</td>
                                                     <td>
                                                         {
-                                                            o?.createdAt && <span className="status pending">Đang Chờ</span>
+                                                            o?.statusOrder === "Pending" && <span className="status pending">Đang Chờ</span>
                                                         }
                                                         {
-                                                            o?.confirmedAt && <span className="status accepted">Đã chấp nhận</span>
+                                                            o?.statusOrder === "Confirm" &&
+                                                                <div className="d-flex flex-column">
+                                                                    <div> <span className="status accepted">Đã chấp nhận</span> </div>
+                                                                    <div style={{cursor: 'pointer'}} className="mt-10" onClick={() => setOpenModalOpenPayment(o)}> Thanh toán </div>
+                                                                </div>
                                                         }
                                                         {
-                                                            o?.paidAt && <span className="status accepted">Đã nhận bàn</span>
+                                                            o?.statusOrder === "Paid" && <span className="status accepted">Đã thanh toán</span>
                                                         }
                                                         {
-                                                            o?.completedAt && <span className="status completed">Hoàn thành</span>
+                                                            o?.statusOrder === "Complete" && <span className="status completed">Hoàn thành</span>
                                                         }
                                                         {
-                                                            o?.cancelledAt && <span className="status pending">Đã hủy</span>
+                                                            o?.statusOrder === "Cancel" && <span className="status pending">Đã hủy</span>
                                                         }
                                                         
                                                     </td>
                                                     <td className="d-flex justify-content-center">
                                                         <button onClick={() => handleViewDetail(o)} className="btn detail-btn">Chi Tiết</button>
                                                         {
-                                                            index % 3 === 1 && <button onClick={handleCancelBooking} className="btn cancel-btn">Hủy</button>
+                                                            (o?.statusOrder === "Pending" || o?.statusOrder === "Confirm" || o?.statusOrder === "Paid") && <button onClick={handleCancelBooking} className="btn cancel-btn">Hủy</button>
                                                         }
                                                     </td>
                                                 </tr>
@@ -153,6 +162,14 @@ const HistoryBooking = () => {
                     }
                 </SpinCustom>
             </HistoryContainer>
+
+            {!!openModalOptionPayment && (
+				<ModalChooseOptionPayment
+					open={openModalOptionPayment}
+					onCancel={() => setOpenModalOpenPayment(false)}
+                    customerId={user?.uid}
+				/>
+			)}
         </ProfileUserLayout>
     );
 }

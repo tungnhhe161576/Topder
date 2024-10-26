@@ -1,12 +1,307 @@
+import { useSelector } from "react-redux";
 import ProfileUserLayout from "../../../../components/Layouts/ProfileUserLayout";
+import UserService from "../../../../services/UserService";
 import { WalletContainer } from "./styled";
+import { userInfor } from "../../../../redux/Slice/userSlice";
+import { useEffect, useState } from "react";
+import SpinCustom from "../../../../components/Common/SpinCustom";
+import { Button, Form, Input, InputNumber, message, Select } from "antd";
+import { formatNumberToK, getRegexNumber } from "../../../../lib/stringUtils";
+import axios from "axios";
+const { Option } = Select;
 
 const Wallet = () => {
+    const [loading, setLoading] = useState(false)
+    const [wallet, setWallet] = useState()
+    const [bankCodes, setBankCodes] = useState([])
+    const [form] = Form.useForm()
+    const user = useSelector(userInfor)
+    
+    const getWalletInfo = async () => {
+        try {
+            setLoading(true)
+            const res = await UserService.getWalletInfo(user?.uid)
+            setWallet(res)
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false)
+        }
+    }
+    useEffect(() => {
+        if (!!user?.uid) {
+            getWalletInfo()
+        }
+    }, [user])
+
+    const getBankCode = async () => {
+        try {
+            setLoading(true)
+            const res = await axios.get("https://api.vietqr.io/v2/banks")
+            setBankCodes(res?.data?.data)
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false)
+        }
+    }
+    useEffect(() => {
+        getBankCode()
+    }, [])
+
+    const handleCreateOTP = async () => {
+        try {
+            setLoading(false)
+            const formValue = await form.validateFields()
+            await UserService.addOTP({
+                walletId: wallet?.walletId,
+                uid: user?.uid,
+                otpCode: formValue?.otp
+            })
+            message.open({
+                content: 'Tạo mã OTP thành công!',
+                type: 'success',
+                style: {
+                    marginTop: '10vh',
+                },
+            })
+            getWalletInfo()
+        } catch (error) {
+            message.open({
+                content: 'tạo mã OTP thất bại',
+                type: 'error',
+                style: {
+                    marginTop: '10vh',
+                },
+            })
+        } finally {
+            setLoading(false)
+            form.resetFields()
+        }
+    }
+
+    const handleSubmit = async () => {
+        try {
+            setLoading(true)
+            const formValues = await form.validateFields()
+            const res = await UserService.createOrUpdateBank({
+                walletId: wallet?.walletId,
+                uid: user?.uid,
+                bankCode: formValues?.bankCode,
+                accountNo: formValues?.acoountNo,
+                accountName: formValues?.accountName
+            })
+            message.open({
+                content: 'Tạo tài khoản thành công!',
+                type: 'success',
+                style: {
+                    marginTop: '10vh',
+                },
+            })
+            getWalletInfo()
+        } catch(error) {
+            message.open({
+                content: 'Tạo tài khoản thất bại!',
+                type: 'error',
+                style: {
+                    marginTop: '10vh',
+                },
+            })
+        } finally {
+            setLoading(false)
+        }
+    }
+    
+
     return (  
         <ProfileUserLayout>
-            <WalletContainer>
-                Wallet
-            </WalletContainer>
+            <SpinCustom spinning={loading}>
+                <WalletContainer>
+                    {
+                        wallet?.bankCode 
+                        ? <div className="d-flex flex-column align-items-center">
+                            <div className="mt-20 text-center fw-500 fs-20 mb-30">
+                                Ví của bạn
+                            </div>
+                            <div className="d-flex justify-content-space-between wallet-info">
+                                <div className="pt-30 pl-10 pb-30">
+                                    <div className="fw-500 fs-16 info mb-5">Ngân hàng</div>
+                                    <div className="info2 mb-12"> 
+                                        <span className="pl-10">{wallet?.bankCode}</span> 
+                                    </div>
+
+                                    <div className="fw-500 fs-16 info mb-5">Số tài khoản</div>
+                                    <div className="info2 mb-12"> 
+                                        <span className="pl-10"> {wallet?.accountNo} </span>
+                                    </div>
+
+                                    <div className="fw-500 fs-16 info mb-5">Chủ tài khoản</div>
+                                    <div className="info2"> 
+                                        <span className="pl-10">{wallet?.accountName} </span>
+                                    </div>
+
+                                    <div className="mt-20">
+                                        <div>
+                                            <Button>
+                                                Chỉnh sửa
+                                            </Button>
+                                        </div>    
+                                        <div>
+                                            <Button>
+                                                Nạp tiền
+                                            </Button>
+                                            <Button>
+                                                Rút tiền
+                                            </Button>
+                                        </div>    
+                                    </div>
+                                </div>
+                                <div className="pt-30 pr-10">
+                                    <div className="fw-500 fs-16">Số dư hiện tại</div>
+                                    <div className="pl-20">{wallet?.walletBalance ? formatNumberToK(wallet?.walletBalance) : '0đ'}</div>
+                                </div>
+                            </div>
+                        </div> 
+                        : wallet?.otpCode 
+                            ? <div>
+                                <div className="mt-20 text-center fw-500 fs-18 mb-30">
+                                    Tạo tài khoản của bạn
+                                </div>
+                                <div className="wallet d-flex justify-content-center">
+                                    <Form 
+                                        form={form} 
+                                        layout="horizontal" 
+                                        labelCol={{
+                                            span: 4,
+                                        }}
+                                        wrapperCol={{
+                                            span: 16,
+                                        }}
+                                        style={{
+                                            minWidth: 800,
+                                            maxWidth: 1000,
+                                        }}
+                                    >
+                                        <Form.Item
+                                            name="bankCode"
+                                            rules={[
+                                                { required: true, message: "Hãy chọn mã Bank Code!" },
+                                            ]}
+                                            label={<span className="fw-600 ml-10"> Bank Code </span>}
+                                        >
+                                            <Select
+                                                allowClear
+                                                placeholder="Chọn ngân hàng"
+                                                showSearch
+                                                optionFilterProp="children"
+                                                filterOption={(input, option) => 
+                                                    option?.children.toLowerCase().includes(input.toLowerCase()) 
+                                                }
+                                            >
+                                                {
+                                                    bankCodes?.map(b => (
+                                                        <Option key={b?.id} value={b?.code}>
+                                                            {b?.shortName}
+                                                        </Option>
+                                                    ))
+                                                }
+                                            </Select>
+                                        </Form.Item>
+                                        <Form.Item
+                                            name="acoountNo"
+                                            rules={[
+                                                { required: true, message: "Hãy nhập số tài khoản!" },
+                                                { pattern: getRegexNumber(), message: "Ký tự không hợp lệ!" },
+                                            ]}
+                                            label={<span className="fw-600 ml-10"> Số tài khoản </span>}
+                                        >
+                                            <Input placeholder="Số tài khoản"/>
+                                        </Form.Item>
+                                        <Form.Item
+                                            name="accountName"
+                                            rules={[
+                                                { required: true, message: "Hãy nhập chủ tài khoản!" },
+                                            ]}
+                                            label={<span className="fw-600 ml-10"> Chủ tài khoản </span>}
+                                        >
+                                            <Input placeholder="Nhập chủ tài khoản"/>
+                                        </Form.Item>
+                                        <Form.Item className="d-flex justify-content-center">
+                                            <Button
+                                                className="button-submit"
+                                                htmlType="submit"
+                                                shape="round"
+                                                onClick={() => handleSubmit()}
+                                            >
+                                                Gửi
+                                            </Button>
+                                        </Form.Item>
+                                    </Form>
+                                </div>
+                            </div>
+                            : <div className="otp">
+                                <div className="mt-20 text-center fw-500 fs-18 mb-30">
+                                    Tạo mã OTP cho ví của bạn
+                                </div>
+                                <div className="d-flex justify-content-center">
+                                    <Form 
+                                        form={form} 
+                                        layout="horizontal" 
+                                        labelCol={{
+                                            span: 9,
+                                        }}
+                                        wrapperCol={{
+                                            span: 14,
+                                        }}
+                                        style={{
+                                            minWidth: 800,
+                                            maxWidth: 1000,
+                                        }}
+                                    >
+                                        <Form.Item 
+                                            name="otp"
+                                            rules={[
+                                                { required: true, message: "Hãy nhập mã OTP!" },
+                                                { pattern: getRegexNumber(), message: "Mã OTP phải là số!" },
+                                            ]}
+                                            label={<span className="fw-600 ml-10"> Tạo OTP </span>}
+                                        >
+                                            <Input.OTP type="password" length={4} />
+                                        </Form.Item>
+                                        <Form.Item
+                                            name="confirmOTP"
+                                            rules={[
+                                                { required: true, message: "Nhập lại mã OTP" },
+                                                ({ getFieldValue }) => ({
+                                                    validator(_, value) {
+                                                    if (!value || getFieldValue('otp') === value) {
+                                                        return Promise.resolve();
+                                                    }
+                                                    return Promise.reject(new Error('OTP chưa đúng!'));
+                                                    },
+                                                }),
+                                            ]}
+                                            dependencies={['otp']}
+                                            label={<span className="fw-600 ml-10"> Nhập lại OTP </span>}
+                                        >
+                                            <Input.OTP type="password" length={4} />
+                                        </Form.Item>
+                                        <Form.Item className="d-flex justify-content-center"> 
+                                            <Button
+                                                className="button-submit"
+                                                htmlType='submit'
+                                                shape="round"
+                                                onClick={handleCreateOTP}
+                                            >
+                                                Tạo
+                                            </Button>
+                                        </Form.Item>
+                                    </Form>
+                                </div>
+                            </div>
+                    }
+                </WalletContainer>
+            </SpinCustom>
         </ProfileUserLayout>
     );
 }

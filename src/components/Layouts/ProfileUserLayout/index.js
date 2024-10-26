@@ -19,13 +19,24 @@ const ProfileUserLayout = ( {children} ) => {
     const [avatar, setAvatar] = useState(null)
     const dispatch  = useDispatch()
     const [loading, setLoading] = useState(false)
+    const [wallet, setWallet] = useState()
     const [form] = Form.useForm()
 
     const isActive = (path) => location.pathname === path;
 
+    const getWalletInfo = async () => {
+        try {
+            const res = await UserService.getWalletInfo(user?.uid)
+            setWallet(res)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
         if (user && user?.image) {
             setAvatar(user.image);
+            getWalletInfo()
         }
     }, [user]);
 
@@ -83,6 +94,7 @@ const ProfileUserLayout = ( {children} ) => {
             setLoading(false)
         }
     }
+
     
     return (  
         <CommonLayout>
@@ -141,8 +153,10 @@ const ProfileUserLayout = ( {children} ) => {
                                 <div className="name white fw-700 fs-20 mt-20">
                                     {user?.name}
                                 </div>
-                                <div className="white fw-700 fs-18 mt-5">
-                                    Số dư ví: <span style={{color: 'black'}}> {formatNumberToK(1000000)} </span> 
+                                <div className="white fw-700 fs-18 mt-5 d-flex justify-content-center">
+                                    <div>
+                                        Số dư ví: <span style={{color: 'black'}}> {wallet?.walletBalance ? formatNumberToK(wallet?.walletBalance) : "0đ"} </span> 
+                                    </div>
                                 </div>
                             </div>
                             <div className="menu">
