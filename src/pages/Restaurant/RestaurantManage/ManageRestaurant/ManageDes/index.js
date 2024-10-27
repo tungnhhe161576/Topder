@@ -78,9 +78,6 @@ const ManageDescription = () => {
 			title: "Nội Dung",
 			dataIndex: "content",
 			key: "content",
-			render: (text) => (
-				<div dangerouslySetInnerHTML={{ __html: text }} /> // Để hiển thị nội dung HTML
-			),
 		},
 	];
 	return (

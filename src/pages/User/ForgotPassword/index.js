@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import LeftSide from "../../../components/LeftSideLogin";
 import { Button, Col, Form, Input, message, Row } from "antd";
 import { Link, useNavigate } from "react-router-dom";
@@ -10,18 +10,51 @@ import UserService from "../../../services/UserService";
 const ForgotPassword = () => {
 	const [form] = Form.useForm();
 	const [loading, setLoading] = useState(false);
-	//const [emailError, setEmailError] = useState("");
+	const [emailExists, setEmailExists] = useState(false);
+	const [showError, setShowError] = useState(false);
 	const nav = useNavigate();
 
+	const checkEmailExistence = async (email) => {
+		try {
+			const check = await UserService.checkExisEmail(email);
+			setEmailExists(check);
+		} catch (error) {
+			message.error(
+				"Email không tồn tại trong hệ thống, vui lòng thử lại."
+			);
+			setEmailExists(false);
+		}
+	};
+
+	useEffect(() => {
+		const email = form.getFieldValue("email");
+		if (email) {
+			const timeoutId = setTimeout(() => {
+				checkEmailExistence(email);
+			}, 1000);
+			return () => clearTimeout(timeoutId);
+		} else {
+			setEmailExists(false);
+		}
+	}, [form.getFieldValue("email")]);
+
 	const handleForgotPassByForm = async () => {
+		setShowError(false);
 		try {
 			setLoading(true);
 			const values = await form.validateFields();
 			const email = values.email;
+
+			if (!emailExists) {
+				setShowError(true);
+				return;
+			}
+
 			localStorage.setItem("forgotPasswordEmail", email);
+
 			const res = await UserService.forgotPassword(email);
 			message.open({
-				content: res || "OTP đã được gửi đến email của bạn.",
+				content: res.message || "OTP đã được gửi đến email của bạn.",
 				type: "success",
 				style: {
 					marginTop: "20vh",
@@ -31,13 +64,6 @@ const ForgotPassword = () => {
 				nav("/verify-otp");
 			}, 1000);
 		} catch (error) {
-			message.open({
-				content: error.message || "Có lỗi xảy ra",
-				type: "error",
-				style: {
-					marginTop: "20vh",
-				},
-			});
 		} finally {
 			setLoading(false);
 		}
@@ -97,22 +123,20 @@ const ForgotPassword = () => {
 							>
 								<Input placeholder="Email" />
 							</Form.Item>
-							{/* {emailError && (
-								<div
-									style={{
-										color: "red",
-										marginTop: "-15px",
-										marginBottom: "10px",
-									}}
-								>
-									{emailError}
-								</div>
-							)} */}
+							{showError &&
+								!emailExists && ( // Chỉ hiển thị khi nhấn nút và email không tồn tại
+									<div
+										className="error-message"
+										style={{
+											color: "red",
+											marginTop: "4px",
+										}}
+									>
+										Email không tồn tại trong hệ thống, vui
+										lòng thử lại.
+									</div>
+								)}
 						</Form>
-
-						{/* <div className="forgot-password fs-16 fw-600 primary-color">
-                        * Quên mật khẩu
-                    </div> */}
 
 						<Button
 							onClick={handleForgotPassByForm}

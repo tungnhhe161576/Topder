@@ -38,6 +38,7 @@ const RegisterRestaurant = () => {
 	const [openTime, setOpenTime] = useState(null);
 	const nav = useNavigate();
 	const [categories, setCategories] = useState([]);
+	const [emailExists, setEmailExists] = useState(false);
 
 	//images
 	const [previewOpen, setPreviewOpen] = useState(false);
@@ -51,6 +52,8 @@ const RegisterRestaurant = () => {
 	const [selectedCity, setSelectedCity] = useState(null);
 	const [selectedDistrict, setSelectedDistrict] = useState(null);
 	const [selectedWard, setSelectedWard] = useState(null);
+
+	//check mail
 
 	const getCities = async () => {
 		try {
@@ -201,12 +204,34 @@ const RegisterRestaurant = () => {
 		console.log("Form values: ", values);
 		form.resetFields();
 	};
-
+	const checkEmailExistence = async (email) => {
+		try {
+			const check = await UserService.checkExisEmail(email);
+			setEmailExists(check);
+		} catch (error) {}
+	};
+	useEffect(() => {
+		const email = form.getFieldValue("email");
+		if (email) {
+			const timeoutId = setTimeout(() => {
+				checkEmailExistence(email);
+			}, 1000); // Debounce 1 second
+			return () => clearTimeout(timeoutId);
+		} else {
+			setEmailExists(false);
+		}
+	}, [form.getFieldValue("email")]);
 	//submit the form
 	const handleRegister = async () => {
 		try {
 			setLoading(true);
 			const values = await form.validateFields();
+			// if (emailExists) {
+			// 	message.error(
+			// 		"Email đã tồn tại. Vui lòng đăng ký với email khác."
+			// 	);
+			// 	return;
+			// }
 			const data = {
 				...values,
 				uid: 0,
@@ -218,7 +243,7 @@ const RegisterRestaurant = () => {
 				File: fileList[0].originFileObj,
 			});
 			message.open({
-				content: res || "Đăng ký nhà hàng thành công.",
+				content: res.message || "Đăng ký nhà hàng thành công.",
 				type: "success",
 				style: {
 					marginTop: "20vh",
@@ -226,10 +251,10 @@ const RegisterRestaurant = () => {
 			});
 			setTimeout(() => {
 				nav("/login");
-			}, 2000);
+			}, 1500);
 		} catch (error) {
 			message.open({
-				error: error.message,
+				error: error || "Đăng kí nhà hàng không thành công",
 				type: "errorr",
 			});
 		} finally {
@@ -414,6 +439,15 @@ const RegisterRestaurant = () => {
 									placeholder="Email"
 								/>
 							</Form.Item>
+							{emailExists && (
+								<div
+									className="error-message"
+									style={{ color: "red", marginTop: "4px" }}
+								>
+									Email đã tồn tại trong hệ thống, vui lòng
+									thử một email khác
+								</div>
+							)}
 						</Col>
 					</Row>
 					<Row gutter={[24, 16]}>
