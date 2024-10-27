@@ -128,7 +128,7 @@ export const router = [
 				title: "Đăng kí nhà hàng",
 			},
 			{
-				path: "blog-detail",
+				path: "blog-detail/:blogId",
 				element: <BlogDetail />,
 				title: "Chi tiết Blog",
 			},

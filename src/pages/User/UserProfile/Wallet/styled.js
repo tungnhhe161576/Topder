@@ -34,4 +34,33 @@ export const WalletContainer = styled.div `
             font-size: 12px;
         }
     }
+
+    .edit {
+    }
+    .withdraw {
+        margin-right: 10px;
+        background-color: #8BC34A;
+        border: none;
+    }
+    .withdraw:hover {
+        background-color: rgb(159 217 92) !important;
+        color: black !important;
+    }
+    .deposit {
+        background-color: #ff7c08;
+        border: none;
+    }
+    .deposit:hover {
+        background-color: #ff9800 !important;
+        color: black !important;
+    }
+    .cancel-edit {
+        background-color: rgb(121 121 121);
+        color: white;
+        border: none;
+    }
+    .cancel-edit:hover {
+        background-color: #9E9E9E !important;
+        color: white !important;
+    }
 `

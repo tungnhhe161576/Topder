@@ -5,17 +5,21 @@ import { WalletContainer } from "./styled";
 import { userInfor } from "../../../../redux/Slice/userSlice";
 import { useEffect, useState } from "react";
 import SpinCustom from "../../../../components/Common/SpinCustom";
-import { Button, Form, Input, InputNumber, message, Select } from "antd";
+import { Button, Form, Input, message, Select } from "antd";
 import { formatNumberToK, getRegexNumber } from "../../../../lib/stringUtils";
 import axios from "axios";
+import ModalWithDraw from "./Modal/Withdraw";
 const { Option } = Select;
 
 const Wallet = () => {
     const [loading, setLoading] = useState(false)
     const [wallet, setWallet] = useState()
     const [bankCodes, setBankCodes] = useState([])
-    const [form] = Form.useForm()
+    const [isEdit, setIsEdit] = useState(false)
+    const [openModalWithdraw, setOpenModalWithdraw] = useState(false)
+    const [openModalDeposit, setOpenModalDeposit] = useState(false)
     const user = useSelector(userInfor)
+    const [form] = Form.useForm()
     
     const getWalletInfo = async () => {
         try {
@@ -68,7 +72,7 @@ const Wallet = () => {
             getWalletInfo()
         } catch (error) {
             message.open({
-                content: 'tạo mã OTP thất bại',
+                content: 'Tạo mã OTP thất bại',
                 type: 'error',
                 style: {
                     marginTop: '10vh',
@@ -84,21 +88,23 @@ const Wallet = () => {
         try {
             setLoading(true)
             const formValues = await form.validateFields()
-            const res = await UserService.createOrUpdateBank({
+            await UserService.createOrUpdateBank({
                 walletId: wallet?.walletId,
                 uid: user?.uid,
                 bankCode: formValues?.bankCode,
-                accountNo: formValues?.acoountNo,
+                accountNo: formValues?.accountNo,
                 accountName: formValues?.accountName
             })
             message.open({
-                content: 'Tạo tài khoản thành công!',
+                content: isEdit ? 'Cập nhật tài khoản thành công' : 'Tạo tài khoản thành công!',
                 type: 'success',
                 style: {
                     marginTop: '10vh',
                 },
             })
             getWalletInfo()
+            form.resetFields()
+            setIsEdit(false)
         } catch(error) {
             message.open({
                 content: 'Tạo tài khoản thất bại!',
@@ -110,6 +116,15 @@ const Wallet = () => {
         } finally {
             setLoading(false)
         }
+    }
+
+    const changeStatusEdit = () => {
+        setIsEdit(true)
+        form.setFieldsValue({
+            bankCode: wallet?.bankCode,
+            accountNo: wallet?.accountNo,
+            accountName: wallet?.accountName
+        })
     }
     
 
@@ -124,44 +139,120 @@ const Wallet = () => {
                                 Ví của bạn
                             </div>
                             <div className="d-flex justify-content-space-between wallet-info">
-                                <div className="pt-30 pl-10 pb-30">
-                                    <div className="fw-500 fs-16 info mb-5">Ngân hàng</div>
-                                    <div className="info2 mb-12"> 
-                                        <span className="pl-10">{wallet?.bankCode}</span> 
+                                
+                                {
+                                    isEdit 
+                                    ? <div>
+                                        {/* chinh sua */}
+                                        <div className="pt-30 pl-10 pb-30">
+                                            <Form 
+                                                form={form} 
+                                                layout="horizontal" 
+                                                labelCol={{span: 4}}
+                                                wrapperCol={{span: 16}}
+                                                style={{minWidth: 700, maxWidth: '100%'}}
+                                            >
+                                                <Form.Item
+                                                    name="bankCode"
+                                                    rules={[
+                                                        { required: true, message: "Hãy chọn mã Bank Code!" },
+                                                    ]}
+                                                    label={<span className="fw-600 ml-10"> Bank Code </span>}
+                                                >
+                                                    <Select
+                                                        allowClear
+                                                        placeholder="Chọn ngân hàng"
+                                                        showSearch
+                                                        optionFilterProp="children"
+                                                        filterOption={(input, option) => 
+                                                            option?.children.toLowerCase().includes(input.toLowerCase()) 
+                                                        }
+                                                    >
+                                                        {
+                                                            bankCodes?.map(b => (
+                                                                <Option key={b?.id} value={b?.code}>
+                                                                    {b?.shortName}
+                                                                </Option>
+                                                            ))
+                                                        }
+                                                    </Select>
+                                                </Form.Item>
+                                                <Form.Item
+                                                    name="accountNo"
+                                                    rules={[
+                                                        { required: true, message: "Hãy nhập số tài khoản!" },
+                                                        { pattern: getRegexNumber(), message: "Ký tự không hợp lệ!" },
+                                                    ]}
+                                                    label={<span className="fw-600 ml-10"> Số tài khoản </span>}
+                                                >
+                                                    <Input placeholder="Số tài khoản"/>
+                                                </Form.Item>
+                                                <Form.Item
+                                                    name="accountName"
+                                                    rules={[
+                                                        { required: true, message: "Hãy nhập chủ tài khoản!" },
+                                                    ]}
+                                                    label={<span className="fw-600 ml-10"> Chủ tài khoản </span>}
+                                                >
+                                                    <Input placeholder="Nhập chủ tài khoản"/>
+                                                </Form.Item>
+                                            </Form>
+                                        </div>
+                                        <div className="">
+                                            <div className="d-flex pl-40 pb-20">
+                                                <Button type="primary" shape="round" onClick={() => handleSubmit()}>
+                                                    Đồng ý
+                                                </Button>
+                                                <Button onClick={() => setIsEdit(false)} shape="round" className="ml-10 cancel-edit">
+                                                    Thoát
+                                                </Button>
+                                            </div>
+                                        </div>
                                     </div>
+                                    : <>
+                                        {/* thong tin vi */}
+                                        <div className="pt-30 pl-10 pb-30">
+                                            <div className="fw-500 fs-16 info mb-5">Ngân hàng</div>
+                                            <div className="info2 mb-12"> 
+                                                <span className="pl-10">{wallet?.bankCode}</span> 
+                                            </div>
 
-                                    <div className="fw-500 fs-16 info mb-5">Số tài khoản</div>
-                                    <div className="info2 mb-12"> 
-                                        <span className="pl-10"> {wallet?.accountNo} </span>
-                                    </div>
+                                            <div className="fw-500 fs-16 info mb-5">Số tài khoản</div>
+                                            <div className="info2 mb-12"> 
+                                                <span className="pl-10"> {wallet?.accountNo} </span>
+                                            </div>
 
-                                    <div className="fw-500 fs-16 info mb-5">Chủ tài khoản</div>
-                                    <div className="info2"> 
-                                        <span className="pl-10">{wallet?.accountName} </span>
-                                    </div>
+                                            <div className="fw-500 fs-16 info mb-5">Chủ tài khoản</div>
+                                            <div className="info2"> 
+                                                <span className="pl-10">{wallet?.accountName} </span>
+                                            </div>
 
-                                    <div className="mt-20">
-                                        <div>
-                                            <Button>
-                                                Chỉnh sửa
-                                            </Button>
-                                        </div>    
-                                        <div>
-                                            <Button>
-                                                Nạp tiền
-                                            </Button>
-                                            <Button>
-                                                Rút tiền
-                                            </Button>
-                                        </div>    
-                                    </div>
-                                </div>
-                                <div className="pt-30 pr-10">
-                                    <div className="fw-500 fs-16">Số dư hiện tại</div>
-                                    <div className="pl-20">{wallet?.walletBalance ? formatNumberToK(wallet?.walletBalance) : '0đ'}</div>
-                                </div>
+                                            <div className="mt-20 d-flex justify-content-space-between">
+                                                <div>
+                                                    <Button className="edit" type="primary" shape="round" onClick={() => changeStatusEdit()}>
+                                                        Chỉnh sửa
+                                                    </Button>
+                                                </div>    
+                                                <div>
+                                                    <Button className="withdraw" shape="round" onClick={() => setOpenModalWithdraw(true)}>
+                                                        Nạp tiền
+                                                    </Button>
+                                                    <Button className="deposit" shape="round">
+                                                        Rút tiền
+                                                    </Button>
+                                                </div>    
+                                            </div>
+                                        </div>
+                                        <div className="pt-30 pr-10">
+                                            <div className="fw-500 fs-16">Số dư hiện tại</div>
+                                            <div className="pl-20">{wallet?.walletBalance ? formatNumberToK(wallet?.walletBalance) : '0đ'}</div>
+                                        </div>
+                                    </>
+                                }
+                                
                             </div>
                         </div> 
+                        //nhap thong tin vi
                         : wallet?.otpCode 
                             ? <div>
                                 <div className="mt-20 text-center fw-500 fs-18 mb-30">
@@ -208,7 +299,7 @@ const Wallet = () => {
                                             </Select>
                                         </Form.Item>
                                         <Form.Item
-                                            name="acoountNo"
+                                            name="accountNo"
                                             rules={[
                                                 { required: true, message: "Hãy nhập số tài khoản!" },
                                                 { pattern: getRegexNumber(), message: "Ký tự không hợp lệ!" },
@@ -239,6 +330,7 @@ const Wallet = () => {
                                     </Form>
                                 </div>
                             </div>
+                            //otp
                             : <div className="otp">
                                 <div className="mt-20 text-center fw-500 fs-18 mb-30">
                                     Tạo mã OTP cho ví của bạn
@@ -301,6 +393,13 @@ const Wallet = () => {
                             </div>
                     }
                 </WalletContainer>
+                {!!openModalWithdraw && (
+                    <ModalWithDraw
+                        open={openModalWithdraw}
+                        onCancel={() => setOpenModalWithdraw(false)}
+                        customerId={user?.uid}
+                    />
+                )}
             </SpinCustom>
         </ProfileUserLayout>
     );

@@ -10,6 +10,7 @@ import {
 	apiGetRelatedRestaurants,
     apiGetAllBlog,
     apiGetAllBlogCategory,
+    apiGetBlogDetail,
 } from './urls'
 
 const apiHomePageData = body => http.get(apiGetDataInHomePage, body)
@@ -36,6 +37,7 @@ const getAllBlog = body => {
     return http.get(`${apiGetAllBlog}?${params}`)
 }
 const getBlogCategory = () => http.get(apiGetAllBlogCategory)
+const getBlogDetail = (blogId) =>http.get(`${apiGetBlogDetail}/${blogId}`)
 
 const GuestService = {
     apiHomePageData,
@@ -46,6 +48,7 @@ const GuestService = {
     getRelatedRestaurant,
     getAllBlog,
     getBlogCategory,
+    getBlogDetail,
 }
 
 export default GuestService
