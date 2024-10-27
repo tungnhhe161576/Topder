@@ -28,6 +28,7 @@ import ModalCustom from "../../../../../components/Common/ModalCustom";
 import UserService from "../../../../../services/UserService";
 import moment from "moment";
 import axios from "axios";
+import dayjs from "dayjs";
 
 const getBase64 = (file) =>
 	new Promise((resolve, reject) => {
@@ -346,12 +347,12 @@ const ManageInfomation = () => {
 			const values = await form.validateFields();
 
 			const updatedData = {
-				...dataSource[0],
 				...values,
-			};
-
-			const result = await UserService.updateRestaurantInfor({
 				uid: user.uid,
+				openTime: dayjs(values?.openTime).format("HH:mm"),
+				closeTime: dayjs(values?.closeTime).format("HH:mm"),
+			};
+			const result = await UserService.updateRestaurantInfor({
 				...values,
 			});
 
@@ -363,9 +364,7 @@ const ManageInfomation = () => {
 						marginTop: "20vh",
 					},
 				});
-
 				setDataSource([updatedData]);
-
 				setIsModalVisible(false);
 			} else {
 				message.open({
