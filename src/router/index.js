@@ -31,6 +31,8 @@ import UserRoutes from './UserRouter'
 import GuestRoutes from "./GuestRouter";
 import RestaurantRoutes from "./RestautantRouter";
 import SpinCustom from "../components/Common/SpinCustom";
+import DepositOrWithdraw from "../pages/Transaction/DepositOrWithdraw";
+import VNPayDepositOrWithdraw from "../pages/Transaction/VNPayDepositOrWithDraw";
 
 const LazyLoadingComponent = ({ children }) => {
     return (
@@ -178,6 +180,14 @@ export const router = [
 				path: "user-wallet",
 				element: <Wallet />,
 				title: "Ví",
+			},
+			{
+				path: "status-transaction",
+				element: <DepositOrWithdraw/>
+			},
+			{
+				path: "status-transaction-with-vnpay/:transactionId",
+				element: <VNPayDepositOrWithdraw/>
 			},
 		],
     },

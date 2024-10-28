@@ -8,16 +8,21 @@ import CustomModal from "../../../../../../components/Common/ModalCustom";
 import { ModalWithdrawContainer } from "./styled";
 import { getRegexNumber } from "../../../../../../lib/stringUtils";
 
-const ModalWithDraw = ({open, onCancel, customerId}) => {
+const ModalDeposit = ({open, onCancel, customerId, walletId}) => {
     const [form] = Form.useForm()
     const [loading, setLoading] = useState(false)
 
-    const handleWithdraw = async () => {
+    const handleDeposit = async () => {
         try {
             setLoading(true)
             const formValue = await form.validateFields()
-            console.log(formValue);
-            
+            const res = await UserService.deposit({
+                uid: customerId,
+                walletId: walletId,
+                transactionAmount: formValue?.number,
+                paymentGateway: formValue?.option
+            });
+            window.location.href = res?.linkPayment;
         } catch (error) {
             console.log(error);
         } finally {
@@ -37,9 +42,9 @@ const ModalWithDraw = ({open, onCancel, customerId}) => {
                     Đóng
                 </Button>
                 <Button className="mr-10 fw-600" type='primary' 
-                    onClick={() => handleWithdraw()}
+                    onClick={() => handleDeposit()}
                 >
-                    Rút tiền
+                    Nạp tiền
                 </Button>
             </div>
         )
@@ -105,4 +110,4 @@ const ModalWithDraw = ({open, onCancel, customerId}) => {
     );
 }
  
-export default ModalWithDraw;
+export default ModalDeposit;

@@ -8,7 +8,7 @@ import SpinCustom from "../../../../components/Common/SpinCustom";
 import { Button, Form, Input, message, Select } from "antd";
 import { formatNumberToK, getRegexNumber } from "../../../../lib/stringUtils";
 import axios from "axios";
-import ModalWithDraw from "./Modal/Withdraw";
+import ModalWithDraw from "./Modal/Deposit";
 const { Option } = Select;
 
 const Wallet = () => {
@@ -398,6 +398,7 @@ const Wallet = () => {
                         open={openModalWithdraw}
                         onCancel={() => setOpenModalWithdraw(false)}
                         customerId={user?.uid}
+                        walletId={wallet?.walletId}
                     />
                 )}
             </SpinCustom>
