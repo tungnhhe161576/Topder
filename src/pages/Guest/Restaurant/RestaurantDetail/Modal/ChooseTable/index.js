@@ -9,7 +9,6 @@ import table2 from "../../../../../../assets/images/table2.jpg"
 import dayjs from "dayjs";
 
 const ModalChooseTable = ({open, onCancel, setTables, tables, restaurantId, date, time}) => {
-    const [tableData, setTableData] = useState([])
     const [tableTudo, setTableTodu] = useState([])
     const [tablePhong, setTablePhong] = useState([])
     const [loading, setLoading] = useState(false)
@@ -17,19 +16,15 @@ const ModalChooseTable = ({open, onCancel, setTables, tables, restaurantId, date
 
     const dateChooseTable = dayjs(date?.$d).format('YYYY-MM-DD')
     const timeChooseTable = dayjs(time?.$d).format('HH:mm')
-    console.log("date",dateChooseTable);
-    console.log("time",timeChooseTable);
     
-
     const getTable = async () => {
         try {
             setLoading(true)
             const res = await UserService.getTable(restaurantId, timeChooseTable, dateChooseTable)
-            const room1 = res?.items?.filter(item => item?.roomId !== null)
-            const room2 = res?.items?.filter(item => item?.roomId === null)
+            const room1 = res?.filter(item => item?.roomId !== null)
+            const room2 = res?.filter(item => item?.roomId === null)
             setTableTodu(room2)
             setTablePhong(room1)
-            setTableData(res)
         } catch (error) {
             console.log(error);
         } finally {
@@ -50,7 +45,6 @@ const ModalChooseTable = ({open, onCancel, setTables, tables, restaurantId, date
             }
         });
     }
-
     
 
     const items = [
@@ -65,7 +59,7 @@ const ModalChooseTable = ({open, onCancel, setTables, tables, restaurantId, date
                 onChange={(e) => handleSelectTable(e.target.value)}
             >
                 <Row gutter={[16, 16]} className="w-100">
-                    {tableData?.tablesWithRooms?.map((t, index) => (
+                    {tablePhong?.map((t, index) => (
                         <Col span={12} key={index} className="w-100">
                             <Radio 
                                 className={`w-100 ${selectedTable?.find(i => i?.tableId === t?.tableId) ? 'selected' : ''}`}
@@ -74,7 +68,11 @@ const ModalChooseTable = ({open, onCancel, setTables, tables, restaurantId, date
                             >
                                 <div className="table-item">
                                     <div className="table-image">
-                                        : <img src={table1} alt="table1"/>
+                                        {
+                                        selectedTable?.find(i => i?.tableId === t?.tableId) 
+                                            ? <img src={table2} alt="table2"/> 
+                                            : <img src={table1} alt="table1"/>
+                                        }
                                     </div>
                                     <div className="des">
                                         <div className="fs-18 fw-500"> Tên phòng: {t?.roomName} </div>
@@ -101,7 +99,7 @@ const ModalChooseTable = ({open, onCancel, setTables, tables, restaurantId, date
                 onChange={(e) => handleSelectTable(e.target.value)}
             >
                 <Row gutter={[16, 16]} className="w-100">
-                    {tableData?.standaloneTables?.map(t => (
+                    {tableTudo?.map(t => (
                         <Col span={12} key={t?.tableId} className="w-100">
                             <Radio 
                                 className={`w-100 ${selectedTable?.find(i => i?.tableId === t?.tableId) ? 'selected' : ''}`}

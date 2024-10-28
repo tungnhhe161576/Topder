@@ -36,34 +36,35 @@ const OrderDetail = ( {setIsDetail, detail} ) => {
         <div className="form-order-detail">
             <Button
                 shape="round"
-                className="fs-16 fw-500 return-button"
+                className="fs-14 fw-500 return-button"
                 onClick={() => setIsDetail(false)}
             >
                 Trở về
             </Button>
 
-            <div className="step mt-50 mb-50">
+            <div className="step mt-20 mb-20">
                 <Steps 
                     labelPlacement="vertical" 
                     items={items} 
                 />
             </div>
 
-            <div className="fs-20 fw-600 mb-5 ml-20">
+            <div className="fs-18 fw-600 ml-20 mb-10">
                 Thông tin người nhận
             </div>
+
             <div className="info">
                 <div>
-                    <span className="fs-16 mr-50">Tên:</span>
-                    <span className="fs-16 primary">{detail?.nameReceiver}</span>
+                    <span className="fs-14 mr-50">Tên:</span>
+                    <span className="fs-13 primary">{detail?.nameReceiver}</span>
                 </div>
                 <div>
-                    <span className="fs-16 mr-48">SĐT:</span>
-                    <span className="fs-16">{detail?.phoneReceiver}</span>
+                    <span className="fs-14 mr-48">SĐT:</span>
+                    <span className="fs-13">{detail?.phoneReceiver}</span>
                 </div>
                 <div>
-                    <span className="fs-16 mr-10">Ngày đặt:</span>
-                    <span className="fs-16 primary">{dayjs(detail?.dateReservation).format('DD-MM-YYYY')}</span>
+                    <span className="fs-14 mr-10">Ngày đặt:</span>
+                    <span className="fs-13 primary">{dayjs(detail?.dateReservation).format('DD-MM-YYYY')}</span>
                 </div>
             </div>
 
@@ -88,6 +89,16 @@ const OrderDetail = ( {setIsDetail, detail} ) => {
                         </tr>
                     </tbody>
                 </table>
+            </div>
+
+            <div className="mt-20">
+                <div className="update-menu pl-20">
+                    <Button type="primary" shape="round">Chỉnh sửa đơn hàng</Button>
+                </div>
+                <div className="menu">
+
+                    
+                </div>
             </div>
         </div>
     );
