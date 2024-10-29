@@ -89,13 +89,19 @@ const ModalDeposit = ({open, onCancel, customerId, walletId, verifiedOTP, setVer
                                 <>
                                     <Form.Item 
                                         name="number" 
-                                        label={<span className="ml-10 fw-500">Nhập số tiền bạn cần rút</span>}
+                                        label={<span className="ml-10 fw-500">Nhập số tiền bạn cần nạp</span>}
                                         rules={[
-                                            { required: true, message: "Hãy nhập số tiền bạn cần rút (Lớn hơn 5.000đ)!" },
+                                            { required: true, message: "Hãy nhập số tiền bạn cần nạp (Từ 10.000đ trở lên)!" },
                                             { pattern: getRegexNumber(), message: "Ký tự không hợp lệ!" },
+                                            { 
+                                                validator: (_, value) => 
+                                                    value && value < 10000
+                                                        ? Promise.reject("Hãy nhập số tiền từ 10.000đ trở lên!")
+                                                        : Promise.resolve(),
+                                            }
                                         ]}
                                     >
-                                        <InputNumber formatter={(value) => formatNumber(value.toString())} parser={(value) => value.replace(/\./g, '')} className="w-100" defaultValue={5000} min={5000} placeholder="Nhập số tiền"/>
+                                        <InputNumber formatter={(value) => formatNumber(value.toString())} parser={(value) => value.replace(/\./g, '')} className="w-100" defaultValue={10000} min={10000} placeholder="Nhập số tiền"/>
                                     </Form.Item>
                                     <Form.Item 
                                         name="option" 
@@ -126,7 +132,6 @@ const ModalDeposit = ({open, onCancel, customerId, walletId, verifiedOTP, setVer
                                                 </div>
                                             </Radio>
                                         </Radio.Group>
-
                                     </Form.Item>
                                 </>
                             )}

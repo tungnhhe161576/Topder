@@ -8,7 +8,8 @@ import SpinCustom from "../../../../components/Common/SpinCustom";
 import { Button, Form, Input, message, Select } from "antd";
 import { formatNumberToK, getRegexNumber } from "../../../../lib/stringUtils";
 import axios from "axios";
-import ModalWithDraw from "./Modal/Deposit";
+import ModalWithDraw from "./Modal/Withdraw";
+import ModalDeposit from "./Modal/Deposit";
 const { Option } = Select;
 
 const Wallet = () => {
@@ -263,7 +264,7 @@ const Wallet = () => {
                                                     <Button className="withdraw" shape="round" onClick={() => setOpenModalDeposit(true)}>
                                                         Nạp tiền
                                                     </Button>
-                                                    <Button className="deposit" shape="round">
+                                                    <Button className="deposit" shape="round" onClick={() => setOpenModalWithdraw(true)}>
                                                         Rút tiền
                                                     </Button>
                                                 </div>    
@@ -420,7 +421,7 @@ const Wallet = () => {
                     }
                 </WalletContainer>
                 {!!openModalDeposit && (
-                    <ModalWithDraw
+                    <ModalDeposit
                         open={openModalDeposit}
                         onCancel={() => {setOpenModalDeposit(false); setVerifiedOTP(false)}}
                         customerId={user?.uid}
@@ -428,6 +429,17 @@ const Wallet = () => {
                         verifiedOTP={verifiedOTP}
                         setVerifiedOTP={setVerifiedOTP}
                         wallet={wallet}
+                    />
+                )}
+                {!!openModalWithdraw && (
+                    <ModalWithDraw
+                        open={openModalWithdraw}
+                        onCancel={() => {setOpenModalWithdraw(false); setVerifiedOTP(false)}}
+                        customerId={user?.uid}
+                        verifiedOTP={verifiedOTP}
+                        setVerifiedOTP={setVerifiedOTP}
+                        wallet={wallet}
+                        getWalletInfo={getWalletInfo}
                     />
                 )}
             </SpinCustom>

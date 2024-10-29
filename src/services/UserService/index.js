@@ -34,6 +34,7 @@ import {
 	apiDeposit,
 	apiCheckRecharge,
 	apiGetTransactionHistory,
+	apiWithdraw,
 } from "./urls";
 
 const categoryResApi = (body) => http.get(apiGetListRestaurants, body);
@@ -98,6 +99,7 @@ const createOrUpdateBank = (body) => http.put(apiCreateOrUpdateBank, body)
 const deposit = body => http.post(apiDeposit, body)
 const checkRecharge = ({transactionId, status}) => http.put(`${apiCheckRecharge}?transactionId=${transactionId}&status=${status}`)
 const getTransactionhistory = (customerId) => http.get(`${apiGetTransactionHistory}/${customerId}`)
+const withdraw = (body) => http.post(apiWithdraw, body)
 
 const UserService = {
 	loginApi,
@@ -133,6 +135,7 @@ const UserService = {
 	deposit,
 	checkRecharge,
 	getTransactionhistory,
+	withdraw,
 };
 
 export default UserService;

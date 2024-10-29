@@ -21,9 +21,9 @@ const TransactionHistory = () => {
             setLoading(true)
             const res = await UserService.getTransactionhistory(user?.uid)
             if (status) {
-                setTransactions(res?.items.filter((transaction) => transaction.status === status))
+                setTransactions(res.filter((transaction) => transaction.status === status))
             } else {
-                setTransactions(res?.items);
+                setTransactions(res);
             }
         } catch (error) {
             console.log(error);
@@ -42,6 +42,7 @@ const TransactionHistory = () => {
     const columns = [
         {
             title: 'Số thứ tự',
+            key: 'stt',
             width: 70,
             align: 'center',
             render: (_, __, index) => <span className="fs-15 fw-500">{index + 1}</span>,
@@ -86,7 +87,9 @@ const TransactionHistory = () => {
                 <div className="d-flex justify-content-center">
                     {value === "Successful" 
                         ? <div className="success">Thành công</div> 
-                        : <div className="fail">Thất bại</div> 
+                        : value === "Cancelled"
+                            ? <div className="fail">Thất bại</div> 
+                            : <div className="fail">Đang chờ</div> 
                     }
                 </div>
             ),
@@ -112,8 +115,11 @@ const TransactionHistory = () => {
                                 <Option key={1} value="Successful">
                                     Thành công
                                 </Option>
-                                <Option key={2} value="Cancel">
+                                <Option key={2} value="Cancelled">
                                     Thất bại
+                                </Option>
+                                <Option key={3} value="Pending">
+                                    Đang chờ
                                 </Option>
                             </Select>
                         </div>

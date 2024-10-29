@@ -9,14 +9,17 @@ const VNPayDepositOrWithdraw = () => {
     const {transactionId} = useParams()
 
     const queryParams = new URLSearchParams(location.search);
-    const status = queryParams.get("vnp_TransactionStatus");
+    const statusTransaction = queryParams.get("vnp_TransactionStatus");
+    const statusResponse = queryParams.get("vnp_ResponseCode");
+
+    // vnp_ResponseCode == "00" && vnp_TransactionStatus == "00" ---- thanh cong
 
     const deposit = async () => {
         try {
-            if (status === "PAID") {
+            if (statusTransaction === '00' && statusResponse === '00') {
                 await UserService.checkRecharge({
                     transactionId, 
-                    status: status === '00' ? 'Successful' : 'Cancelled'
+                    status: 'Successful'
                 })
                 message.open({
                     content: 'Nạp tiền thành công.',
@@ -28,7 +31,7 @@ const VNPayDepositOrWithdraw = () => {
             } else {
                 await UserService.checkRecharge({
                     transactionId, 
-                    status: status === '00' ? 'Successful' : 'Cancelled'
+                    status: 'Cancelled'
                 })
                 message.open({
                     content: 'Nạp tiền thất bại.',
@@ -49,7 +52,7 @@ const VNPayDepositOrWithdraw = () => {
     
     return (  
         <div className="mt-40 pl-40">
-            {status !== "00" 
+            {(statusTransaction !== '00' || statusResponse !== '00')
                 ? <div>
                     <div>
                         <Button onClick={() => nav('/user-profile/user-wallet')} type="primary" shape="round" style={{width: '200px'}}>
