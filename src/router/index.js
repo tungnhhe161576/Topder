@@ -33,6 +33,7 @@ import RestaurantRoutes from "./RestautantRouter";
 import SpinCustom from "../components/Common/SpinCustom";
 import DepositOrWithdraw from "../pages/Transaction/DepositOrWithdraw";
 import VNPayDepositOrWithdraw from "../pages/Transaction/VNPayDepositOrWithDraw";
+import TransactionHistory from "../pages/User/UserProfile/TransactionHistory";
 
 const LazyLoadingComponent = ({ children }) => {
     return (
@@ -180,6 +181,11 @@ export const router = [
 				path: "user-wallet",
 				element: <Wallet />,
 				title: "Ví",
+			},
+			{
+				path: "transactiom-history",
+				element: <TransactionHistory/>,
+				title: "Lịch sử giao dịch",
 			},
 			{
 				path: "status-transaction",

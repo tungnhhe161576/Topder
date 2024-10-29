@@ -18,6 +18,7 @@ const Wallet = () => {
     const [isEdit, setIsEdit] = useState(false)
     const [openModalWithdraw, setOpenModalWithdraw] = useState(false)
     const [openModalDeposit, setOpenModalDeposit] = useState(false)
+    const [verifiedOTP, setVerifiedOTP] = useState(false);
     const user = useSelector(userInfor)
     const [form] = Form.useForm()
     
@@ -105,6 +106,7 @@ const Wallet = () => {
             getWalletInfo()
             form.resetFields()
             setIsEdit(false)
+            setVerifiedOTP(false)
         } catch(error) {
             message.open({
                 content: 'Tạo tài khoản thất bại!',
@@ -152,61 +154,85 @@ const Wallet = () => {
                                                 wrapperCol={{span: 16}}
                                                 style={{minWidth: 700, maxWidth: '100%'}}
                                             >
-                                                <Form.Item
-                                                    name="bankCode"
-                                                    rules={[
-                                                        { required: true, message: "Hãy chọn mã Bank Code!" },
-                                                    ]}
-                                                    label={<span className="fw-600 ml-10"> Bank Code </span>}
-                                                >
-                                                    <Select
-                                                        allowClear
-                                                        placeholder="Chọn ngân hàng"
-                                                        showSearch
-                                                        optionFilterProp="children"
-                                                        filterOption={(input, option) => 
-                                                            option?.children.toLowerCase().includes(input.toLowerCase()) 
-                                                        }
-                                                    >
-                                                        {
-                                                            bankCodes?.map(b => (
-                                                                <Option key={b?.id} value={b?.code}>
-                                                                    {b?.shortName}
-                                                                </Option>
-                                                            ))
-                                                        }
-                                                    </Select>
-                                                </Form.Item>
-                                                <Form.Item
-                                                    name="accountNo"
-                                                    rules={[
-                                                        { required: true, message: "Hãy nhập số tài khoản!" },
-                                                        { pattern: getRegexNumber(), message: "Ký tự không hợp lệ!" },
-                                                    ]}
-                                                    label={<span className="fw-600 ml-10"> Số tài khoản </span>}
-                                                >
-                                                    <Input placeholder="Số tài khoản"/>
-                                                </Form.Item>
-                                                <Form.Item
-                                                    name="accountName"
-                                                    rules={[
-                                                        { required: true, message: "Hãy nhập chủ tài khoản!" },
-                                                    ]}
-                                                    label={<span className="fw-600 ml-10"> Chủ tài khoản </span>}
-                                                >
-                                                    <Input placeholder="Nhập chủ tài khoản"/>
-                                                </Form.Item>
+                                                {!verifiedOTP && (
+                                                    <>
+                                                        <Form.Item 
+                                                            name="otp"
+                                                            rules={[
+                                                                { required: true, message: "Hãy nhập mã OTP!" },
+                                                                { pattern: getRegexNumber(), message: "Mã OTP phải là số!" },
+                                                            ]}
+                                                            label={<span className="fw-600 ml-10"> Tạo OTP </span>}
+                                                        >
+                                                            <Input.OTP
+                                                                type="password" 
+                                                                onChange={(e) => {
+                                                                    if (e === wallet?.otpCode) {
+                                                                        setVerifiedOTP(true)
+                                                                    }
+                                                                }}
+                                                                className="ml-40" 
+                                                                length={4} 
+                                                            />
+                                                        </Form.Item>
+                                                        <div className="d-flex pl-40 pb-20">
+                                                            <Button onClick={() => {setIsEdit(false); setVerifiedOTP(false)}} shape="round" className="ml-10 cancel-edit">
+                                                                Thoát
+                                                            </Button>
+                                                        </div>
+                                                    </>
+                                                )}
+                                                {verifiedOTP && (
+                                                    <>
+                                                        <Form.Item
+                                                            name="bankCode"
+                                                            rules={[{ required: true, message: "Hãy chọn mã Bank Code!" }]}
+                                                            label={<span className="fw-600 ml-10"> Bank Code </span>}
+                                                        >
+                                                            <Select
+                                                                allowClear
+                                                                placeholder="Chọn ngân hàng"
+                                                                showSearch
+                                                                optionFilterProp="children"
+                                                                filterOption={(input, option) => 
+                                                                    option?.children.toLowerCase().includes(input.toLowerCase()) 
+                                                                }
+                                                            >
+                                                                {bankCodes?.map(b => (
+                                                                    <Option key={b?.id} value={b?.code}>
+                                                                        {b?.shortName}
+                                                                    </Option>
+                                                                ))}
+                                                            </Select>
+                                                        </Form.Item>
+                                                        <Form.Item
+                                                            name="accountNo"
+                                                            rules={[
+                                                                { required: true, message: "Hãy nhập số tài khoản!" },
+                                                                { pattern: getRegexNumber(), message: "Ký tự không hợp lệ!" },
+                                                            ]}
+                                                            label={<span className="fw-600 ml-10"> Số tài khoản </span>}
+                                                        >
+                                                            <Input placeholder="Số tài khoản"/>
+                                                        </Form.Item>
+                                                        <Form.Item
+                                                            name="accountName"
+                                                            rules={[{ required: true, message: "Hãy nhập chủ tài khoản!" }]}
+                                                            label={<span className="fw-600 ml-10"> Chủ tài khoản </span>}
+                                                        >
+                                                            <Input placeholder="Nhập chủ tài khoản"/>
+                                                        </Form.Item>
+                                                        <div className="d-flex pl-40 pb-20">
+                                                            <Button type="primary" shape="round" onClick={() => handleSubmit()}>
+                                                                Đồng ý
+                                                            </Button>
+                                                            <Button onClick={() => {setIsEdit(false); setVerifiedOTP(false)}} shape="round" className="ml-10 cancel-edit">
+                                                                Thoát
+                                                            </Button>
+                                                        </div>
+                                                    </>
+                                                )}
                                             </Form>
-                                        </div>
-                                        <div className="">
-                                            <div className="d-flex pl-40 pb-20">
-                                                <Button type="primary" shape="round" onClick={() => handleSubmit()}>
-                                                    Đồng ý
-                                                </Button>
-                                                <Button onClick={() => setIsEdit(false)} shape="round" className="ml-10 cancel-edit">
-                                                    Thoát
-                                                </Button>
-                                            </div>
                                         </div>
                                     </div>
                                     : <>
@@ -234,7 +260,7 @@ const Wallet = () => {
                                                     </Button>
                                                 </div>    
                                                 <div>
-                                                    <Button className="withdraw" shape="round" onClick={() => setOpenModalWithdraw(true)}>
+                                                    <Button className="withdraw" shape="round" onClick={() => setOpenModalDeposit(true)}>
                                                         Nạp tiền
                                                     </Button>
                                                     <Button className="deposit" shape="round">
@@ -393,12 +419,15 @@ const Wallet = () => {
                             </div>
                     }
                 </WalletContainer>
-                {!!openModalWithdraw && (
+                {!!openModalDeposit && (
                     <ModalWithDraw
-                        open={openModalWithdraw}
-                        onCancel={() => setOpenModalWithdraw(false)}
+                        open={openModalDeposit}
+                        onCancel={() => {setOpenModalDeposit(false); setVerifiedOTP(false)}}
                         customerId={user?.uid}
                         walletId={wallet?.walletId}
+                        verifiedOTP={verifiedOTP}
+                        setVerifiedOTP={setVerifiedOTP}
+                        wallet={wallet}
                     />
                 )}
             </SpinCustom>

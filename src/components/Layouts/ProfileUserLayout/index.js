@@ -1,11 +1,11 @@
 import { Button, Col, Form, Image, message, Row, Upload } from "antd";
 import CommonLayout from "../CommonLayout";
 import { ProfileContainer } from "./styled";
-import { UserOutlined, ReconciliationFilled, StarFilled, HeartFilled, LogoutOutlined, UserSwitchOutlined, CameraOutlined, PhoneOutlined, WalletOutlined } from '@ant-design/icons'
+import { UserOutlined, ReconciliationFilled, StarFilled, HeartFilled, LogoutOutlined, UserSwitchOutlined, CameraOutlined, PhoneOutlined, WalletOutlined, TransactionOutlined } from '@ant-design/icons'
 import { useLocation, useNavigate } from "react-router-dom";
 import { formatNumberToK } from "../../../lib/stringUtils";
 import { useDispatch, useSelector } from "react-redux";
-import { setUserInformation, updateUserInformation, userInfor } from "../../../redux/Slice/userSlice";
+import { updateUserInformation, userInfor } from "../../../redux/Slice/userSlice";
 import { useEffect, useState } from "react";
 import UserService from "../../../services/UserService";
 import ImageService from "../../../services/ImageService";
@@ -40,12 +40,12 @@ const ProfileUserLayout = ( {children} ) => {
         }
     }, [user]);
 
-    const handleLogout = () => {
-        localStorage.removeItem('token')
-        dispatch(setAccessToken(null));  
-        dispatch(setUserInformation(null))
-        nav('/login')
-    }
+    // const handleLogout = () => {
+    //     localStorage.removeItem('token')
+    //     dispatch(setAccessToken(null));  
+    //     dispatch(setUserInformation(null))
+    //     nav('/login')
+    // }
 
     const handleBeforeUpload = (file) => {
         const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"]
@@ -183,6 +183,28 @@ const ProfileUserLayout = ( {children} ) => {
                                     </div>
                                 </div>
                                 <div 
+                                    className={`menu-item ${isActive('/user-profile/transactiom-history') ? 'active' : ''}`}
+                                    onClick={() => nav('/user-profile/transactiom-history')}
+                                >
+                                    <div className="icon">
+                                        <TransactionOutlined />
+                                    </div>
+                                    <div className="item-name">
+                                        Lịch sử giao dịch
+                                    </div>
+                                </div>
+                                <div 
+                                    className={`menu-item ${isActive('/user-profile/user-wallet') ? 'active' : ''}`} 
+                                    onClick={() => nav('/user-profile/user-wallet')}
+                                >
+                                    <div className="icon">
+                                        <WalletOutlined />
+                                    </div>
+                                    <div className="item-name">
+                                        Ví của tôi
+                                    </div>
+                                </div>
+                                <div 
                                     className={`menu-item ${isActive('/user-profile/wishlist') ? 'active' : ''}`} 
                                     onClick={() => nav('/user-profile/wishlist')}
                                 >
@@ -226,25 +248,14 @@ const ProfileUserLayout = ( {children} ) => {
                                         Xác thực điện thoại
                                     </div>
                                 </div>
-                                <div 
-                                    className={`menu-item ${isActive('/user-profile/user-wallet') ? 'active' : ''}`} 
-                                    onClick={() => nav('/user-profile/user-wallet')}
-                                >
-                                    <div className="icon">
-                                        <WalletOutlined />
-                                    </div>
-                                    <div className="item-name">
-                                        Ví của tôi
-                                    </div>
-                                </div>
-                                <div className="menu-item" onClick={() => handleLogout()}>
+                                {/* <div className="menu-item" onClick={() => handleLogout()}>
                                     <div className="icon">
                                         <LogoutOutlined />
                                     </div>
                                     <div className="item-name">
                                         Đăng xuất
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                         </div>      
                     </Col> 

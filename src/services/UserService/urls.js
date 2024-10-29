@@ -31,3 +31,4 @@ export const apiCheckRecharge = "WalletTransaction/CheckRecharge"
 export const apiRegisterCustomer = "User/RegisterCustomer";
 export const apiUpdateResInfor = "Restaurant/UpdateRestaurantInfo";
 export const apiCheckEmail = "User/CheckExistEmail";
+export const apiGetTransactionHistory = "WalletTransaction/GetWalletTransactionList";

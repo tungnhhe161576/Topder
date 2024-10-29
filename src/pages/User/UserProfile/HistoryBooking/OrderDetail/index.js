@@ -22,7 +22,7 @@ const OrderDetail = ( {setIsDetail, detail} ) => {
         },
         {
           title: <span className='fs-15 fw-600'>Hoàn thành</span>,
-          status: detail?.completedAt ? 'finish' : 'wait',
+          status: detail?.completedAt ? 'complete' : 'wait',
           icon: <div className="step-icon"><CheckOutlined className="white fw-600"/></div>
         },
         {
