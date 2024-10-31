@@ -36,6 +36,7 @@ import {
 	apiGetTransactionHistory,
 	apiWithdraw,
 	apiLoginGG,
+	apiCheckPaymentOrder,
 } from "./urls";
 
 const categoryResApi = (body) => http.get(apiGetListRestaurants, body);
@@ -46,13 +47,14 @@ const updateProfile = (body) =>
 			"Content-Type": "multipart/form-data",
 		},
 	});
-const getWishLish = (userId) => http.get(`${apiGetListWishList}/${userId}`);
+const getWishLish = (userId) =>
+	http.get(`${apiGetListWishList}/${userId}?pageSize=1000`);
 const createWishList = (body) => http.post(apiAddWishList, body);
 const deleteWishlist = (customerId, wishlistId) =>
 	http.delete(`${apiDeleteWishList}/${customerId}/${wishlistId}`);
 const getCurrentUser = (uid) => http.get(`${apigetCurrentUser}/${uid}`);
 const getFeedbacks = (customerId) =>
-	http.get(`${apiGetFeedback}?customerId=${customerId}`);
+	http.get(`${apiGetFeedback}?pageSize=10000&customerId=${customerId}`);
 const createFeedback = (body) => http.post(apiCreateFeedback, body);
 const deleteFeedback = (feedbackId) =>
 	http.delete(`${apiDeleteFeedback}/${feedbackId}`);
@@ -98,10 +100,13 @@ const getAllDiscount = (restaurantId, customerId, totalPrice) =>
 	);
 const createOrder = (body) => http.post(apiCreateOrder, body);
 const getOrderHistory = (customerId) =>
-	http.get(`${apiGetOrderHistory}/${customerId}`);
+	http.get(`${apiGetOrderHistory}/${customerId}?pageSize=10000`);
 const getOrderDetail = (customerId, orderId) =>
 	http.get(`${apiViewOrderDetail}/${customerId}/${orderId}`);
-const paidOrder = (body) => http.post(apiPaidOrder, body);
+const paidOrder = (orderId, userId, paymentGateway) =>
+	http.post(
+		`${apiPaidOrder}?orderId=${orderId}&userId=${userId}&paymentGateway=${paymentGateway}`
+	);
 const getWalletInfo = (userId) => http.get(`${apiGetWalletInfo}/${userId}`);
 const addOTP = (body) => http.post(apiAddOTP, body);
 const createOrUpdateBank = (body) => http.put(apiCreateOrUpdateBank, body);
@@ -113,6 +118,8 @@ const checkRecharge = ({ transactionId, status }) =>
 const getTransactionhistory = (customerId) =>
 	http.get(`${apiGetTransactionHistory}/${customerId}`);
 const withdraw = (body) => http.post(apiWithdraw, body);
+const checkPaymentOrder = (orderID, status) =>
+	http.get(`${apiCheckPaymentOrder}/${orderID}?status=${status}`);
 const loginGG = (body, accessToken) =>
 	http.post(apiLoginGG, body, {
 		headers: {
@@ -157,6 +164,7 @@ const UserService = {
 	getTransactionhistory,
 	withdraw,
 	loginGG,
+	checkPaymentOrder,
 };
 
 export default UserService;

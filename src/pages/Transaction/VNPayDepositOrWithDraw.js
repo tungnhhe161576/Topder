@@ -12,6 +12,8 @@ const VNPayDepositOrWithdraw = () => {
     const statusTransaction = queryParams.get("vnp_TransactionStatus");
     const statusResponse = queryParams.get("vnp_ResponseCode");
 
+    const paymentType = queryParams.get("paymentType");
+
     // vnp_ResponseCode == "00" && vnp_TransactionStatus == "00" ---- thanh cong
 
     const deposit = async () => {
@@ -46,8 +48,37 @@ const VNPayDepositOrWithdraw = () => {
         }
     }
 
+
+    const order = async () => {
+        try {
+            if (statusTransaction === '00' && statusResponse === '00') {
+                await UserService.checkPaymentOrder(transactionId, 'Successful')
+                message.open({
+                    content: 'Thanh toán thành công.',
+                    type: 'success',
+                    style: {
+                        marginTop: '10vh',
+                    },
+                })
+            } else {
+                await UserService.checkPaymentOrder(transactionId,  'Cancelled')
+                message.open({
+                    content: 'Thanh toán thất bại.',
+                    type: 'error',
+                    style: {
+                        marginTop: '10vh',
+                    },
+                })
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     useEffect(() => {
-        deposit()
+        paymentType === 'order'
+            ? order() 
+            : deposit()
     })
     
     return (  

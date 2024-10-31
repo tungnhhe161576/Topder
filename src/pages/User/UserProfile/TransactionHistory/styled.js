@@ -7,7 +7,7 @@ export const TransactionHistoryContainer = styled.div `
         background-color: #4bac4f;
     }
 
-    .success,.fail {
+    .success,.fail,.pending {
         width: 100px;
         height: 25px;
         display: flex;
@@ -22,8 +22,11 @@ export const TransactionHistoryContainer = styled.div `
         background-color: #ff7f0e;
 
     }
-    .fail {
+    .pending {
         background-color: #9e9e9e;
+    }
+    .fail {
+        background-color: red;
     }
 
     .select {

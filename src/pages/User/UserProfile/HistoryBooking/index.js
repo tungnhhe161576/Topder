@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { userInfor } from "../../../../redux/Slice/userSlice";
 import UserService from "../../../../services/UserService";
-import ModalChooseOptionPayment from "./Modal/OptionPayment";
 import Pending from "./OrderStatus/Pending";
 import Confirm from "./OrderStatus/Confirm";
 import Complete from "./OrderStatus/Complete";
@@ -17,7 +16,6 @@ const HistoryBooking = () => {
     const [orderHistory, setOrderHistory] = useState([])
     const [orderDetail, setOrderDetail] = useState()
     const [isDetail, setIsDetail] = useState(false)
-    const [openModalOptionPayment, setOpenModalOpenPayment] = useState(false)
     const user = useSelector(userInfor) 
 
     const getHistoryOrder = async () => {
@@ -88,16 +86,7 @@ const HistoryBooking = () => {
         <ProfileUserLayout>
             <HistoryContainer>
                 <Tabs defaultActiveKey="1" items={items}/>
-                
             </HistoryContainer>
-
-            {!!openModalOptionPayment && (
-				<ModalChooseOptionPayment
-					open={openModalOptionPayment}
-					onCancel={() => setOpenModalOpenPayment(false)}
-                    customerId={user?.uid}
-				/>
-			)}
         </ProfileUserLayout>
     );
 }

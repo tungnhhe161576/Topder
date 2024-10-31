@@ -14,6 +14,7 @@ const TransactionHistory = () => {
     const [transactions, setTransactions] = useState([])
     const [loading, setLoading] = useState(false)
     const [status, setStatus] = useState('')
+    const [type, setType] = useState('')
     const user = useSelector(userInfor)
 
     const getAllTransactionHistory = async () => {
@@ -21,7 +22,9 @@ const TransactionHistory = () => {
             setLoading(true)
             const res = await UserService.getTransactionhistory(user?.uid)
             if (status) {
-                setTransactions(res.filter((transaction) => transaction.status === status))
+                type 
+                    ? setTransactions(res.filter((t) => {return t.status === status && t.transactionType === type}))
+                    : setTransactions(res.filter((t) => t.status === status))
             } else {
                 setTransactions(res);
             }
@@ -36,7 +39,7 @@ const TransactionHistory = () => {
         if (user) {
             getAllTransactionHistory()
         }
-    }, [status])
+    }, [status, type])
     
 
     const columns = [
@@ -89,7 +92,7 @@ const TransactionHistory = () => {
                         ? <div className="success">Thành công</div> 
                         : value === "Cancelled"
                             ? <div className="fail">Thất bại</div> 
-                            : <div className="fail">Đang chờ</div> 
+                            : <div className="pending">Đang chờ</div> 
                     }
                 </div>
             ),
@@ -105,23 +108,43 @@ const TransactionHistory = () => {
                         <div className="fs-20 fw-500">
                             Lịch sử giao dịch
                         </div>
-                        <div className="pr-40 select">
-                            <Select 
-                                className="nice-select w-100" 
-                                allowClear  
-                                placeholder="Trạng thái"
-                                onChange={(e) => setStatus(e)}
-                            >
-                                <Option key={1} value="Successful">
-                                    Thành công
-                                </Option>
-                                <Option key={2} value="Cancelled">
-                                    Thất bại
-                                </Option>
-                                <Option key={3} value="Pending">
-                                    Đang chờ
-                                </Option>
-                            </Select>
+                        <div className="d-flex">
+                            <div className="pr-40 mr-10 select">
+                                <Select 
+                                    className="nice-select w-100" 
+                                    allowClear  
+                                    placeholder="Trạng thái"
+                                    onChange={(e) => setStatus(e)}
+                                >
+                                    <Option key={1} value="Successful">
+                                        Thành công
+                                    </Option>
+                                    <Option key={2} value="Cancelled">
+                                        Thất bại
+                                    </Option>
+                                    <Option key={3} value="Pending">
+                                        Đang chờ
+                                    </Option>
+                                </Select>
+                            </div>
+                            <div className="pr-40 select">
+                                <Select 
+                                    className="nice-select w-100" 
+                                    allowClear  
+                                    placeholder="Loại giao dịch"
+                                    onChange={(e) => setType(e)}
+                                >
+                                    <Option key={1} value="Withdraw">
+                                        Rút tiền
+                                    </Option>
+                                    <Option key={2} value="Recharge">
+                                        Nạp tiền
+                                    </Option>
+                                    <Option key={3} value="SystemSubtract">
+                                        Thanh toán
+                                    </Option>
+                                </Select>
+                            </div>
                         </div>
                     </div>
                     <div className="mt-30 pr-20">

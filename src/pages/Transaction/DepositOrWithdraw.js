@@ -11,6 +11,8 @@ const DepositOrWithdraw = () => {
     const status = queryParams.get("status");
     const transactionId = parseInt(queryParams.get("transactionId"))
 
+    const paymentType = queryParams.get("paymentType");
+
     const deposit = async () => {
         try {
             if (status === "PAID") {
@@ -37,8 +39,37 @@ const DepositOrWithdraw = () => {
         }
     }
 
+
+    const order = async () => {
+        try {
+            if (status === "PAID") {
+                await UserService.checkPaymentOrder(transactionId, 'Successful')
+                message.open({
+                    content: 'Thanh toán thành công.',
+                    type: 'success',
+                    style: {
+                        marginTop: '10vh',
+                    },
+                })
+            } else {
+                await UserService.checkPaymentOrder(transactionId, 'Cancelled')
+                message.open({
+                    content: 'Thanh toán thất bại.',
+                    type: 'error',
+                    style: {
+                        marginTop: '10vh',
+                    },
+                })
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     useEffect(() => {
-        deposit()
+        paymentType === 'order'
+            ? order() 
+            : deposit()
     })
     
     return (  

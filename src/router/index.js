@@ -36,6 +36,12 @@ import VNPayDepositOrWithdraw from "../pages/Transaction/VNPayDepositOrWithDraw"
 import TransactionHistory from "../pages/User/UserProfile/TransactionHistory";
 import ManageMenu from "../pages/Restaurant/RestaurantManage/ManageMenu";
 import ManageTable from "../pages/Restaurant/RestaurantManage/ManageTable";
+import AdminRoutes from "./AdminRouter";
+import AdminDashboard from "../pages/Admin/Dashboard";
+import AccountManagement from "../pages/Admin/AccountManagement";
+import OrderManagement from "../pages/Admin/OrderManagement";
+import BlogManagement from "../pages/Admin/BlogManagement";
+import ContactManagement from "../pages/Admin/ContactManagement";
 
 const LazyLoadingComponent = ({ children }) => {
 	return (
@@ -216,7 +222,6 @@ export const router = [
 				<RestaurantRoutes />
 			</LazyLoadingComponent>
 		),
-
 		children: [
 			{
 				path: "dashboard",
@@ -245,6 +250,38 @@ export const router = [
 			{
 				path: "manage-menu",
 				element: <ManageMenu />,
+			},
+		],
+	},
+
+	//admin
+	{
+		path: "admin",
+		element: (
+			<LazyLoadingComponent>
+				<AdminRoutes />
+			</LazyLoadingComponent>
+		),
+		children: [
+			{
+				path: "dashboard",
+				element: <AdminDashboard />,
+			},
+			{
+				path: "manage-account",
+				element: <AccountManagement />,
+			},
+			{
+				path: "manage-order",
+				element: <OrderManagement />,
+			},
+			{
+				path: "manage-blog",
+				element: <BlogManagement />,
+			},
+			{
+				path: "manage-contact",
+				element: <ContactManagement />,
 			},
 		],
 	},

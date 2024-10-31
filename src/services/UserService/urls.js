@@ -35,3 +35,4 @@ export const apiGetTransactionHistory =
 	"WalletTransaction/GetWalletTransactionList";
 export const apiWithdraw = "WalletTransaction/Withdraw";
 export const apiLoginGG = "User/LoginWithGoogle";
+export const apiCheckPaymentOrder = "Order/CheckPayment";

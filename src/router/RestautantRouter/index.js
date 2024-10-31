@@ -8,8 +8,7 @@ const RestaurantRoutes = () => {
         {
             !!localStorage.getItem('token') &&
             jwtDecode(localStorage.getItem('token'))?.role === "Restaurant" 
-                ?
-                    <Outlet />
+                ? <Outlet />
                 : <ErrorPage />
         }
         </>

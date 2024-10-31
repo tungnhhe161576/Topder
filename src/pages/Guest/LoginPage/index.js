@@ -33,6 +33,8 @@ const LoginPage = () => {
 				nav("/");
 			} else if (res.data.userInfo.role === "Restaurant") {
 				nav("/restaurant/dashboard");
+			} else {
+				nav("/admin/dashboard")
 			}
 		} catch (error) {
 			if (error.response && error.response.status === 401) {

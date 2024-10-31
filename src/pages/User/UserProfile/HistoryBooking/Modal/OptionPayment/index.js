@@ -1,4 +1,4 @@
-import { Button, Form, Radio, Select } from "antd";
+import { Button, Form, message, Radio } from "antd";
 import CustomModal from "../../../../../../components/Common/ModalCustom";
 import { ModalChooseOptionPaymentContainer } from "./styled";
 import vnpay from '../../../../../../assets/images/vnpay-logo.jpg'
@@ -8,7 +8,7 @@ import { useState } from "react";
 import UserService from "../../../../../../services/UserService";
 import SpinCustom from "../../../../../../components/Common/SpinCustom";
 
-const ModalChooseOptionPayment = ({open, onCancel, customerId}) => {
+const ModalChooseOptionPayment = ({open, onCancel, user, orderHistory}) => {
     const [form] = Form.useForm()
     const [loading, setLoading] = useState(false)
 
@@ -16,14 +16,29 @@ const ModalChooseOptionPayment = ({open, onCancel, customerId}) => {
         try {
             setLoading(true)
             const formValue = await form.validateFields()
-            const res = await UserService.paidOrder({
-                orderId: open?.orderId,
-                userId: customerId,
-                paymentGateway: formValue?.option
+            const res = await UserService.paidOrder(open?.orderId, user?.uid, formValue?.option)
+
+            message.open({
+                content: "Thanh toán thành công!",
+                type: 'success',
+                style: {
+                    marginTop: '10vh',
+                },
             })
-            // onCancel()
+
+            if (formValue?.option === "VNPAY" || formValue?.option === "VIETQR") {
+                window.location.href = res;
+            }
+            orderHistory()
+            onCancel()
         } catch (error) {
-            console.log(error);
+            message.open({
+                content: "Thanh toán thất bại!",
+                type: 'error',
+                style: {
+                    marginTop: '10vh',
+                },
+            })
         } finally {
             setLoading(false)
         }
@@ -59,7 +74,20 @@ const ModalChooseOptionPayment = ({open, onCancel, customerId}) => {
                     </div>
                     <div className="mb-20">
                         <Form form={form}>
-                            <Form.Item name="option">
+                            <Form.Item name="option"
+                                rules={[
+									{
+										required: true,
+										message: "Hãy chọn phương thức thanh toán!",
+									},
+                                    { 
+                                        validator: (_, value) => 
+                                            value === 'ISBALANCE' && open?.totalAmount > user?.walletBalance
+                                                ? Promise.reject("Số dư trong ví không đủ để thanh toán!")
+                                                : Promise.resolve(),
+                                    }
+								]}
+                            >
                                 <Radio.Group
                                     block 
                                     optionType="button" 

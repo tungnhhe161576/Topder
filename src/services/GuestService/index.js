@@ -30,7 +30,7 @@ const getAllRestaurants = body => {
 }
 
 const getAllRestaurantCategory = body => http.get(apiGetAllRestaurantCategory, body)
-const getAllFeedBack = restaurantId => http.get(`${apiGetAllFeedback}/${restaurantId}` )
+const getAllFeedBack = restaurantId => http.get(`${apiGetAllFeedback}/${restaurantId}?pageSize=10000` )
 const getRelatedRestaurant = (restaurantId, categoryRestaurantId) => http.get(`${apiGetRelatedRestaurants}/${restaurantId}/${categoryRestaurantId}`)
 const getAllBlog = body => {
     const params = QueryString.stringify(body)
