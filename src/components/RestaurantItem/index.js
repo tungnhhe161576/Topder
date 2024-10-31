@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { RestaurantItemContainer } from "./styled";
 import { useNavigate } from "react-router-dom";
-import { Rate } from "antd";
+import { message, Rate } from "antd";
 import { HeartOutlined } from "@ant-design/icons";
 import { formatNumberToK } from "../../lib/stringUtils";
 import { useSelector } from "react-redux";
@@ -14,9 +14,12 @@ const RestaurantItem = ({
 	setOpenModalBooking,
 	setText,
 	isWishlist,
+	onRemove,
 }) => {
 	const nav = useNavigate();
-	const user = useSelector(userInfor)
+	const user = useSelector(userInfor);
+	const [isLiked, setIsLiked] = useState(false);
+	const [loading, setLoading] = useState(false);
 
 	const handleOptionOpen = () => {
 		if (isWishlist) {
@@ -32,15 +35,68 @@ const RestaurantItem = ({
 		}
 	};
 
-	const handleLikeRestaurant = async () => {
+	// const handleLikeRestaurant = async () => {
+	// 	try {
+	// 		const res = await UserService.createWishList({
+	// 			customerId: user?.uid,
+	// 			uid: data?.uid,
+	// 		});
+	// 		console.log("res", res);
+	// 	} catch (error) {
+	// 		console.log(error);
+	// 	}
+	// };
+	const getWishlist = async () => {
+		if (user) {
+			try {
+				const wishlist = await UserService.getWishLish(user?.uid);
+				const likedRestaurant = wishlist.find(
+					(item) => item.uid === data.uid
+				);
+				if (likedRestaurant) {
+					setIsLiked(likedRestaurant);
+				}
+			} catch (error) {
+				console.log("Lỗi khi lấy danh sách yêu thích:", error);
+			}
+		}
+	};
+	useEffect(() => {
+		getWishlist();
+	}, [user, data?.uid]);
+
+	const handleLikeClick = async () => {
+		if (!user) {
+			setOpenRequestLogin(true);
+			setText("Bạn cần đăng nhập để thêm cửa hàng này vào mục yêu thích");
+			return;
+		}
+		setLoading(true);
+
 		try {
-			// const res = await UserService.createWishList({customerId: user?.uid, uid: data?.uid})
-			// console.log("res", res);
-			
+			if (isLiked) {
+				await UserService.deleteWishlist(user?.uid, isLiked.wishlistId);
+				setIsLiked(false);
+				message.success("Xóa khỏi yêu thích thành công", 2);
+
+				onRemove(data.uid);
+			} else if (!isLiked) {
+				const res = await UserService.createWishList({
+					customerId: user?.uid,
+					restaurantId: data?.uid,
+				});
+
+				setIsLiked(res);
+				await getWishlist();
+				message.success("Đã thêm vào yêu thích", 2);
+			}
 		} catch (error) {
 			console.log(error);
+			message.error("Có lỗi xảy ra, vui lòng thử lại", 2);
+		} finally {
+			setLoading(false);
 		}
-	}
+	};
 
 	return (
 		<RestaurantItemContainer>
@@ -71,15 +127,30 @@ const RestaurantItem = ({
 					{data?.nameRes}
 				</div>
 				<div className="rate">
-					<Rate style={{ color: "#ff7c08" }} value={data?.star} disabled /> -
-					({data?.totalFeedbacks} đánh giá)
+					<Rate
+						style={{ color: "#ff7c08" }}
+						value={data?.star}
+						disabled
+					/>{" "}
+					- ({data?.totalFeedbacks} đánh giá)
 				</div>
 				<div className="price fs-18 fw-600 primary">
 					<div>
-						<span style={{color: 'black'}}>Giá bàn: </span> {formatNumberToK(data?.price)}
+						<span style={{ color: "black" }}>Giá bàn: </span>{" "}
+						{formatNumberToK(data?.price)}
 					</div>
 					<div>
-					 	{data?.discount > 0 ? (<><span style={{color: 'black'}}> Giảm giá: </span> <span>{data?.discount} %</span></>)  : ''}
+						{data?.discount > 0 ? (
+							<>
+								<span style={{ color: "black" }}>
+									{" "}
+									Giảm giá:{" "}
+								</span>{" "}
+								<span>{data?.discount} %</span>
+							</>
+						) : (
+							""
+						)}
 					</div>
 				</div>
 				<div className="hard"></div>
@@ -91,16 +162,26 @@ const RestaurantItem = ({
 							<span>Xem chi tiết</span>
 						)}
 					</div>
-					{!isWishlist ? (
-						<div
-							className="drop-heart"
-							onClick={() => handleLikeRestaurant()}
-						>
-							<HeartOutlined style={{ color: "#ff7c08" }} />
-						</div>
-					) : (
+					{/* {!isWishlist ? ( */}
+					<div
+						className={`drop-heart ${
+							isLiked ? "liked" : "default"
+						}`}
+						onClick={handleLikeClick}
+						style={{
+							backgroundColor: isLiked ? "#f55b22" : "",
+						}}
+					>
+						<HeartOutlined
+							style={{
+								color: "#fa875c",
+								cursor: "pointer",
+							}}
+						/>
+					</div>
+					{/* ) : (
 						<></>
-					)}
+					)} */}
 				</div>
 			</div>
 		</RestaurantItemContainer>

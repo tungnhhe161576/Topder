@@ -1,20 +1,46 @@
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, message } from "antd";
 import ProfileUserLayout from "../../../../components/Layouts/ProfileUserLayout";
 import { ChangePasswordContainer } from "./styled";
 import { getRegexPassowrd } from "../../../../lib/stringUtils";
 import { useState } from "react";
+import UserService from "../../../../services/UserService";
+import { useSelector } from "react-redux";
+import { userInfor } from "../../../../redux/Slice/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const ChangePassword = () => {
 	const [form] = Form.useForm();
 	const [loading, setLoading] = useState(false);
+	const user = useSelector(userInfor);
+	const nav = useNavigate();
 
 	const handleChangePassword = async () => {
 		try {
 			setLoading(true);
+
 			const values = await form.validateFields();
-			console.log(values);
+
+			const response = await UserService.changePassword({
+				uid: user.uid,
+				...values,
+			});
+			console.log("check", response);
+			if (response === "Mật khẩu đã được thay đổi thành công.") {
+				message.open({
+					content:
+						response.data ||
+						"Đổi mật khẩu thành công. vui lòng đăng nhập lại!",
+					type: "success",
+				});
+				setTimeout(() => {
+					nav("/login");
+				}, 1500);
+			}
 		} catch (error) {
-			console.log(error);
+			message.open({
+				content: "Mật khẩu cũ không đúng, vui lòng thử lại!",
+				type: "error",
+			});
 		} finally {
 			setLoading(false);
 		}
@@ -32,7 +58,7 @@ const ChangePassword = () => {
 					>
 						<Form.Item
 							className="mb-20 form-item"
-							name="password"
+							name="oldPassword"
 							rules={[
 								{
 									required: true,

@@ -66,6 +66,28 @@ const LeftSide = () => {
 				</div>
 				<div className="item-name"> Quản lý giảm giá </div>
 			</div>
+			<div
+				className={`item rate ${
+					isActive("/restaurant/manage-table") ? "active" : ""
+				}`}
+				onClick={() => nav("/restaurant/manage-table")}
+			>
+				<div className="item-icon">
+					<InsertRowAboveOutlined />
+				</div>
+				<div className="item-name"> Quản lý bàn nhà hàng </div>
+			</div>
+			<div
+				className={`item rate ${
+					isActive("/restaurant/manage-menu") ? "active" : ""
+				}`}
+				onClick={() => nav("/restaurant/manage-menu")}
+			>
+				<div className="item-icon">
+					<InsertRowAboveOutlined />
+				</div>
+				<div className="item-name"> Quản lý thực đơn </div>
+			</div>
 		</div>
 	);
 };

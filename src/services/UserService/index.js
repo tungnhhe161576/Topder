@@ -35,6 +35,7 @@ import {
 	apiCheckRecharge,
 	apiGetTransactionHistory,
 	apiWithdraw,
+	apiLoginGG,
 } from "./urls";
 
 const categoryResApi = (body) => http.get(apiGetListRestaurants, body);
@@ -85,21 +86,40 @@ const verifyOTP = (body) => http.post(apiVerifyOTP, body);
 const resetPassword = (body) => http.post(apiResetPassword, body);
 const changePassword = (body) => http.post(apiChangePassword, body);
 
-const getMenu = (restaurantId) => http.get(`${apiGetMenu}/${restaurantId}`)
-const getTable = (restaurantId, timeReservation, dateReservation) => http.get(`${apiGetTable}?restaurantId=${restaurantId}&timeReservation=${timeReservation}&dateReservation=${dateReservation}`)
-const calTotalOrder = (body) => http.post(apiCalTotalOrder, body)
-const getAllDiscount = (restaurantId, customerId, totalPrice) => http.get(`${apiGetAllDiscount}/${restaurantId}/${customerId}/${totalPrice}`)
-const createOrder = (body) => http.post (apiCreateOrder, body)
-const getOrderHistory = (customerId) => http.get(`${apiGetOrderHistory}/${customerId}`)
-const getOrderDetail = (customerId, orderId) => http.get(`${apiViewOrderDetail}/${customerId}/${orderId}`)
-const paidOrder = body => http.post(apiPaidOrder, body)
-const getWalletInfo = userId => http.get(`${apiGetWalletInfo}/${userId}`)
-const addOTP = (body) => http.post(apiAddOTP, body)
-const createOrUpdateBank = (body) => http.put(apiCreateOrUpdateBank, body)
-const deposit = body => http.post(apiDeposit, body)
-const checkRecharge = ({transactionId, status}) => http.put(`${apiCheckRecharge}?transactionId=${transactionId}&status=${status}`)
-const getTransactionhistory = (customerId) => http.get(`${apiGetTransactionHistory}/${customerId}`)
-const withdraw = (body) => http.post(apiWithdraw, body)
+const getMenu = (restaurantId) => http.get(`${apiGetMenu}/${restaurantId}`);
+const getTable = (restaurantId, timeReservation, dateReservation) =>
+	http.get(
+		`${apiGetTable}?restaurantId=${restaurantId}&timeReservation=${timeReservation}&dateReservation=${dateReservation}`
+	);
+const calTotalOrder = (body) => http.post(apiCalTotalOrder, body);
+const getAllDiscount = (restaurantId, customerId, totalPrice) =>
+	http.get(
+		`${apiGetAllDiscount}/${restaurantId}/${customerId}/${totalPrice}`
+	);
+const createOrder = (body) => http.post(apiCreateOrder, body);
+const getOrderHistory = (customerId) =>
+	http.get(`${apiGetOrderHistory}/${customerId}`);
+const getOrderDetail = (customerId, orderId) =>
+	http.get(`${apiViewOrderDetail}/${customerId}/${orderId}`);
+const paidOrder = (body) => http.post(apiPaidOrder, body);
+const getWalletInfo = (userId) => http.get(`${apiGetWalletInfo}/${userId}`);
+const addOTP = (body) => http.post(apiAddOTP, body);
+const createOrUpdateBank = (body) => http.put(apiCreateOrUpdateBank, body);
+const deposit = (body) => http.post(apiDeposit, body);
+const checkRecharge = ({ transactionId, status }) =>
+	http.put(
+		`${apiCheckRecharge}?transactionId=${transactionId}&status=${status}`
+	);
+const getTransactionhistory = (customerId) =>
+	http.get(`${apiGetTransactionHistory}/${customerId}`);
+const withdraw = (body) => http.post(apiWithdraw, body);
+const loginGG = (body, accessToken) =>
+	http.post(apiLoginGG, body, {
+		headers: {
+			Authorization: `Bearer ${accessToken}`,
+			"Content-Type": "application/json",
+		},
+	});
 
 const UserService = {
 	loginApi,
@@ -136,6 +156,7 @@ const UserService = {
 	checkRecharge,
 	getTransactionhistory,
 	withdraw,
+	loginGG,
 };
 
 export default UserService;

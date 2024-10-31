@@ -6,7 +6,6 @@ import ManageImages from "../ManageRestaurant/ManageImg";
 import ManageInformation from "../ManageRestaurant/ManageInfor";
 import ChangePassword from "../ManageRestaurant/ChangePassword";
 import ManagePolicy from "../ManageRestaurant/MangePolicy";
-
 const ManageRestaurant = () => {
 	return (
 		<RestaurantLayout>

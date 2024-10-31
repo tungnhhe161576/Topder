@@ -26,36 +26,46 @@ import Wallet from "../pages/User/UserProfile/Wallet";
 import ManagementDiscount from "../pages/Restaurant/RestaurantManage/ManageDiscount";
 import VerifyOTP from "../pages/User/VerifyOTP";
 import ResetPassword from "../pages/User/ResetPassword";
-import React from 'react'
-import UserRoutes from './UserRouter'
+import React from "react";
+import UserRoutes from "./UserRouter";
 import GuestRoutes from "./GuestRouter";
 import RestaurantRoutes from "./RestautantRouter";
 import SpinCustom from "../components/Common/SpinCustom";
 import DepositOrWithdraw from "../pages/Transaction/DepositOrWithdraw";
 import VNPayDepositOrWithdraw from "../pages/Transaction/VNPayDepositOrWithDraw";
 import TransactionHistory from "../pages/User/UserProfile/TransactionHistory";
+import ManageMenu from "../pages/Restaurant/RestaurantManage/ManageMenu";
+import ManageTable from "../pages/Restaurant/RestaurantManage/ManageTable";
 
 const LazyLoadingComponent = ({ children }) => {
-    return (
+	return (
 		<React.Suspense
 			fallback={
-				<div className="loading-center" style={{ display: 'flex', justifyContent: 'center', height: '100vh', alignItems: 'center' }}>
+				<div
+					className="loading-center"
+					style={{
+						display: "flex",
+						justifyContent: "center",
+						height: "100vh",
+						alignItems: "center",
+					}}
+				>
 					<SpinCustom />
 				</div>
 			}
 		>
 			{children}
 		</React.Suspense>
-    )
-}
+	);
+};
 
 export const router = [
 	//Guest
 	{
-		path: '/',
+		path: "/",
 		element: (
 			<LazyLoadingComponent>
-				<GuestRoutes/>
+				<GuestRoutes />
 			</LazyLoadingComponent>
 		),
 		children: [
@@ -135,15 +145,15 @@ export const router = [
 				element: <BlogDetail />,
 				title: "Chi tiết Blog",
 			},
-		]
+		],
 	},
 
-    // User
-    {
+	// User
+	{
 		path: "user-profile",
 		element: (
 			<LazyLoadingComponent>
-				<UserRoutes/>
+				<UserRoutes />
 			</LazyLoadingComponent>
 		),
 		children: [
@@ -184,28 +194,28 @@ export const router = [
 			},
 			{
 				path: "transactiom-history",
-				element: <TransactionHistory/>,
+				element: <TransactionHistory />,
 				title: "Lịch sử giao dịch",
 			},
 			{
 				path: "status-transaction",
-				element: <DepositOrWithdraw/>
+				element: <DepositOrWithdraw />,
 			},
 			{
 				path: "status-transaction-with-vnpay/:transactionId",
-				element: <VNPayDepositOrWithdraw/>
+				element: <VNPayDepositOrWithdraw />,
 			},
 		],
-    },
+	},
 
 	//Restaurant
 	{
 		path: "restaurant",
 		element: (
 			<LazyLoadingComponent>
-				<RestaurantRoutes/>
+				<RestaurantRoutes />
 			</LazyLoadingComponent>
-	  	),
+		),
 
 		children: [
 			{
@@ -228,6 +238,14 @@ export const router = [
 				path: "manage-discount",
 				element: <ManagementDiscount />,
 			},
+			{
+				path: "manage-table",
+				element: <ManageTable />,
+			},
+			{
+				path: "manage-menu",
+				element: <ManageMenu />,
+			},
 		],
 	},
 
@@ -235,9 +253,9 @@ export const router = [
 	{
 		path: "*",
 		element: (
-		  <LazyLoadingComponent>
-			<ErrorPage />
-		  </LazyLoadingComponent>
-		)
-	}
-  ]
+			<LazyLoadingComponent>
+				<ErrorPage />
+			</LazyLoadingComponent>
+		),
+	},
+];

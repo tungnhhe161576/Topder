@@ -10,6 +10,8 @@ import { useDispatch } from "react-redux";
 import { Bounce, toast, ToastContainer } from "react-toastify";
 import { setUserInformation } from "../../../redux/Slice/userSlice";
 import { setAccessToken } from "../../../redux/Slice/accessTokenSlice";
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
 const LoginPage = () => {
 	const [form] = Form.useForm();
@@ -44,6 +46,33 @@ const LoginPage = () => {
 		} finally {
 			setLoading(false);
 		}
+	};
+
+	const handleGoogleLoginSuccess = async (response) => {
+		try {
+			setLoading(true);
+			const accessToken = response.credential;
+			console.log("Access Token:", accessToken);
+			const jwt = jwtDecode(accessToken);
+			console.log("JWT:", jwt);
+			const res = await UserService.loginGG(accessToken);
+			console.log("API Response after Google Login:", res);
+
+			localStorage.setItem("token", res.data.token);
+			// dispatch(setUserInformation(res.data.userInfo));
+			// dispatch(setAccessToken(res.data.token));
+			toast("Đăng nhập thành công!");
+			nav("/"); // Chuyển hướng đến trang chủ
+		} catch (error) {
+			console.error("Error during Google Login:", error);
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const handleGoogleLoginFailure = (error) => {
+		console.error("Google Login Failed:", error);
+		toast.error("Đăng nhập bằng Google thất bại. Vui lòng thử lại.");
 	};
 
 	return (
@@ -151,10 +180,25 @@ const LoginPage = () => {
 						<div className="or mt-10">Hoặc</div>
 
 						<div className="others-login mt-20">
-							<Button shape="round">
+							{/* <Button shape="round">
 								tiếp tục với{" "}
 								<GoogleOutlined className="fs-20" />
-							</Button>
+							</Button> */}
+							<GoogleLogin
+								onSuccess={handleGoogleLoginSuccess}
+								onFailure={handleGoogleLoginFailure}
+								cookiePolicy={"single_host_origin"}
+								render={(renderProps) => (
+									<Button
+										shape="round"
+										onClick={renderProps.onClick}
+										disabled={renderProps.disabled}
+									>
+										Tiếp tục với{" "}
+										<GoogleOutlined className="fs-20" />
+									</Button>
+								)}
+							/>
 						</div>
 					</div>
 				</Col>
