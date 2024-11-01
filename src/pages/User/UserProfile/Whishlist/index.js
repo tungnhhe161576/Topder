@@ -31,7 +31,7 @@ const Whishlist = () => {
 		if (user?.uid) {
 			getData();
 		}
-	}, [user]);
+	}, [user, currentPage]);
 
 	const itemPerPage = 2;
 	const onPageChange = (page) => {
@@ -41,9 +41,14 @@ const Whishlist = () => {
 	console.log("data", data);
 
 	const handleRemoveItem = (restaurantId) => {
-		setData((prevData) =>
-			prevData.filter((item) => item.uid !== restaurantId)
-		);
+		const current = data.filter((item) => item.uid !== restaurantId);
+		setData(current);
+		if (
+			current.length <= (currentPage - 1) * itemPerPage &&
+			currentPage > 1
+		) {
+			setCurrentPage(currentPage - 1);
+		}
 	};
 
 	return (
