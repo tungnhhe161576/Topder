@@ -79,7 +79,7 @@ const RestaurantItem = ({
 				setIsLiked(false);
 				message.success("Xóa khỏi yêu thích thành công", 2);
 
-				onRemove(data.uid);
+				if (onRemove) onRemove(data?.uid);
 			} else if (!isLiked) {
 				const res = await UserService.createWishList({
 					customerId: user?.uid,
