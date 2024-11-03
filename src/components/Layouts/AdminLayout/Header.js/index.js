@@ -43,7 +43,7 @@ const Header = () => {
 					{user ? (
 						<div className="user-info">
 							<span onClick={handleLogout}>
-								<UserOutlined /> {user?.nameRes}/Đăng xuất
+								<UserOutlined /> {user?.name}/Đăng xuất
 							</span>
 						</div>
 					) : (

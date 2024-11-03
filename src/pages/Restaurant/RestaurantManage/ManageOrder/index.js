@@ -1,21 +1,11 @@
 import React, { useState } from "react";
-import {
-	Button,
-	Col,
-	Modal,
-	Row,
-	Space,
-	Table,
-	Tag,
-	Select,
-	DatePicker,
-} from "antd";
+import { Button, Col, Row, Table, Tag, Select, DatePicker } from "antd";
 import RestaurantLayout from "../../../../components/Layouts/RestaurantLayout";
 import { FileAddOutlined } from "@ant-design/icons";
 import { ManageOrderContainer } from "./styled";
 import ModalCustom from "../../../../components/Common/ModalCustom";
 
-const { Option } = Select;
+//const { Option } = Select;
 
 const ManageOrder = () => {
 	const initialData = [
@@ -69,15 +59,15 @@ const ManageOrder = () => {
 			phoneOrderer: "0967778888",
 			nameReceiver: "Nguyễn Văn An",
 			phoneReceiver: "0967778888",
-			orderDate: "13/06/2024",
+			orderDate: "13/07/2024",
 			status: "Đã Nhận Bàn",
 			history: [
-				{ status: "Chờ duyệt", time: "11:30 13/06/2024" },
-				{ status: "Chấp Nhận", time: "12:30 13/06/2024" },
-				{ status: "Đã Nhận Bàn", time: "14:00 13/06/2024" },
+				{ status: "Chờ duyệt", time: "11:30 13/07/2024" },
+				{ status: "Chấp Nhận", time: "12:30 13/07/2024" },
+				{ status: "Đã Nhận Bàn", time: "14:00 13/07/2024" },
 			],
 			details: {
-				dateReceived: "13/06/2024",
+				dateReceived: "13/07/2024",
 				timeReceived: "12:00",
 				adults: 2,
 				children: 0,
@@ -92,12 +82,12 @@ const ManageOrder = () => {
 			nameReceiver: "Ngô Quang Huy",
 			phoneReceiver: "0967891234",
 			orderDate: "15/06/2024",
-			status: "Thành Công",
+			status: "Hoàn Thành",
 			history: [
 				{ status: "Chờ duyệt", time: "08:00 15/06/2024" },
 				{ status: "Chấp Nhận", time: "09:00 15/06/2024" },
 				{ status: "Đã Nhận Bàn", time: "10:00 15/06/2024" },
-				{ status: "Thành Công", time: "12:00 15/06/2024" },
+				{ status: "Hoàn Thành", time: "12:00 15/06/2024" },
 			],
 			details: {
 				dateReceived: "15/06/2024",
@@ -133,12 +123,12 @@ const ManageOrder = () => {
 			nameReceiver: "Trần Thị Mai",
 			phoneReceiver: "0968888888",
 			orderDate: "17/06/2024",
-			status: "Thành Công",
+			status: "Hoàn Thành",
 			history: [
 				{ status: "Chờ duyệt", time: "08:00 17/06/2024" },
 				{ status: "Chấp Nhận", time: "09:00 17/06/2024" },
 				{ status: "Đã Nhận Bàn", time: "10:30 17/06/2024" },
-				{ status: "Thành Công", time: "12:00 17/06/2024" },
+				{ status: "Hoàn Thành", time: "12:00 17/06/2024" },
 			],
 			details: {
 				dateReceived: "17/06/2024",
@@ -153,6 +143,9 @@ const ManageOrder = () => {
 	const [data, setData] = useState(initialData);
 	const [isModalVisible, setIsModalVisible] = useState(false);
 	const [selectedOrder, setSelectedOrder] = useState(null);
+	const [filteredData, setFilteredData] = useState(initialData);
+	const [selectedStatuses, setSelectedStatuses] = useState({});
+	const [selectedStatus, setSelectedStatus] = useState(null);
 
 	const showDetail = (record) => {
 		setSelectedOrder(record);
@@ -169,28 +162,15 @@ const ManageOrder = () => {
 		setSelectedOrder(null);
 	};
 
-	const updateStatus = (key) => {
+	const updateStatus = (key, newStatus) => {
 		const newData = data.map((item) => {
 			if (item.key === key) {
-				const updatedStatus =
-					item.status === "Chờ Duyệt"
-						? "Chấp Nhận"
-						: item.status === "Chấp Nhận"
-						? "Đã Nhận Bàn"
-						: item.status;
-				return { ...item, status: updatedStatus };
+				return { ...item, status: newStatus };
 			}
 			return item;
 		});
 		setData(newData);
-	};
-
-	const statusCounts = {
-		"Chờ Duyệt": 7,
-		"Chấp Nhận": 1,
-		"Đã Nhận Bàn": 1,
-		"Thành Công": 1,
-		Hủy: 0,
+		setFilteredData(newData);
 	};
 
 	// Cột cho bảng
@@ -256,7 +236,7 @@ const ManageOrder = () => {
 				if (status === "Chờ Duyệt") className = "tag-waiting";
 				else if (status === "Chấp Nhận") className = "tag-accepted";
 				else if (status === "Đã Nhận Bàn") className = "tag-received";
-				else if (status === "Thành Công") className = "tag-success";
+				else if (status === "Hoàn Thành") className = "tag-success";
 				else if (status === "Hủy") className = "tag-cancelled";
 
 				return <Tag className={className}>{status}</Tag>;
@@ -274,26 +254,101 @@ const ManageOrder = () => {
 				</Button>
 			),
 		},
+		// {
+		// 	title: "Cập Nhật Trạng Thái",
+		// 	key: "updateStatus",
+		// 	render: (_, record) => (
+		// 		<span>
+		// 			<div>
+		// 				<span style={{ marginRight: 10 }}>{record.status}</span>
+		// 			</div>
+		// 			<Button
+		// 				className="btn"
+		// 				type="primary"
+		// 				onClick={() => updateStatus(record.key)}
+		// 			>
+		// 				Cập Nhật
+		// 			</Button>
+		// 		</span>
+		// 	),
+		// },
 		{
 			title: "Cập Nhật Trạng Thái",
 			key: "updateStatus",
-			render: (_, record) => (
-				<span>
-					<div>
-						<span style={{ marginRight: 10 }}>{record.status}</span>
-					</div>
-					<Button
-						className="btn-status"
-						type="default"
-						onClick={() => updateStatus(record.key)}
-					>
-						Cập Nhật
-					</Button>
-				</span>
-			),
+			render: (_, record) => {
+				const handleSelectChange = (value) => {
+					setSelectedStatuses((prev) => ({
+						...prev,
+						[record.key]: value, // Cập nhật trạng thái đã chọn cho từng đơn hàng
+					}));
+				};
+
+				return (
+					<span>
+						<Select
+							style={{ marginRight: 10, width: 150 }}
+							value={
+								selectedStatuses[record.key] || record.status
+							} // Lấy giá trị từ selectedStatuses
+							onChange={handleSelectChange}
+						>
+							{renderOptions(record.status)}
+						</Select>
+						<Button
+							className="btn"
+							type="primary"
+							onClick={() =>
+								updateStatus(
+									record.key,
+									selectedStatuses[record.key] ||
+										record.status
+								)
+							}
+						>
+							Cập Nhật
+						</Button>
+					</span>
+				);
+			},
 		},
 	];
 
+	const renderOptions = (status) => {
+		switch (status) {
+			case "Chờ Duyệt":
+				return (
+					<>
+						<Select.Option value="Hủy">Hủy</Select.Option>
+						<Select.Option value="Chấp Nhận">
+							Chấp Nhận
+						</Select.Option>
+					</>
+				);
+			case "Chấp Nhận":
+				return (
+					<>
+						<Select.Option value="Hủy">Hủy</Select.Option>
+						<Select.Option value="Đã Nhận Bàn">
+							Đã Nhận Bàn
+						</Select.Option>
+						<Select.Option value="Chờ Duyệt">
+							Chờ Duyệt
+						</Select.Option>
+					</>
+				);
+			case "Đã Nhận Bàn":
+				return (
+					<>
+						<Select.Option value="Hủy">Hủy</Select.Option>
+						<Select.Option value="Hoàn Thành">
+							Thành Công
+						</Select.Option>
+					</>
+				);
+			default:
+				return null; // Trạng thái Hủy hoặc Thành Công sẽ không có tùy chọn
+		}
+	};
 	const onSearchByMonth = (value) => {
 		console.log(
 			"Tìm kiếm theo Tháng/Năm:",
@@ -307,6 +362,19 @@ const ManageOrder = () => {
 			value ? value.format("MM/DD/YYYY") : "No date selected"
 		);
 	};
+	const onSearchByStatus = (status) => {
+		if (selectedStatus === status) {
+			setFilteredData(data);
+			setSelectedStatus(null);
+		} else {
+			const newFilteredData = data.filter(
+				(item) => item.status === status
+			);
+			setFilteredData(newFilteredData);
+			setSelectedStatus(status);
+		}
+	};
+
 	return (
 		<RestaurantLayout>
 			<ManageOrderContainer>
@@ -336,7 +404,11 @@ const ManageOrder = () => {
 									style={{ marginRight: "10px" }}
 									placeholder="----/--"
 								/>
-								<Button onClick={() => onSearchByMonth()}>
+								<Button
+									className="btn"
+									type="primary"
+									onClick={() => onSearchByMonth()}
+								>
 									Tìm Kiếm
 								</Button>
 							</Col>
@@ -346,7 +418,11 @@ const ManageOrder = () => {
 									style={{ marginRight: "10px" }}
 									placeholder="mm/dd/yyyy"
 								/>
-								<Button onClick={() => onSearchByDate()}>
+								<Button
+									className="btn"
+									type="primary"
+									onClick={() => onSearchByDate()}
+								>
 									Tìm Kiếm
 								</Button>
 							</Col>
@@ -356,29 +432,49 @@ const ManageOrder = () => {
 					<Row justify="center">
 						<Col xs={24} sm={24} md={24} lg={24} xl={24}>
 							<div className="status-bar">
-								{Object.keys(statusCounts).map((status) => (
-									<Tag
-										key={status}
-										className={
-											status === "Chờ Duyệt"
-												? "tag-waiting"
-												: status === "Chấp Nhận"
-												? "tag-accepted"
-												: status === "Đã Nhận Bàn"
-												? "tag-received"
-												: status === "Thành Công"
-												? "tag-success"
-												: "tag-cancelled"
-										}
-									>
-										{status}: {statusCounts[status]}
-									</Tag>
-								))}
+								<div
+									className="status-item tag-waiting"
+									onClick={() =>
+										onSearchByStatus("Chờ Duyệt")
+									}
+								>
+									Chờ Duyệt: 7
+								</div>
+								<div
+									className="status-item tag-accepted"
+									onClick={() =>
+										onSearchByStatus("Chấp Nhận")
+									}
+								>
+									Chấp Nhận: 1
+								</div>
+								<div
+									className="status-item tag-received"
+									onClick={() =>
+										onSearchByStatus("Đã Nhận Bàn")
+									}
+								>
+									Đã Nhận Bàn: 1
+								</div>
+								<div
+									className="status-item tag-success"
+									onClick={() =>
+										onSearchByStatus("Hoàn Thành")
+									}
+								>
+									Hoàn Thành: 1
+								</div>
+								<div
+									className="status-item tag-cancelled"
+									onClick={() => onSearchByStatus("Hủy")}
+								>
+									Hủy: 0
+								</div>
 							</div>
 
 							<Table
 								columns={columns}
-								dataSource={data}
+								dataSource={filteredData}
 								pagination={{
 									pageSize: 4,
 									position: ["bottomCenter"],
@@ -391,10 +487,11 @@ const ManageOrder = () => {
 								onOk={handleOk}
 								onCancel={handleCancel}
 								footer={null}
+								width={700}
+								style={{ textAlign: "center" }}
 							>
 								{selectedOrder && (
 									<div className="order-detail">
-										<h3>Chi Tiết Đơn Hàng</h3>
 										<table>
 											<thead>
 												<tr>

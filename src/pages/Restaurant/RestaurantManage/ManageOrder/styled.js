@@ -24,7 +24,19 @@ export const ManageOrderContainer = styled.div`
 		text-align: center;
 		padding: 16px;
 	}
+	.status-bar {
+		display: flex;
+		gap: 10px;
+		justify-content: center;
+		align-items: center;
+		flex-wrap: wrap;
+	}
 
+	.status-item {
+		cursor: pointer;
+		padding: 8px 12px;
+		border-radius: 25px;
+	}
 	.tag-waiting {
 		color: #1e283d;
 		border: 1px solid #1e283d;
@@ -94,12 +106,15 @@ export const ManageOrderContainer = styled.div`
 	.order-detail table td {
 		font-size: 16px;
 	}
-	.btn-status {
+	.btn {
 		background-color: #20c997;
 		color: white;
 		font-weight: bold;
 		border-radius: 20px;
 		padding: 5px 20px;
+	}
+	.btn:hover {
+		background-color: #46c29d !important ;
 	}
 	.status-bar {
 		display: flex;
