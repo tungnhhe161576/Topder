@@ -1,20 +1,17 @@
-import { jwtDecode } from "jwt-decode"
-import { Outlet } from "react-router-dom"
-import ErrorPage from '../../pages/ErrorPage'
+import { jwtDecode } from "jwt-decode";
+import { Outlet } from "react-router-dom";
+import Decentralization from "../../pages/Decentralization";
 const UserRoutes = () => {
-    
-    return (
-        
-        <>
-        {
-            !!localStorage.getItem('token') &&
-            jwtDecode(localStorage.getItem('token'))?.role === "Customer" 
-                ?
-                    <Outlet />
-                : <ErrorPage />
-        }
-        </>
-    )
-}
+	return (
+		<>
+			{!!localStorage.getItem("token") &&
+			jwtDecode(localStorage.getItem("token"))?.role === "Customer" ? (
+				<Outlet />
+			) : (
+				<Decentralization />
+			)}
+		</>
+	);
+};
 
-export default UserRoutes
+export default UserRoutes;
