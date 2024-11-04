@@ -57,17 +57,17 @@ const HistoryBooking = () => {
         {
           key: '1',
           label: <span className="fw-500 fs-18"> Đang chờ </span>,
-          children: <Pending orderHistory={orderHistory} loading={loading} orderDetail={orderDetail} isDetail={isDetail} setIsDetail={setIsDetail} handleViewDetail={handleViewDetail}/>,
+          children: <Pending getHistoryOrder={getHistoryOrder} orderHistory={orderHistory} loading={loading} orderDetail={orderDetail} isDetail={isDetail} setIsDetail={setIsDetail} handleViewDetail={handleViewDetail}/>,
         },
         {
           key: '2',
           label: <span className="fw-500 fs-18"> Đã chấp nhận </span>,
-          children: <Confirm orderHistory={orderHistory} loading={loading} orderDetail={orderDetail} isDetail={isDetail} setIsDetail={setIsDetail} handleViewDetail={handleViewDetail}/>,
+          children: <Confirm getHistoryOrder={getHistoryOrder} orderHistory={orderHistory} loading={loading} orderDetail={orderDetail} isDetail={isDetail} setIsDetail={setIsDetail} handleViewDetail={handleViewDetail}/>,
         },
         {
           key: '3',
           label: <span className="fw-500 fs-18"> Đã thanh toán </span>,
-          children: <Paid orderHistory={orderHistory} loading={loading} orderDetail={orderDetail} isDetail={isDetail} setIsDetail={setIsDetail} handleViewDetail={handleViewDetail}/>,
+          children: <Paid getHistoryOrder={getHistoryOrder} orderHistory={orderHistory} loading={loading} orderDetail={orderDetail} isDetail={isDetail} setIsDetail={setIsDetail} handleViewDetail={handleViewDetail}/>,
         },
         {
           key: '4',

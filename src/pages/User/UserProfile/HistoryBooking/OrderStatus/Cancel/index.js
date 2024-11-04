@@ -2,6 +2,7 @@ import { Space, Table } from "antd";
 import SpinCustom from "../../../../../../components/Common/SpinCustom";
 import OrderDetail from "../../OrderDetail";
 import dayjs from "dayjs";
+import { formatNumberToK } from "../../../../../../lib/stringUtils";
 
 const Cancel = ({orderHistory, loading, orderDetail, isDetail, setIsDetail, handleViewDetail}) => {
     const columns = [
@@ -24,6 +25,13 @@ const Cancel = ({orderHistory, loading, orderDetail, isDetail, setIsDetail, hand
             key: 'dateReservation',
             width: 200,
             render: (value) => <span> {dayjs(value).format('DD-MM-YYYY')} </span>,
+        },
+        {
+            title: 'Giá trị đơn hàng',
+            dataIndex: 'totalAmount',
+            key: 'totalAmount',
+            width: 150,
+            render: (value) => <span> {formatNumberToK(value)} </span>,
         },
         {
             title: 'Trạng Thái',

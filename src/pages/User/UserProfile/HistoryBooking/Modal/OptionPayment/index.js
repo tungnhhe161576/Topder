@@ -7,17 +7,20 @@ import balance from '../../../../../../assets/images/430509.png'
 import { useState } from "react";
 import UserService from "../../../../../../services/UserService";
 import SpinCustom from "../../../../../../components/Common/SpinCustom";
+import { useDispatch } from "react-redux";
+import { updateUserInformation } from "../../../../../../redux/Slice/userSlice";
 
 const ModalChooseOptionPayment = ({open, onCancel, user, orderHistory}) => {
     const [form] = Form.useForm()
     const [loading, setLoading] = useState(false)
+    const dispatch = useDispatch()
 
     const handlePaidPayment = async () => {
         try {
             setLoading(true)
             const formValue = await form.validateFields()
             const res = await UserService.paidOrder(open?.orderId, user?.uid, formValue?.option)
-
+            const wallet = await UserService.getWalletInfo(user?.uid)
             message.open({
                 content: "Thanh toán thành công!",
                 type: 'success',
@@ -30,6 +33,7 @@ const ModalChooseOptionPayment = ({open, onCancel, user, orderHistory}) => {
                 window.location.href = res;
             }
             orderHistory()
+            dispatch(updateUserInformation({ walletBalance: wallet?.walletBalance }))
             onCancel()
         } catch (error) {
             message.open({

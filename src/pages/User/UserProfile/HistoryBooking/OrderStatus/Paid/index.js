@@ -2,8 +2,13 @@ import { Space, Table } from "antd";
 import SpinCustom from "../../../../../../components/Common/SpinCustom";
 import OrderDetail from "../../OrderDetail";
 import dayjs from "dayjs";
+import ModalCancelOrder from "../../Modal/CancelOrder";
+import { useState } from "react";
+import { formatNumberToK } from "../../../../../../lib/stringUtils";
 
-const Paid = ({orderHistory, loading, orderDetail, isDetail, setIsDetail, handleViewDetail}) => {
+const Paid = ({getHistoryOrder, orderHistory, loading, orderDetail, isDetail, setIsDetail, handleViewDetail}) => {
+    const [openModalCancelOrder, setOpenModalCancelOrder] = useState(false)
+    
     const columns = [
         {
             title: 'Tên Cửa Hàng',
@@ -26,6 +31,13 @@ const Paid = ({orderHistory, loading, orderDetail, isDetail, setIsDetail, handle
             render: (value) => <span> {dayjs(value).format('DD-MM-YYYY')} </span>,
         },
         {
+            title: 'Giá trị đơn hàng',
+            dataIndex: 'totalAmount',
+            key: 'totalAmount',
+            width: 150,
+            render: (value) => <span> {formatNumberToK(value)} </span>,
+        },
+        {
             title: 'Trạng Thái',
             dataIndex: 'statusOrder',
             key: 'statusOrder',
@@ -44,6 +56,7 @@ const Paid = ({orderHistory, loading, orderDetail, isDetail, setIsDetail, handle
             render: (_, record) => (
                 <Space size="middle d-flex">
                     <button onClick={() => handleViewDetail(record)} className="btn detail-btn">Chi Tiết</button>
+                    <button className="btn cancel-btn" onClick={() => setOpenModalCancelOrder(record)}>Hủy</button>
                 </Space>
             ),
         },
@@ -66,6 +79,13 @@ const Paid = ({orderHistory, loading, orderDetail, isDetail, setIsDetail, handle
                             : <OrderDetail setIsDetail={setIsDetail} detail={orderDetail}/>
                     }
                 </SpinCustom>
+                {!!openModalCancelOrder && (
+                    <ModalCancelOrder
+                        open={openModalCancelOrder}
+                        onCancel={() => setOpenModalCancelOrder(false)}
+                        onOk={getHistoryOrder}
+				/>
+			)}
         </div>
     );
 }

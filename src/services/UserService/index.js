@@ -37,6 +37,7 @@ import {
 	apiWithdraw,
 	apiLoginGG,
 	apiCheckPaymentOrder,
+	apiCancelOrder,
 } from "./urls";
 
 const categoryResApi = (body) => http.get(apiGetListRestaurants, body);
@@ -128,6 +129,8 @@ const loginGG = (body, accessToken) =>
 		},
 	});
 
+const cancelOrder =  (body) => http.put(apiCancelOrder, body)
+
 const UserService = {
 	loginApi,
 	updateProfile,
@@ -165,6 +168,7 @@ const UserService = {
 	withdraw,
 	loginGG,
 	checkPaymentOrder,
+	cancelOrder,
 };
 
 export default UserService;

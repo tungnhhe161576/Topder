@@ -2,8 +2,13 @@ import { Space, Table } from "antd";
 import SpinCustom from "../../../../../../components/Common/SpinCustom";
 import dayjs from "dayjs";
 import OrderDetail from "../../OrderDetail";
+import { useState } from "react";
+import ModalCancelOrder from "../../Modal/CancelOrder";
+import { formatNumberToK } from "../../../../../../lib/stringUtils";
 
-const Pending = ({orderHistory, loading, orderDetail, isDetail, setIsDetail, handleViewDetail}) => {
+const Pending = ({getHistoryOrder, orderHistory, loading, orderDetail, isDetail, setIsDetail, handleViewDetail}) => {
+    const [openModalCancelOrder, setOpenModalCancelOrder] = useState(false)
+    
     const columns = [
         {
             title: 'Tên Cửa Hàng',
@@ -26,6 +31,13 @@ const Pending = ({orderHistory, loading, orderDetail, isDetail, setIsDetail, han
             render: (value) => <span> {dayjs(value).format('DD-MM-YYYY')} </span>,
         },
         {
+            title: 'Giá trị đơn hàng',
+            dataIndex: 'totalAmount',
+            key: 'totalAmount',
+            width: 150,
+            render: (value) => <span> {formatNumberToK(value)} </span>,
+        },
+        {
             title: 'Trạng Thái',
             dataIndex: 'statusOrder',
             key: 'statusOrder',
@@ -44,7 +56,7 @@ const Pending = ({orderHistory, loading, orderDetail, isDetail, setIsDetail, han
             render: (_, record) => (
                 <Space size="middle d-flex">
                     <button onClick={() => handleViewDetail(record)} className="btn detail-btn">Chi Tiết</button>
-                    <button className="btn cancel-btn">Hủy</button>
+                    <button className="btn cancel-btn" onClick={() => setOpenModalCancelOrder(record)}>Hủy</button>
                 </Space>
             ),
         },
@@ -53,20 +65,28 @@ const Pending = ({orderHistory, loading, orderDetail, isDetail, setIsDetail, han
     return (  
         <div>
             <SpinCustom spinning={loading}>
-                    <div className="fs-22 fw-600 mb-20 mt-30">
-                        {isDetail === false ? 'Danh sách đặt bàn' : 'Chi tiết đơn đặt bàn'}
-                    </div>
-                    {
-                        !isDetail 
-                            ? <Table 
-                                columns={columns} 
-                                dataSource={orderHistory.filter(o => o.statusOrder === 'Pending')} 
-                                pagination={{pageSize: 5}}
-                                bordered
-                            />
-                            : <OrderDetail setIsDetail={setIsDetail} detail={orderDetail}/>
-                    }
-                </SpinCustom>
+                <div className="fs-22 fw-600 mb-20 mt-30">
+                    {isDetail === false ? 'Danh sách đặt bàn' : 'Chi tiết đơn đặt bàn'}
+                </div>
+                {
+                    !isDetail 
+                        ? <Table 
+                            columns={columns} 
+                            dataSource={orderHistory.filter(o => o.statusOrder === 'Pending')} 
+                            pagination={{pageSize: 5}}
+                            bordered
+                        />
+                        : <OrderDetail setIsDetail={setIsDetail} detail={orderDetail}/>
+                }
+            </SpinCustom>
+
+            {!!openModalCancelOrder && (
+				<ModalCancelOrder
+					open={openModalCancelOrder}
+					onCancel={() => setOpenModalCancelOrder(false)}
+                    onOk={getHistoryOrder}
+				/>
+			)}
         </div>
     );
 }

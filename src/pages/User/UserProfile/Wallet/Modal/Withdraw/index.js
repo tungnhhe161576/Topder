@@ -19,7 +19,6 @@ const ModalWithDraw = ({open, onCancel, customerId, verifiedOTP, setVerifiedOTP,
         try {
             setLoading(true)
             const formValue = await form.validateFields()
-            console.log(formValue);
             await UserService.withdraw({
                 uid: customerId,
                 walletId: wallet?.walletId,

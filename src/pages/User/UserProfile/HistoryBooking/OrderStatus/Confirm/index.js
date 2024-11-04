@@ -7,9 +7,11 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { userInfor } from "../../../../../../redux/Slice/userSlice";
 import { formatNumberToK } from "../../../../../../lib/stringUtils";
+import ModalCancelOrder from "../../Modal/CancelOrder";
 
-const Confirm = ({orderHistory, loading, orderDetail, isDetail, setIsDetail, handleViewDetail}) => {
+const Confirm = ({getHistoryOrder, orderHistory, loading, orderDetail, isDetail, setIsDetail, handleViewDetail}) => {
     const [openModalOptionPayment, setOpenModalOpenPayment] = useState(false)
+    const [openModalCancelOrder, setOpenModalCancelOrder] = useState(false)
     const user = useSelector(userInfor)
     
     const columns = [
@@ -55,11 +57,12 @@ const Confirm = ({orderHistory, loading, orderDetail, isDetail, setIsDetail, han
             title: 'Chi Tiết',
             dataIndex: 'statusOrder',
             key: 'statusOrder',
-            width: 200,
+            width: 300,
             render: (_, record) => (
                 <Space size="middle d-flex">
                     <button onClick={() => handleViewDetail(record)} className="btn detail-btn">Chi Tiết</button>
                     <button className="btn payment" onClick={() => setOpenModalOpenPayment(record)}>Thanh toán</button>
+                    <button className="btn cancel-btn" onClick={() => setOpenModalCancelOrder(record)}>Hủy</button>
                 </Space>
             ),
         },
@@ -89,8 +92,16 @@ const Confirm = ({orderHistory, loading, orderDetail, isDetail, setIsDetail, han
                     open={openModalOptionPayment}
                     onCancel={() => setOpenModalOpenPayment(false)}
                     user={user}
-                    orderHistory={orderHistory}
+                    orderHistory={getHistoryOrder}
                 />
+			)}
+
+            {!!openModalCancelOrder && (
+				<ModalCancelOrder
+					open={openModalCancelOrder}
+					onCancel={() => setOpenModalCancelOrder(false)}
+                    onOk={getHistoryOrder}
+				/>
 			)}
         </div>
     );

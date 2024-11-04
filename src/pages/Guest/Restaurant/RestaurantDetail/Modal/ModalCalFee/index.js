@@ -141,14 +141,19 @@ const ModalCalFee = ({open, onCancel, restaurantId, userId, totalPrice, form}) =
                         <div>
                             <Button type="primary" onClick={() => setOpenModalDiscount(discounts)}> Chọn Voucher </Button>
                         </div>
-                        <div>
-                            {
-                                selectedVoucher && <div>
-                                    <span className="red fw-500">Voucher đã chọn: </span>
-                                    <span> {selectedVoucher?.discountName} </span>
+                        {
+                            totalPrice !== 0 
+                                ? <div>
+                                    {
+                                        selectedVoucher && <div>
+                                            <span className="red fw-500">Voucher đã chọn: </span>
+                                            <span> {selectedVoucher?.discountName} </span>
+                                        </div>
+                                    }
                                 </div>
-                            }
-                        </div>
+                                : <></>
+                        }
+                        
                     </div>
                 </SpinCustom>
             </CustomModal>

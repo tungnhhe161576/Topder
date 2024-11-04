@@ -4,6 +4,7 @@ import OrderDetail from "../../OrderDetail";
 import dayjs from "dayjs";
 import { useState } from "react";
 import ModalFeedback from "../../Modal/Feedback";
+import { formatNumberToK } from "../../../../../../lib/stringUtils";
 
 const Complete = ({orderHistory, loading, orderDetail, isDetail, setIsDetail, handleViewDetail}) => {
     const [openModalSendFeedback, setOpenModalSendFeedback] = useState(false)
@@ -29,6 +30,13 @@ const Complete = ({orderHistory, loading, orderDetail, isDetail, setIsDetail, ha
             key: 'dateReservation',
             width: 200,
             render: (value) => <span> {dayjs(value).format('DD-MM-YYYY')} </span>,
+        },
+        {
+            title: 'Giá trị đơn hàng',
+            dataIndex: 'totalAmount',
+            key: 'totalAmount',
+            width: 150,
+            render: (value) => <span> {formatNumberToK(value)} </span>,
         },
         {
             title: 'Trạng Thái',

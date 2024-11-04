@@ -21,31 +21,31 @@ const RestaurantRate = ( {restaurantDetail} ) => {
     const nav = useNavigate()
     const user = useSelector(userInfor)
 
-    const handleSubmitFormDating = async () => {
-        try {
-            setLoading(true)
-            const values = await form.validateFields()
-            const res = await UserService.createFeedback({
-                customerId: user?.uid,
-                restaurantId: restaurantDetail?.uid,
-                star: values?.rate,
-                content: values?.content
-            })
-            message.open({
-                content: res,
-                type: 'success',
-                style: {
-                    marginTop: '10vh',
-                },
-            })
-            await getAllFeedback()
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setLoading(false)
-            form.resetFields()
-        }
-    }
+    // const handleSubmitFormDating = async () => {
+    //     try {
+    //         setLoading(true)
+    //         const values = await form.validateFields()
+    //         const res = await UserService.createFeedback({
+    //             customerId: user?.uid,
+    //             restaurantId: restaurantDetail?.uid,
+    //             star: values?.rate,
+    //             content: values?.content
+    //         })
+    //         message.open({
+    //             content: res,
+    //             type: 'success',
+    //             style: {
+    //                 marginTop: '10vh',
+    //             },
+    //         })
+    //         await getAllFeedback()
+    //     } catch (error) {
+    //         console.log(error);
+    //     } finally {
+    //         setLoading(false)
+    //         form.resetFields()
+    //     }
+    // }
 
     const getAllFeedback = async () => {
         try {
@@ -85,7 +85,7 @@ const RestaurantRate = ( {restaurantDetail} ) => {
     return (  
         <Row gutter={[40, 0]} className="mt-20">
             <SpinCustom spinning={loading}>
-                <Col xs={24} sm={24} md={13} lg={13} xl={13} style={{ minWidth: '500px' }}>
+                <Col xs={24} sm={24} md={17} lg={15} xl={15} style={{ minWidth: '500px' }}>
                     <div className="fs-22 fw-600 mt-10 mb-15"> {feedbacks.length} Đánh giá </div>
                     {
                         feedbacks?.length === 0
@@ -146,7 +146,7 @@ const RestaurantRate = ( {restaurantDetail} ) => {
                 </Col>
             </SpinCustom>
 
-            {
+            {/* {
                 !!user 
                     ? <Col xs={24} sm={24} md={11} lg={11} xl={11}>
                         <div className="fs-22 fw-600 mt-10 mb-15"> Đánh giá </div>
@@ -183,7 +183,7 @@ const RestaurantRate = ( {restaurantDetail} ) => {
                         </div>
                     </Col>
                     : <></>
-            }
+            } */}
             {!!openModalDeleteFeedback && (
                 <ModalDeleteFeedback
                     open={openModalDeleteFeedback}

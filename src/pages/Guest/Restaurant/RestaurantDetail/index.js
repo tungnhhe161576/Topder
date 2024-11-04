@@ -34,6 +34,7 @@ import UserService from "../../../../services/UserService";
 import ModalChooseFood from "./Modal/ChooseFood";
 import ModalChooseTable from "./Modal/ChooseTable";
 import ModalCalFee from "./Modal/ModalCalFee";
+import Policy from "./Description/Policy";
 
 const RestaurantDetail = () => {
 	const [selectedOption, setSelectedOption] = useState("description");
@@ -214,6 +215,7 @@ const RestaurantDetail = () => {
 	const options = [
 		{ label: "Mô Tả", value: "description" },
 		{ label: "Đánh giá", value: "rate" },
+		{ label: "Chính sách", value: "policy" },
 	];
 
 	return (
@@ -336,6 +338,7 @@ const RestaurantDetail = () => {
 										value={selectedOption}
 										onChange={setSelectedOption}
 										size="large"
+										style={{minWidth: '400px'}}
 									/>
 								</div>
 								<Divider
@@ -344,10 +347,10 @@ const RestaurantDetail = () => {
 								/>
 								<div>
 									{selectedOption === "description" ? (
-										<RestaurantDescription description={restaurantDetail?.description}/>
-									) : (
+										<RestaurantDescription restaurantDetail={restaurantDetail}/>
+									) : selectedOption === "rate" ? (
 										<RestaurantRate restaurantDetail={restaurantDetail}/>
-									)}
+									) : <Policy restaurantDetail={restaurantDetail}/>}
 								</div>
 							</div>
 						</Col>

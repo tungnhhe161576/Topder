@@ -11,17 +11,16 @@ const ModalFeedback = ({open, onCancel}) => {
     const [form] = Form.useForm()
     const [loading, setLoading] = useState(false)
 
-    console.log(open);
     const user = useSelector(userInfor)
     
     const handleSendFeedback = async () => {
         try {
             setLoading(true)
             const formValue = await form.validateFields()
-            console.log(formValue);
             
             await UserService.createFeedback({
                 customerId: user?.uid,
+                orderId: open?.orderId,
                 restaurantId: open?.restaurantId,
                 star: formValue?.rate,
                 content: formValue?.content
