@@ -37,3 +37,6 @@ export const apiWithdraw = "WalletTransaction/Withdraw";
 export const apiLoginGG = "User/LoginWithGoogle";
 export const apiCheckPaymentOrder = "Order/CheckPayment";
 export const apiCancelOrder = "Order/CancelOrder";
+export const apiGetRestaurantDashboard = "Dashboard/GetDashboardRestaurant";
+
+

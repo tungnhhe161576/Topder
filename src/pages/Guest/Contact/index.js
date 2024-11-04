@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import CommonLayout from "../../../components/Layouts/CommonLayout";
 import { ContactContainer } from "./styled";
-import { Form, Input, Button, Row, Col } from "antd";
+import { Form, Input, Button, Row, Col, Select, message } from "antd";
 import { getRegexEmail, getRegexPhoneNumber } from "../../../lib/stringUtils";
 import {
   PhoneOutlined,
@@ -9,19 +9,47 @@ import {
   EditOutlined,
   UserOutlined,
 } from "@ant-design/icons";
+import { useSelector } from "react-redux";
+import { userInfor } from "../../../redux/Slice/userSlice";
+import GuestService from '../../../services/GuestService'
 const { TextArea } = Input;
+const { Option } = Select;
 
 const Contact = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
+  const user = useSelector(userInfor)
+  console.log(user);
+  
 
-  const handleLoginByForm = async () => {
+  const handleSendForm = async () => {
     try {
       setLoading(true);
       const values = await form.validateFields();
       console.log(values);
+      await GuestService.createContact({
+        uid: user? user?.uid : null,
+        name: user ? user?.name : values?.name,
+        email: user ? user?.email : values?.email,
+        topic: values?.subject,
+        content: values?.content,
+        phone: user ? user?.phone : values?.phone,
+      })
+      message.open({
+        content: values?.subject === 'RestaurantRegister' ? 'Gửi yêu cầu thành công, vui lòng kiểm tra email để đăng ký nhà hàng.' : 'Gửi liên hệ thành công.',
+        type: 'success',
+        style: {
+            marginTop: '10vh',
+        },
+      })
     } catch (error) {
-      console.log(error);
+      message.open({
+        content: 'Gửi yêu cầu thất bại!',
+        type: 'error',
+        style: {
+            marginTop: '10vh',
+        },
+      })
     } finally {
       setLoading(false);
     }
@@ -61,104 +89,114 @@ const Contact = () => {
                   layout="vertical"
                   initialValues={{ remember: true }}
                 >
-                  <Form.Item
-                    name="name"
-                    rules={[
-                      { required: true, message: "Vui lòng nhập họ và tên!" },
-                    ]}
-                  >
-                    <Input
-                      prefix={<UserOutlined style={{ color: "#ff7c08" }} />}
-                      placeholder="Họ và tên"
-                    />
-                  </Form.Item>
-
                   <Row gutter={16}>
-                    <Col xs={24} md={12}>
+                    {
+                      !!user 
+                       ? <></>
+                       : <>
+                        <Col span={24}>
+                            <Form.Item
+                              name="name"
+                              rules={[
+                                { required: true, message: "Vui lòng nhập họ và tên!" },
+                              ]}
+                            >
+                              <Input
+                                prefix={<UserOutlined style={{ color: "#ff7c08" }} />}
+                                placeholder="Họ và tên"
+                              />
+                            </Form.Item>
+                          </Col>
+
+                          <Col xs={24} md={12}>
+                            <Form.Item
+                              name="email"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: "Vui lòng nhập email!",
+                                },
+                                {
+                                  pattern: getRegexEmail(),
+                                  message: "Email sai định dạng",
+                                },
+                              ]}
+                            >
+                              <Input
+                                prefix={<MailOutlined style={{ color: "#ff7c08" }} />}
+                                placeholder="Email"
+                              />
+                            </Form.Item>
+                          </Col>
+
+                          <Col xs={24} md={12}>
+                            <Form.Item
+                              name="phone"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: "Vui lòng nhập số điện thoại!",
+                                },
+                                {
+                                  pattern: getRegexPhoneNumber(),
+                                  message: "Số điện thoại sai định dạng",
+                                },
+                              ]}
+                            >
+                              <Input
+                                prefix={
+                                  <PhoneOutlined style={{ color: "#ff7c08" }} />
+                                }
+                                placeholder="Số điện thoại"
+                              />
+                            </Form.Item>
+                          </Col>
+                       </>
+                    }
+                    <Col span={24}>
                       <Form.Item
-                        name="email"
+                        name="subject"
                         rules={[
-                          {
-                            required: true,
-                            message: "Vui lòng nhập email!",
-                          },
-                          {
-                            pattern: getRegexEmail(),
-                            message: "Email sai định dạng",
-                          },
+                          { required: true, message: "Vui lòng nhập chủ đề!" },
                         ]}
                       >
-                        <Input
-                          prefix={<MailOutlined style={{ color: "#ff7c08" }} />}
-                          placeholder="Email"
-                        />
+                        <Select placeholder="Chọn yêu cầu" allowClear>
+                          <Option value="RestaurantRegister">Đăng ký nhà hàng</Option>
+                          <Option value="Other">Khác</Option>
+                        </Select>
                       </Form.Item>
                     </Col>
-
-                    <Col xs={24} md={12}>
+                    <Col span={24}>
                       <Form.Item
-                        name="phone"
+                        name="content"
                         rules={[
-                          {
-                            required: true,
-                            message: "Vui lòng nhập số điện thoại!",
-                          },
-                          {
-                            pattern: getRegexPhoneNumber(),
-                            message: "Số điện thoại sai định dạng",
-                          },
+                          { required: true, message: "Vui lòng nhập nội dung!" },
                         ]}
                       >
-                        <Input
-                          prefix={
-                            <PhoneOutlined style={{ color: "#ff7c08" }} />
-                          }
-                          placeholder="Số điện thoại"
-                        />
+                        <div style={{ position: "relative" }}>
+                          <EditOutlined
+                            style={{
+                              position: "absolute",
+                              left: "10px",
+                              top: "50%",
+                              transform: "translateY(-50%)",
+                              color: "#ff7c08",
+                              fontSize: "20px",
+                            }}
+                          />
+                          <TextArea
+                            placeholder="Nội dung"
+                            rows={4}
+                            style={{ paddingLeft: "30px" }}
+                          />
+                        </div>
                       </Form.Item>
                     </Col>
                   </Row>
-
-                  <Form.Item
-                    name="subject"
-                    rules={[
-                      { required: true, message: "Vui lòng nhập chủ đề!" },
-                    ]}
-                  >
-                    <Input
-                      prefix={<EditOutlined style={{ color: "#ff7c08" }} />}
-                      placeholder="Chủ đề (Ví dụ: Mở cửa hàng, feedback về Topder, khác...)"
-                    />
-                  </Form.Item>
-
-                  <Form.Item
-                    name="content"
-                    rules={[
-                      { required: true, message: "Vui lòng nhập nội dung!" },
-                    ]}
-                  >
-                    <div style={{ position: "relative" }}>
-                      <EditOutlined
-                        style={{
-                          position: "absolute",
-                          left: "10px",
-                          top: "50%",
-                          transform: "translateY(-50%)",
-                          color: "#ff7c08",
-                          fontSize: "20px",
-                        }}
-                      />
-                      <TextArea
-                        placeholder="Nội dung"
-                        rows={4}
-                        style={{ paddingLeft: "30px" }}
-                      />
-                    </div>
-                  </Form.Item>
                 </Form>
                 <div className="contact-submit">
                   <Button
-                    onClick={handleLoginByForm}
+                    onClick={() => handleSendForm()}
                     htmlType="submit"
                     loading={loading}
                     type="primary"

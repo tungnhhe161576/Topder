@@ -24,7 +24,6 @@ export const DashboardContainer = styled.div `
         }
 
         .background-count {
-            background-color: #fff;
             border-radius: 20px;
             font-size: 25px;
             padding: 5px;
@@ -34,12 +33,33 @@ export const DashboardContainer = styled.div `
             justify-content: center;
             margin-top: 6px;
         }
-        .order-success .background-count {
-            background-color: #cbf0ee;
+
+        .income {
+            width: 120px !important;
         }
-        .vote .background-count {
-            background-color: #f5d3a1;
+        .order-by-month {
+            border-radius: 20px;
+            font-size: 25px;
+            padding: 5px;
+            width: 150px;
+            font-weight: 600;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 6px;
         }
+        .income-by-month {
+            border-radius: 20px;
+            font-size: 25px;
+            padding: 5px;
+            width: 150px;
+            font-weight: 600;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 6px;
+        }
+        
         .title {
             font-size: 22px;
             font-weight: 600;
@@ -50,6 +70,10 @@ export const DashboardContainer = styled.div `
         margin-top: 40px;
 
         .left {
+            .ant-statistic {
+                display: inline-block;
+            }
+
             .chart1 {
                 border-radius: 10px;
                 padding: 15px 25px;

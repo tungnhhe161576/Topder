@@ -11,7 +11,8 @@ import {
     apiGetAllBlog,
     apiGetAllBlogCategory,
     apiGetBlogDetail,
-    apiGetRestaurantFee
+    apiGetRestaurantFee,
+    apiCreateContact,
 } from './urls'
 
 const apiHomePageData = body => http.get(apiGetDataInHomePage, body)
@@ -40,6 +41,7 @@ const getAllBlog = body => {
 const getBlogCategory = () => http.get(apiGetAllBlogCategory)
 const getBlogDetail = (blogId) =>http.get(`${apiGetBlogDetail}/${blogId}`)
 const getRestaurantFee = (restaurantId) => http.get(`${apiGetRestaurantFee}/${restaurantId}`)
+const createContact = (body) => http.post(apiCreateContact, body)
 
 const GuestService = {
     apiHomePageData,
@@ -51,7 +53,8 @@ const GuestService = {
     getAllBlog,
     getBlogCategory,
     getBlogDetail,
-    getRestaurantFee
+    getRestaurantFee,
+    createContact,
 }
 
 export default GuestService

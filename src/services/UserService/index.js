@@ -38,6 +38,7 @@ import {
 	apiLoginGG,
 	apiCheckPaymentOrder,
 	apiCancelOrder,
+	apiGetRestaurantDashboard,
 } from "./urls";
 
 const categoryResApi = (body) => http.get(apiGetListRestaurants, body);
@@ -130,6 +131,7 @@ const loginGG = (body, accessToken) =>
 	});
 
 const cancelOrder =  (body) => http.put(apiCancelOrder, body)
+const getRestaurantDashboard =  (restaurantId) => http.get(`${apiGetRestaurantDashboard}/${restaurantId}`)
 
 const UserService = {
 	loginApi,
@@ -169,6 +171,7 @@ const UserService = {
 	loginGG,
 	checkPaymentOrder,
 	cancelOrder,
+	getRestaurantDashboard,
 };
 
 export default UserService;

@@ -2,38 +2,31 @@ import React, { useEffect } from 'react';
 import { Col, Row } from "antd";
 import { Chart } from '@antv/g2';
 
-const RightSide = () => {
+const RightSide = ({restaurantData}) => {
     useEffect(() => {
         const data = [
-          { Star: '1 sao', value: 0 },
-          { Star: '2 sao', value: 0 },
-          { Star: '3 sao', value: 0 },
-          { Star: '4 sao', value: 0 },
-          { Star: '5 sao', value: 3 },
+            { Star: '1 sao', value: restaurantData?.feedbackStars?.star1 },
+            { Star: '2 sao', value: restaurantData?.feedbackStars?.star2 },
+            { Star: '3 sao', value: restaurantData?.feedbackStars?.star3 },
+            { Star: '4 sao', value: restaurantData?.feedbackStars?.star4 },
+            { Star: '5 sao', value: restaurantData?.feedbackStars?.star5 },
         ];
     
         const chart = new Chart({
-          container: 'container',
-          autoFit: true,
-          height: 300, 
+            container: 'container',
+            autoFit: true,
+            height: 300, 
         });
-    
         chart.data(data);
-    
         chart
-          .interval()
-          .position('Star*value')  
-          .color('Star');   
-    
+            .interval()
+            .position('Star*value')  
+            .color('Star');   
         chart.render();
-    
         return () => {
-          chart.destroy();
+            chart.destroy();
         };
-    }, []);
-
-    
-
+    }, [restaurantData]);
 
     return ( 
         <div className="right">
@@ -43,39 +36,38 @@ const RightSide = () => {
                         <div className="pt-25 pl-20 pr-20">
                             <div className="d-flex justify-content-space-between mb-20">
                                 <div className="fw-600 fs-17">Trạng thái đặt bàn</div>
-                                <div className="added"> + </div>
                             </div>
                             <div className="status d-flex flex-column">
                                 <div className="wait">
-                                    <div className="mb-5"> Đang đợi: {0} </div>
+                                    <div className="mb-5"> Đang đợi: {restaurantData?.orderStatus?.pending} </div>
                                     <div className="d-flex">
                                         <div className="fs-13 w-30 click-to-view">Click to view</div>
                                         <div style={{color: '#b2afaf'}}>Đợi</div>
                                     </div>
                                 </div>
                                 <div className="accept">
-                                    <div className="mb-5"> Chấp nhận: {4} </div>
+                                    <div className="mb-5"> Chấp nhận: {restaurantData?.orderStatus?.confirm} </div>
                                     <div className="d-flex">
                                         <div className="fs-13 w-30 click-to-view">Click to view</div>
                                         <div style={{color: '#73c2ff'}}>Chấp nhận</div>
                                     </div>
                                 </div>
                                 <div className="process">
-                                    <div className="mb-5"> Đang duyệt: {0} </div>
+                                    <div className="mb-5"> Đã thanh toán: {restaurantData?.orderStatus?.paid} </div>
                                     <div className="d-flex align-items-center">
                                         <div className="fs-13 w-30 click-to-view">Click to view</div>
                                         <div style={{color: '#e8b240', padding: '5px 6px', borderRadius: '10px', backgroundColor: '#fff2d6'}}>Xử lý</div>
                                     </div>
                                 </div>
                                 <div className="done">
-                                    <div className="mb-5"> Hoàn thành: {26} </div>
+                                    <div className="mb-5"> Hoàn thành: {restaurantData?.orderStatus?.complete} </div>
                                     <div className="d-flex align-items-center">
                                         <div className="fs-13 w-30 click-to-view">Click to view</div>
                                         <div style={{color: '#6ac0dd', padding: '5px 6px', borderRadius: '10px', backgroundColor: '#cbf0ee'}}>Thành công</div>
                                     </div>
                                 </div>
                                 <div className="cancel">
-                                    <div className="mb-5"> Hủy bàn: {0} </div>
+                                    <div className="mb-5"> Hủy bàn: {restaurantData?.orderStatus?.cancel} </div>
                                     <div className="d-flex">
                                         <div className="fs-13 w-30 click-to-view">Click to view</div>
                                         <div className="red">Hủy</div>
