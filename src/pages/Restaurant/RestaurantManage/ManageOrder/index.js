@@ -243,6 +243,20 @@ const ManageOrder = () => {
 			},
 		},
 		{
+			title: "Chọn bàn",
+			dataIndex: "phoneReceiver",
+			key: "phoneReceiver",
+			//check text
+			render: (_, record) => (
+				<Button
+					className="btn-detail"
+					onClick={() => showDetail(record)}
+				>
+					Detail
+				</Button>
+			),
+		},
+		{
 			title: "Chi Tiết",
 			key: "detail",
 			render: (_, record) => (
@@ -393,12 +407,14 @@ const ManageOrder = () => {
 					</div>
 					<div>
 						<Row
-							justify="center"
+							justify="space-evenly"
 							gutter={[16, 16]}
 							className="search-container"
 						>
 							<Col>
-								<label>Tháng/Năm</label>
+								<div style={{ marginBottom: "8px" }}>
+									<label>Tháng/Năm</label>
+								</div>
 								<DatePicker
 									picker="month"
 									style={{ marginRight: "10px" }}
@@ -413,7 +429,9 @@ const ManageOrder = () => {
 								</Button>
 							</Col>
 							<Col>
-								<label>Ngày/Tháng/Năm</label>
+								<div style={{ marginBottom: "8px" }}>
+									<label>Ngày/Tháng/Năm</label>
+								</div>
 								<DatePicker
 									style={{ marginRight: "10px" }}
 									placeholder="mm/dd/yyyy"
@@ -487,12 +505,12 @@ const ManageOrder = () => {
 								onOk={handleOk}
 								onCancel={handleCancel}
 								footer={null}
-								width={700}
+								width={1000}
 								style={{ textAlign: "center" }}
 							>
 								{selectedOrder && (
 									<div className="order-detail">
-										<table>
+										<table className="w-100">
 											<thead>
 												<tr>
 													<th>

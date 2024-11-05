@@ -42,6 +42,7 @@ import AccountManagement from "../pages/Admin/AccountManagement";
 import OrderManagement from "../pages/Admin/OrderManagement";
 import BlogManagement from "../pages/Admin/BlogManagement";
 import ContactManagement from "../pages/Admin/ContactManagement";
+import VerifyAccount from "../components/VerifyAccount";
 
 const LazyLoadingComponent = ({ children }) => {
 	return (
@@ -150,6 +151,11 @@ export const router = [
 				path: "blog-detail/:blogId",
 				element: <BlogDetail />,
 				title: "Chi tiết Blog",
+			},
+			{
+				path: "verify-account/:uId",
+				element: <VerifyAccount />,
+				title: "Xác thực tài khoản",
 			},
 		],
 	},

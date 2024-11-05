@@ -122,16 +122,11 @@ const getTransactionhistory = (customerId) =>
 const withdraw = (body) => http.post(apiWithdraw, body);
 const checkPaymentOrder = (orderID, status) =>
 	http.get(`${apiCheckPaymentOrder}/${orderID}?status=${status}`);
-const loginGG = (body, accessToken) =>
-	http.post(apiLoginGG, body, {
-		headers: {
-			Authorization: `Bearer ${accessToken}`,
-			"Content-Type": "application/json",
-		},
-	});
+const loginGG = (body) => http.post(apiLoginGG, body);
 
-const cancelOrder =  (body) => http.put(apiCancelOrder, body)
-const getRestaurantDashboard =  (restaurantId) => http.get(`${apiGetRestaurantDashboard}/${restaurantId}`)
+const cancelOrder = (body) => http.put(apiCancelOrder, body);
+const getRestaurantDashboard = (restaurantId) =>
+	http.get(`${apiGetRestaurantDashboard}/${restaurantId}`);
 
 const UserService = {
 	loginApi,

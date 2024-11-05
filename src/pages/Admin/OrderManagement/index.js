@@ -466,12 +466,12 @@ const OrderManagement = () => {
 								onOk={handleOk}
 								onCancel={handleCancel}
 								footer={null}
-								width={700}
+								width={1000}
 								style={{ textAlign: "center" }}
 							>
 								{selectedOrder && (
 									<div className="order-detail">
-										<table>
+										<table className="w-100">
 											<thead>
 												<tr>
 													<th>

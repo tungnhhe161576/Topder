@@ -34,7 +34,7 @@ const LoginPage = () => {
 			} else if (res.data.userInfo.role === "Restaurant") {
 				nav("/restaurant/dashboard");
 			} else {
-				nav("/admin/dashboard")
+				nav("/admin/dashboard");
 			}
 		} catch (error) {
 			if (error.response && error.response.status === 401) {
@@ -55,14 +55,9 @@ const LoginPage = () => {
 			setLoading(true);
 			const accessToken = response.credential;
 			console.log("Access Token:", accessToken);
-			const jwt = jwtDecode(accessToken);
-			console.log("JWT:", jwt);
 			const res = await UserService.loginGG(accessToken);
-			console.log("API Response after Google Login:", res);
-
-			localStorage.setItem("token", res.data.token);
-			// dispatch(setUserInformation(res.data.userInfo));
-			// dispatch(setAccessToken(res.data.token));
+			localStorage.setItem("token", res.data);
+			dispatch(setAccessToken(res.data));
 			toast("Đăng nhập thành công!");
 			nav("/"); // Chuyển hướng đến trang chủ
 		} catch (error) {
