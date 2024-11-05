@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
 	Button,
 	Col,
@@ -27,62 +27,56 @@ const RegisterPage = () => {
 	const [emailExists, setEmailExists] = useState(false);
 	const nav = useNavigate();
 
-	const checkEmailExistence = async (email) => {
-		try {
-			const check = await UserService.checkExisEmail(email);
-			setEmailExists(check);
-		} catch (error) {
-			message.error("Có lỗi xảy ra trong quá trình kiểm tra email");
-		}
-	};
-	useEffect(() => {
-		const email = form.getFieldValue("email");
-		if (email) {
-			const timeoutId = setTimeout(() => {
-				checkEmailExistence(email);
-			}, 1000); // Debounce 1 second
-			return () => clearTimeout(timeoutId);
-		} else {
-			setEmailExists(false);
-		}
-	}, [form.getFieldValue("email")]);
 	const handleRegister = async () => {
+		const values = await form.validateFields();
 		try {
-			setLoading(true);
-			const values = await form.validateFields();
-			// if (checkEmailExistence(values.email)) {
-			// 	message.error(
-			// 		"Email đã tồn tại trong hệ thống, vui lòng thử một email khác"
-			// 	);
-			// 	return;
-			// } else {
-			const data = {
-				...values,
-				uid: 0,
-				dob: values?.dob
-					? dayjs(values?.dob).format("YYYY-MM-DD")
-					: null,
-				gender:
-					values?.gender === "Nam"
-						? "Male"
-						: values?.gender === "Nữ"
-						? "Female"
-						: "Other",
-			};
-			const res = await UserService.registerCustomer({
-				...data,
-			});
-			message.open({
-				content: res.message || "Đăng ký tài khoản thành công.",
-				type: "success",
-			});
-			setTimeout(() => {
-				nav("/login");
-			}, 1500);
-			// }
-		} catch (error) {
-		} finally {
-			setLoading(false);
+			const emails = values.email;
+			const emailCheck = await UserService.checkExisEmail(emails);
+			if (
+				emailCheck?.message ===
+				"Email đã tồn tại trong hệ thống vui lòng thử một email khác ."
+			) {
+				setEmailExists(true);
+				setLoading(false);
+				return;
+			}
+		} catch (e) {
+			try {
+				setLoading(true);
+				{
+					const data = {
+						...values,
+						uid: 0,
+						dob: values?.dob
+							? dayjs(values?.dob).format("YYYY-MM-DD")
+							: null,
+						gender:
+							values?.gender === "Nam"
+								? "Male"
+								: values?.gender === "Nữ"
+								? "Female"
+								: "Other",
+					};
+					const res = await UserService.registerCustomer({
+						...data,
+					});
+					message.open({
+						content: res.message || "Đăng ký tài khoản thành công.",
+						type: "success",
+					});
+					setTimeout(() => {
+						nav("/login");
+					}, 1500);
+					// }
+				}
+			} catch (error) {
+				message.open({
+					content: "Đăng ký tài khoản không thành công",
+					type: "error",
+				});
+			} finally {
+				setLoading(false);
+			}
 		}
 	};
 	return (

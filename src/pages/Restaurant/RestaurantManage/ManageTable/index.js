@@ -4,6 +4,7 @@ import { Tabs } from "antd";
 import Room from "../ManageTable/Room";
 import Table from "../ManageTable/Table";
 import CategoryRoom from "../ManageTable/CategoryRoom";
+import TableBookingSchedule from "../ManageTable/TableBookingSchedule";
 
 const ManageTable = () => {
 	return (
@@ -32,6 +33,11 @@ const ManageTable = () => {
 								label: "Kiểu phòng",
 								key: "3",
 								children: <CategoryRoom />,
+							},
+							{
+								label: "Đặt lịch bận bàn",
+								key: "4",
+								children: <TableBookingSchedule />,
 							},
 						]}
 					/>

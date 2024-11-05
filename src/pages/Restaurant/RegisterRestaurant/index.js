@@ -204,61 +204,50 @@ const RegisterRestaurant = () => {
 		console.log("Form values: ", values);
 		form.resetFields();
 	};
-	const checkEmailExistence = async (email) => {
-		try {
-			const check = await UserService.checkExisEmail(email);
-			setEmailExists(check);
-		} catch (error) {}
-	};
-	useEffect(() => {
-		const email = form.getFieldValue("email");
-		if (email) {
-			const timeoutId = setTimeout(() => {
-				checkEmailExistence(email);
-			}, 1000); // Debounce 1 second
-			return () => clearTimeout(timeoutId);
-		} else {
-			setEmailExists(false);
-		}
-	}, [form.getFieldValue("email")]);
-	//submit the form
 	const handleRegister = async () => {
+		const values = await form.validateFields();
 		try {
-			setLoading(true);
-			const values = await form.validateFields();
-			// if (emailExists) {
-			// 	message.error(
-			// 		"Email đã tồn tại. Vui lòng đăng ký với email khác."
-			// 	);
-			// 	return;
-			// }
-			const data = {
-				...values,
-				uid: 0,
-				openTime: dayjs(values?.openTime).format("HH:mm"),
-				closeTime: dayjs(values?.closeTime).format("HH:mm"),
-			};
-			const res = await UserService.registerRestaurant({
-				...data,
-				File: fileList[0].originFileObj,
-			});
-			message.open({
-				content: res.message || "Đăng ký nhà hàng thành công.",
-				type: "success",
-				style: {
-					marginTop: "20vh",
-				},
-			});
-			setTimeout(() => {
-				nav("/login");
-			}, 1500);
-		} catch (error) {
-			message.open({
-				error: error || "Đăng kí nhà hàng không thành công",
-				type: "errorr",
-			});
-		} finally {
-			setLoading(false);
+			const emails = values.email;
+			const emailCheck = await UserService.checkExisEmail(emails);
+			if (
+				emailCheck?.message ===
+				"Email đã tồn tại trong hệ thống vui lòng thử một email khác ."
+			) {
+				setEmailExists(true);
+				setLoading(false);
+				return;
+			}
+		} catch (e) {
+			try {
+				setLoading(true);
+				const data = {
+					...values,
+					uid: 0,
+					openTime: dayjs(values?.openTime).format("HH:mm"),
+					closeTime: dayjs(values?.closeTime).format("HH:mm"),
+				};
+				const res = await UserService.registerRestaurant({
+					...data,
+					File: fileList[0].originFileObj,
+				});
+				message.open({
+					content: res.message || "Đăng ký nhà hàng thành công.",
+					type: "success",
+					style: {
+						marginTop: "20vh",
+					},
+				});
+				setTimeout(() => {
+					nav("/login");
+				}, 1500);
+			} catch (error) {
+				message.open({
+					error: error || "Đăng kí nhà hàng không thành công",
+					type: "errorr",
+				});
+			} finally {
+				setLoading(false);
+			}
 		}
 	};
 

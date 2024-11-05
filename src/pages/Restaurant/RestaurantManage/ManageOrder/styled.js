@@ -36,6 +36,7 @@ export const ManageOrderContainer = styled.div`
 		cursor: pointer;
 		padding: 8px 12px;
 		border-radius: 25px;
+		font-weight: bold;
 	}
 	.tag-waiting {
 		color: #1e283d;

@@ -1,22 +1,24 @@
-import QueryString from 'qs'
-import http from '../index'
+import QueryString from "qs";
+import http from "../index";
 
 import {
-    apiGetDataInHomePage,
-    apiGetDataRestaurantDetail,
-    apiGetAllRestaurants,
-    apiGetAllRestaurantCategory,
-    apiGetAllFeedback,
+	apiGetDataInHomePage,
+	apiGetDataRestaurantDetail,
+	apiGetAllRestaurants,
+	apiGetAllRestaurantCategory,
+	apiGetAllFeedback,
 	apiGetRelatedRestaurants,
-    apiGetAllBlog,
-    apiGetAllBlogCategory,
-    apiGetBlogDetail,
-    apiGetRestaurantFee,
-    apiCreateContact,
-} from './urls'
+	apiGetAllBlog,
+	apiGetAllBlogCategory,
+	apiGetBlogDetail,
+	apiGetRestaurantFee,
+	apiCreateContact,
+	apiVerifyAccountRequest,
+} from "./urls";
 
-const apiHomePageData = body => http.get(apiGetDataInHomePage, body)
-const apiRestaurantDetail = restaurantId => http.get(`${apiGetDataRestaurantDetail}/${restaurantId}` )
+const apiHomePageData = (body) => http.get(apiGetDataInHomePage, body);
+const apiRestaurantDetail = (restaurantId) =>
+	http.get(`${apiGetDataRestaurantDetail}/${restaurantId}`);
 
 // const getAllRestaurants = (params) => {
 //     const filteredParams = Object.fromEntries(
@@ -26,35 +28,43 @@ const apiRestaurantDetail = restaurantId => http.get(`${apiGetDataRestaurantDeta
 //     return http.get(`${apiGetAllRestaurants}?${query}`);
 // };
 
-const getAllRestaurants = body => {
-    const params = QueryString.stringify(body)
-    return http.get(`${apiGetAllRestaurants}?${params}`)
-}
+const getAllRestaurants = (body) => {
+	const params = QueryString.stringify(body);
+	return http.get(`${apiGetAllRestaurants}?${params}`);
+};
 
-const getAllRestaurantCategory = body => http.get(apiGetAllRestaurantCategory, body)
-const getAllFeedBack = restaurantId => http.get(`${apiGetAllFeedback}/${restaurantId}?pageSize=10000` )
-const getRelatedRestaurant = (restaurantId, categoryRestaurantId) => http.get(`${apiGetRelatedRestaurants}/${restaurantId}/${categoryRestaurantId}`)
-const getAllBlog = body => {
-    const params = QueryString.stringify(body)
-    return http.get(`${apiGetAllBlog}?${params}`)
-}
-const getBlogCategory = () => http.get(apiGetAllBlogCategory)
-const getBlogDetail = (blogId) =>http.get(`${apiGetBlogDetail}/${blogId}`)
-const getRestaurantFee = (restaurantId) => http.get(`${apiGetRestaurantFee}/${restaurantId}`)
-const createContact = (body) => http.post(apiCreateContact, body)
+const getAllRestaurantCategory = (body) =>
+	http.get(apiGetAllRestaurantCategory, body);
+const getAllFeedBack = (restaurantId) =>
+	http.get(`${apiGetAllFeedback}/${restaurantId}?pageSize=10000`);
+const getRelatedRestaurant = (restaurantId, categoryRestaurantId) =>
+	http.get(
+		`${apiGetRelatedRestaurants}/${restaurantId}/${categoryRestaurantId}`
+	);
+const getAllBlog = (body) => {
+	const params = QueryString.stringify(body);
+	return http.get(`${apiGetAllBlog}?${params}`);
+};
+const getBlogCategory = () => http.get(apiGetAllBlogCategory);
+const getBlogDetail = (blogId) => http.get(`${apiGetBlogDetail}/${blogId}`);
+const getRestaurantFee = (restaurantId) =>
+	http.get(`${apiGetRestaurantFee}/${restaurantId}`);
+const createContact = (body) => http.post(apiCreateContact, body);
+const verifyAccount = (uId) => http.get(`${apiVerifyAccountRequest}/${uId}`);
 
 const GuestService = {
-    apiHomePageData,
-    apiRestaurantDetail,
-    getAllRestaurants,
-    getAllRestaurantCategory,
-    getAllFeedBack,
-    getRelatedRestaurant,
-    getAllBlog,
-    getBlogCategory,
-    getBlogDetail,
-    getRestaurantFee,
-    createContact,
-}
+	apiHomePageData,
+	apiRestaurantDetail,
+	getAllRestaurants,
+	getAllRestaurantCategory,
+	getAllFeedBack,
+	getRelatedRestaurant,
+	getAllBlog,
+	getBlogCategory,
+	getBlogDetail,
+	getRestaurantFee,
+	createContact,
+	verifyAccount,
+};
 
-export default GuestService
+export default GuestService;
