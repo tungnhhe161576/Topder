@@ -39,6 +39,7 @@ import {
 	apiCheckPaymentOrder,
 	apiCancelOrder,
 	apiGetRestaurantDashboard,
+	apiChangeMenus,
 } from "./urls";
 
 const categoryResApi = (body) => http.get(apiGetListRestaurants, body);
@@ -127,7 +128,7 @@ const loginGG = (body) => http.post(apiLoginGG, body);
 const cancelOrder = (body) => http.put(apiCancelOrder, body);
 const getRestaurantDashboard = (restaurantId) =>
 	http.get(`${apiGetRestaurantDashboard}/${restaurantId}`);
-
+const changeMenus = (body) => http.put(apiChangeMenus, body);
 const UserService = {
 	loginApi,
 	updateProfile,
@@ -167,6 +168,7 @@ const UserService = {
 	checkPaymentOrder,
 	cancelOrder,
 	getRestaurantDashboard,
+	changeMenus,
 };
 
 export default UserService;
