@@ -38,5 +38,4 @@ export const apiLoginGG = "User/LoginWithGoogle";
 export const apiCheckPaymentOrder = "Order/CheckPayment";
 export const apiCancelOrder = "Order/CancelOrder";
 export const apiGetRestaurantDashboard = "Dashboard/GetDashboardRestaurant";
-
-
+export const apiChangeMenus = "Order/ChangeMenus";
