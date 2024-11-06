@@ -6,7 +6,11 @@ import ManageImages from "../ManageRestaurant/ManageImg";
 import ManageInformation from "../ManageRestaurant/ManageInfor";
 import ChangePassword from "../ManageRestaurant/ChangePassword";
 import ManagePolicy from "../ManageRestaurant/MangePolicy";
+import { useSelector } from "react-redux";
+import { userInfor } from "../../../../redux/Slice/userSlice";
 const ManageRestaurant = () => {
+	const user = useSelector(userInfor)
+
 	return (
 		<RestaurantLayout>
 			<ManageRestaurantContainer>
@@ -22,7 +26,7 @@ const ManageRestaurant = () => {
 							{
 								label: "Thông tin",
 								key: "1",
-								children: <ManageInformation />,
+								children: <ManageInformation user={user}/>,
 							},
 							{
 								label: "Mô tả | Chi tiết",

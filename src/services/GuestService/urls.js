@@ -15,3 +15,4 @@ export const apiGetBlogDetail = "Blog/GetDetailBlog";
 export const apiGetRestaurantFee = "Restaurant/GetDiscountAndFee";
 export const apiCreateContact = "Contact/Create";
 export const apiVerifyAccountRequest = "User/VerifyAccount";
+export const apiGetAllCategory = "CategoryRestaurant/GetAllCategoryRestaurants";

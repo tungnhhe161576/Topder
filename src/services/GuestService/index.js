@@ -14,6 +14,7 @@ import {
 	apiGetRestaurantFee,
 	apiCreateContact,
 	apiVerifyAccountRequest,
+	apiGetAllCategory,
 } from "./urls";
 
 const apiHomePageData = (body) => http.get(apiGetDataInHomePage, body);
@@ -51,6 +52,7 @@ const getRestaurantFee = (restaurantId) =>
 	http.get(`${apiGetRestaurantFee}/${restaurantId}`);
 const createContact = (body) => http.post(apiCreateContact, body);
 const verifyAccount = (uId) => http.get(`${apiVerifyAccountRequest}/${uId}`);
+const getAllCategory = () => http.get(apiGetAllCategory);
 
 const GuestService = {
 	apiHomePageData,
@@ -65,6 +67,7 @@ const GuestService = {
 	getRestaurantFee,
 	createContact,
 	verifyAccount,
+	getAllCategory,
 };
 
 export default GuestService;

@@ -42,5 +42,10 @@ export const apiChangeMenus = "Order/ChangeMenus";
 export const apiGetAllOrderByRestaurant = "Order/GetOrderListForRestaurant";
 export const apiUpdateOrderForConfirm = "Order/UpdateStatus";
 export const apiCreateTableOrder = "Order/CreateOrderTable";
+export const apiUpdateRestaurantProfile = "Restaurant/UpdateRestaurantInfo";
+export const apiGetAllTableLazy = "TableBookingSchedule/GetTableBookingScheduleList";
+export const apiGetAllTableScheduleList = "RestaurantTables/GetTableScheduleList";
+export const apiCreateScheduleTable = "TableBookingSchedule/Create";
+export const apiDeleteScheduleTable = "TableBookingSchedule/Delete";
 
 

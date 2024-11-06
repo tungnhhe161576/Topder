@@ -43,6 +43,11 @@ import {
 	apiGetAllOrderByRestaurant,
 	apiUpdateOrderForConfirm,
 	apiCreateTableOrder,
+	apiUpdateRestaurantProfile,
+	apiGetAllTableLazy,
+	apiGetAllTableScheduleList,
+	apiCreateScheduleTable,
+	apiDeleteScheduleTable,
 } from "./urls";
 
 const categoryResApi = (body) => http.get(apiGetListRestaurants, body);
@@ -135,6 +140,11 @@ const changeMenus = (body) => http.put(apiChangeMenus, body);
 const getAllOrderByRestaurant = (restaurantId) => http.get(`${apiGetAllOrderByRestaurant}/${restaurantId}?pageNumber=1&pageSize=10000`)
 const updateOrderForConfirm = (orderId, status) => http.put(`${apiUpdateOrderForConfirm}/${orderId}?status=${status}`)
 const createTableOrder = (body) => http.post(apiCreateTableOrder, body)
+const updateRestaurantProfile = (body) => http.put(apiUpdateRestaurantProfile, body)
+const getAllTableLazy = (restaurantId) => http.get(`${apiGetAllTableLazy}/${restaurantId}`)
+const getAllTableScheduleList = (restaurantId) => http.get(`${apiGetAllTableScheduleList}/${restaurantId}`)
+const createScheduleTable = (body) => http.post(apiCreateScheduleTable, body)
+const deleteScheduleTable = (scheduleId) => http.delete(`${apiDeleteScheduleTable}/${scheduleId}`)
 
 const UserService = {
 	loginApi,
@@ -179,6 +189,11 @@ const UserService = {
 	getAllOrderByRestaurant,
 	updateOrderForConfirm,
 	createTableOrder,
+	updateRestaurantProfile,
+	getAllTableLazy,
+	getAllTableScheduleList,
+	createScheduleTable,
+	deleteScheduleTable,
 };
 
 export default UserService;

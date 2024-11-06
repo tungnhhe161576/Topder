@@ -5,8 +5,12 @@ import Room from "../ManageTable/Room";
 import Table from "../ManageTable/Table";
 import CategoryRoom from "../ManageTable/CategoryRoom";
 import TableBookingSchedule from "../ManageTable/TableBookingSchedule";
+import { useSelector } from "react-redux";
+import { userInfor } from "../../../../redux/Slice/userSlice";
 
 const ManageTable = () => {
+	const user = useSelector(userInfor)
+	
 	return (
 		<RestaurantLayout>
 			<MangementTableContainer>
@@ -37,7 +41,7 @@ const ManageTable = () => {
 							{
 								label: "Đặt lịch bận bàn",
 								key: "4",
-								children: <TableBookingSchedule />,
+								children: <TableBookingSchedule user={user}/>,
 							},
 						]}
 					/>

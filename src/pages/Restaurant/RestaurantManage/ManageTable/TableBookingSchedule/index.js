@@ -1,44 +1,66 @@
 import { Button, Table } from "antd";
+import { useEffect, useState } from "react";
+import UserService from "../../../../../services/UserService";
+import dayjs from "dayjs";
+import ModalCreateSchedule from "./Modal/CreateSchedule";
+import SpinCustom from "../../../../../components/Common/SpinCustom";
+import ModalDeleteSchedule from "./Modal/DeleteSchedule";
 
-const TableBookingSchedule = () => {
-	const data = [
-		{
-			nameTable: "Đỗ Văn Đạt",
-			startDate: "13-06-2024",
-			endDate: "13-06-2024",
-			note: "dscsadsa",
-		},
-	];
+const TableBookingSchedule = ({user}) => {
+	const [loading, setLoading] = useState(false)
+	const [openModalEdit, setOpenModalEdit] = useState(false)
+	const [openModalDelete, setOpenModalDelete] = useState(false)
+	const [openModalCreateSchedule, setOpenModalCreateSchedule] = useState(false)
+	const [tables, setTables] = useState([])
+
+	const getAllTableLazy = async () => {
+		try {
+			setLoading(true)
+			const res = await UserService.getAllTableLazy(user?.uid)
+			setTables(res)
+		} catch (error) {
+			
+		} finally {
+			setLoading(false)
+		}
+	}
+
+	useEffect(() => {
+		if (!!user?.uid) {
+			getAllTableLazy()
+		}
+	}, [])
+
+
 	const columns = [
 		{
 			title: "Tên bàn",
-			dataIndex: "nameTable",
-			key: "nameTable",
+			dataIndex: "tableName",
+			key: "tableName",
 			render: (text) => <span className="fs-15"> {text} </span>,
 		},
 		{
 			title: "Thời gian bắt đầu",
-			dataIndex: "startDate",
-			key: "startDate",
-			render: (text) => <span className="fs-14"> {text} </span>,
+			dataIndex: "startTime",
+			key: "startTime",
+			render: (value) => <span className="fs-14"> {dayjs(value).format('DD-MM-YYYY HH:mm')} </span>,
 		},
 		{
 			title: "Thời gian kết thúc",
-			dataIndex: "endDate",
-			key: "endDate",
-			render: (text) => <span className="fs-14"> {text} </span>,
+			dataIndex: "endTime",
+			key: "endTime",
+			render: (value) => <span className="fs-14"> {dayjs(value).format('DD-MM-YYYY HH:mm')} </span>,
 		},
 		{
 			title: "Ghi chú",
-			dataIndex: "note",
-			key: "note",
+			dataIndex: "notes",
+			key: "notes",
 			render: (text) => <span className="fs-14"> {text} </span>,
 		},
 		{
 			title: "",
-			dataIndex: "note",
 			key: "note",
-			render: (text, record) => (
+			render: (_, record) => (
 				<div
 					style={{
 						display: "flex",
@@ -54,7 +76,7 @@ const TableBookingSchedule = () => {
 							alignItems: "center",
 						}}
 						type="primary"
-						// onClick={() => handleEdit(record)}
+						onClick={() => setOpenModalEdit(record)}
 					>
 						Chỉnh sửa
 					</Button>
@@ -66,7 +88,7 @@ const TableBookingSchedule = () => {
 						}}
 						type="primary"
 						danger
-						// onClick={() => handleDelete(record.key)}
+						onClick={() => setOpenModalDelete(record)}
 					>
 						Xóa
 					</Button>
@@ -81,22 +103,39 @@ const TableBookingSchedule = () => {
 					<Button
 						type="primary"
 						style={{ height: 40 }}
-						// onClick={showModal}
+						onClick={() => setOpenModalCreateSchedule(true)}
 					>
 						Tạo lịch
 					</Button>
 				</div>
 
 				<div className="table">
-					<Table
-						columns={columns}
-						dataSource={data}
-						bordered={false}
-						rowSelection
-						pagination={{ pageSize: 5 }}
-					/>
+					<SpinCustom spinning={loading}>
+						<Table
+							columns={columns}
+							dataSource={tables}
+							bordered={false}
+							pagination={{ pageSize: 5 }}
+						/>
+					</SpinCustom>
 				</div>
 			</div>
+
+			{!!openModalCreateSchedule && (
+				<ModalCreateSchedule
+					open={openModalCreateSchedule}
+					onCancel={() => setOpenModalCreateSchedule(false)}
+					onOk={getAllTableLazy}
+					userId={user?.uid}
+				/>
+			)}
+			{!!openModalDelete && (
+				<ModalDeleteSchedule
+					open={openModalDelete}
+					onCancel={() => setOpenModalDelete(false)}
+					onOk={getAllTableLazy}
+				/>
+			)}
 		</>
 	);
 };
