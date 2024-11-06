@@ -25,10 +25,10 @@ const Pending = ({getHistoryOrder, orderHistory, loading, orderDetail, isDetail,
         },
         {
             title: 'Thời Gian Đặt',
-            dataIndex: 'dateReservation',
-            key: 'dateReservation',
-            width: 120,
-            render: (value) => <span> {dayjs(value).format('DD-MM-YYYY')} </span>,
+            dataIndex: 'createdAt',
+            key: 'createdAt',
+            width: 200,
+            render: (value) => <span> {dayjs(value).format('DD-MM-YYYY HH:mm')} </span>,
         },
         {
             title: 'Giá trị đơn hàng',
@@ -52,7 +52,7 @@ const Pending = ({getHistoryOrder, orderHistory, loading, orderDetail, isDetail,
             title: 'Chi Tiết',
             dataIndex: 'statusOrder',
             key: 'statusOrder',
-            width: 300,
+            width: 200,
             render: (_, record) => (
                 <Space size="middle d-flex">
                     <button onClick={() => handleViewDetail(record)} className="btn detail-btn">Chi Tiết</button>

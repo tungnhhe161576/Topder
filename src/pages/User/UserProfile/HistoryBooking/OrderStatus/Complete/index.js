@@ -6,16 +6,15 @@ import { useState } from "react";
 import ModalFeedback from "../../Modal/Feedback";
 import { formatNumberToK } from "../../../../../../lib/stringUtils";
 
-const Complete = ({orderHistory, loading, orderDetail, isDetail, setIsDetail, handleViewDetail}) => {
+const Complete = ({getHistoryOrder, orderHistory, loading, orderDetail, isDetail, setIsDetail, handleViewDetail}) => {
     const [openModalSendFeedback, setOpenModalSendFeedback] = useState(false)
-    const [isSendFeedback, setIsSendFeedback] = useState(false)
     
     const columns = [
         {
             title: 'Tên Cửa Hàng',
             dataIndex: 'restaurantName',
             key: 'restaurantName',
-            width: 250,
+            width: 200,
             render: (text) => <span className="fs-15">{text}</span>,
         },
         {
@@ -26,10 +25,10 @@ const Complete = ({orderHistory, loading, orderDetail, isDetail, setIsDetail, ha
         },
         {
             title: 'Thời Gian Đặt',
-            dataIndex: 'dateReservation',
-            key: 'dateReservation',
+            dataIndex: 'createdAt',
+            key: 'createdAt',
             width: 200,
-            render: (value) => <span> {dayjs(value).format('DD-MM-YYYY')} </span>,
+            render: (value) => <span> {dayjs(value).format('DD-MM-YYYY HH:mm')} </span>,
         },
         {
             title: 'Giá trị đơn hàng',
@@ -53,17 +52,27 @@ const Complete = ({orderHistory, loading, orderDetail, isDetail, setIsDetail, ha
             title: 'Chi Tiết',
             dataIndex: 'statusOrder',
             key: 'statusOrder',
-            width: 200,
+            width: 250,
             render: (_, record) => (
                 <Space size="middle d-flex">
                     <button onClick={() => handleViewDetail(record)} className="btn detail-btn">Chi Tiết</button>
-                    <button 
-                        style={{background: '#8bc34a', borderRadius: '25px', border: 'none', cursor: 'pointer'}} 
-                        className="pt-5 pb-5 pl-10 pr-10"
-                        onClick={() => setOpenModalSendFeedback(record)}
-                    >
-                        Đánh giá
-                    </button>
+                    {
+                        !record?.isFeedback 
+                            ? <button 
+                                style={{background: '#8bc34a', borderRadius: '25px', border: 'none', cursor: 'pointer'}} 
+                                className="pt-5 pb-5 pl-10 pr-10"
+                                onClick={() => setOpenModalSendFeedback(record)}
+                            >
+                                Đánh giá
+                            </button>
+                            : <button 
+                                style={{background: '#8bc34a', borderRadius: '25px', border: 'none', cursor: 'pointer'}} 
+                                className="pt-5 pb-5 pl-10 pr-10"
+                            >
+                                Xem đánh giá
+                            </button>
+                    }
+                    
                 </Space>
             ),
         },
@@ -91,6 +100,7 @@ const Complete = ({orderHistory, loading, orderDetail, isDetail, setIsDetail, ha
 				<ModalFeedback
 					open={openModalSendFeedback}
 					onCancel={() => setOpenModalSendFeedback(false)}
+                    onOk={getHistoryOrder}
 				/>
 			)}
         </div>

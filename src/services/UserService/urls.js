@@ -39,3 +39,8 @@ export const apiCheckPaymentOrder = "Order/CheckPayment";
 export const apiCancelOrder = "Order/CancelOrder";
 export const apiGetRestaurantDashboard = "Dashboard/GetDashboardRestaurant";
 export const apiChangeMenus = "Order/ChangeMenus";
+export const apiGetAllOrderByRestaurant = "Order/GetOrderListForRestaurant";
+export const apiUpdateOrderForConfirm = "Order/UpdateStatus";
+export const apiCreateTableOrder = "Order/CreateOrderTable";
+
+

@@ -3,11 +3,24 @@ import styled from "styled-components";
 export const ManageOrderContainer = styled.div`
 	width: 100%;
 
+
+
 	.body {
 		background-color: #fff;
 		border-radius: 10px;
 		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 		padding: 40px 20px;
+
+		.select {
+			width: 200px;
+
+			:where(.css-dev-only-do-not-override-14qglws).ant-select-outlined:not(.ant-select-customize-input) .ant-select-selector {
+				border: 1px solid #ff7c08;
+			}
+			.ant-select:not(.ant-select-customize-input) .ant-select-selector {
+				border-radius: 25px !important;
+			}
+		}
 	}
 	.ant-table {
 		width: 100%;

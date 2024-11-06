@@ -25,10 +25,10 @@ const Paid = ({getHistoryOrder, orderHistory, loading, orderDetail, isDetail, se
         },
         {
             title: 'Thời Gian Đặt',
-            dataIndex: 'dateReservation',
-            key: 'dateReservation',
+            dataIndex: 'createdAt',
+            key: 'createdAt',
             width: 200,
-            render: (value) => <span> {dayjs(value).format('DD-MM-YYYY')} </span>,
+            render: (value) => <span> {dayjs(value).format('DD-MM-YYYY HH:mm')} </span>,
         },
         {
             title: 'Giá trị đơn hàng',

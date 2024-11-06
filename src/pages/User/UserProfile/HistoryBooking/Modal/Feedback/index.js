@@ -7,7 +7,7 @@ import UserService from "../../../../../../services/UserService";
 import { useSelector } from "react-redux";
 import { userInfor } from "../../../../../../redux/Slice/userSlice";
 
-const ModalFeedback = ({open, onCancel}) => {
+const ModalFeedback = ({open, onCancel, onOk}) => {
     const [form] = Form.useForm()
     const [loading, setLoading] = useState(false)
 
@@ -33,6 +33,7 @@ const ModalFeedback = ({open, onCancel}) => {
                     marginTop: '10vh',
                 },
             })
+            onOk()
             onCancel()
         } catch (error) {
             message.open({
