@@ -6,7 +6,7 @@ import { useState } from "react";
 import ModalFeedback from "../../Modal/Feedback";
 import { formatNumberToK } from "../../../../../../lib/stringUtils";
 
-const Complete = ({getHistoryOrder, orderHistory, loading, orderDetail, isDetail, setIsDetail, handleViewDetail}) => {
+const Complete = ({orderHistory, loading, orderDetail, isDetail, setIsDetail, handleViewDetail, getHistoryOrder}) => {
     const [openModalSendFeedback, setOpenModalSendFeedback] = useState(false)
     
     const columns = [

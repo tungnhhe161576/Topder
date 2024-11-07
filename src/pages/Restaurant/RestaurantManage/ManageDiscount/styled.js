@@ -10,7 +10,7 @@ export const ManagementDiscountContainer = styled.div`
 		padding: 40px 20px;
 	}
 	.ant-table-thead > tr > th {
-		background-color: #f5f5f5;
+		/* background-color: #f5f5f5; */
 		font-weight: bold;
 	}
 

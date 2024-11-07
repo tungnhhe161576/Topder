@@ -33,16 +33,10 @@ const ModalFeedback = ({open, onCancel, onOk}) => {
                     marginTop: '10vh',
                 },
             })
-            onOk()
             onCancel()
+            onOk()
         } catch (error) {
-            message.open({
-                content: 'Tạo đánh giá thất bại!',
-                type: 'error',
-                style: {
-                    marginTop: '10vh',
-                },
-            })
+            console.log(error);
         } finally {
             setLoading(false)
         }

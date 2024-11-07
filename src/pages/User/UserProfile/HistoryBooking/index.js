@@ -110,6 +110,7 @@ const HistoryBooking = () => {
 					isDetail={isDetail}
 					setIsDetail={setIsDetail}
 					handleViewDetail={handleViewDetail}
+					getHistoryOrder={getHistoryOrder}
 				/>
 			),
 		},

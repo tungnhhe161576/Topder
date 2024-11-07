@@ -51,6 +51,10 @@ import {
 	apiGetAllImageRestaurant,
 	apiUpdatePolicy,
 	apiGetAllFeedbackByRestaurant,
+	apiGetDiscountByRestaurant,
+	apiUpdateActiveDiscount,
+	apiDeleteDiscount,
+	apiUpdateDiscount,
 } from "./urls";
 
 const categoryResApi = (body) => http.get(apiGetListRestaurants, body);
@@ -134,7 +138,7 @@ const getTransactionhistory = (customerId) =>
 const withdraw = (body) => http.post(apiWithdraw, body);
 const checkPaymentOrder = (orderID, status) =>
 	http.get(`${apiCheckPaymentOrder}/${orderID}?status=${status}`);
-const loginGG = (body) => http.post(apiLoginGG, body);
+const loginGG = (accessToken) => http.post(`${apiLoginGG}?accessToken=${accessToken}`);
 
 const cancelOrder = (body) => http.put(apiCancelOrder, body);
 const getRestaurantDashboard = (restaurantId) =>
@@ -152,6 +156,10 @@ const getAllImageRestaurant = (restaurantId) => http.get(`${apiGetAllImageRestau
 const updatePolicy = (restaurantId, discountPrice, firstFeePercent, returningFeePercent, cancellationFeePercent) => 
 	http.put(`${apiUpdatePolicy}/${restaurantId}?discountPrice=${discountPrice}&firstFeePercent=${firstFeePercent}&returningFeePercent=${returningFeePercent}&cancellationFeePercent=${cancellationFeePercent}`)
 const getAllFeedbackByRestaurant = (restaurantId) => http.get(`${apiGetAllFeedbackByRestaurant}/${restaurantId}?pageNumber=1&pageSize=10000`)
+const getDiscountByRestaurant = (restaurantId) => http.get(`${apiGetDiscountByRestaurant}/${restaurantId}?pageNumber=1&pageSize=10000`)
+const updateActiveDiscount = (body) => http.put(apiUpdateActiveDiscount, body)
+const deleteDiscount = (restaurantId, discountId) => http.put(`${apiDeleteDiscount}/${restaurantId}/${discountId}`)
+const updateDiscount = (body) => http.put(apiUpdateDiscount, body)
 
 
 
@@ -206,6 +214,10 @@ const UserService = {
 	getAllImageRestaurant,
 	updatePolicy,
 	getAllFeedbackByRestaurant,
+	getDiscountByRestaurant,
+	updateActiveDiscount,
+	deleteDiscount,
+	updateDiscount,
 };
 
 export default UserService;

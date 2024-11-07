@@ -50,5 +50,9 @@ export const apiDeleteScheduleTable = "TableBookingSchedule/Delete";
 export const apiGetAllImageRestaurant = "Image/GetImageList"
 export const apiUpdatePolicy = "Restaurant/UpdateDiscountAndFee"
 export const apiGetAllFeedbackByRestaurant = "Feedback/GetFeedbackListForRestaurant"
+export const apiGetDiscountByRestaurant = "Discount/GetDiscountList"
+export const apiUpdateActiveDiscount = "Discount/Active"
+export const apiDeleteDiscount = "Discount/Invisible"
+export const apiUpdateDiscount = "Discount/Update"
 
 
