@@ -13,7 +13,6 @@ import { useDispatch } from "react-redux";
 const { Option } = Select;
 
 const ModalUpdateInfo = ({open, onCancel}) => {
-    const [logo, setLogo] = useState('')
     const [loading, setLoading] = useState(false)
     const [cities, setCities] = useState([])
 	const [districts, setDistricts] = useState([])
@@ -105,24 +104,6 @@ const ModalUpdateInfo = ({open, onCancel}) => {
     }, [open, form]);
 
 
-    const handleBeforeUpload = (file) => {
-        const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"]
-        const isAllowedType = allowedImageTypes.includes(file.type)
-        if (!isAllowedType) {
-          message.open({
-            content: 'Vui lòng chọn file hình ảnh đúng định dạng (JPG, PNG, GIF).',
-            type: 'error',
-            style: {
-                marginTop: '20vh',
-            },
-          })
-        } else {
-          setLogo(URL.createObjectURL(file))
-        }
-        return isAllowedType ? false : Upload.LIST_IGNORE
-    }
-
-
     const handelUpdate = async () => {
         try {
             setLoading(true);
@@ -141,9 +122,6 @@ const ModalUpdateInfo = ({open, onCancel}) => {
                 subdescription: subDescription,
                 description: description,
             }
-
-            console.log("updateUser", updateUser);
-            
 
             await UserService.updateRestaurantProfile(updateUser)  
             message.open({
@@ -207,31 +185,6 @@ const ModalUpdateInfo = ({open, onCancel}) => {
                     <Form form={form} layout="vertical">
                         <Row gutter={[16, 16]}>
                             <Col span={12}>
-                                {/* <Form.Item name='logo'>
-                                    <div className="image">
-										<img src={open?.logo} alt="logo" />
-									</div>
-                                    <div className="cam">
-                                        <Form form={form}>
-                                            <Form.Item
-                                                name="avatar"
-                                                className="m-0 p-0"
-                                            >
-                                                <Upload.Dragger
-                                                    className="dragger"
-                                                    beforeUpload={file => handleBeforeUpload(file)}
-                                                    style={{ width: '100%', height: '150px', border: 'none' }}
-                                                    accept="image/*"
-                                                    multiple={false}
-                                                    maxCount={1}
-                                                    fileList={[]}
-                                                >
-                                                    <span> + </span>
-                                                </Upload.Dragger>
-                                            </Form.Item>
-                                        </Form>
-                                    </div>
-                                </Form.Item> */}
                                 <Form.Item
                                     name="nameRes"
                                     label={
@@ -344,9 +297,9 @@ const ModalUpdateInfo = ({open, onCancel}) => {
                                     rules={[
                                         { required: true, message: "Chọn loại nhà hàng" },
                                     ]}
-                                    className="form-item"
+                                    className="form-item select"
                                 >
-                                    <Select className="nice-select w-100" allowClear placeholder="Chọn loại nhà hàng">
+                                    <Select className="mb-9 w-100" allowClear placeholder="Chọn loại nhà hàng">
                                         {
                                             category?.map(c => (
                                                 <Option key={c?.categoryRestaurantId} value={c?.categoryRestaurantId} >
@@ -392,8 +345,9 @@ const ModalUpdateInfo = ({open, onCancel}) => {
                                         </span>
                                     }
                                     rules={[{ required: true, message: "Chọn thành phố/tỉnh thành" }]}
+                                    className="form-item select mb-18"
                                 >
-                                    <Select allowClear onChange={handleCityChange}>
+                                    <Select allowClear onChange={handleCityChange} className="mb-9 w-100">
                                         {cities.map(c => (
                                             <Option key={c.id} value={c.id}>{c.full_name}</Option>
                                         ))}
@@ -407,8 +361,9 @@ const ModalUpdateInfo = ({open, onCancel}) => {
                                         </span>
                                     }
                                     rules={[{ required: true, message: "Chọn huyện" }]}
-                                    >
-                                    <Select allowClear onChange={handleDistrictChange}>
+                                    className="form-item select mb-15"
+                                >
+                                    <Select allowClear onChange={handleDistrictChange} className="mb-9 w-100">
                                         {districts.map(d => (
                                             <Option key={d.id} value={d.id}>{d.full_name}</Option>
                                         ))}
@@ -422,8 +377,9 @@ const ModalUpdateInfo = ({open, onCancel}) => {
                                         </span>
                                     }
                                     rules={[{ required: true, message: "Chọn xã" }]}
-                                    >
-                                    <Select allowClear>
+                                    className="form-item select"
+                                >
+                                    <Select allowClear className="mb-9 w-100">
                                         {communes.map(c => (
                                             <Option key={c.id} value={c.id}>{c.full_name}</Option>
                                         ))}
@@ -435,7 +391,7 @@ const ModalUpdateInfo = ({open, onCancel}) => {
                                     name="subDescription"
                                     labelCol={0}
                                 >
-                                    <div>
+                                    <div className="pl-20 fw-500 fs-18 mb-10">
                                        Mô tả ngắn gọn 
                                     </div>
                                     <Editor
@@ -466,7 +422,7 @@ const ModalUpdateInfo = ({open, onCancel}) => {
                                     name="description"
                                     labelCol={0}
                                 >
-                                    <div>
+                                    <div className="pl-20 fw-500 fs-18 mb-10">
                                         Mô tả chi tiết 
                                     </div>
                                     <Editor

@@ -1,58 +1,105 @@
 import React, { useState } from "react";
-import { Upload, Modal, message } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { Button, Form, message, Upload } from "antd";
+import CustomModal from "../../../../../../components/Common/ModalCustom";
+import ImageService from "../../../../../../services/ImageService";
+import { ModalUploadImageContainer } from "./styled";
 
-const AddImageModal = ({ visible, onCancel, onAdd }) => {
-	const [newImage, setNewImage] = useState([]);
-	const [fileList, setFileList] = useState([]);
+const AddImageModal = ({ open, onCancel, onOk, userId }) => {
+	const [loading, setLoading] = useState(false)
+	const [fileList, setFileList] = useState([])
+	const [form] = Form.useForm()
 
-	const handleImageUpload = ({ file, fileList }) => {
-		setFileList(fileList); // Quản lý danh sách file đã upload
 
-		// Khi file hoàn tất tải lên
-		if (file.status === "done" || file.originFileObj) {
-			const newImageUrl = URL.createObjectURL(file.originFileObj);
-			setNewImage(newImageUrl); // Lưu URL của file đã tải lên
-			console.log("img", newImageUrl);
+	const handleBeforeUpload = (file) => {
+		const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
+		const isAllowedType = allowedImageTypes.includes(file.type);
+		if (!isAllowedType) {
+			message.error('Vui lòng chọn file hình ảnh đúng định dạng (JPG, PNG, GIF).');
 		}
+		return isAllowedType || Upload.LIST_IGNORE;
 	};
 
-	const handleOk = () => {
-		// Kiểm tra nếu có ảnh mới được tải lên
-		if (newImage) {
-			onAdd(newImage);
-			setNewImage(null); // Reset ảnh sau khi upload thành công
-			setFileList([]); // Reset danh sách file sau khi upload
-			message.success("Đã thêm hình ảnh thành công!");
-		} else {
-			message.error("Vui lòng tải lên hình ảnh!");
-		}
+	const handleChange = (info) => {
+		setFileList(info.fileList.map(file => {
+			if (file.response) {
+				file.url = file.response.url;
+			}
+			return file;
+		}));
 	};
+
+
+    const handleCreateImages = async () => {
+        try {
+            setLoading(true)
+			const formData = new FormData();
+			fileList.forEach(file => {
+				formData.append('files', file.originFileObj);
+			});
+			console.log("formData", formData);
+			
+			await ImageService.createImages(userId, formData);
+            onCancel()
+            onOk()
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false)
+        }
+    }
+
+	
+
+    
+    const footer = () => {
+        return (
+            <div className="d-flex justify-content-center">
+                <Button className="mr-10 fw-600 bg-gray" type="primary" shape='round' onClick={() => onCancel()}>
+                    Đóng
+                </Button>
+                <Button className="mr-10 fw-600" type="primary" shape='round' loading={loading} onClick={() => handleCreateImages()}>
+                    Đồng ý
+                </Button>
+            </div>
+        )
+    }
 
 	return (
-		<Modal
-			title="Thêm Hình Ảnh"
-			visible={visible}
-			onOk={handleOk}
+		<CustomModal
+			open={!!open}
 			onCancel={onCancel}
-			okText="Thêm"
-			cancelText="Hủy"
-			destroyOnClose
-			width={700}
+			footer={footer}
+			width={800}
+			style={{marginTop: '150px'}}
 		>
-			<Upload
-				listType="picture-card"
-				fileList={fileList}
-				onChange={handleImageUpload}
-			>
-				{fileList.length === 0 && (
-					<div>
-						<PlusOutlined />
-						<div style={{ marginTop: 8 }}>Upload</div>
-					</div>
-				)}
-			</Upload>
-		</Modal>
+			<ModalUploadImageContainer>
+				<div className="title-type-1">Tạo ảnh cho nhà hàng</div>
+				<div>
+					<Form form={form}>
+						<Form.Item
+							name="image"
+							className="m-0 p-0"
+						>
+							<Upload.Dragger
+								className="dragger"
+								beforeUpload={handleBeforeUpload}
+								onChange={handleChange}
+								fileList={fileList}
+								style={{ width: '100%', border: 'none', backgroundColor: 'white', margin: 'auto' }}
+								accept="image/*"
+								multiple={true}
+								listType="picture"
+							>
+								<Button shape="round" type="primary">
+									Chọn ảnh
+								</Button>
+							</Upload.Dragger>
+						</Form.Item>
+					</Form>
+				</div>
+			</ModalUploadImageContainer>
+
+	    </CustomModal>
 	);
 };
 

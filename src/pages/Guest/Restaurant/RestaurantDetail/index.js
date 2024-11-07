@@ -300,7 +300,11 @@ const RestaurantDetail = () => {
 													Mô tả ngắn gọn:
 												</div>
 												<div style={{fontStyle: "italic"}}>
-													{restaurantDetail?.subdescription}
+													{restaurantDetail?.subdescription ? (
+														<div dangerouslySetInnerHTML={{ __html: restaurantDetail?.subdescription }} />
+													) : (
+														'Nhà hàng chưa có mô tả ngắn gọn'
+													)}
 												</div>
 											</div>
 											<div>

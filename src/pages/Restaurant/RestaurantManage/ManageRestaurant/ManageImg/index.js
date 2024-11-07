@@ -1,92 +1,56 @@
 import { useEffect, useState } from "react";
 import { ManageImgContainer } from "./styled";
-import { Button, Table, Modal, message } from "antd";
+import { Button, Table, message } from "antd";
 import AddImageModal from "./ModalAdd";
 import EditImageModal from "./ModalEdit";
-import ImageService from "../../../../../services/ImageService";
-import { userInfor } from "../../../../../redux/Slice/userSlice";
-import { useSelector } from "react-redux";
+import UserService from "../../../../../services/UserService";
+import SpinCustom from "../../../../../components/Common/SpinCustom";
+import ModalDeleteImage from "./ModalDeleteImage";
 
-const ManageImages = () => {
-	const [dataSource, setDataSource] = useState([]);
-	const user = useSelector(userInfor);
-	const [isAddModalVisible, setIsAddModalVisible] = useState(false);
-	const [isEditModalVisible, setIsEditModalVisible] = useState(false);
-	const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
-	const [currentImage, setCurrentImage] = useState(null);
-	const [deleteKey, setDeleteKey] = useState(null);
+const ManageImages = ({user}) => {
+	const [images, setImages] = useState([]);
+	const [loading, setLoading] = useState(false)
+	const [modalCreateImage, setModalCreateImage] = useState(false)
+	const [modalDeleteImage, setModalDeleteImage] = useState(false)
+	const [modalUpdateImage, setModalUpdateImage] = useState(false)
 
-	// Fetch images from API
 	const getImages = async () => {
 		try {
-			const response = await ImageService.getImgRestaurant(user?.uid);
-			const images = response?.map((item) => ({
-				key: item.imageId,
-				imageUrl: item.imageUrl,
-				restaurantId: item.restaurantId,
-			}));
-			setDataSource(images);
+			setLoading(true)
+			const response = await UserService.getAllImageRestaurant(user?.uid)
+			setImages(response);
 		} catch (error) {
 			message.error("Failed to load images from the server.");
+		} finally {
+			setLoading(false)
 		}
 	};
 
 	// Fetch images on component mount
 	useEffect(() => {
-		getImages();
+		if(!!user?.uid){
+			getImages();
+		}
 	}, []);
 
-	const showAddModal = () => {
-		setIsAddModalVisible(true);
-	};
-
-	const showEditModal = (image) => {
-		setCurrentImage(image);
-		setIsEditModalVisible(true);
-	};
-
-	const showDeleteModal = (key) => {
-		setDeleteKey(key);
-		setIsDeleteModalVisible(true);
-	};
-
-	const handleAddImage = (newImage) => {
-		const newData = {
-			key: (dataSource.length + 1).toString(),
-			imageUrl: newImage,
-		};
-		setDataSource([...dataSource, newData]);
-		setIsAddModalVisible(false);
-	};
-
-	const handleEditImage = (updatedImage) => {
-		setDataSource(
-			dataSource.map((item) =>
-				item.key === currentImage.key
-					? { ...item, imageUrl: updatedImage }
-					: item
-			)
-		);
-		setIsEditModalVisible(false);
-	};
-
-	const handleDeleteImage = () => {
-		setDataSource(dataSource.filter((item) => item.key !== deleteKey));
-		setIsDeleteModalVisible(false);
-		message.success("Xóa hình ảnh thành công.");
-	};
-
-	const handleCancelDelete = () => {
-		setIsDeleteModalVisible(false);
-	};
-
 	const columns = [
+		{
+			title: "STT",
+			dataIndex: "number",
+			key: "number",
+			render: (_, __, index) => (
+				<span className="fs-16 fw-500"> {index+1} </span>
+			),
+		},
 		{
 			title: "Ảnh",
 			dataIndex: "imageUrl",
 			key: "imageUrl",
-			render: (imageUrl) => (
-				<img src={imageUrl} alt="Ảnh Nhà Hàng" width={80} />
+			width: 300,
+			render: (value) => (
+				<div className="image-container">
+					<img src={value} alt="Ảnh Nhà Hàng"/>
+				</div>
 			),
 		},
 		{
@@ -96,7 +60,7 @@ const ManageImages = () => {
 				<Button
 					style={{ height: 40 }}
 					type="primary"
-					onClick={() => showEditModal(record)}
+					onClick={() => setModalUpdateImage(record)}
 				>
 					Chỉnh Sửa
 				</Button>
@@ -110,7 +74,7 @@ const ManageImages = () => {
 					style={{ height: 40 }}
 					type="primary"
 					danger
-					onClick={() => showDeleteModal(record.key)}
+					onClick={() => setModalDeleteImage(record)}
 				>
 					Xóa
 				</Button>
@@ -124,38 +88,55 @@ const ManageImages = () => {
 				<Button
 					type="primary"
 					style={{ height: 40 }}
-					onClick={showAddModal}
+					onClick={() => setModalCreateImage(true)}
 				>
 					Thêm Hình Ảnh
 				</Button>
 			</div>
 
-			<Table dataSource={dataSource} columns={columns} />
+			<div className="w-90 m-auto">
+				<SpinCustom spinning={loading}>
+					<Table 
+						dataSource={images} 
+						columns={columns} 
+						pagination={{
+							pageSize: 5,
+							position: ["bottomCenter"],
+						}}
+					/>
+				</SpinCustom>
+			</div>
 
-			{/* Modal xác nhận xóa */}
-			<Modal
-				title="Xác nhận xóa"
-				visible={isDeleteModalVisible}
-				onOk={handleDeleteImage}
-				onCancel={handleCancelDelete}
-				okText="Xóa"
-				cancelText="Hủy"
-			>
-				<p>Bạn có chắc chắn muốn xóa hình ảnh này không?</p>
-			</Modal>
-
-			<AddImageModal
-				visible={isAddModalVisible}
-				onCancel={() => setIsAddModalVisible(false)}
-				onAdd={handleAddImage}
-			/>
-
-			<EditImageModal
-				visible={isEditModalVisible}
-				onCancel={() => setIsEditModalVisible(false)}
-				onEdit={handleEditImage}
-				currentImage={currentImage?.imageUrl} // Truyền URL của ảnh hiện tại
-			/>
+			{
+				!!modalUpdateImage && (
+					<EditImageModal
+						open={modalUpdateImage}
+						onCancel={() => setModalUpdateImage(false)}
+						onOk={getImages}
+						userId={user?.uid}
+					/>
+				)
+			}
+			{
+				!!modalDeleteImage && (
+					<ModalDeleteImage
+						open={modalDeleteImage}
+						onCancel={() => setModalDeleteImage(false)}
+						onOk={getImages}
+						userId={user?.uid}
+					/>
+				)
+			}
+			{
+				!!modalCreateImage && (
+					<AddImageModal
+						open={modalCreateImage}
+						onCancel={() => setModalCreateImage(false)}
+						onOk={getImages}
+						userId={user?.uid}
+					/>
+				)
+			}
 		</ManageImgContainer>
 	);
 };

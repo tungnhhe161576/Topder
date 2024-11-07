@@ -29,19 +29,14 @@ const ManageRestaurant = () => {
 								children: <ManageInformation user={user}/>,
 							},
 							{
-								label: "Mô tả | Chi tiết",
-								key: "2",
-								children: <ManageDescription />,
-							},
-							{
 								label: "Ảnh",
 								key: "3",
-								children: <ManageImages />,
+								children: <ManageImages user={user}/>,
 							},
 							{
 								label: "Quản lý chính sách nhà hàng",
 								key: "5",
-								children: <ManagePolicy />,
+								children: <ManagePolicy user={user}/>,
 							},
 							{
 								label: "Đổi mật khẩu",

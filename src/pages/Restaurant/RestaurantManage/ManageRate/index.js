@@ -2,33 +2,63 @@ import { Table } from "antd";
 import RestaurantLayout from "../../../../components/Layouts/RestaurantLayout";
 import { ManageRateContainer } from "./styled";
 import dayjs from "dayjs";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { userInfor } from "../../../../redux/Slice/userSlice";
+import UserService from '../../../../services/UserService'
+import SpinCustom from '../../../../components/Common/SpinCustom'
 
-const data = [
-    { name: 'Đỗ Văn Đạt', phoneNumber: '0968228847', content: 'Ngon', stars: 4, date: '13-06-2024' },
-    { name: 'Nguyễn Huy Tùng', phoneNumber: '0968228847', content: 'Ngon', stars: 5, date: '13-06-2024' },
-    { name: 'Đỗ Văn Đạt', phoneNumber: '0968228847', content: 'Ngon', stars: 4, date: '13-06-2024' },
-    { name: 'Đoàn Ngọc Minh', phoneNumber: '0968228847', content: 'Ngon', stars: 5, date: '13-06-2024' },
-    { name: 'Đỗ Văn Đạt', phoneNumber: '0968228847', content: 'Ngon', stars: 2, date: '13-06-2024' },
-    { name: 'Đoàn Ngọc Minh', phoneNumber: '0968228847', content: 'Ngon', stars: 3, date: '13-06-2024' },
-    { name: 'Đỗ Văn Đạt', phoneNumber: '0968228847', content: 'Ngon', stars: 5, date: '13-06-2024' },
-    { name: 'Nguyễn Văn Đức', phoneNumber: '0968228847', content: 'Ngon', stars: 3, date: '13-06-2024' },
-    { name: 'Đoàn Ngọc Minh', phoneNumber: '0968228847', content: 'Ngon', stars: 5, date: '13-06-2024' },
-    { name: 'Đỗ Văn Đạt', phoneNumber: '0968228847', content: 'Ngon', stars: 1, date: '13-06-2024' },
-    { name: 'Nguyễn Văn Đức', phoneNumber: '0968228847', content: 'Ngon', stars: 3, date: '13-06-2024' },
-]   
 const ManageRate = () => {
+    const [loading, setLoading] = useState(false)
+    const [feedbacks, setFeedbacks] = useState([])
+    const user = useSelector(userInfor)
+
+    const getFeedbacks = async () => {
+        try {
+            setLoading(true)
+            const res = await UserService.getAllFeedbackByRestaurant(user?.uid)
+            setFeedbacks(res?.items)
+        } catch (error) {
+            
+        } finally {
+            setLoading(false)
+        }
+    }
+    useEffect(() => {
+        if(!!user?.uid) {
+            getFeedbacks()
+        }
+    }, [user])
 
     const columns = [
         {
+            title: 'STT',
+            dataIndex: 'number',
+            key: 'number',
+            render: (_, __, value) => <span className="fs-15"> {value+1} </span>,
+            align: 'center',
+        },
+        {
+            align: 'center',
+            title: 'Ngày tạo',
+            dataIndex: 'createDate',
+            key: 'createDate',
+            sorter: (a, b) => dayjs(a.createDate).unix() - dayjs(b.createDate).unix(),
+            render: (text) => <span className="fs-14"> {dayjs(text).format('DD-MM-YYYY')} </span>,
+        },
+        {
             title: 'Tên khách hàng',
-            dataIndex: 'name',
-            key: 'name',
+            dataIndex: 'customerName',
+            key: 'customerName',
+            align: 'center',
             render: (text) => <span className="fs-15"> {text} </span>,
         },
         {
-            title: 'Số điện thoại',
-            dataIndex: 'phoneNumber',
-            key: 'phoneNumber',
+            title: 'Số sao',
+            dataIndex: 'star',
+            key: 'star',
+            align: 'center',
+            sorter: (a, b) => a.star - b.star,
             render: (text) => <span className="fs-14"> {text} </span>,
         },
         {
@@ -36,42 +66,6 @@ const ManageRate = () => {
             dataIndex: 'content',
             key: 'content',
             render: (text) => <span className="fs-14"> {text} </span>,
-        },
-        {
-            title: 'Số sao',
-            dataIndex: 'stars',
-            key: 'stars',
-            render: (text) => <span className="fs-14"> {text} </span>,
-            sorter: (a, b) => a.stars - b.stars,
-            filters: [
-                {
-                    text: '5 sao',
-                    value: 5,
-                },
-                {
-                    text: '4 sao',
-                    value: 4,
-                },
-                {
-                    text: '3 sao',
-                    value: 3,
-                },
-                {
-                    text: '2 sao',
-                    value: 2,
-                },
-                {
-                    text: '1 sao',
-                    value: 1,
-                },
-            ],
-            onFilter: (value, record) => record.stars === value,
-        },
-        {
-            title: 'Ngày/Tháng/Năm',
-            dataIndex: 'date',
-            key: 'date',
-            render: (d) => <span className="fs-14"> {d} </span>,
         },
     ]
 
@@ -82,16 +76,16 @@ const ManageRate = () => {
                     <div className="fw-600 fs-22 pl-15 mb-22">
                         Đánh giá của khách hàng
                     </div>
-                    <div className="table">
-                        <Table 
-                            columns={columns}
-                            dataSource={data} 
-                            bordered={false}
-                            rowSelection
-                            pagination={{ pageSize: 5 }}
-                        />
-
-                    </div>
+                    <SpinCustom spinning={loading}>
+                        <div className="table">
+                            <Table 
+                                columns={columns}
+                                dataSource={feedbacks} 
+                                bordered={false}
+                                pagination={{ pageSize: 8 }}
+                            />
+                        </div>
+                    </SpinCustom>
                 </div>
             </ManageRateContainer>
         </RestaurantLayout>

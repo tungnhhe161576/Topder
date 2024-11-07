@@ -48,6 +48,9 @@ import {
 	apiGetAllTableScheduleList,
 	apiCreateScheduleTable,
 	apiDeleteScheduleTable,
+	apiGetAllImageRestaurant,
+	apiUpdatePolicy,
+	apiGetAllFeedbackByRestaurant,
 } from "./urls";
 
 const categoryResApi = (body) => http.get(apiGetListRestaurants, body);
@@ -145,6 +148,12 @@ const getAllTableLazy = (restaurantId) => http.get(`${apiGetAllTableLazy}/${rest
 const getAllTableScheduleList = (restaurantId) => http.get(`${apiGetAllTableScheduleList}/${restaurantId}`)
 const createScheduleTable = (body) => http.post(apiCreateScheduleTable, body)
 const deleteScheduleTable = (scheduleId) => http.delete(`${apiDeleteScheduleTable}/${scheduleId}`)
+const getAllImageRestaurant = (restaurantId) => http.get(`${apiGetAllImageRestaurant}/${restaurantId}?pageNumber=1&PageSize=10000`)
+const updatePolicy = (restaurantId, discountPrice, firstFeePercent, returningFeePercent, cancellationFeePercent) => 
+	http.put(`${apiUpdatePolicy}/${restaurantId}?discountPrice=${discountPrice}&firstFeePercent=${firstFeePercent}&returningFeePercent=${returningFeePercent}&cancellationFeePercent=${cancellationFeePercent}`)
+const getAllFeedbackByRestaurant = (restaurantId) => http.get(`${apiGetAllFeedbackByRestaurant}/${restaurantId}?pageNumber=1&pageSize=10000`)
+
+
 
 const UserService = {
 	loginApi,
@@ -194,6 +203,9 @@ const UserService = {
 	getAllTableScheduleList,
 	createScheduleTable,
 	deleteScheduleTable,
+	getAllImageRestaurant,
+	updatePolicy,
+	getAllFeedbackByRestaurant,
 };
 
 export default UserService;

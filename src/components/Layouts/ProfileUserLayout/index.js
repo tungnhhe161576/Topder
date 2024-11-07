@@ -55,7 +55,7 @@ const ProfileUserLayout = ( {children} ) => {
             content: 'Vui lòng chọn file hình ảnh đúng định dạng (JPG, PNG, GIF).',
             type: 'error',
             style: {
-                marginTop: '20vh',
+                marginTop: '10vh',
             },
           })
         } else {
@@ -83,7 +83,7 @@ const ProfileUserLayout = ( {children} ) => {
                 content: res.message,
                 type: 'success',
                 style: {
-                    marginTop: '20vh',
+                    marginTop: '10vh',
                 },
             })
 

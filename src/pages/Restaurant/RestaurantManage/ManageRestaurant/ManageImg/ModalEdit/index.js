@@ -1,90 +1,116 @@
-import React, { useState, useEffect } from "react";
-import { Upload, Modal, message } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import React, { useState } from "react";
+import { Upload, message, Button, Form } from "antd";
 import ImageService from "../../../../../../services/ImageService";
+import CustomModal from "../../../../../../components/Common/ModalCustom";
 
-const EditImageModal = ({ visible, onCancel, onEdit, currentImage }) => {
-	const [image, setImage] = useState(currentImage);
-	const [fileList, setFileList] = useState([]);
+const EditImageModal = ({ open, onCancel, onOk, userId }) => {
+	const [image, setImage] = useState(open?.imageUrl);
 	const [loading, setLoading] = useState(false);
+	const [form] = Form.useForm();
 
-	useEffect(() => {
-		setImage(currentImage);
-		setFileList([]);
-	}, [currentImage]);
 
-	const handleImageUpload = ({ file, fileList }) => {
-		setFileList(fileList);
+	const handleBeforeUpload = (file) => {
+        const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"]
+        const isAllowedType = allowedImageTypes.includes(file.type)
+        if (!isAllowedType) {
+			message.open({
+				content: 'Vui lòng chọn file hình ảnh đúng định dạng (JPG, PNG, GIF).',
+				type: 'error',
+				style: {
+					marginTop: '20vh',
+				},
+			})
+        } else {
+			setImage(URL.createObjectURL(file))
+        }
+        return isAllowedType ? false : Upload.LIST_IGNORE
+    }
 
-		if (file.status === "done") {
-			const newImageUrl = URL.createObjectURL(file.originFileObj);
-			setImage(newImageUrl);
-		}
+	const handleUpdateImage = async () => {
+        try {
+            setLoading(true)
+            const values = await form.validateFields()
+            const fileValue = values.image.file;
+            const file = new FormData();
+            file.append("file", fileValue);
 
-		if (file.status === "removed") {
-			if (fileList.length === 0) {
-				setImage(currentImage);
-			}
-		}
-	};
-	console.log("currentImage:", currentImage);
-	const handleOk = async () => {
-		if (image) {
-			try {
-				setLoading(true);
-				const body = {
-					imageId: currentImage.imageId,
-					restaurantId: currentImage.restaurantId,
-					imageUrl: image,
-				};
-				await ImageService.updatedImageRes(body);
-				onEdit(image);
-				setFileList([]);
-				message.success("Đã cập nhật hình ảnh thành công!");
-			} catch (error) {
-				message.error("Có lỗi xảy ra khi cập nhật hình ảnh!");
-			} finally {
-				setLoading(false);
-			}
-		} else {
-			message.error("Vui lòng tải lên hình ảnh!");
-		}
-	};
+            await ImageService.updatedImageRes(open?.imageId, userId, file)
+            message.open({
+                content: "Cập nhật ảnh thành công!",
+                type: 'success',
+                style: {
+                    marginTop: '10vh',
+                },
+            })
+			onCancel()
+            onOk()
+        } catch (error) {
+            console.error("Error updating avatar:", error)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+	const footer = () => {
+        return (
+            <div className="d-flex justify-content-center">
+                <Button className="mr-10 fw-600 bg-gray" type="primary" shape='round' onClick={() => onCancel()}>
+                    Đóng
+                </Button>
+                <Button className="mr-10 fw-600" type="primary" shape='round' loading={loading} onClick={() => handleUpdateImage()}>
+                    Đồng ý
+                </Button>
+            </div>
+        )
+    }
+
+	console.log(image);
+	
 
 	return (
-		<Modal
-			title="Chỉnh Sửa Hình Ảnh"
-			visible={visible}
-			onOk={handleOk}
+		<CustomModal
+			open={!!open}
 			onCancel={onCancel}
-			width={500}
-			okText="Chỉnh sửa"
-			cancelText="Hủy"
-			loading={loading}
+			footer={footer}
+			width={600}
+			style={{marginTop: '-60px'}}
 		>
-			<Upload
-				listType="picture-card"
-				fileList={fileList}
-				onChange={handleImageUpload}
-				beforeUpload={() => false}
-			>
-				{fileList.length === 0 && (
-					<div>
-						<PlusOutlined />
-						<div style={{ marginTop: 8 }}>Upload</div>
-					</div>
-				)}
-			</Upload>
-
-			{/* Hiển thị ảnh hiện tại nếu có */}
-			{image && (
-				<img
-					src={image}
-					alt="Hình ảnh hiện tại"
-					style={{ width: "70%", marginTop: 16 }}
-				/>
-			)}
-		</Modal>
+			<div className="d-flex align-items-center">
+				<div className="image-container w-70">
+					<img
+						src={image}
+						alt="Hình ảnh hiện tại"
+						style={{ backgroundSize: 'cover', backgroundPosition: 'center', width: '100%', minHeight: '400px'}}
+					/>
+				</div>
+				<div className="ml-10 w-30">
+					<Form form={form}>
+						<Form.Item
+							name="image"
+							className="m-0 p-0"
+						>
+							<Upload.Dragger
+								className="dragger"
+								beforeUpload={file => handleBeforeUpload(file)}
+								style={{ width: '100%', border: 'none', backgroundColor: 'white', margin: 'auto' }}
+								accept="image/*"
+								multiple={false}
+								maxCount={1}
+								fileList={[]}
+							>
+								<Button 
+									className=""
+									shape="round"
+									type="primary"
+								>
+									Chọn ảnh thay thế
+								</Button>
+							</Upload.Dragger>
+						</Form.Item>
+					</Form>
+				</div>
+			</div>
+		</CustomModal>
 	);
 };
 

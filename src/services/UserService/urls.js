@@ -47,5 +47,8 @@ export const apiGetAllTableLazy = "TableBookingSchedule/GetTableBookingScheduleL
 export const apiGetAllTableScheduleList = "RestaurantTables/GetTableScheduleList";
 export const apiCreateScheduleTable = "TableBookingSchedule/Create";
 export const apiDeleteScheduleTable = "TableBookingSchedule/Delete";
+export const apiGetAllImageRestaurant = "Image/GetImageList"
+export const apiUpdatePolicy = "Restaurant/UpdateDiscountAndFee"
+export const apiGetAllFeedbackByRestaurant = "Feedback/GetFeedbackListForRestaurant"
 
 

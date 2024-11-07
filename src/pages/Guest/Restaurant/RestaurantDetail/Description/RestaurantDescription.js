@@ -10,7 +10,11 @@ const RestaurantDescription = ( {restaurantDetail} ) => {
     return (  
         <div>
             <div className="des">
-                {restaurantDetail?.description}
+                {restaurantDetail?.description ? (
+                    <div dangerouslySetInnerHTML={{ __html: restaurantDetail?.description }} />
+                ) : (
+                    'Nhà hàng chưa có mô tả'
+                )}
             </div>
             <div className="map mt-20 w-100">
                 <iframe 

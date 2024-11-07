@@ -22,4 +22,13 @@ export const ModalUpdateContainer = styled.div `
     .form-item {
         border-bottom: 2px solid #d8d8d8;
     }
+
+    .select {
+        :where(.css-dev-only-do-not-override-14qglws).ant-select-outlined:not(.ant-select-customize-input) .ant-select-selector {
+            border: none;
+        }
+        .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+            border-radius: 25px !important;
+        }
+    }
 `
