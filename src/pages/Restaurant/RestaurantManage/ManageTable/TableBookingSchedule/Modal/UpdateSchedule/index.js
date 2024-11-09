@@ -1,16 +1,16 @@
 import { Button, Col, DatePicker, Form, Input, message, Radio, Row, Tabs } from "antd";
 import table1 from "../../../../../../../assets/images/table1.jpg" 
 import table2 from "../../../../../../../assets/images/table2.jpg" 
-import { ModalCreateScheduleContainer } from "./styled";
 import CustomModal from "../../../../../../../components/Common/ModalCustom";
 import { useEffect, useState } from "react";
 import UserService from "../../../../../../../services/UserService";
 import dayjs from "dayjs";
+import { ModalUpdateScheduleContainer } from "./styled";
 const { RangePicker } = DatePicker;
 
-const ModalCreateSchedule = ({open, onCancel, onOk, userId}) => {
+const ModalUpdateSchedule = ({open, onCancel, onOk, userId}) => {
     const [loading, setLoading] = useState(false);
-    const [selectedTable, setSelectedTable] = useState([])
+    const [selectedTable, setSelectedTable] = useState(open?.tableId)
     const [tableTudo, setTableTodu] = useState([])
     const [tablePhong, setTablePhong] = useState([])
     const [form] = Form.useForm()
@@ -33,17 +33,24 @@ const ModalCreateSchedule = ({open, onCancel, onOk, userId}) => {
     useEffect(() => {
         getTable()
     }, [])
-    
 
-    const handleCreate = async () => {
+    useEffect(() => {
+        const dateField = [dayjs(open.startTime, "YYYY-MM-DD HH:mm"), dayjs(open.endTime, "YYYY-MM-DD HH:mm")]
+        form.setFieldsValue({
+            notes: open?.notes,
+            date: dateField,
+        })
+    }, [form, open])
+
+    const handleUpdateSchedule = async () => {
         try {
             setLoading(true);
             const formValues = await form.validateFields()
-
-            const table = selectedTable.map((t) => (t.tableId));
+            console.log(formValues);
             
-            await UserService.createScheduleTable({
-                tableIds: table,
+            await UserService.updateScheduleTable({
+                scheduleId: open?.scheduleId,
+                tableId: selectedTable,
                 restaurantId: userId,
                 startTime: dayjs(formValues?.date[0].$d).format(),
                 endTime: dayjs(formValues?.date[1].$d).format(),
@@ -51,7 +58,7 @@ const ModalCreateSchedule = ({open, onCancel, onOk, userId}) => {
             })
 
             message.open({
-                content: 'Tạo lịch thành công!',
+                content: 'Cập nhật lịch thành công!',
                 type: 'success',
                 style: {
                     marginTop: '10vh',
@@ -75,21 +82,21 @@ const ModalCreateSchedule = ({open, onCancel, onOk, userId}) => {
             <Radio.Group 
                 block 
                 optionType="button" 
-                value={selectedTable.map(t => t.tableId)} 
-                onChange={(e) => handleSelectTable(e.target.value)}
+                value={selectedTable} 
+                onChange={(e) => hanleSelectedTable(e.target.value)}
             >
                 <Row gutter={[16, 16]} className="w-100">
                     {tablePhong?.map((t, index) => (
                         <Col span={12} key={index} className="w-100">
                             <Radio 
-                                className={`w-100 ${selectedTable?.find(i => i?.tableId === t?.tableId) ? 'selected' : ''}`}
+                                className={`w-100 ${selectedTable=== t?.tableId ? 'selected' : ''}`}
                                 style={{height: '200px'}}
                                 value={t}
                             >
                                 <div className="table-item">
                                     <div className="table-image">
                                         {
-                                        selectedTable?.find(i => i?.tableId === t?.tableId) 
+                                        selectedTable === t?.tableId
                                             ? <img src={table2} alt="table2"/> 
                                             : <img src={table1} alt="table1"/>
                                         }
@@ -115,21 +122,21 @@ const ModalCreateSchedule = ({open, onCancel, onOk, userId}) => {
             <Radio.Group 
                 block 
                 optionType="button" 
-                value={selectedTable.map(t => t.tableId)} 
-                onChange={(e) => handleSelectTable(e.target.value)}
+                value={selectedTable} 
+                onChange={(e) => hanleSelectedTable(e.target.value)}
             >
                 <Row gutter={[16, 16]} className="w-100">
                     {tableTudo?.map(t => (
                         <Col span={12} key={t?.tableId} className="w-100">
                             <Radio 
-                                className={`w-100 ${selectedTable?.find(i => i?.tableId === t?.tableId) ? 'selected' : ''}`}
+                                className={`w-100 ${selectedTable === t?.tableId ? 'selected' : ''}`}
                                 style={{height: '200px'}}
                                 value={t}
                             >
                                 <div className="table-item">
                                     <div className="table-image">
                                         {
-                                        selectedTable?.find(i => i?.tableId === t?.tableId) 
+                                        selectedTable === t?.tableId
                                             ? <img src={table2} alt="table2"/> 
                                             : <img src={table1} alt="table1"/>
                                         } 
@@ -149,15 +156,8 @@ const ModalCreateSchedule = ({open, onCancel, onOk, userId}) => {
         }
     ]
 
-    const handleSelectTable = (table) => {
-        setSelectedTable((prev) => {
-            const exists = prev.find(f => f.tableId === table.tableId);
-            if (exists) {
-                return prev.filter(f => f.tableId !== table.tableId); 
-            } else {
-                return [...prev, { ...table }];
-            }
-        });
+    const hanleSelectedTable = (table) => {
+        setSelectedTable(table?.tableId)
     }
 
     const footer = () => {
@@ -166,7 +166,7 @@ const ModalCreateSchedule = ({open, onCancel, onOk, userId}) => {
                 <Button className="mr-10 fw-600" shape='round' onClick={() => onCancel()}>
                     Đóng
                 </Button>
-                <Button className="mr-10 fw-600" type="primary" shape='round' onClick={() => handleCreate()} loading={loading}>
+                <Button className="mr-10 fw-600" type="primary" shape='round' onClick={() => handleUpdateSchedule()} loading={loading}>
                     Đồng ý
                 </Button>
             </div>
@@ -182,7 +182,7 @@ const ModalCreateSchedule = ({open, onCancel, onOk, userId}) => {
             width={1000}
             className='mt-50'
         >
-            <ModalCreateScheduleContainer>
+            <ModalUpdateScheduleContainer>
                 <div>
                     <Form form={form}>
                         <div className='fs-22 fw-600 d-flex justify-content-center'>
@@ -240,9 +240,9 @@ const ModalCreateSchedule = ({open, onCancel, onOk, userId}) => {
                         </div>
                     </Form>
                 </div>
-            </ModalCreateScheduleContainer>
+            </ModalUpdateScheduleContainer>
         </CustomModal>
     );
 }
  
-export default ModalCreateSchedule;
+export default ModalUpdateSchedule;

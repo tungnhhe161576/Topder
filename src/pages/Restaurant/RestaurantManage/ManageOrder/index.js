@@ -166,10 +166,20 @@ const ManageOrder = () => {
 			dataIndex: "update",
 			key: "update",
 			render: (_, record) => (
-				<>
-					<Button className="mb-5" type="primary" shape='round' onClick={() => setOpenModalDetail(record)} >
+				<div className="d-flex">
+					<Button className="mb-5 mr-5" type="primary" shape='round' onClick={() => setOpenModalDetail(record)} >
 						Chi tiết
 					</Button>
+				</div>
+			),
+			width: 100
+		},
+		{
+			title: "",
+			dataIndex: "a",
+			key: "a",
+			render: (_, record) => (
+				<div className="d-flex">
 					{
 						record?.statusOrder === 'Complete' || record?.statusOrder === 'Cancel'
 							? <></>
@@ -186,7 +196,7 @@ const ManageOrder = () => {
 								</Dropdown>
 							</Button>
 					}
-				</>
+				</div>
 			),
 			width: 100
 		},

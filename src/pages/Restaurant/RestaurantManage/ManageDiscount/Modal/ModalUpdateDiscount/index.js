@@ -12,26 +12,19 @@ const ModalUpdateDiscount = ({open, onCancel, onOk, userId}) => {
     const [menus, setMenus] = useState(open?.discountMenuDtos)
     const [form] = Form.useForm()
 
-    console.log(open);
-    
-
     const handleUpdateDiscount = async () => {
         try {
             setLoading(false)
             const values = await form.validateFields()
             const menu = menus.map(({ menuId, discountMenuPercentage }) => ({ menuId, discountMenuPercentage }));
-            // const data = {
-            //     ...values,
-            //     menu
-            // }
-            // console.log("data", data);
             await UserService.updateDiscount({
                 ...values,
                 discountId: open?.discountId,
                 restaurantId: userId,
                 discountMenuDtos: menu,
                 startDate: values?.startDate?.$d,
-                endDate: values?.endDate?.$d
+                endDate: values?.endDate?.$d,
+                isActive: open?.isActive
             })
             message.open({
                 content: 'Chỉnh sửa thành công',
@@ -83,7 +76,7 @@ const ModalUpdateDiscount = ({open, onCancel, onOk, userId}) => {
                 onCancel={onCancel}
                 width={800}
                 footer={footer}
-                style={{marginTop: '-50px'}}
+                style={{marginTop: '-80px'}}
             >
                 <div>
                     <Form form={form} layout="vertical">
@@ -219,8 +212,9 @@ const ModalUpdateDiscount = ({open, onCancel, onOk, userId}) => {
                             {({ getFieldValue }) => {
                                 const selectedDate = getFieldValue('applyType');
                                 return selectedDate === 'Order Value Range' ? (
-                                    <>
+                                    <div className="d-flex w-90 m-auto justify-content-center">
                                         <Form.Item
+                                            style={{flex: '1', marginRight: '10px'}}
                                             name="minOrderValue"
                                             label= "Khoảng giá tối thiểu"
                                             rules={[
@@ -233,6 +227,7 @@ const ModalUpdateDiscount = ({open, onCancel, onOk, userId}) => {
                                             <InputNumber min={0} style={{ width: "100%" }} />
                                         </Form.Item>
                                         <Form.Item
+                                            style={{flex: '1'}}
                                             label="Khoảng giá tối đa"
                                             name="maxOrderValue"
                                             rules={[
@@ -244,7 +239,7 @@ const ModalUpdateDiscount = ({open, onCancel, onOk, userId}) => {
                                         >
                                             <InputNumber min={0} style={{ width: "100%" }} />
                                         </Form.Item>
-                                    </>
+                                    </div>
                                 ) : null
                             }}
                         </Form.Item>
@@ -271,7 +266,7 @@ const ModalUpdateDiscount = ({open, onCancel, onOk, userId}) => {
                             {({ getFieldValue }) => {
                                 const selectedDate = getFieldValue('scope');
                                 return selectedDate === 'Entire Order' ? (
-                                    <>
+                                    <div className="w-50 pl-40">
                                         <Form.Item
                                             label="Chiết khấu"
                                             name="discountPercentage"
@@ -284,9 +279,11 @@ const ModalUpdateDiscount = ({open, onCancel, onOk, userId}) => {
                                         >
                                             <InputNumber min={0} max={100} style={{ width: "100%" }} />
                                         </Form.Item>
-                                    </>
+                                    </div>
                                 ) : selectedDate === 'Per Service' ? (
                                     <Button
+                                        className="ml-40 bg-primary"
+                                        shape="round"
                                         type="primary"
                                         onClick={() => setOpenChooseMenus(menus)}
                                         style={{ marginBottom: "16px" }}
@@ -299,12 +296,6 @@ const ModalUpdateDiscount = ({open, onCancel, onOk, userId}) => {
 
                         <Form.Item label="Mô tả" name="description">
                             <Input.TextArea rows={3} />
-                        </Form.Item>
-                        <Form.Item label="Kích hoạt" name="isActive">
-                            <Radio.Group>
-                                <Radio value={true}>Kích hoạt</Radio>
-                                <Radio value={false}>Không kích hoạt</Radio>
-                            </Radio.Group>
                         </Form.Item>
                     </Form>
 

@@ -1,15 +1,42 @@
 import { MangementTableContainer } from "./styled";
 import RestaurantLayout from "../../../../components/Layouts/RestaurantLayout";
 import { Tabs } from "antd";
-import Room from "../ManageTable/Room";
-import Table from "../ManageTable/Table";
-import CategoryRoom from "../ManageTable/CategoryRoom";
 import TableBookingSchedule from "../ManageTable/TableBookingSchedule";
 import { useSelector } from "react-redux";
 import { userInfor } from "../../../../redux/Slice/userSlice";
+import AllTable from "../ManageTable/Table";
+import RestaurantRoom from "./Room";
+import UserService from "../../../../services/UserService";
+import { useEffect, useState } from "react";
 
 const ManageTable = () => {
 	const user = useSelector(userInfor)
+	const [loading, setLoading] = useState(false)
+	const [tables, setTables] = useState([])
+	const [type, setType] = useState()
+
+	const getAllTables = async () => {
+		try {
+			setLoading(true)
+			const res = await UserService.getAllRestaurantTable(user?.uid)
+			if (type) {
+				type === 'free' 
+					? setTables(res.items.filter(i => i?.roomId === null))
+					: setTables(res.items.filter(i => i?.roomId !== null))
+			} else {
+				setTables(res.items)
+			}
+		} catch (error) {
+			console.log(error);
+		} finally {
+			setLoading(false)
+		}
+	}
+	useEffect(() => {
+		if (!!user?.uid) {
+			getAllTables()
+		}
+	}, [user, type])
 	
 	return (
 		<RestaurantLayout>
@@ -26,21 +53,16 @@ const ManageTable = () => {
 							{
 								label: "Bàn",
 								key: "1",
-								children: <Table />,
+								children: <AllTable user={user} getAllTables={getAllTables} loading={loading} setLoading={setLoading} tables={tables} setType={setType}/>,
 							},
 							{
 								label: "Phòng",
 								key: "2",
-								children: <Room />,
-							},
-							{
-								label: "Kiểu phòng",
-								key: "3",
-								children: <CategoryRoom />,
+								children: <RestaurantRoom user={user} getAllTables={getAllTables}/>,
 							},
 							{
 								label: "Đặt lịch bận bàn",
-								key: "4",
+								key: "3",
 								children: <TableBookingSchedule user={user}/>,
 							},
 						]}

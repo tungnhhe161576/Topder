@@ -55,6 +55,17 @@ import {
 	apiUpdateActiveDiscount,
 	apiDeleteDiscount,
 	apiUpdateDiscount,
+	apiCreateDiscount,
+	apiUpdateScheduleTable,
+	apiGetAllRestaurantTable,
+	apiUpdateTable,
+	apiDeleteTable,
+	apiGetAllRoom,
+	apiCreateTable,
+	apiIsEnabledRoom,
+	apiInvisibleRoom,
+	apiUpdateRoom,
+	apiCreateRoom,
 } from "./urls";
 
 const categoryResApi = (body) => http.get(apiGetListRestaurants, body);
@@ -160,6 +171,18 @@ const getDiscountByRestaurant = (restaurantId) => http.get(`${apiGetDiscountByRe
 const updateActiveDiscount = (body) => http.put(apiUpdateActiveDiscount, body)
 const deleteDiscount = (restaurantId, discountId) => http.put(`${apiDeleteDiscount}/${restaurantId}/${discountId}`)
 const updateDiscount = (body) => http.put(apiUpdateDiscount, body)
+const createDiscount = (body) => http.post(apiCreateDiscount, body)
+const updateScheduleTable = (body) => http.put(apiUpdateScheduleTable, body)
+const getAllRestaurantTable = (restaunrantId) => http.get(`${apiGetAllRestaurantTable}/${restaunrantId}`)
+const updateTable = (body) => http.put(apiUpdateTable, body)
+const deleteTable = (restaurantId, tableId) => http.put(`${apiDeleteTable}/${restaurantId}/${tableId}`)
+const getAllRoom = (restaurantId) => http.get(`${apiGetAllRoom}/${restaurantId}?pageNumber=1&pageSize=1000`)
+const createTable = (body) => http.post(apiCreateTable, body)
+const isEnabledRoom = (restaurantId, roomId, isEnabledBooking) => http.put(`${apiIsEnabledRoom}/${restaurantId}/${roomId}?isEnabledBooking=${isEnabledBooking}`)
+const invisibleRoom = (restaurantId, roomId) => http.put(`${apiInvisibleRoom}/${restaurantId}/${roomId}`)
+const updateRoom = (body) => http.put(apiUpdateRoom, body)
+const createRoom = (body) => http.post(apiCreateRoom, body)
+
 
 
 
@@ -218,6 +241,17 @@ const UserService = {
 	updateActiveDiscount,
 	deleteDiscount,
 	updateDiscount,
+	createDiscount,
+	updateScheduleTable,
+	getAllRestaurantTable,
+	updateTable,
+	deleteTable,
+	getAllRoom,
+	createTable,
+	isEnabledRoom,
+	invisibleRoom,
+	updateRoom,
+	createRoom,
 };
 
 export default UserService;

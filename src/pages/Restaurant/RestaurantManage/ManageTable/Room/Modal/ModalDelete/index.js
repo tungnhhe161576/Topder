@@ -3,25 +3,26 @@ import CustomModal from "../../../../../../../components/Common/ModalCustom";
 import { useState } from "react";
 import UserService from "../../../../../../../services/UserService";
 
-const ModalDeleteSchedule = ({open, onCancel, onOk}) => {
+const ModalDeleteRoom = ({open, onCancel, onOk, userId, getAllTables}) => {
     const [loading, setLoading] = useState(false)
 
     const handledDelete = async () => {
         try {
             setLoading(true)
-            await UserService.deleteScheduleTable(open?.scheduleId)
+            await UserService.invisibleRoom(userId, open?.roomId)
             message.open({
-                content: 'Xóa lịch thành công!',
+                content: 'Xóa bàn thành công!',
                 type: 'success',
                 style: {
                     marginTop: '10vh',
                 },
             })
+            getAllTables()
             onOk()
             onCancel()
         } catch (error) {
             message.open({
-                content: 'Xóa lịch thất bại!',
+                content: 'Xóa bàn thất bại!',
                 type: 'error',
                 style: {
                     marginTop: '10vh',
@@ -54,10 +55,10 @@ const ModalDeleteSchedule = ({open, onCancel, onOk}) => {
             style={{marginTop: '200px'}}
         >
             <div className="fw-500 fs-20">
-                Bạn có chắc chắn muốn xóa lịch này hay không ?
+                Bạn có chắc chắn muốn xóa phòng này hay không ?
             </div>
         </CustomModal>
     );
 }
  
-export default ModalDeleteSchedule;
+export default ModalDeleteRoom;

@@ -5,12 +5,13 @@ import dayjs from "dayjs";
 import ModalCreateSchedule from "./Modal/CreateSchedule";
 import SpinCustom from "../../../../../components/Common/SpinCustom";
 import ModalDeleteSchedule from "./Modal/DeleteSchedule";
+import ModalUpdateSchedule from "./Modal/UpdateSchedule";
 
 const TableBookingSchedule = ({user}) => {
 	const [loading, setLoading] = useState(false)
-	const [openModalEdit, setOpenModalEdit] = useState(false)
 	const [openModalDelete, setOpenModalDelete] = useState(false)
 	const [openModalCreateSchedule, setOpenModalCreateSchedule] = useState(false)
+	const [oepnModalUpdateSchedule, setModalUpdateSchedule] = useState(false)
 	const [tables, setTables] = useState([])
 
 	const getAllTableLazy = async () => {
@@ -19,7 +20,7 @@ const TableBookingSchedule = ({user}) => {
 			const res = await UserService.getAllTableLazy(user?.uid)
 			setTables(res)
 		} catch (error) {
-			
+			console.log(error);
 		} finally {
 			setLoading(false)
 		}
@@ -29,7 +30,7 @@ const TableBookingSchedule = ({user}) => {
 		if (!!user?.uid) {
 			getAllTableLazy()
 		}
-	}, [])
+	}, [user])
 
 
 	const columns = [
@@ -76,7 +77,7 @@ const TableBookingSchedule = ({user}) => {
 							alignItems: "center",
 						}}
 						type="primary"
-						onClick={() => setOpenModalEdit(record)}
+						onClick={() => setModalUpdateSchedule(record)}
 					>
 						Chỉnh sửa
 					</Button>
@@ -96,6 +97,9 @@ const TableBookingSchedule = ({user}) => {
 			),
 		},
 	];
+
+
+
 	return (
 		<>
 			<div className="body">
@@ -134,6 +138,14 @@ const TableBookingSchedule = ({user}) => {
 					open={openModalDelete}
 					onCancel={() => setOpenModalDelete(false)}
 					onOk={getAllTableLazy}
+				/>
+			)}
+			{!!oepnModalUpdateSchedule && (
+				<ModalUpdateSchedule
+					open={oepnModalUpdateSchedule}
+					onCancel={() => setModalUpdateSchedule(false)}
+					onOk={getAllTableLazy}
+					userId={user?.uid}
 				/>
 			)}
 		</>
