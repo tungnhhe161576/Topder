@@ -1,10 +1,10 @@
-import { Button, Table, Form, Select } from "antd";
+import { Button, Table, Form, Select, message } from "antd";
 import { useEffect, useState } from "react";
 import RestaurantLayout from "../../../../components/Layouts/RestaurantLayout";
 import { ManagementDiscountContainer } from "./styled";
 import { useSelector } from "react-redux";
 import { userInfor } from "../../../../redux/Slice/userSlice";
-import UserService from '../../../../services/UserService'
+import UserService from "../../../../services/UserService";
 import dayjs from "dayjs";
 import SpinCustom from "../../../../components/Common/SpinCustom";
 import { formatNumberToK } from "../../../../lib/stringUtils";
@@ -15,67 +15,109 @@ import ModalCreateDiscount from "./ModalCreateDiscount";
 const { Option } = Select;
 
 const ManagementDiscount = () => {
-	const [loading, setLoading] = useState(false)
-	const [openModalDeleteDiscount, setOpenModalDeleteDiscount] = useState(false)
-	const [openModalUpdateDiscount, setOpenModalUpdateDiscount] = useState(false)
-	const [openModalCreateDiscount, setOpenModalCreateDiscount] = useState(false)
-	const [openModalViewDetailMenu, setOpenModalViewDetailMenu] = useState(false)
-	const [active, setActive] = useState()
-	const [applyType, setApplyType] = useState()
-	const [applicableTo, setApplicableTo] = useState()
-	const [discounts, setDiscounts] = useState([])
-	const user = useSelector(userInfor)
+	const [loading, setLoading] = useState(false);
+	const [openModalDeleteDiscount, setOpenModalDeleteDiscount] =
+		useState(false);
+	const [openModalUpdateDiscount, setOpenModalUpdateDiscount] =
+		useState(false);
+	const [openModalCreateDiscount, setOpenModalCreateDiscount] =
+		useState(false);
+	const [openModalViewDetailMenu, setOpenModalViewDetailMenu] =
+		useState(false);
+	const [active, setActive] = useState();
+	const [applyType, setApplyType] = useState();
+	const [applicableTo, setApplicableTo] = useState();
+	const [discounts, setDiscounts] = useState([]);
+	const user = useSelector(userInfor);
 
 	console.log(user);
-	
 
 	const getDiscounts = async () => {
 		try {
-			setLoading(true)
-			const res = await UserService.getDiscountByRestaurant(user?.uid)
-			applyType 
-				? applicableTo 
+			setLoading(true);
+			const res = await UserService.getDiscountByRestaurant(user?.uid);
+			applyType
+				? applicableTo
 					? active !== undefined
-						? setDiscounts(res.filter((i) => {return i.isActive === active && i.applicableTo === applicableTo && i.applyType === applyType}))
-						: setDiscounts(res.filter((i) => {return i.applicableTo === applicableTo && i.applyType === applyType}))
+						? setDiscounts(
+								res.filter((i) => {
+									return (
+										i.isActive === active &&
+										i.applicableTo === applicableTo &&
+										i.applyType === applyType
+									);
+								})
+						  )
+						: setDiscounts(
+								res.filter((i) => {
+									return (
+										i.applicableTo === applicableTo &&
+										i.applyType === applyType
+									);
+								})
+						  )
 					: active !== undefined
-						? setDiscounts(res.filter((i) => {return !!i.isActive === active && i.applyType === applyType}))
-						: setDiscounts(res.filter((i) => {return i.applyType === applyType}))
-				: applicableTo 
-					? active !== undefined
-						? setDiscounts(res.filter((i) => {return i.isActive === active && i.applicableTo === applicableTo}))
-						: setDiscounts(res.filter((i) => {return i.applicableTo === applicableTo}))
-					: active !== undefined
-						? setDiscounts(res.filter((i) => {return !!i.isActive === active}))
-						: setDiscounts(res)
+					? setDiscounts(
+							res.filter((i) => {
+								return (
+									!!i.isActive === active &&
+									i.applyType === applyType
+								);
+							})
+					  )
+					: setDiscounts(
+							res.filter((i) => {
+								return i.applyType === applyType;
+							})
+					  )
+				: applicableTo
+				? active !== undefined
+					? setDiscounts(
+							res.filter((i) => {
+								return (
+									i.isActive === active &&
+									i.applicableTo === applicableTo
+								);
+							})
+					  )
+					: setDiscounts(
+							res.filter((i) => {
+								return i.applicableTo === applicableTo;
+							})
+					  )
+				: active !== undefined
+				? setDiscounts(
+						res.filter((i) => {
+							return !!i.isActive === active;
+						})
+				  )
+				: setDiscounts(res);
 		} catch (error) {
 			console.log(error);
 		} finally {
-			setLoading(false)
+			setLoading(false);
 		}
-	}
+	};
 	useEffect(() => {
-		if(!!user) {
+		if (!!user) {
 			getDiscounts();
 		}
-	}, [active, applicableTo, applyType, user])
-
+	}, [active, applicableTo, applyType, user]);
 
 	const handleActiveOrDisActive = async (record) => {
 		try {
 			await UserService.updateActiveDiscount({
 				id: record?.discountId,
 				restaurantId: user?.uid,
-				isActive: !record?.isActive
-			})
-			getDiscounts()
+				isActive: !record?.isActive,
+			});
+			message.success("Cập nhật trạng thái thành công");
+			getDiscounts();
 		} catch (error) {
 			console.log(error);
 		} finally {
-
 		}
-	}
-
+	};
 
 	const columns = [
 		{
@@ -83,93 +125,102 @@ const ManagementDiscount = () => {
 			key: "discountName",
 			dataIndex: "discountName",
 			// width: 150,
-			align: 'center'
+			align: "center",
 		},
 		{
 			title: "Ngày bắt đầu",
 			key: "startDate",
 			dataIndex: "startDate",
 			width: 120,
-			align: 'center',
-			sorter: (a, b) => dayjs(a.startDate).unix() - dayjs(b.startDate).unix(),
-			render: (value) => (
-				<div> {dayjs(value).format('DD-MM-YYYY')} </div>
-			)
+			align: "center",
+			sorter: (a, b) =>
+				dayjs(a.startDate).unix() - dayjs(b.startDate).unix(),
+			render: (value) => <div> {dayjs(value).format("DD-MM-YYYY")} </div>,
 		},
 		{
 			title: "Ngày kết thúc",
 			key: "endDate",
 			dataIndex: "endDate",
 			width: 120,
-			align: 'center',
+			align: "center",
 			sorter: (a, b) => dayjs(a.endDate).unix() - dayjs(b.endDate).unix(),
-			render: (value) => (
-				<div> {dayjs(value).format('DD-MM-YYYY')} </div>
-			)
+			render: (value) => <div> {dayjs(value).format("DD-MM-YYYY")} </div>,
 		},
 		{
 			title: "Đối tượng áp dụng",
 			key: "applicableTo",
 			dataIndex: "applicableTo",
 			width: 120,
-			align: 'center',
+			align: "center",
 			render: (value) => (
 				<div>
-					{
-						value === 'New Customer'
-							? 'Cho khách hàng mới'
-							: value === 'All Customers'
-								? 'Tất cả khách hàng'
-								: 'Khách hàng thân thiết'
-					}
+					{value === "New Customer"
+						? "Cho khách hàng mới"
+						: value === "All Customers"
+						? "Tất cả khách hàng"
+						: "Khách hàng thân thiết"}
 				</div>
-			)
+			),
 		},
 		{
 			title: "Loại áp dụng",
 			key: "applyType",
 			dataIndex: "applyType",
 			// width: 150,
-			align: 'center',
+			align: "center",
 			render: (_, record) => (
 				<div>
-					{
-						record?.applyType === "Order Value Range"
-							? <>
-								<div>Cho đơn từ: {formatNumberToK(record?.minOrderValue)} </div>
-								<div>đến: {formatNumberToK(record?.maxOrderValue)} </div>
-							</>
-							: <> Áp dụng cho mọi đơn </>
-					}
+					{record?.applyType === "Order Value Range" ? (
+						<>
+							<div>
+								Cho đơn từ:{" "}
+								{formatNumberToK(record?.minOrderValue)}{" "}
+							</div>
+							<div>
+								đến: {formatNumberToK(record?.maxOrderValue)}{" "}
+							</div>
+						</>
+					) : (
+						<> Áp dụng cho mọi đơn </>
+					)}
 				</div>
-			)
+			),
 		},
 		{
 			title: "Phạm vi",
 			key: "scope",
 			dataIndex: "scope",
 			width: 100,
-			align: 'center',
+			align: "center",
 			render: (_, record) => (
 				<div>
-					{
-						record?.scope === "Entire Order"
-							? <>
-								<div> {record?.discountPercentage}% tổng đơn </div>
-							</>
-							: <>
-								<Button className="button-detail" shape="round" onClick={() => setOpenModalViewDetailMenu(record)}> Chi tiết </Button>
-							</>
-					}
+					{record?.scope === "Entire Order" ? (
+						<>
+							<div> {record?.discountPercentage}% tổng đơn </div>
+						</>
+					) : (
+						<>
+							<Button
+								className="button-detail"
+								shape="round"
+								onClick={() =>
+									setOpenModalViewDetailMenu(record)
+								}
+							>
+								{" "}
+								Chi tiết{" "}
+							</Button>
+						</>
+					)}
 				</div>
-			)
+			),
 		},
 		{
 			title: "Số lượng",
 			key: "quantity",
 			dataIndex: "quantity",
 			width: 80,
-			align: 'center',
+			align: "center",
 			sorter: (a, b) => a.quantity - b.quantity,
 		},
 		{
@@ -177,39 +228,59 @@ const ManagementDiscount = () => {
 			key: "description",
 			dataIndex: "description",
 			// width: 150,
-			align: 'center'
+			align: "center",
 		},
 		{
 			title: "Mô tả",
 			key: "isActive",
 			dataIndex: "isActive",
-			align: 'center',
+			align: "center",
 			render: (_, record) => (
 				<div>
-					{
-						!record?.isActive
-							? <Button className="button-active" onClick={() => handleActiveOrDisActive(record)}>Kích hoạt</Button>
-							: <Button className="button-active" onClick={() => handleActiveOrDisActive(record)}>Hủy kích hoạt</Button>
-					}
+					{!record?.isActive ? (
+						<Button
+							className="button-active"
+							onClick={() => handleActiveOrDisActive(record)}
+						>
+							Kích hoạt
+						</Button>
+					) : (
+						<Button
+							className="button-active"
+							onClick={() => handleActiveOrDisActive(record)}
+						>
+							Hủy kích hoạt
+						</Button>
+					)}
 				</div>
-			)
+			),
 		},
 		{
 			title: "Mô tả",
 			key: "isActive",
 			dataIndex: "isActive",
 			// width: 150,
-			align: 'center',
+			align: "center",
 			render: (_, record) => (
 				<div className="d-flex">
-					<Button className="mr-5 delete-button" shape="round" onClick={() => setOpenModalDeleteDiscount(record)}>Xóa</Button>
-					<Button className="update-button" shape="round" onClick={() => setOpenModalUpdateDiscount(record)}>Chỉnh sửa</Button>
+					<Button
+						className="mr-5 delete-button"
+						shape="round"
+						onClick={() => setOpenModalDeleteDiscount(record)}
+					>
+						Xóa
+					</Button>
+					<Button
+						className="update-button"
+						shape="round"
+						onClick={() => setOpenModalUpdateDiscount(record)}
+					>
+						Chỉnh sửa
+					</Button>
 				</div>
-			)
+			),
 		},
-
 	];
-
 
 	return (
 		<RestaurantLayout>
@@ -226,12 +297,12 @@ const ManagementDiscount = () => {
 					</div>
 					<div className="d-flex">
 						<div className="mr-10 select">
-							<Select 
-								className="nice-select w-100" 
-								allowClear  
+							<Select
+								className="nice-select w-100"
+								allowClear
 								placeholder="Loại áp dụng"
 								onChange={(e) => setApplyType(e)}
-								>
+							>
 								<Option key={1} value="All Orders">
 									Tất cả đơn hàng
 								</Option>
@@ -240,10 +311,10 @@ const ManagementDiscount = () => {
 								</Option>
 							</Select>
 						</div>
-						<div className="select mr-10"> 
-							<Select 
-								className="nice-select w-100" 
-								allowClear  
+						<div className="select mr-10">
+							<Select
+								className="nice-select w-100"
+								allowClear
 								placeholder="Đối tượng áp dụng"
 								onChange={(e) => setApplicableTo(e)}
 							>
@@ -258,10 +329,10 @@ const ManagementDiscount = () => {
 								</Option>
 							</Select>
 						</div>
-						<div className="select pr-40 "> 
-							<Select 
-								className="nice-select w-100" 
-								allowClear  
+						<div className="select pr-40 ">
+							<Select
+								className="nice-select w-100"
+								allowClear
 								placeholder="Trạng thái"
 								onChange={(e) => setActive(e)}
 							>

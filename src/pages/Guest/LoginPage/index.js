@@ -18,12 +18,19 @@ const LoginPage = () => {
 	const [loading, setLoading] = useState(false);
 	const nav = useNavigate();
 	const dispatch = useDispatch();
+	const [rememberMe, setRememberMe] = useState(false);
+	const [textError, setTextError] = useState(false);
 
 	const handleLoginByForm = async () => {
+		const values = await form.validateFields();
 		try {
 			setLoading(true);
-			const values = await form.validateFields();
 			const res = await UserService.loginApi(values);
+			if (rememberMe) {
+				localStorage.setItem("token", res.data.token);
+			} else {
+				sessionStorage.setItem("token", res.data.token);
+			}
 			localStorage.setItem("token", res.data.token);
 			dispatch(setUserInformation(res.data.userInfo));
 			dispatch(setAccessToken(res.data.token));
@@ -37,14 +44,7 @@ const LoginPage = () => {
 				nav("/admin/dashboard");
 			}
 		} catch (error) {
-			if (error.response && error.response.status === 401) {
-				toast.error(
-					error.response.data.message ||
-						"Đăng nhập thất bại. Vui lòng thử lại."
-				);
-			} else {
-				toast.error("Xin lỗi: Đang có một vấn đề gì đó xảy ra");
-			}
+			console.log("dsdasd", error);
 		} finally {
 			setLoading(false);
 		}
@@ -54,12 +54,21 @@ const LoginPage = () => {
 		try {
 			setLoading(true);
 			const accessToken = response.credential;
-			console.log("Access Token:", accessToken);
+			// console.log("Access Token:", accessToken);
 			const res = await UserService.loginGG(accessToken);
+			const token = jwtDecode(res.data);
+			// console.log("Token:", token);
 			localStorage.setItem("token", res.data);
+			dispatch(setUserInformation(token));
 			dispatch(setAccessToken(res.data));
 			toast("Đăng nhập thành công!");
-			nav("/"); // Chuyển hướng đến trang chủ
+			if (token.role === "Customer") {
+				nav("/");
+			} else if (token.role === "Restaurant") {
+				nav("/restaurant/dashboard");
+			} else {
+				nav("/admin/dashboard");
+			}
 		} catch (error) {
 			console.error("Error during Google Login:", error);
 		} finally {
@@ -149,7 +158,13 @@ const LoginPage = () => {
 								valuePropName="checked"
 								className="ml-20"
 							>
-								<Checkbox className="fw-600">
+								<Checkbox
+									className="fw-600"
+									checked={rememberMe}
+									onChange={(e) =>
+										setRememberMe(e.target.checked)
+									}
+								>
 									Ghi nhớ tài khoản
 								</Checkbox>
 								<span
@@ -162,7 +177,6 @@ const LoginPage = () => {
 								</span>
 							</Form.Item>
 						</Form>
-
 						<Button
 							onClick={handleLoginByForm}
 							htmlType="submit"

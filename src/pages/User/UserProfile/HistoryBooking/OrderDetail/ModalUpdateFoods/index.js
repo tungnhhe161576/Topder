@@ -1,20 +1,30 @@
-import { Avatar, Button, InputNumber, Radio, Tabs } from "antd";
+import { Avatar, Button, InputNumber, message, Radio, Tabs } from "antd";
+import { ModalChooseFoodContainer } from "../../../../../Guest/Restaurant/RestaurantDetail/Modal/ChooseFood/styled";
 import CustomModal from "../../../../../../components/Common/ModalCustom";
 import { useEffect, useState } from "react";
 import UserService from "../../../../../../services/UserService";
 import { formatNumberToK } from "../../../../../../lib/stringUtils";
-import { ModalChooseMenuContainer } from "./styled";
 import SpinCustom from "../../../../../../components/Common/SpinCustom";
 
-const ModalChooseMenus = ({ open, onCancel, userId, setMenus, menus }) => {
-	const [loading, setLoading] = useState(false);
+const ModalUpdateFoods = ({
+	open,
+	onCancel,
+	foods,
+	setFoods,
+	restaurantId,
+	getHistoryOrder,
+	handleViewDetail,
+	customerId,
+	orderId,
+}) => {
 	const [menu, setMenu] = useState([]);
-	const [selectedFoods, setSelectedFoods] = useState(open);
+	const [loading, setLoading] = useState(false);
+	const [selectedFoods, setSelectedFoods] = useState(foods);
 
 	const getMenu = async () => {
 		try {
 			setLoading(true);
-			const res = await UserService.getMenu(userId);
+			const res = await UserService.getMenu(restaurantId);
 			setMenu(res);
 		} catch (error) {
 			console.log(error);
@@ -39,12 +49,29 @@ const ModalChooseMenus = ({ open, onCancel, userId, setMenus, menus }) => {
 
 	const handleQuantityChange = (foodId, quantity) => {
 		setSelectedFoods((prev) =>
-			prev.map((f) =>
-				f.menuId === foodId
-					? { ...f, discountMenuPercentage: quantity }
-					: f
-			)
+			prev.map((f) => (f.menuId === foodId ? { ...f, quantity } : f))
 		);
+	};
+
+	const handleUpdate = async () => {
+		try {
+			setLoading(false);
+			const updateData = {
+				orderId: orderId,
+				customerId: customerId,
+				restaurantId: restaurantId,
+				orderMenus: selectedFoods,
+			};
+			await UserService.changeMenus(updateData);
+			message.success("Cập nhật thành công", 2);
+			onCancel();
+			handleViewDetail();
+			getHistoryOrder();
+		} catch (error) {
+			console.error("Failed to update order menus:", error);
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	const items = menu?.map((m) => {
@@ -121,14 +148,12 @@ const ModalChooseMenus = ({ open, onCancel, userId, setMenus, menus }) => {
 											<InputNumber
 												className="d-flex align-items-center"
 												min={1}
-												max={100}
 												value={
 													selectedFoods.find(
 														(i) =>
 															i?.menuId ===
 															f?.menuId
-													)?.discountMenuPercentage ||
-													1
+													)?.quantity || 1
 												}
 												onChange={(value) =>
 													handleQuantityChange(
@@ -160,9 +185,10 @@ const ModalChooseMenus = ({ open, onCancel, userId, setMenus, menus }) => {
 					className="mr-10 fw-600"
 					type="primary"
 					onClick={() => {
-						onCancel();
-						setMenus(selectedFoods);
+						handleUpdate();
+						setFoods(selectedFoods);
 					}}
+					loading={loading}
 				>
 					Đồng ý
 				</Button>
@@ -178,8 +204,9 @@ const ModalChooseMenus = ({ open, onCancel, userId, setMenus, menus }) => {
 				width={800}
 				footer={footer}
 				style={{ marginTop: "150px" }}
+				loading={loading}
 			>
-				<ModalChooseMenuContainer>
+				<ModalChooseFoodContainer>
 					<div className="fs-22 fw-600 d-flex justify-content-center">
 						Chọn món ăn
 					</div>
@@ -188,10 +215,10 @@ const ModalChooseMenus = ({ open, onCancel, userId, setMenus, menus }) => {
 							<Tabs items={items} />
 						</div>
 					</SpinCustom>
-				</ModalChooseMenuContainer>
+				</ModalChooseFoodContainer>
 			</CustomModal>
 		</div>
 	);
 };
 
-export default ModalChooseMenus;
+export default ModalUpdateFoods;
