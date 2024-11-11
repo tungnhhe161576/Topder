@@ -88,6 +88,17 @@ const LeftSide = () => {
 				</div>
 				<div className="item-name"> Quản lý thực đơn </div>
 			</div>
+			<div
+				className={`item contact ${
+					isActive("/restaurant/contact") ? "active" : ""
+				}`}
+				onClick={() => nav("/restaurant/contact")}
+			>
+				<div className="item-icon">
+					<InsertRowAboveOutlined />
+				</div>
+				<div className="item-name"> Liên hệ </div>
+			</div>
 		</div>
 	);
 };

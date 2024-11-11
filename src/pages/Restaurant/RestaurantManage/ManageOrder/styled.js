@@ -22,6 +22,17 @@ export const ManageOrderContainer = styled.div`
 			}
 		}
 	}
+
+	.huydon{
+		border: none;
+		background-color: #b1b4bb;
+	}
+	.huydon:hover {
+		border: none;
+		color: black !important;
+		background-color: #9d9ea3 !important;
+	}
+
 	.ant-table {
 		width: 100%;
 		margin: 20px 0;

@@ -15,9 +15,6 @@ const Dashboard = () => {
     const [restaurantData, setRestaurantData] = useState()
     const [loading, setLoading] = useState(false)
     const user = useSelector(userInfor)
-    console.log("user", user);
-    console.log("data", restaurantData);
-    
 
     const getDataDashboard = async () => {
         try {

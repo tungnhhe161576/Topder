@@ -55,65 +55,6 @@ const ManageOrder = () => {
 		}
 	}, [user, statusOrder]);
 
-	const items = (order) => [
-		{
-			key: "1",
-			label:
-				order?.statusOrder === "Pending" ? (
-					<span
-						className="fs-12"
-						onClick={() => {
-							setOpenModalUpdateOrder(order);
-							setText(
-								"Bạn có chắc chắn muốn xác nhận đơn hàng này không ?"
-							);
-							setStatus("Confirm");
-						}}
-					>
-						{" "}
-						Xác nhận đơn{" "}
-					</span>
-				) : (order?.statusOrder === "Confirm" &&
-						order?.totalAmount === 0) ||
-				  order?.statusOrder === "Paid" ? (
-					<span
-						onClick={() => {
-							setOpenModalUpdateOrder(order);
-							setText(
-								"Bạn có chắc chắn muốn hoàn thành đơn hàng này không ?"
-							);
-							setStatus("Complete");
-						}}
-					>
-						Hoàn thành đơn
-					</span>
-				) : (
-					<></>
-				),
-		},
-		{
-			key: "2",
-			label: (
-				<span
-					className="fs-12"
-					onClick={() => {
-						setOpenModalUpdateOrder(order);
-						setText(
-							`${
-								order?.statusOrder !== "Paid"
-									? "Bạn có chắc chắn muốn hủy đơn hàng này không ?"
-									: "Bạn sẽ mất đi 100% số tiền đơn hàng này và sẽ hoàn về ví của khách hàng!"
-							}`
-						);
-						setStatus("Cancel");
-					}}
-				>
-					Hủy
-				</span>
-			),
-		},
-	];
-
 	const columns = [
 		{
 			title: "Tên Người Đặt",
@@ -212,7 +153,7 @@ const ManageOrder = () => {
 			dataIndex: "update",
 			key: "update",
 			render: (_, record) => (
-				<div className="d-flex">
+				<div className="d-flex justify-content-center align-items-center">
 					<Button
 						className="mb-5 mr-5"
 						type="primary"
@@ -230,25 +171,60 @@ const ManageOrder = () => {
 			dataIndex: "a",
 			key: "a",
 			render: (_, record) => (
-				<div className="d-flex">
-					{record?.statusOrder === "Complete" ||
-					record?.statusOrder === "Cancel" ? (
-						<></>
-					) : (
-						<Button type="primary" shape="round">
-							<Dropdown
-								menu={{
-									items: items(record),
-								}}
-								trigger={["click"]}
-							>
-								<span>Cập nhật đơn</span>
-							</Dropdown>
+				<div className="d-flex align-items-center justify-content-center" >
+					{record?.statusOrder === "Pending" && (
+						<Button
+							className="mr-5"
+							onClick={() => {
+								setOpenModalUpdateOrder(record);
+								setText("Bạn có chắc chắn muốn xác nhận đơn hàng này không ?");
+								setStatus("Confirm");
+							}}
+							shape="round"
+							type="primary"
+						>
+							Xác nhận đơn
 						</Button>
 					)}
+					{(record?.statusOrder === "Confirm" && record?.totalAmount === 0) || record?.statusOrder === "Paid" ? (
+						<Button
+							onClick={() => {
+								setOpenModalUpdateOrder(record);
+								setText("Bạn có chắc chắn muốn hoàn thành đơn hàng này không ?");
+								setStatus("Complete");
+							}}
+							shape="round"
+							type="primary"
+						>
+							Hoàn thành đơn
+						</Button>
+					) : null}
+					{
+						record?.statusOrder === "Pending" || record?.statusOrder === "Confirm" || record?.statusOrder === "Paid"
+						 	? (
+								
+									<Button
+										className="huydon"
+										onClick={() => {
+											setOpenModalUpdateOrder(record);
+											setText(
+												`${
+													record?.statusOrder !== "Paid"
+														? "Bạn có chắc chắn muốn hủy đơn hàng này không ?"
+														: "Bạn sẽ mất đi 100% số tiền đơn hàng này và sẽ hoàn về ví của khách hàng!"
+												}`
+											);
+											setStatus("Cancel");
+										}}
+										shape="round"
+									>
+										Hủy
+									</Button>
+							) : null
+					}
 				</div>
 			),
-			width: 100,
+			// width: 200
 		},
 	];
 

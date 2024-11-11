@@ -35,6 +35,7 @@ import DepositOrWithdraw from "../pages/Transaction/DepositOrWithdraw";
 import VNPayDepositOrWithdraw from "../pages/Transaction/VNPayDepositOrWithDraw";
 import TransactionHistory from "../pages/User/UserProfile/TransactionHistory";
 import ManageMenu from "../pages/Restaurant/RestaurantManage/ManageMenu";
+import ContactRestaurant from "../pages/Restaurant/RestaurantManage/Contact";
 import ManageTable from "../pages/Restaurant/RestaurantManage/ManageTable";
 import AdminRoutes from "./AdminRouter";
 import AdminDashboard from "../pages/Admin/Dashboard";
@@ -256,6 +257,11 @@ export const router = [
 			{
 				path: "manage-menu",
 				element: <ManageMenu />,
+				element: <ManageMenu />,
+			},
+			{
+				path: "contact",
+				element: <ContactRestaurant />
 			},
 		],
 	},

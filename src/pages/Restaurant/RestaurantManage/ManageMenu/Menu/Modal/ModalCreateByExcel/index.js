@@ -113,10 +113,12 @@ const ModalCreateByExcel = ({open, onCancel, onOk, userId}) => {
                 <div className="title-type-1">
                     Tải tệp Excel món ăn
                 </div>
-                <div className="d-flex">
-                    <Button type="primary" className="tep-mau" onClick={() => exportToExcel()}>
-                        Tải tệp mẫu Excel
-                    </Button>
+                <div className="d-flex mt-20 align-items-center justify-content-center">
+                    <div className="mr-20">
+                        <Button type="primary" className="tep-mau" onClick={() => exportToExcel()}>
+                            Tải tệp mẫu Excel
+                        </Button>
+                    </div>
 
                     <div>
                         <Form form={form}>
