@@ -1,36 +1,17 @@
-import { Button, Col, Form, Image, Input, InputNumber, message, Row, Select, Upload } from "antd"
-import CustomModal from "../../../../../../../components/Common/ModalCustom"
-import UserService from "../../../../../../../services/UserService"
-import ImageService from "../../../../../../../services/ImageService"
-import { useEffect, useState } from "react"
-import TextArea from "antd/es/input/TextArea"
+import { useState } from "react";
+import { Editor } from "@tinymce/tinymce-react";
+import { Button, Col, Form, Image, Input, message, Row, Select, Upload } from "antd";
 import { CameraOutlined } from '@ant-design/icons'
-const {Option} = Select
+import CustomModal from "../../../../../../components/Common/ModalCustom";
+import AdminService from "../../../../../../services/AdminService";
+import ImageService from "../../../../../../services/ImageService";
+const { Option } = Select;
 
-const ModalUpdateMenu = ({open, onCancel, onOk, userId}) => {
+const ModalCreateBlog = ({open, onCancel, onOk, blogCategory}) => {
     const [loading, setLoading] = useState(false)
-    const [categories, setCategories] = useState([])
     const [image, setImage] = useState(null)
+    const [content, setContent] = useState('');
     const [form] = Form.useForm()
-
-    const getAllCategories = async () => {
-        try {
-            const res = await UserService.getAllCategoryMenu(userId)
-            setCategories(res)
-        } catch (error) {
-            console.log(error);
-        }
-    }
-    useEffect(() => {
-        getAllCategories()
-    }, [])
-
-    useEffect(() => {
-        form.setFieldsValue({
-            ...open,
-        })
-        setImage(open.image);
-    }, [open, form])
 
 
     const handleBeforeUpload = (file) => {
@@ -50,8 +31,12 @@ const ModalUpdateMenu = ({open, onCancel, onOk, userId}) => {
         return isAllowedType ? false : Upload.LIST_IGNORE
     }
 
+    const handleEditorChange2 = (newContent) => {
+        setContent(newContent);
+    };
 
-    const handleUpdateMenu = async () => {
+    
+    const handleCreateBlog = async () => {
         try {
             setLoading(true)
             const formValues = await form.validateFields()
@@ -63,14 +48,15 @@ const ModalUpdateMenu = ({open, onCancel, onOk, userId}) => {
             const getImage = await ImageService.uploadImage(formData)
             setImage(getImage.url)
 
-            await UserService.updateMenu({
+            await AdminService.createBlog({
                 ...formValues,
-                restaurantId: userId,
-                menuId: open?.menuId,
+                adminId: 1,
+                imageFile: null,
                 image: image,
+                content: content,
             })
             message.open({
-                content: 'Cập nhật món ăn thành công!',
+                content: 'Tạo bài viết bàn thành công!',
                 type: 'success',
                 style: {
                     marginTop: '10vh',
@@ -79,17 +65,12 @@ const ModalUpdateMenu = ({open, onCancel, onOk, userId}) => {
             onOk()
             onCancel()
         } catch (error) {
-            message.open({
-                content: 'Cập nhật món ăn thất bại!',
-                type: 'error',
-                style: {
-                    marginTop: '10vh',
-                },
-            })
+            console.log(error)
         } finally {
             setLoading(false)
         }
     }
+    
     
     const footer = () => {
         return (
@@ -97,7 +78,7 @@ const ModalUpdateMenu = ({open, onCancel, onOk, userId}) => {
                 <Button className="mr-10 fw-600" shape='round' onClick={() => onCancel()}>
                     Đóng
                 </Button>
-                <Button className="mr-10 fw-600" type="primary" shape='round' onClick={() => handleUpdateMenu()} loading={loading}>
+                <Button className="mr-10 fw-600" type="primary" shape='round' onClick={() => handleCreateBlog()} loading={loading}>
                     Đồng ý
                 </Button>
             </div>
@@ -109,69 +90,52 @@ const ModalUpdateMenu = ({open, onCancel, onOk, userId}) => {
             open={!!open}
             onCancel={onCancel}
             footer={footer}
-            width={800}
-            // style={{marginTop: '200px'}}
+            width={1000}
+            style={{marginTop: '-70px'}}
         >
             <div className="title-type-1">
-                Cập nhật món ăn
+                Cập nhật bài viết
             </div>
             <div className="mt-20">
                 <Form form={form} layout="vertical">
                     <Row gutter={[16, 16]} >
-                        <Col span={12}>
+                        <Col span={16}>
                             <Form.Item
-                                name="categoryMenuId"
-                                label={
-                                    <span className="fs-17 fw-600 d-flex justify-content-start">
-                                        Loại món ăn
-                                    </span>
-                                }
+                                name="title"
+                                label='Tên bài viết'
                                 rules={[
-                                    { required: true, message: "Vui lòng chọn loại món ăn!" },
+                                    { required: true, message: "Vui lòng đặt tên bài viết!" },
                                 ]}
                             >
-                                <Select allowClear placeholder='Chọn loại món ăn'>
-                                    {
-                                        categories.map(i => (
-                                            <Option key={i?.categoryMenuId} value={i?.categoryMenuId}>
-                                                {i?.categoryMenuName}
-                                            </Option>
-                                        ))
-                                    }
-                                </Select>
-                            </Form.Item>
-                        
-                            <Form.Item
-                                name="dishName"
-                                label={
-                                    <span className="fs-17 fw-600 d-flex justify-content-start">
-                                        Tên món ăn
-                                    </span>
-                                }
-                                rules={[
-                                    { required: true, message: "Vui lòng đặt tên món ăn!" },
-                                ]}
-                            >
-                                <Input placeholder="Tên món ăn"/>
+                                <Input placeholder="Tên bài viết"/>
                             </Form.Item>
 
                             <Form.Item
-                                name="price"
-                                label={
-                                    <span className="fs-17 fw-600 d-flex justify-content-start">
-                                        Giá tiền
-                                    </span>
-                                }
+                                name="bloggroupId"
+                                label='Loại bài viết'
                                 rules={[
-                                    { required: true, message: "Vui lòng chọn giá tiền!" },
+                                    { required: true, message: "Vui lòng chọn loại bài viết!" },
                                 ]}
                             >
-                                <InputNumber placeholder="Sức chứa" min={0} className='w-100'/>
+                                <Select allowClear  placeholder="Loại bài viết">
+									{
+										blogCategory?.map(i => (
+											<Option key={i?.bloggroupId} value={i?.bloggroupId}>
+												{i?.bloggroupName}
+											</Option>
+										))
+									}
+								</Select>
                             </Form.Item>
                         </Col>
-                        <Col span={12}>
+
+                        <Col span={8}>
                             <div className="w-70 m-auto">
-                                <Image src={image} alt="image"/>
+                                {
+                                    !!image 
+                                        ? <Image src={image} alt="image"/>
+                                        : <div className="fs-16 fw-500 gray d-flex justify-content-center"> Chọn ảnh </div>
+                                }
                                 <Form.Item
                                     name="image"
                                     className="m-0 p-0"
@@ -205,23 +169,42 @@ const ModalUpdateMenu = ({open, onCancel, onOk, userId}) => {
                                     : <></>
                                 }
                         </Col>
+
                         <Col span={24}>
                             <Form.Item
-                                name="description"
-                                label={
-                                    <span className="fs-17 fw-600 d-flex justify-content-start">
-                                        Mô tả
-                                    </span>
-                                }
+                                name="content"
+                                labelCol={0}
                             >
-                                <TextArea rows={4} placeholder="Đánh giá của bạn" />
+                                <div className="pl-20 fw-500 fs-18 mb-10">
+                                    Nội dung bài viết 
+                                </div>
+                                <Editor
+                                    onEditorChange={handleEditorChange2}
+                                    apiKey='mbse8bnylyttkkcul3b8wf174fumv1dwoe7romoif6cirr9f'
+                                    init={{
+                                        height: 300,
+                                        width: '100%',
+                                    menubar: false,
+                                    plugins: [
+                                        'advlist autolink lists link image charmap print preview anchor',
+                                        'searchreplace visualblocks code fullscreen',
+                                        'insertdatetime media table paste code help wordcount'
+                                    ],
+                                    toolbar:
+                                        // eslint-disable-next-line no-multi-str
+                                        'undo redo | formatselect | bold italic backcolor | \
+                                        alignleft aligncenter alignright alignjustify | \
+                                        bullist numlist outdent indent | removeformat | help'
+                                    }}
+                                    initialValue={open?.description}
+                                />
                             </Form.Item>
                         </Col>
                     </Row>
                 </Form>
             </div>
         </CustomModal>
-    );
+    )
 }
  
-export default ModalUpdateMenu;
+export default ModalCreateBlog;

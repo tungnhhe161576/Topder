@@ -2,7 +2,6 @@ import styled from "styled-components";
 
 export const MangementTableContainer = styled.div`
 	width: 100%;
-	height: calc(100vh - 200px);
 	.body {
 		background-color: #fff;
 		border-radius: 10px;

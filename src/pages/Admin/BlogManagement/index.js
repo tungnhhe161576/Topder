@@ -1,26 +1,64 @@
 import { Tabs } from "antd";
 import AdminLayout from "../../../components/Layouts/AdminLayout";
 import { BlogManagementContainer } from "./styled";
-import Blog from "../BlogManagement/Blog";
 import BlogGroup from "../BlogManagement/BlogGroup";
+import AllBlogs from "./Blog";
+import { useEffect, useState } from "react";
+import AdminService from "../../../services/AdminService";
 
 const BlogManagement = () => {
+	const [loading, setLoading] = useState(false)
+	const [dataSearch, setDataSearch] = useState({
+		pageNumber: 1,
+		pageSize: 10000,
+		blogGroupId: undefined,
+		title: ''
+	})
+	const [blogs, setBlogs] = useState([])
+	const [blogCategory, setBlogCategory] = useState([])
+
+	const getAllBlog = async () => {
+		try {
+			setLoading(true)
+			const res = await AdminService.getAllBlog(dataSearch)
+			setBlogs(res.items)
+		} catch (error) {	
+			console.log(error);
+		} finally {
+			setLoading(false)
+		}
+	}
+	
+	const getAllBlogCategory = async () => {
+		try {
+			setLoading(true)
+			const res = await AdminService.getCategoryBLog()
+			setBlogCategory(res.items)
+		} catch (error) {
+			console.log(error);
+		} finally {
+			setLoading(false)
+		}
+	}
+
+	useEffect(() => {
+		getAllBlog()
+	}, [dataSearch])
+	useEffect(() => {
+		getAllBlogCategory()
+	}, [])
+	
 	return (
 		<AdminLayout>
 			<BlogManagementContainer>
 				<div className="body">
-					<div className="title">
-						{/* <h3 className="card-title card-title-dash">
-							Quản lý nhà hàng
-						</h3> */}
-					</div>
 					<Tabs
 						type="card"
 						items={[
 							{
 								label: "Blog",
 								key: "1",
-								children: <Blog />,
+								children: <AllBlogs blogs={blogs} loading={loading} setDataSearch={setDataSearch} getAllBlog={getAllBlog} blogCategory={blogCategory}/>,
 							},
 							{
 								label: "Loại Blog",

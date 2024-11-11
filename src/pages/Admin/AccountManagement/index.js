@@ -4,38 +4,40 @@ import { AccountManagementContainer } from "./styled";
 import CustomerAccount from "./Account/CustomerAccount";
 import RestaurantAccount from "./Account/RestaurantAccount";
 import { useEffect, useState } from "react";
+import AdminService from "../../../services/AdminService";
 
 const AccountManagement = () => {
     const [loading, setLoading] = useState(false)
     const [accounts, setAccounts] = useState([])
 
-
-    const getAccount = async () => {
+    const getAllAccount = async () => {
         try {
             setLoading(true)
-            
+            const res = await AdminService.getAllUser()
+            setAccounts(res)
         } catch (error) {
             console.log(error);
         } finally {
             setLoading(false)
         }
     }
-
     useEffect(() => {
-        getAccount()
+        getAllAccount()
     }, [])
+
+
 
 
     const items=[
         {
             key: "1",
             label: "Khách hàng",
-            children: <CustomerAccount loading={loading} accounts={accounts} getAccount={getAccount}/>,
+            children: <CustomerAccount loading={loading} accounts={accounts} getAccount={getAllAccount}/>,
         },
         {
             key: "2",
             label: "Nhà hàng",
-            children: <RestaurantAccount loading={loading} accounts={accounts} getAccount={getAccount}/>,
+            children: <RestaurantAccount loading={loading} accounts={accounts} getAccount={getAllAccount}/>,
         },
     ]
 
