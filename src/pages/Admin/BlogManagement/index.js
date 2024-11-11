@@ -14,6 +14,11 @@ const BlogManagement = () => {
 		blogGroupId: undefined,
 		title: ''
 	})
+	const [dataCategorySearch, setDataCategorySearch] = useState({
+		pageNumber: 1,
+		pageSize: 10000,
+		blogGroupName: ''
+	})
 	const [blogs, setBlogs] = useState([])
 	const [blogCategory, setBlogCategory] = useState([])
 
@@ -32,7 +37,7 @@ const BlogManagement = () => {
 	const getAllBlogCategory = async () => {
 		try {
 			setLoading(true)
-			const res = await AdminService.getCategoryBLog()
+			const res = await AdminService.getCategoryBLog(dataCategorySearch)
 			setBlogCategory(res.items)
 		} catch (error) {
 			console.log(error);
@@ -44,9 +49,10 @@ const BlogManagement = () => {
 	useEffect(() => {
 		getAllBlog()
 	}, [dataSearch])
+	
 	useEffect(() => {
 		getAllBlogCategory()
-	}, [])
+	}, [dataCategorySearch])
 	
 	return (
 		<AdminLayout>
@@ -63,7 +69,7 @@ const BlogManagement = () => {
 							{
 								label: "Loại Blog",
 								key: "2",
-								children: <BlogGroup />,
+								children: <BlogGroup blogCategory={blogCategory} getAllBlogCategory={getAllBlogCategory} getAllBlog={getAllBlog} loading={loading} setDataCategorySearch={setDataCategorySearch}/>,
 							},
 						]}
 					/>

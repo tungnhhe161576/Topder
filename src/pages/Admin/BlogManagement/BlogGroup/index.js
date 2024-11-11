@@ -1,74 +1,62 @@
 import { Button, Col, Form, Input, message, Modal, Row, Table } from "antd";
 import { BlogContainer } from "../Blog/styled";
 import { useEffect, useState } from "react";
+import SpinCustom from "../../../../components/Common/SpinCustom";
+import ModalDeleteCategory from "./Modal/ModalDelete";
+import ModalCreateCategory from "./Modal/ModalCreate";
+import ModalUpdateCategory from "./Modal/ModalUpdate";
+import { BlogGroupContainer } from "./styled";
 
-const BlogGroup = () => {
-	const [isAddModalVisible, setIsAddModalVisible] = useState(false);
-	const [isEditModalVisible, setIsEditModalVisible] = useState(false);
-	const [formAdd] = Form.useForm();
-	const [formEdit] = Form.useForm();
-	const [dataSource, setDataSource] = useState([]);
-	const [editingBlog, setEditingBlog] = useState(null);
-	//const [searchTitle, setSearchTitle] = useState("");
+const BlogGroup = ({blogCategory, getAllBlogCategory, getAllBlog, loading, setDataCategorySearch}) => {
+	const [openModalDeleteCategory, setOpenModalDeleteCategory] = useState(false)
+	const [openModalCreateCategory, setOpenModalCreateCategory] = useState(false)
+	const [openModalUpdateCategory, setOpenModalUpdateCategory] = useState(false)
+	const [form] = Form.useForm();
 
-	const initialDataSource = [
-		{
-			key: 1,
-			bloggroupName: "Công nghệ",
-		},
-		{
-			key: 2,
-			bloggroupName: "Công nghệ",
-		},
-		{
-			key: 3,
-			bloggroupName: "Công nghệ",
-		},
-		{
-			key: 4,
-			bloggroupName: "Công nghệ",
-		},
-	];
+	const handleSearch = async () => {
+		try {
+			const formValues = await form.validateFields();
+			setDataCategorySearch(prev => ({
+				...prev,
+				blogGroupName: formValues.title,
+			}));
+		} catch (error) {
+			console.log(error);
+		}
+	};
+	
 
 	const columns = [
 		{
-			title: "Loại Blog",
+			title: "STT",
+			dataIndex: "number",
+			key: "number",
+			render: (_, __, index) => (<div className="fs-16 fw-500">{index+1}</div>)
+		},
+		{
+			title: "Tên",
 			dataIndex: "bloggroupName",
 			key: "bloggroupName",
 		},
 		{
-			title: "Hành Động",
+			title: "Hành động",
 			dataIndex: "",
 			key: "action",
 			render: (text, record) => (
-				<div
-					style={{
-						display: "flex",
-						gap: "15px",
-						alignItems: "center",
-						justifyContent: "center",
-					}}
-				>
+				<div className="d-flex align-items-center">
 					<Button
-						style={{
-							height: 40,
-							display: "flex",
-							alignItems: "center",
-						}}
+						shape="round"
+						className="mr-10"
 						type="primary"
-						onClick={() => handleEdit(record)}
+						onClick={() => setOpenModalUpdateCategory(record)}
 					>
 						Chỉnh sửa
 					</Button>
 					<Button
-						style={{
-							height: 40,
-							display: "flex",
-							alignItems: "center",
-						}}
+						shape="round"
 						type="primary"
 						danger
-						onClick={() => handleDelete(record.key)}
+						onClick={() => setOpenModalDeleteCategory(record)}
 					>
 						Xóa
 					</Button>
@@ -76,177 +64,78 @@ const BlogGroup = () => {
 			),
 		},
 	];
-	const showAddModal = () => {
-		setIsAddModalVisible(true);
-		formAdd.resetFields();
-	};
 
-	const handleEdit = (record) => {
-		setEditingBlog(record);
-		formEdit.setFieldsValue({
-			bloggroupName: record.bloggroupName,
-		});
-		setIsEditModalVisible(true);
-	};
 
-	const handleDelete = (key) => {
-		setDataSource((prev) => prev.filter((item) => item.key !== key));
-		message.success("Xóa blog thành công!");
-	};
-
-	const handleAddOk = async () => {
-		try {
-			const values = await formAdd.validateFields();
-			const newBlog = {
-				key: Date.now(),
-				bloggroupName: values.bloggroupName,
-			};
-			setDataSource((prev) => [...prev, newBlog]);
-			setIsAddModalVisible(false);
-			message.success("Thêm blog thành công!");
-		} catch (err) {
-			console.error(err);
-		}
-	};
-
-	const handleEditOk = async () => {
-		try {
-			const values = await formEdit.validateFields();
-			setDataSource((prev) =>
-				prev.map((item) =>
-					item.key === editingBlog.key ? { ...item, ...values } : item
-				)
-			);
-			setIsEditModalVisible(false);
-			message.success("Chỉnh sửa blog thành công!");
-		} catch (err) {
-			console.error(err);
-		}
-	};
-
-	const handleAddCancel = () => {
-		setIsAddModalVisible(false);
-	};
-
-	const handleEditCancel = () => {
-		setIsEditModalVisible(false);
-	};
-
-	useEffect(() => {
-		setDataSource(initialDataSource);
-	}, []);
-
-	const handleSearchByTitle = () => {
-		// Logic to filter by title (if needed)
-	};
 
 	return (
-		<BlogContainer>
+		<BlogGroupContainer>
 			<div>
-				<div>
-					<Row
-						justify="center"
-						gutter={[16, 16]}
-						className="search-container"
-					>
-						<Col>
-							<label>Tiêu đề</label>
-							<Input
-								placeholder="Tìm theo tiêu đề"
-								style={{ width: 200, marginLeft: 10 }}
-								//onChange={(e) => setSearchTitle(e.target.value)}
-							/>
-							<Button
-								className="btn"
-								type="primary"
-								style={{ marginLeft: 10 }}
-								onClick={handleSearchByTitle}
-							>
-								Tìm Kiếm
-							</Button>
-						</Col>
-					</Row>
-				</div>
-				<div
-					style={{
-						marginBottom: "20px",
-						textAlign: "right",
-					}}
-				>
-					<Button
-						type="primary"
-						style={{ height: 40 }}
-						onClick={showAddModal}
-					>
-						Thêm Blog
-					</Button>
-				</div>
-				<Table
-					dataSource={dataSource}
-					columns={columns}
-					rowKey="key"
-					pagination={{ pageSize: 4 }}
-				/>
-
-				<Modal
-					title="Thêm Loại Blog"
-					visible={isAddModalVisible}
-					onOk={handleAddOk}
-					onCancel={handleAddCancel}
-					okText="Thêm"
-					cancelText="Hủy"
-					width={600}
-				>
-					<Form form={formAdd} layout="vertical">
-						<Row gutter={[24, 16]}>
-							<Col xs={24}>
-								<Form.Item
-									name="bloggroupName"
-									label="Loại Blog"
-									rules={[
-										{
-											required: true,
-											message: "Vui lòng nhập loại blog",
-										},
-									]}
+				<div className="d-flex justify-content-space-between align-items-center">
+					<div className="pl-20">
+						<Button
+							type="primary"
+							style={{ height: 40 }}
+							onClick={() => setOpenModalCreateCategory(true)}
+						>
+							Thêm loại bài viết
+						</Button>
+					</div>
+					<div className="pr-20">
+						<Form form={form} className="d-flex align-items-center">
+							<Form.Item name='title' className="mr-10 search-text" style={{width: '400px'}}>
+								<Input placeholder="Tìm theo tiêu đề" allowClear className="input-text w-100"/>
+							</Form.Item>
+							<Form.Item>
+								<Button
+									type="primary"
+									htmlType="submit"
+									className="btn menu_search"
+									onClick={() => handleSearch()}
 								>
-									<Input placeholder="Nhập loại blog" />
-								</Form.Item>
-							</Col>
-						</Row>
-					</Form>
-				</Modal>
+									TÌm kiếm
+								</Button>
+							</Form.Item>
+						</Form>
+					</div>
+				</div>
 
-				<Modal
-					title="Chỉnh Sửa Loại Blog"
-					visible={isEditModalVisible}
-					onOk={handleEditOk}
-					onCancel={handleEditCancel}
-					okText="Chỉnh sửa"
-					cancelText="Hủy"
-					width={600}
-				>
-					<Form form={formEdit} layout="vertical">
-						<Row gutter={[24, 16]}>
-							<Col xs={24}>
-								<Form.Item
-									name="bloggroupName"
-									label="Loại Blog"
-									rules={[
-										{
-											required: true,
-											message: "Vui lòng nhập loại blog",
-										},
-									]}
-								>
-									<Input placeholder="Nhập loại blog" />
-								</Form.Item>
-							</Col>
-						</Row>
-					</Form>
-				</Modal>
+				<div className="mt-30">
+					<SpinCustom spinning={loading}>
+						<Table
+							dataSource={blogCategory}
+							columns={columns}
+							rowKey="key"
+							pagination={{ pageSize: 5 }}
+						/>
+					</SpinCustom>
+				</div>
 			</div>
-		</BlogContainer>
+
+			{!!openModalDeleteCategory && (
+				<ModalDeleteCategory
+					open={openModalDeleteCategory}
+					onCancel={() => setOpenModalDeleteCategory(false)}
+					onOk={getAllBlogCategory}
+					getAllBlog={getAllBlog}
+				/>
+			)}
+			{!!openModalCreateCategory && (
+				<ModalCreateCategory
+					open={openModalCreateCategory}
+					onCancel={() => setOpenModalCreateCategory(false)}
+					onOk={getAllBlogCategory}
+				/>
+			)}
+			{!!openModalUpdateCategory && (
+				<ModalUpdateCategory
+					open={openModalUpdateCategory}
+					onCancel={() => setOpenModalUpdateCategory(false)}
+					onOk={getAllBlogCategory}
+					getAllBlog={getAllBlog}
+				/>
+			)}
+
+		</BlogGroupContainer>
 	);
 };
 export default BlogGroup;
