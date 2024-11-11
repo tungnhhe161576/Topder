@@ -66,7 +66,20 @@ import {
 	apiInvisibleRoom,
 	apiUpdateRoom,
 	apiCreateRoom,
+	apiGetAllMenu,
+	apiDeleteMenu,
+	apiUpdateMenu,
+	apiGetAllCategoryMenu,
+	apiCreateMenu,
+	apiActiveMenu,
+	apiDeleteCategoryMenu,
+	apiCreateCategoryMenu,
+	apiUpdateCategoryMenu,
+	apiUploadFileMenu,
 } from "./urls";
+
+
+
 
 const categoryResApi = (body) => http.get(apiGetListRestaurants, body);
 const loginApi = (body) => http.post(apiLogin, body);
@@ -182,6 +195,22 @@ const isEnabledRoom = (restaurantId, roomId, isEnabledBooking) => http.put(`${ap
 const invisibleRoom = (restaurantId, roomId) => http.put(`${apiInvisibleRoom}/${restaurantId}/${roomId}`)
 const updateRoom = (body) => http.put(apiUpdateRoom, body)
 const createRoom = (body) => http.post(apiCreateRoom, body)
+const getAllMenu = (restaurantId) => http.get(`${apiGetAllMenu}/${restaurantId}?pageNumber=1&pageSize=10000`)
+const deleteMenu = (restaurantId, menuId) => http.put(`${apiDeleteMenu}/${restaurantId}/${menuId}`)
+const updateMenu = (body) => http.put(apiUpdateMenu, body)
+const getAllCategoryMenu = (restaurantId) => http.get(`${apiGetAllCategoryMenu}/${restaurantId}`)
+const createMenu = (body) => http.post(apiCreateMenu, body)
+const activeMenu = (menuId, status) => http.put(`${apiActiveMenu}/${menuId}?status=${status}`)
+const deleteCategoryMenu = (id) => http.put(`${apiDeleteCategoryMenu}/${id}`)
+const createCategoryMenu = (body) => http.post(apiCreateCategoryMenu, body)
+const updateCategoryMenu = (body) => http.put(apiUpdateCategoryMenu, body)
+const uploadFileMenu = (restaurantId, file) => {
+	const formData = new FormData();
+    formData.append('RestaurantId', restaurantId);
+    formData.append('File', file);
+	http.post(apiUploadFileMenu, formData);
+}
+	
 
 
 
@@ -252,6 +281,17 @@ const UserService = {
 	invisibleRoom,
 	updateRoom,
 	createRoom,
+	getAllMenu,
+	deleteMenu,
+	updateMenu,
+	getAllCategoryMenu,
+	createMenu,
+	activeMenu,
+	deleteCategoryMenu,
+	createCategoryMenu,
+	updateCategoryMenu,
+	uploadFileMenu,
 };
+
 
 export default UserService;

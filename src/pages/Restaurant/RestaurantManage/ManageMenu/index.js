@@ -1,17 +1,43 @@
 import { MangementMenuContainer } from "./styled";
 import RestaurantLayout from "../../../../components/Layouts/RestaurantLayout";
 import { Tabs } from "antd";
-import Menu from "../ManageMenu/Menu";
 import CategoryMenu from "../ManageMenu/CategoryMenu";
+import { useSelector } from "react-redux";
+import { userInfor } from "../../../../redux/Slice/userSlice";
+import { useEffect, useState } from "react";
+import UserService from "../../../../services/UserService";
+import RestaurantMenu from "../ManageMenu/Menu";
 
 const ManageMenu = () => {
+	const user = useSelector(userInfor)
+	const [menus, setMenus] = useState([])
+	const [loading, setLoading] = useState(false)
+	
+	const getMenus = async () => {
+		try {
+			setLoading(true)
+			const res = await UserService.getAllMenu(user?.uid)
+			setMenus(res.items)
+		} catch (error) {
+            console.log(error)
+		}finally {
+			setLoading(false)
+		}
+	}
+
+	useEffect(() => {
+        if (!!user) {
+            getMenus()
+        }
+    }, [user])
+
 	return (
 		<RestaurantLayout>
 			<MangementMenuContainer>
 				<div className="body">
 					<div className="title">
 						<h3 className="card-title card-title-dash">
-							Quản lý nhà hàng
+							Quản lý thực đơn
 						</h3>
 					</div>
 					<Tabs
@@ -20,12 +46,12 @@ const ManageMenu = () => {
 							{
 								label: "Thực đơn",
 								key: "1",
-								children: <Menu />,
+								children: <RestaurantMenu user={user} getMenus={getMenus} loading={loading} setLoading={setLoading} menus={menus}/>,
 							},
 							{
 								label: "Loại thực đơn",
 								key: "2",
-								children: <CategoryMenu />,
+								children: <CategoryMenu user={user} getMenus={getMenus}/>,
 							},
 						]}
 					/>
