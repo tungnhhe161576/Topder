@@ -11,6 +11,9 @@ import {
     apiDeleteBlogCategory,
     apiCreateBlogCategory,
     apiUpdateBlogCategory,
+    apiGetAllContact,
+    apiDeleteContact,
+    apiGetDataDashboard,
 } from './urls'
 
 
@@ -30,6 +33,9 @@ const getAllUser = () => http.get(apiGetAllUser)
 const deleteBlogCategory = (id) => http.delete(`${apiDeleteBlogCategory}/${id}`)
 const createBlogCategory = (body) => http.post(apiCreateBlogCategory, body)
 const updateBlogCategory = (body) => http.put(apiUpdateBlogCategory, body)
+const getAllContact = () => http.get(`${apiGetAllContact}?pageNumber=1&pageSize=1000`)
+const deleteContact = (contactId ) => http.delete(`${apiDeleteContact}/${contactId}?id=0`)
+const getDataDashboard = () => http.get(apiGetDataDashboard)
 
 
 
@@ -43,6 +49,9 @@ const AdminService = {
     deleteBlogCategory,
     createBlogCategory,
     updateBlogCategory,
+    getAllContact,
+    deleteContact,
+    getDataDashboard,
 }
 
 export default AdminService

@@ -23,9 +23,6 @@ const ModalUpdateInfo = ({open, onCancel}) => {
     const [form] = Form.useForm()
     const dispatch = useDispatch()
 
-    console.log(open);
-    
-
     useEffect(() => {
         const fetchData = async () => {
             await getAllRestaurantCategory();
