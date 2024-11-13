@@ -4,8 +4,11 @@ import UserService from "../../services/UserService";
 import { useEffect } from "react";
 import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { TransactionContainer } from "./styled";
+import { useSelector } from "react-redux";
+import { userInfor } from "../../redux/Slice/userSlice";
 
 const VNPayDepositOrWithdraw = () => {
+	const user = useSelector(userInfor)
 	const location = useLocation();
 	const nav = useNavigate();
 	const { transactionId } = useParams();
@@ -112,7 +115,11 @@ const VNPayDepositOrWithdraw = () => {
 						</span>
 					</p>
 					<Button
-						onClick={() => nav("/user-profile/user-wallet")}
+						onClick={() => 
+							user?.role === 'Restaurant' 
+							 ? nav("/restaurant/wallet")
+							 : nav('/user-profile/user-wallet')
+						}
 						type="primary"
 						shape="round"
 						className="back-button"

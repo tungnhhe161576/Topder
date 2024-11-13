@@ -1,22 +1,21 @@
-import { useEffect, useState } from "react";
-import ProfileUserLayout from "../../../../components/Layouts/ProfileUserLayout";
-import { TransactionHistoryContainer } from "./styled";
-import UserService from "../../../../services/UserService";
-import { useSelector } from "react-redux";
-import { userInfor } from "../../../../redux/Slice/userSlice";
-import SpinCustom from "../../../../components/Common/SpinCustom";
-import { Select, Table } from "antd";
-import { formatNumberToK } from "../../../../lib/stringUtils";
-import dayjs from "dayjs";
-const { Option } = Select;
+import { useSelector } from "react-redux"
+import { userInfor } from "../../../../../redux/Slice/userSlice"
+import { useEffect, useState } from "react"
+import { formatNumberToK } from "../../../../../lib/stringUtils"
+import dayjs from "dayjs"
+import UserService from "../../../../../services/UserService"
+import { TransactionHistoryContainer } from "../../../../User/UserProfile/TransactionHistory/styled"
+import SpinCustom from "../../../../../components/Common/SpinCustom"
+import { Select, Table } from "antd"
+const {Option} = Select
 
-const TransactionHistory = () => {
+const TransaactionManagement = () => {
     const [transactions, setTransactions] = useState([])
     const [loading, setLoading] = useState(false)
     const [status, setStatus] = useState('')
     const [type, setType] = useState('')
     const user = useSelector(userInfor)
-
+    
     const getAllTransactionHistory = async () => {
         try {
             setLoading(true)
@@ -40,8 +39,8 @@ const TransactionHistory = () => {
             getAllTransactionHistory()
         }
     }, [status, type])
-    
 
+    
     const columns = [
         {
             title: 'Số thứ tự',
@@ -98,10 +97,9 @@ const TransactionHistory = () => {
             ),
         },
     ]
-
-
+    
     return (  
-        <ProfileUserLayout>
+        <div style={{height: '100vh'}}>
             <TransactionHistoryContainer>
                 <SpinCustom spinning={loading}>
                     <div className="d-flex align-items-center justify-content-space-between">
@@ -110,7 +108,7 @@ const TransactionHistory = () => {
                         </div>
                         <div className="d-flex">
                             <div className="pr-40 mr-10 select">
-                                <Select 
+                                <Select
                                     className="nice-select w-100" 
                                     allowClear  
                                     placeholder="Trạng thái"
@@ -157,8 +155,8 @@ const TransactionHistory = () => {
                     </div>
                 </SpinCustom>
             </TransactionHistoryContainer>
-        </ProfileUserLayout>
+        </div>
     );
 }
  
-export default TransactionHistory;
+export default TransaactionManagement;

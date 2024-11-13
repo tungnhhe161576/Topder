@@ -44,8 +44,16 @@ import OrderManagement from "../pages/Admin/OrderManagement";
 import BlogManagement from "../pages/Admin/BlogManagement";
 import ContactManagement from "../pages/Admin/ContactManagement";
 import VerifyAccount from "../components/VerifyAccount";
+import RestaurantWallet from "../pages/Restaurant/RestaurantManage/Wallet";
+import { useSelector } from "react-redux";
+import { userInfor } from "../redux/Slice/userSlice";
+import CommonRole from "./CommonRole";
+import ManageTransaction from "../pages/Admin/ManageTransaction";
 
 const LazyLoadingComponent = ({ children }) => {
+
+	const user = useSelector(userInfor)
+
 	return (
 		<React.Suspense
 			fallback={
@@ -161,7 +169,27 @@ export const router = [
 		],
 	},
 
+	
+
 	// User
+	{
+		path: "transaction",
+		element: (
+			<LazyLoadingComponent>
+				<CommonRole />
+			</LazyLoadingComponent>
+		),
+		children: [
+			{
+				path: "vnpay/:transactionId",
+				element: <VNPayDepositOrWithdraw />,
+			},
+			{
+				path: "vietqr",
+				element: <DepositOrWithdraw />,
+			},
+		],
+	},
 	{
 		path: "user-profile",
 		element: (
@@ -210,14 +238,14 @@ export const router = [
 				element: <TransactionHistory />,
 				title: "Lịch sử giao dịch",
 			},
-			{
-				path: "status-transaction",
-				element: <DepositOrWithdraw />,
-			},
-			{
-				path: "status-transaction-with-vnpay/:transactionId",
-				element: <VNPayDepositOrWithdraw />,
-			},
+			// {
+			// 	path: "status-transaction",
+			// 	element: <DepositOrWithdraw />,
+			// },
+			// {
+			// 	path: "status-transaction-with-vnpay/:transactionId",
+			// 	element: <VNPayDepositOrWithdraw />,
+			// },
 		],
 	},
 
@@ -257,12 +285,23 @@ export const router = [
 			{
 				path: "manage-menu",
 				element: <ManageMenu />,
-				element: <ManageMenu />,
 			},
 			{
 				path: "contact",
 				element: <ContactRestaurant />
 			},
+			{
+				path: "wallet",
+				element: <RestaurantWallet />
+			},
+			// {
+			// 	path: "status-transaction",
+			// 	element: <DepositOrWithdraw />,
+			// },
+			// {
+			// 	path: "status-transaction-with-vnpay/:transactionId",
+			// 	element: <VNPayDepositOrWithdraw />,
+			// },
 		],
 	},
 
@@ -294,6 +333,10 @@ export const router = [
 			{
 				path: "manage-contact",
 				element: <ContactManagement />,
+			},
+			{
+				path: "manage-transaction",
+				element: <ManageTransaction />,
 			},
 		],
 	},

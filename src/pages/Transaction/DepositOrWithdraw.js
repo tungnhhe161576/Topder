@@ -4,8 +4,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import UserService from "../../services/UserService";
 import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { TransactionContainer } from "./styled";
+import { useSelector } from "react-redux";
+import { userInfor } from "../../redux/Slice/userSlice";
 
 const DepositOrWithdraw = () => {
+	const user = useSelector(userInfor)
 	const location = useLocation();
 	const nav = useNavigate();
 
@@ -109,7 +112,11 @@ const DepositOrWithdraw = () => {
 						</span>
 					</p>
 					<Button
-						onClick={() => nav("/user-profile/user-wallet")}
+						onClick={() => 
+							user?.role === 'Restaurant' 
+							 ? nav("/restaurant/wallet")
+							 : nav('/user-profile/user-wallet')
+						}
 						type="primary"
 						shape="round"
 						className="back-button"

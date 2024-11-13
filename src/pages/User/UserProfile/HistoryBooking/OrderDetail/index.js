@@ -176,6 +176,7 @@ const OrderDetail = ({
 					onCancel={() => setOpenModalChooseFood(false)}
 					setFoods={setFoods}
 					foods={foods}
+					detail={detail}
 					restaurantId={detail?.restaurantId}
 					getHistoryOrder={getHistoryOrder}
 					handleViewDetail={handleViewDetail}

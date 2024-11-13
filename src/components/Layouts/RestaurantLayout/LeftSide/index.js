@@ -34,6 +34,17 @@ const LeftSide = () => {
 				<div className="item-name"> Quản lý nhà hàng </div>
 			</div>
 			<div
+				className={`item contact ${
+					isActive("/restaurant/wallet") ? "active" : ""
+				}`}
+				onClick={() => nav("/restaurant/wallet")}
+			>
+				<div className="item-icon">
+					<InsertRowAboveOutlined />
+				</div>
+				<div className="item-name"> Ví của bạn </div>
+			</div>
+			<div
 				className={`item order ${
 					isActive("/restaurant/manage-order") ? "active" : ""
 				}`}

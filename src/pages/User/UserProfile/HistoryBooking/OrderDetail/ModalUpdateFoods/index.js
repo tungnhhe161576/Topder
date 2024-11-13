@@ -11,6 +11,7 @@ const ModalUpdateFoods = ({
 	onCancel,
 	foods,
 	setFoods,
+	detail,
 	restaurantId,
 	getHistoryOrder,
 	handleViewDetail,
@@ -64,9 +65,9 @@ const ModalUpdateFoods = ({
 			};
 			await UserService.changeMenus(updateData);
 			message.success("Cập nhật thành công", 2);
-			onCancel();
-			handleViewDetail();
+			handleViewDetail(detail);
 			getHistoryOrder();
+			onCancel();
 		} catch (error) {
 			console.error("Failed to update order menus:", error);
 		} finally {

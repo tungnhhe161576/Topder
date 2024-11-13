@@ -29,8 +29,26 @@ const ManageInfomation = ({user}) => {
 	const [openModalUpdate, setOpenModalUpdate] = useState(false);
 	const [loading, setLoading] = useState(false)
 	const [logo, setLogo] = useState(null)
+	const [wallet, setWallet] = useState()
 	const [form] = Form.useForm()
 	const dispatch = useDispatch()
+
+	const getWalletInfo = async () => {
+        try {
+            setLoading(true)
+            const res = await UserService.getWalletInfo(user?.uid)
+            setWallet(res)
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false)
+        }
+    }
+    useEffect(() => {
+        if (!!user?.uid) {
+            getWalletInfo()
+        }
+    }, [user])
 
 
 
@@ -152,7 +170,7 @@ const ManageInfomation = ({user}) => {
                                 	}
 									<div className="mt-10 pl-20"> 
 										<span className="fw-500 fs-16">Số dư: </span>
-										<span className="red fs-18 fw-500"> {formatNumberToK(user?.walletBalance)} </span>
+										<span className="red fs-18 fw-500"> {formatNumberToK(wallet?.walletBalance)} </span>
 									</div>
 								</div>
 								<div className="ml-10 w-100">

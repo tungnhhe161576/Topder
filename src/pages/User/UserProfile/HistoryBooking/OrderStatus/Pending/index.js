@@ -76,7 +76,7 @@ const Pending = ({getHistoryOrder, orderHistory, loading, orderDetail, isDetail,
                             pagination={{pageSize: 5}}
                             bordered
                         />
-                        : <OrderDetail setIsDetail={setIsDetail} detail={orderDetail}/>
+                        : <OrderDetail setIsDetail={setIsDetail} detail={orderDetail} getHistoryOrder={getHistoryOrder} handleViewDetail={handleViewDetail}/>
                 }
             </SpinCustom>
 

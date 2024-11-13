@@ -3,9 +3,12 @@ import SpinCustom from '../../../../components/Common/SpinCustom'
 import dayjs from 'dayjs';
 import { useState } from 'react';
 import ModalViewDetail from './Modal/ModalViewDetail';
+import ModalBanAccount from './Modal/ModalBanAccount';
+import { AccountManagerContainer } from './styled';
 
 const RestaurantAccount = ({loading, accounts, getAccount}) => {
     const [openModalViewDetail, setOpenModalViewDetail] = useState(false)
+	const [openModalBanAccount, setOpenModalBanAccount] = useState(false)
     
     
     const columns = [
@@ -13,6 +16,7 @@ const RestaurantAccount = ({loading, accounts, getAccount}) => {
 			title: 'STT',
 			dataIndex: 'number',
 			key: 'number',
+			align: 'center',
 			render: (_, __, index) => <span className="fs-15"> {index + 1} </span>,
 		},
         {
@@ -20,12 +24,14 @@ const RestaurantAccount = ({loading, accounts, getAccount}) => {
             dataIndex: "nameRes",
             key: "nameRes",
             width: 150,
+			align: 'center',
         },
 		{
 			title: "Chủ nhà hàng",
 			dataIndex: "nameOwner",
 			key: "nameOwner",
 			width: 150,
+			align: 'center',
 		},
 		{
 			title: "Ảnh",
@@ -34,12 +40,14 @@ const RestaurantAccount = ({loading, accounts, getAccount}) => {
 			render: (text) => (
 				<img src={text} alt="Blog" width='100px'/>
 			),
+			align: 'center',
 		},
 		{
 			title: "Địa chỉ",
 			dataIndex: "address",
 			key: "address",
 			width: 150,
+			align: 'center',
             render: (value) => <span> {dayjs(value).format('DD-MM-YYYY')} </span>
 		},
 		{
@@ -47,6 +55,7 @@ const RestaurantAccount = ({loading, accounts, getAccount}) => {
 			dataIndex: "phone",
 			key: "phone",
 			width: 150,
+			align: 'center',
             // render: (value) => <span> {dayjs(value).format('DD-MM-YYYY')} </span>
 		},
 		{
@@ -54,20 +63,57 @@ const RestaurantAccount = ({loading, accounts, getAccount}) => {
 			dataIndex: "email",
 			key: "email",
 			width: 150,
+			align: 'center',
             // render: (value) => <span> {dayjs(value).format('DD-MM-YYYY')} </span>
 		},
-		// {
-		// 	title: "Trạng thái",
-		// 	dataIndex: "status",
-		// 	key: "status",
-		// 	render: (value, record) => (
-        //         <></>
-		// 	),
-		// },
+		{
+			title: "Trạng thái",
+			dataIndex: "status",
+			key: "status",
+			align: 'center',
+			render: (value, record) => (
+                <div className="d-flex justify-content-center align-items-center">
+					{
+						value === 'Active'
+							? <div className="unban">Hoạt động</div>
+							: <div className="ban">Vô hiệu hóa</div>
+					}
+				</div>
+			),
+		},
+		{
+			title: "",
+			dataIndex: "status",
+			key: "status",
+			align: 'center',
+			render: (value, record) => (
+				<div className="d-flex">
+					{value === 'Active' 
+						? <Button
+							type="primary"
+							shape="round"
+							className="mr-3"
+							onClick={() => setOpenModalBanAccount(record)}
+						>
+							Khóa tài khoản
+						</Button>
+						: <Button
+							type="primary"
+							shape="round"
+							className="mr-3"
+							onClick={() => setOpenModalBanAccount(record)}
+						>
+							Mở tài khoản
+						</Button>
+					}
+				</div>
+			),
+		},
 		{
 			title: "",
 			dataIndex: "",
 			key: "action",
+			align: 'center',
 			render: (text, record) => (
 				<div className="d-flex">
 					<Button
@@ -84,7 +130,7 @@ const RestaurantAccount = ({loading, accounts, getAccount}) => {
 	];
     
     return (  
-        <div>
+        <AccountManagerContainer>
             <div className="mt-20 ml-30 fw-500 fs-20">
                 Các nhà hàng
             </div>
@@ -107,7 +153,16 @@ const RestaurantAccount = ({loading, accounts, getAccount}) => {
                     />
                 )    
             }
-        </div>
+			{
+				!!openModalBanAccount && (
+					<ModalBanAccount
+                        open={openModalBanAccount}
+                        onCancel={() => setOpenModalBanAccount(false)}
+                        onOk={getAccount}
+                    />
+				)
+			}
+        </AccountManagerContainer>
     );
 }
  

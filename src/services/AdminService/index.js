@@ -14,6 +14,9 @@ import {
     apiGetAllContact,
     apiDeleteContact,
     apiGetDataDashboard,
+    apiBanAccount,
+    apiGetAllTransaction,
+    apiChangeStatusWithdraw,
 } from './urls'
 
 
@@ -36,6 +39,9 @@ const updateBlogCategory = (body) => http.put(apiUpdateBlogCategory, body)
 const getAllContact = () => http.get(`${apiGetAllContact}?pageNumber=1&pageSize=1000`)
 const deleteContact = (contactId ) => http.delete(`${apiDeleteContact}/${contactId}?id=0`)
 const getDataDashboard = () => http.get(apiGetDataDashboard)
+const banAccount = (userId, status) => http.get(`${apiBanAccount}/${userId}?status=${status}`)
+const getAllTransaction = () => http.get(apiGetAllTransaction)
+const changeStatusWithdraw = (transactionId, status) => http.put(`${apiChangeStatusWithdraw}/${transactionId}?status=${status}`)
 
 
 
@@ -52,6 +58,9 @@ const AdminService = {
     getAllContact,
     deleteContact,
     getDataDashboard,
+    banAccount,
+    getAllTransaction,
+    changeStatusWithdraw,
 }
 
 export default AdminService

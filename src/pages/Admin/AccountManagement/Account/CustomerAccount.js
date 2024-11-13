@@ -1,26 +1,33 @@
 import SpinCustom from "../../../../components/Common/SpinCustom";
-import { Table } from 'antd'
+import { Button, Table } from 'antd'
 import dayjs from "dayjs";
+import { AccountManagerContainer } from "./styled";
+import { useState } from "react";
+import ModalBanAccount from "./Modal/ModalBanAccount";
 
-const CustomerAccount = ({loading, accounts, getAllAccount}) => {
+const CustomerAccount = ({loading, accounts, getAccount}) => {
+	const [openModalBanAccount, setOpenModalBanAccount] = useState(false)
 
     const columns = [
 		{
 			title: 'STT',
 			dataIndex: 'number',
 			key: 'number',
+			align: 'center',
 			render: (_, __, index) => <span className="fs-15"> {index + 1} </span>,
 		},
 		{
 			title: "Tên",
 			dataIndex: "name",
 			key: "name",
+			align: 'center',
 			width: 150,
 		},
 		{
 			title: "Ảnh",
 			dataIndex: "image",
 			key: "image",
+			align: 'center',
 			render: (text) => (
 				<img src={text} alt="Blog" width='100px'/>
 			),
@@ -30,6 +37,7 @@ const CustomerAccount = ({loading, accounts, getAllAccount}) => {
 			dataIndex: "dob",
 			key: "dob",
 			width: 150,
+			align: 'center',
             render: (value) => <span> {dayjs(value).format('DD-MM-YYYY')} </span>
 		},
 		{
@@ -37,6 +45,7 @@ const CustomerAccount = ({loading, accounts, getAllAccount}) => {
 			dataIndex: "phone",
 			key: "phone",
 			width: 150,
+			align: 'center',
             // render: (value) => <span> {dayjs(value).format('DD-MM-YYYY')} </span>
 		},
 		{
@@ -44,6 +53,7 @@ const CustomerAccount = ({loading, accounts, getAllAccount}) => {
 			dataIndex: "email",
 			key: "email",
 			width: 150,
+			align: 'center',
             // render: (value) => <span> {dayjs(value).format('DD-MM-YYYY')} </span>
 		},
 		{
@@ -51,37 +61,56 @@ const CustomerAccount = ({loading, accounts, getAllAccount}) => {
 			dataIndex: "gender",
 			key: "gender",
 			width: 150,
+			align: 'center',
             render: (value) => <span> {value === 'Male' ? 'Nam' : (value === 'Female' ? 'Nữ' : 'Khác')} </span>
 		},
-		// {
-		// 	title: "Trạng thái",
-		// 	dataIndex: "status",
-		// 	key: "status",
-		// 	render: (value, record) => (
-        //         <></>
-		// 	),
-		// },
+		{
+			title: "Trạng thái",
+			dataIndex: "status",
+			key: "status",
+			align: 'center',
+			render: (value, record) => (
+                <div className="d-flex justify-content-center align-items-center">
+					{
+						value === 'Active'
+							? <div className="unban">Hoạt động</div>
+							: <div className="ban">Vô hiệu hóa</div>
+					}
+				</div>
+			),
+		},
 		{
 			title: "",
-			dataIndex: "",
-			key: "action",
-			render: (text, record) => (
+			dataIndex: "status",
+			key: "status",
+			align: 'center',
+			render: (value, record) => (
 				<div className="d-flex">
-					{/* <Button
-						type="primary"
-						shape="round"
-						className="mr-3"
-						onClick={() => setOpenModalViewDetail(record)}
-					>
-						Chi tiết
-					</Button> */}
+					{value === 'Active' 
+						? <Button
+							type="primary"
+							shape="round"
+							className="mr-3"
+							onClick={() => setOpenModalBanAccount(record)}
+						>
+							Khóa tài khoản
+						</Button>
+						: <Button
+							type="primary"
+							shape="round"
+							className="mr-3"
+							onClick={() => setOpenModalBanAccount(record)}
+						>
+							Mở tài khoản
+						</Button>
+					}
 				</div>
 			),
 		},
 	];
 
     return (  
-        <div>
+        <AccountManagerContainer>
             <div className="mt-20 ml-30 fw-500 fs-20">
                 Các tài khoản người dùng
             </div>
@@ -95,7 +124,18 @@ const CustomerAccount = ({loading, accounts, getAllAccount}) => {
                     />
                 </SpinCustom>
             </div>
-        </div>
+
+
+			{
+				!!openModalBanAccount && (
+					<ModalBanAccount
+                        open={openModalBanAccount}
+                        onCancel={() => setOpenModalBanAccount(false)}
+                        onOk={getAccount}
+                    />
+				)
+			}
+        </AccountManagerContainer>
     );
 }
  

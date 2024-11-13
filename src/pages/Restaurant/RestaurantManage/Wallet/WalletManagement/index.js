@@ -1,28 +1,24 @@
-import { useSelector } from "react-redux";
-import ProfileUserLayout from "../../../../components/Layouts/ProfileUserLayout";
-import UserService from "../../../../services/UserService";
-import { WalletContainer } from "./styled";
-import { userInfor } from "../../../../redux/Slice/userSlice";
-import { useEffect, useState } from "react";
-import SpinCustom from "../../../../components/Common/SpinCustom";
-import { Button, Form, Input, message, Select } from "antd";
-import { formatNumberToK, getRegexNumber } from "../../../../lib/stringUtils";
-import axios from "axios";
-import ModalWithDraw from "./Modal/Withdraw";
-import ModalDeposit from "./Modal/Deposit";
-const { Option } = Select;
+import { useEffect, useState } from "react"
+import UserService from "../../../../../services/UserService"
+import axios from "axios"
+import { Button, Form, Input, message, Select } from "antd"
+import { formatNumberToK, getRegexNumber } from "../../../../../lib/stringUtils"
+import SpinCustom from "../../../../../components/Common/SpinCustom"
+import { WalletContainer } from "../../../../User/UserProfile/Wallet/styled"
+import ModalDeposit from "../../../../User/UserProfile/Wallet/Modal/Deposit"
+import ModalWithDraw from "../../../../User/UserProfile/Wallet/Modal/Withdraw"
+const {Option} = Select
 
-const Wallet = () => {
+const WalletManagement = ({user}) => {
     const [loading, setLoading] = useState(false)
     const [wallet, setWallet] = useState()
     const [bankCodes, setBankCodes] = useState([])
+    const [verifiedOTP, setVerifiedOTP] = useState(false);
     const [isEdit, setIsEdit] = useState(false)
     const [openModalWithdraw, setOpenModalWithdraw] = useState(false)
     const [openModalDeposit, setOpenModalDeposit] = useState(false)
-    const [verifiedOTP, setVerifiedOTP] = useState(false);
-    const user = useSelector(userInfor)
     const [form] = Form.useForm()
-    
+
     const getWalletInfo = async () => {
         try {
             setLoading(true)
@@ -39,6 +35,7 @@ const Wallet = () => {
             getWalletInfo()
         }
     }, [user])
+
 
     const getBankCode = async () => {
         try {
@@ -130,9 +127,8 @@ const Wallet = () => {
         })
     }
     
-
     return (  
-        <ProfileUserLayout>
+        <div style={{height: '100vh'}}>
             <SpinCustom spinning={loading}>
                 <WalletContainer>
                     {
@@ -368,8 +364,6 @@ const Wallet = () => {
                                         layout="horizontal" 
                                         labelCol={{
                                             span: 9,
-
-                                            
                                         }}
                                         wrapperCol={{
                                             span: 14,
@@ -445,8 +439,8 @@ const Wallet = () => {
                     />
                 )}
             </SpinCustom>
-        </ProfileUserLayout>
+        </div>
     );
 }
  
-export default Wallet;
+export default WalletManagement;
