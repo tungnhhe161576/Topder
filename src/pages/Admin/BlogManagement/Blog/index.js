@@ -149,10 +149,10 @@ const AllBlogs = ({blogs, loading, setDataSearch, getAllBlog, blogCategory}) => 
 
 					<div className="pr-20">
 						<Form form={form} className="d-flex align-items-center">
-							<Form.Item name='title' className="mr-10 search-text" style={{width: '400px'}}>
+							<Form.Item name='title' className="mr-10 search-text" style={{width: '500px'}}>
 								<Input placeholder="Tên bài viết" allowClear className="input-text w-100"/>
 							</Form.Item>
-							<Form.Item name="category" className="mr-40 menu_search" >
+							<Form.Item name="category" className="mr-40 menu_search" style={{width: '250px'}}>
 								<Select className="nice-select w-100" allowClear  placeholder="Chọn loại bài viết">
 									{
 										blogCategory?.map(i => (

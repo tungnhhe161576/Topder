@@ -140,7 +140,7 @@ const RestaurantAccount = ({loading, accounts, getAccount}) => {
                         dataSource={accounts.filter(i => i.role === 'Restaurant')}
                         columns={columns}
                         rowKey="key"
-                        pagination={{ pageSize: 4 }}
+                        pagination={{ pageSize: 5 }}
                     />
                 </SpinCustom>
             </div>

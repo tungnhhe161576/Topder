@@ -52,7 +52,7 @@ const ModalCreateBlog = ({open, onCancel, onOk, blogCategory}) => {
                 ...formValues,
                 adminId: 1,
                 imageFile: null,
-                image: image,
+                image: getImage.url,
                 content: content,
             })
             message.open({
@@ -139,6 +139,9 @@ const ModalCreateBlog = ({open, onCancel, onOk, blogCategory}) => {
                                 <Form.Item
                                     name="image"
                                     className="m-0 p-0"
+                                    rules={[
+                                        { required: true, message: "Vui lòng chọn ảnh cho bài viết!" },
+                                    ]}
                                 >
                                     <Upload.Dragger
                                         className="dragger"
@@ -153,7 +156,7 @@ const ModalCreateBlog = ({open, onCancel, onOk, blogCategory}) => {
                                     </Upload.Dragger>
                                 </Form.Item>
                             </div>
-                            {
+                            {/* {
                                 image !== open?.image 
                                     ? 
                                         <div className="d-flex justify-content-center mt-15">
@@ -167,7 +170,7 @@ const ModalCreateBlog = ({open, onCancel, onOk, blogCategory}) => {
                                             </Button>
                                         </div>
                                     : <></>
-                                }
+                            } */}
                         </Col>
 
                         <Col span={24}>

@@ -42,12 +42,16 @@ const ModalUpdateBlog = ({open, onCancel, onOk, blogCategory}) => {
         setContent(newContent);
     };
 
+    console.log("image", image);
+    
+
     
     const hanldeUpdateBlog = async () => {
         try {
             setLoading(true)
             const formValues = await form.validateFields()
             console.log(formValues);
+            let url = ''
             
             if (formValues.image.file) {
                 const file = formValues.image.file;
@@ -55,13 +59,14 @@ const ModalUpdateBlog = ({open, onCancel, onOk, blogCategory}) => {
                 formData.append("file", file);
                 const getImage = await ImageService.uploadImage(formData)
                 setImage(getImage.url)
+                url = getImage.url
             }
 
             await AdminService.updateBlog({
                 ...formValues,
                 blogId: open?.blogId,
                 imageFile: null,
-                image: formValues.image.file ? image : open?.image,
+                image: formValues.image.file ? url : open?.image,
                 content: 'abc',
             })
             message.open({
@@ -73,6 +78,7 @@ const ModalUpdateBlog = ({open, onCancel, onOk, blogCategory}) => {
             })
             onOk()
             onCancel()
+
         } catch (error) {
             console.log(error)
         } finally {

@@ -2,6 +2,7 @@ import styled from 'styled-components'
 
 export const AccountManagerContainer= styled.div `
     width: 100%;
+    height: 100vh;
 
     .ban {
         border: 1px solid red;

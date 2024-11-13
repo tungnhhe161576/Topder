@@ -3,24 +3,33 @@ import AdminLayout from "../../../components/Layouts/AdminLayout";
 import { ManageTransactionContainer } from "./styled";
 import AdminService from "../../../services/AdminService";
 import SpinCustom from "../../../components/Common/SpinCustom";
-import { Button, Table } from "antd";
+import { Button, Select, Table } from "antd";
 import dayjs from "dayjs";
 import ModalHideQRCode from "./Modal/ModalHideQRCode";
 import ModalStatusWithDraw from "./Modal/ModalStatusWithdraw";
 import { formatNumberToK } from "../../../lib/stringUtils";
-
+const {Option} = Select
+ 
 const ManageTransaction = () => {
     const [loading, setLoading] =  useState(false)
     const [transactions, setTransactions] = useState([])
     const [openModalHideQRCode, setOpenModalHideQRCode] = useState(false)
     const [openModalWithdrawStatus, setOpenModalWithfrawStatus] = useState(false)
     const [value, setValue] = useState('')
+    const [status, setStatus] = useState('')
+    const [type, setType] = useState('Withdraw')
 
     const getAllTransaction = async () => {
         try {
             setLoading(true)
             const res = await AdminService.getAllTransaction()
-            setTransactions(res)
+            status
+                ? type 
+                    ? setTransactions(res.filter((t) => {return t.status === status && t.transactionType === type}))
+                    : setTransactions(res.filter((t) => t.status === status))
+                : type  
+                    ? setTransactions(res.filter((t) => {return t.transactionType === type}))
+                    : setTransactions(res)
         } catch (error) {
             console.log(error);
         } finally {
@@ -29,7 +38,7 @@ const ManageTransaction = () => {
     }
     useEffect(() => {
         getAllTransaction()
-    }, [])
+    }, [status, type])
 
 
 
@@ -68,6 +77,7 @@ const ManageTransaction = () => {
             dataIndex: 'transactionAmount',
             key: 'transactionAmount',
             // width: 150,
+            sorter: (a, b) => a.transactionAmount - b.transactionAmount,
             align: 'center',
             render: (value) => <span className="fs-15 fw-500">{formatNumberToK(value)}</span>,
         },
@@ -98,8 +108,8 @@ const ManageTransaction = () => {
                         : value === "Recharge"
                         ? <div className="recharge">Nạp tiền</div> 
                         : value === "SystemAdd"
-                        ? <div className="systemAdd">Hệ thống cộng tiền</div> 
-                        : <div className="systemsubtract">Hệ thống trừ tiền</div>
+                        ? <div className="SystemAdd">Hệ thống cộng tiền</div> 
+                        : <div className="Systemsubtract">Hệ thống trừ tiền</div>
                     }
                 </div>
             ),
@@ -109,9 +119,9 @@ const ManageTransaction = () => {
             dataIndex: 'status',
             key: 'status',
             align: 'center',
-            render: (value) => <span className="fw-500">
-                {value === 'Pending' ? 'Đang chờ' : (value === 'Cancelled' ? 'Hủy' : 'Thành công')}
-            </span>
+            render: (value) => <div className="fw-500">
+                {value === 'Pending' ? <span className="pending">Đang chờ</span> : (value === 'Cancelled' ? <span className="cancel">Hủy</span> : <span className="primary">Thành công</span>)}
+            </div>
         },
         {
             title: 'Chi tiết',
@@ -169,12 +179,58 @@ const ManageTransaction = () => {
             <ManageTransactionContainer>
                 <SpinCustom spinning={loading}>
                     <div>
-                        <div></div>
+                        <div className="d-flex align-items-center justify-content-space-between">
+                            <div className="fs-20 fw-500">
+                                Giao dịch
+                            </div>
+                            <div className="d-flex">
+                                <div className="pr-40 mr-10 select">
+                                    <Select 
+                                        className="nice-select w-100" 
+                                        allowClear  
+                                        placeholder="Trạng thái"
+                                        onChange={(e) => setStatus(e)}
+                                    >
+                                        <Option key={1} value="Successful">
+                                            Thành công
+                                        </Option>
+                                        <Option key={2} value="Cancelled">
+                                            Thất bại
+                                        </Option>
+                                        <Option key={3} value="Pending">
+                                            Đang chờ
+                                        </Option>
+                                    </Select>
+                                </div>
+                                <div className="pr-40 select">
+                                    <Select 
+                                        className="nice-select w-100" 
+                                        allowClear  
+                                        placeholder="Loại giao dịch"
+                                        defaultValue='Withdraw'
+                                        onChange={(e) => setType(e)}
+                                    >
+                                        <Option key={1} value="Withdraw">
+                                            Rút tiền
+                                        </Option>
+                                        <Option key={2} value="Recharge">
+                                            Nạp tiền
+                                        </Option>
+                                        <Option key={3} value="SystemSubtract">
+                                            Hệ thống trừ tiền
+                                        </Option>
+                                        <Option key={3} value="SystemAdd">
+                                            Hệ thống cộng tiền
+                                        </Option>
+                                    </Select>
+                                </div>
+                            </div>
+                        </div>
                         <div className="mt-30">
                             <Table
                                 columns={columns} 
                                 dataSource={transactions} 
-                                pagination={{pageSize: 6}}
+                                pagination={{pageSize: 8}}
                                 // bordered
                             />
                         </div>
