@@ -103,6 +103,56 @@ const LeftSide = ({data}) => {
             chart.destroy();
         };
     }, [data]);
+
+
+
+    useEffect(() => {
+        const dataChart = [
+            { name: 'Dưới 18', age: data?.customerAgeGroup?.under18 },
+            { name: 'Từ 18 đến 24', age: data?.customerAgeGroup?.between18And24 },
+            { name: 'Từ 25 đến 34', age: data?.customerAgeGroup?.between25And34 },
+            { name: 'Từ 35 đến 44', age: data?.customerAgeGroup?.between35And44 },
+            { name: 'Từ 45 đến 54', age: data?.customerAgeGroup?.between45And54 },
+            { name: 'Trên 55', age: data?.customerAgeGroup?.above55 },
+        ];
+        const chart = new Chart({
+            container: 'chart3',
+            autoFit: true,
+            height: 300,
+        });
+        chart.data(dataChart);
+        chart.coordinate('theta', {
+            radius: 0.75, 
+            innerRadius: 0.6, 
+        });
+        chart.tooltip({
+            showMarkers: false,
+        });
+        chart
+            .interval()
+            .adjust('stack')
+            .position('age')
+            .color('name', ['#003f82', '#ffded7', '#71c3fe', '#a3e1d7', '#7d3888'])
+            .style({ stroke: '#fff', lineWidth: 1 })
+    
+        chart.legend({
+            position: 'top',
+            itemName: {
+                style: {
+                fontSize: 12, 
+                fill: '#8c8c8c',
+                },
+            },
+            maxItemWidth: 120, 
+            layout: 'horizontal',
+            itemSpacing: 20, 
+            flipPage: false,
+        });
+        chart.render();
+        return () => {
+            chart.destroy();
+        };
+    }, [data]);
     
 
 
@@ -196,6 +246,16 @@ const LeftSide = ({data}) => {
                 </Col>
                 <Col xs={12} sm={12} md={12} lg={12} xl={12}>
                     <div className="chart1" style={{height: '370px'}}>
+                        <div className="fs-18 fw-600"> 
+                            Phân tích độ tuổi 
+                        </div>
+                        <div>
+                            <div id="chart3" style={{ width: '100%', height: '300px' }}></div>
+                        </div>
+                    </div>
+                </Col>
+                {/* <Col xs={12} sm={12} md={12} lg={12} xl={12}>
+                    <div className="chart1" style={{height: '370px'}}>
                         <div className="fs-18 fw-600 mb-20"> 
                             Nhà hàng được ưu chuộng
                         </div>
@@ -218,7 +278,7 @@ const LeftSide = ({data}) => {
                             }
                         </div>
                     </div>
-                </Col>
+                </Col> */}
             </Row>
         </div>
     );

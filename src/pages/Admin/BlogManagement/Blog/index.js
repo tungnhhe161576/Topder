@@ -77,6 +77,9 @@ const AllBlogs = ({blogs, loading, setDataSearch, getAllBlog, blogCategory}) => 
 			dataIndex: "content",
 			key: "content",
 			width: 200,
+			render: (value) => (
+				<div dangerouslySetInnerHTML={{ __html: value }} />
+			)
 		},
 		{
 			title: "Trạng thái",

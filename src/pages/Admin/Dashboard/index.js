@@ -29,16 +29,13 @@ const AdminDashboard = () => {
         getData()
     }, [])
 
-    console.log('data', data);
-    
-
     return (  
         <AdminLayout>
             <DashboardContainer>
                 <SpinCustom spinning={loading}>
                     <div className='part1'>
                             <div className="d-flex justify-content-space-between align-items-center">
-                                <div className="overview"> Overview </div>
+                                <div className="overview"> Tổng quam </div>
                                 <div className="d-flex"> 
                                     <Button className="black fs-15 mr-15">
                                         <ShareAltOutlined /> Share

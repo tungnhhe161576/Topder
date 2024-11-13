@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react';
-import { Col, Row } from "antd";
+import { Avatar, Col, Row } from "antd";
 import { Chart } from '@antv/g2';
+import { formatNumberToK } from '../../../../lib/stringUtils';
 
 const RightSide = ({data}) => {
     useEffect(() => {
-        const data = [
-          { Status: 'Wait', value: 11 },
-          { Status: 'Accept', value: 23 },
-          { Status: 'Process', value: 12 },
-          { Status: 'Done', value: 19 },
-          { Status: 'Cancel', value: 5 },
+        const dataChart = [
+          { Status: 'Đang chờ', value: data?.orderStatus?.pending },
+          { Status: 'Chấp nhận', value: data?.orderStatus?.confirm },
+          { Status: 'Chuyển khoản', value: data?.orderStatus?.paid },
+          { Status: 'Hoàn thành', value: data?.orderStatus?.complete },
+          { Status: 'Hủy', value: data?.orderStatus?.cancel },
         ];
     
         const chart = new Chart({
@@ -18,7 +19,7 @@ const RightSide = ({data}) => {
           height: 300, 
         });
     
-        chart.data(data);
+        chart.data(dataChart);
     
         chart
           .interval()
@@ -41,45 +42,31 @@ const RightSide = ({data}) => {
                 <Col xs={16} sm={16} md={16} lg={24} xl={24}>
                     <div className="border">
                         <div className="pt-25 pl-20 pr-20">
-                            <div className="d-flex justify-content-space-between mb-20 align-items-center">
-                                <div className="fw-600 fs-17">Trạng thái đặt bàn</div>
-                                <div className="fw-600 fs-14">Tổng: {data?.orderStatus?.totalOrder}</div>
-                            </div>
-                            <div className="status d-flex flex-column">
-                                <div className="wait">
-                                    <div className="mb-5"> Đang đợi: {data?.orderStatus?.pending} </div>
-                                    <div className="d-flex">
-                                        <div className="fs-13 w-30 click-to-view">Click to view</div>
-                                        <div style={{color: '#b2afaf'}}>Đợi</div>
-                                    </div>
+                            <div className="chart1" style={{height: '570px'}}>
+                                <div className="fs-18 fw-600 mb-20"> 
+                                    Nhà hàng được ưu chuộng
                                 </div>
-                                <div className="accept">
-                                    <div className="mb-5"> Chấp nhận: {data?.orderStatus?.confirm} </div>
-                                    <div className="d-flex">
-                                        <div className="fs-13 w-30 click-to-view">Click to view</div>
-                                        <div style={{color: '#73c2ff'}}>Chấp nhận</div>
-                                    </div>
-                                </div>
-                                <div className="process">
-                                    <div className="mb-5"> Đã thanh toán: {data?.orderStatus?.paid} </div>
-                                    <div className="d-flex align-items-center">
-                                        <div className="fs-13 w-30 click-to-view">Click to view</div>
-                                        <div style={{color: '#e8b240', padding: '5px 6px', borderRadius: '10px', backgroundColor: '#fff2d6'}}>Xử lý</div>
-                                    </div>
-                                </div>
-                                <div className="done">
-                                    <div className="mb-5"> Hoàn thành: {data?.orderStatus?.complete} </div>
-                                    <div className="d-flex align-items-center">
-                                        <div className="fs-13 w-30 click-to-view">Click to view</div>
-                                        <div style={{color: '#6ac0dd', padding: '5px 6px', borderRadius: '10px', backgroundColor: '#cbf0ee'}}>Thành công</div>
-                                    </div>
-                                </div>
-                                <div className="cancel">
-                                    <div className="mb-5"> Hủy bàn: {data?.orderStatus?.cancel} </div>
-                                    <div className="d-flex">
-                                        <div className="fs-13 w-30 click-to-view">Click to view</div>
-                                        <div className="red">Hủy</div>
-                                    </div>
+                                <div>
+                                    {
+                                        data?.topRestaurantDTOs.slice(0, 4).map((i, index) => (
+                                            <div className="item" key={index}>
+                                                <div className="d-flex justify-content-space-between align-items-center">
+                                                    <div className="d-flex align-items-center flex-column">
+                                                        <div>
+                                                            <Avatar size={56} src={<img src={i.image} alt="restaurant" />} />
+                                                        </div>
+                                                        <div style={{color: 'gray'}} className="fs-13 mt-10"> 
+                                                            Thu nhập: {formatNumberToK(i.totalInCome)} 
+                                                        </div>
+                                                    </div>
+                                                    <div className='pr-30'>
+                                                        <div className="fw-600 fs-15 mb-5"> {i.name} </div>
+                                                        <div style={{color: 'gray'}}> Số đơn: {i.totalOrder} </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -88,11 +75,15 @@ const RightSide = ({data}) => {
                 <Col xs={16} sm={16} md={16} lg={24} xl={24}>
                     <div className="border">
                         <div className="pt-25 pl-20 pr-20">
-                            <div className="mb-20">
+                            {/* <div className="mb-20">
                                 <div className="fw-600 fs-17">Trạng thái đơn hàng</div>
-                            </div>
+                            </div> */}
                             <div className="chart">
-                                <div id="container" style={{ width: '100%', height: '250px' }}></div>
+                                <div className='fs-20 fw-500 mb-20 pl-10'>
+                                    <span>Tổng đơn hàng: </span>
+                                    <span className='primary'>{data?.orderStatus?.totalOrder}</span>
+                                </div>
+                                <div id="container" style={{ width: '100%', height: '330px' }}></div>
                             </div>
                         </div>
                     </div>
