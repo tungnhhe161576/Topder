@@ -9,6 +9,7 @@ import {
 	DatePicker,
 	Dropdown,
 	Input,
+	Form,
 } from "antd";
 import RestaurantLayout from "../../../../components/Layouts/RestaurantLayout";
 import {} from "@ant-design/icons";
@@ -32,16 +33,67 @@ const ManageOrder = () => {
 	const [text, setText] = useState("");
 	const [status, setStatus] = useState("");
 	const user = useSelector(userInfor);
+	const [form] = Form.useForm();
+	const [selectedMonth, setSelectedMonth] = useState(null);
+	const [selectedDate, setSelectedDate] = useState(null);
+	const [allOrders, setAllOrders] = useState([]);
 
-	const getAllOrders = async () => {
+	console.log("check", orders);
+	console.log("month", dayjs(selectedMonth).format("MM-YYYY"));
+	console.log("date", dayjs(selectedDate).format("DD-MM-YYYY"));
+
+	const handleMonthSearch = () => {
+		if (selectedMonth) {
+			const filteredOrders = allOrders.filter((order) =>
+				dayjs(order.dateReservation).isSame(
+					dayjs(selectedMonth),
+					"month"
+				)
+			);
+			setOrders(filteredOrders);
+		} else {
+			setOrders(allOrders);
+		}
+	};
+
+	const handleDateSearch = () => {
+		if (selectedDate) {
+			const filteredOrders = allOrders.filter((order) =>
+				dayjs(order.dateReservation).isSame(dayjs(selectedDate), "day")
+			);
+			setOrders(filteredOrders);
+		} else {
+			setOrders(allOrders);
+		}
+	};
+	const handleSearch = async () => {
+		try {
+			const formValues = await form.validateFields();
+			getAllOrders(formValues.title);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+	const getAllOrders = async (nameReceiver = "") => {
 		try {
 			setLoading(true);
 			const res = await UserService.getAllOrderByRestaurant(user?.uid);
-			statusOrder
-				? setOrders(
-						res?.items.filter((o) => o?.statusOrder === statusOrder)
-				  )
-				: setOrders(res?.items);
+			let filteredOrders = res?.items;
+
+			if (statusOrder) {
+				filteredOrders = filteredOrders.filter(
+					(o) => o?.statusOrder === statusOrder
+				);
+			}
+			if (nameReceiver) {
+				filteredOrders = filteredOrders.filter((o) =>
+					o?.nameReceiver
+						?.toLowerCase()
+						.includes(nameReceiver.toLowerCase())
+				);
+			}
+			setOrders(filteredOrders);
+			setAllOrders(filteredOrders);
 		} catch (error) {
 			console.log(error);
 		} finally {
@@ -171,13 +223,15 @@ const ManageOrder = () => {
 			dataIndex: "a",
 			key: "a",
 			render: (_, record) => (
-				<div className="d-flex align-items-center justify-content-center" >
+				<div className="d-flex align-items-center justify-content-center">
 					{record?.statusOrder === "Pending" && (
 						<Button
 							className="mr-5"
 							onClick={() => {
 								setOpenModalUpdateOrder(record);
-								setText("Bạn có chắc chắn muốn xác nhận đơn hàng này không ?");
+								setText(
+									"Bạn có chắc chắn muốn xác nhận đơn hàng này không ?"
+								);
 								setStatus("Confirm");
 							}}
 							shape="round"
@@ -186,11 +240,15 @@ const ManageOrder = () => {
 							Xác nhận đơn
 						</Button>
 					)}
-					{(record?.statusOrder === "Confirm" && record?.totalAmount === 0) || record?.statusOrder === "Paid" ? (
+					{(record?.statusOrder === "Confirm" &&
+						record?.totalAmount === 0) ||
+					record?.statusOrder === "Paid" ? (
 						<Button
 							onClick={() => {
 								setOpenModalUpdateOrder(record);
-								setText("Bạn có chắc chắn muốn hoàn thành đơn hàng này không ?");
+								setText(
+									"Bạn có chắc chắn muốn hoàn thành đơn hàng này không ?"
+								);
 								setStatus("Complete");
 							}}
 							shape="round"
@@ -199,29 +257,27 @@ const ManageOrder = () => {
 							Hoàn thành đơn
 						</Button>
 					) : null}
-					{
-						record?.statusOrder === "Pending" || record?.statusOrder === "Confirm" || record?.statusOrder === "Paid"
-						 	? (
-								
-									<Button
-										className="huydon"
-										onClick={() => {
-											setOpenModalUpdateOrder(record);
-											setText(
-												`${
-													record?.statusOrder !== "Paid"
-														? "Bạn có chắc chắn muốn hủy đơn hàng này không ?"
-														: "Bạn sẽ mất đi 100% số tiền đơn hàng này và sẽ hoàn về ví của khách hàng!"
-												}`
-											);
-											setStatus("Cancel");
-										}}
-										shape="round"
-									>
-										Hủy
-									</Button>
-							) : null
-					}
+					{record?.statusOrder === "Pending" ||
+					record?.statusOrder === "Confirm" ||
+					record?.statusOrder === "Paid" ? (
+						<Button
+							className="huydon"
+							onClick={() => {
+								setOpenModalUpdateOrder(record);
+								setText(
+									`${
+										record?.statusOrder !== "Paid"
+											? "Bạn có chắc chắn muốn hủy đơn hàng này không ?"
+											: "Bạn sẽ mất đi 100% số tiền đơn hàng này và sẽ hoàn về ví của khách hàng!"
+									}`
+								);
+								setStatus("Cancel");
+							}}
+							shape="round"
+						>
+							Hủy
+						</Button>
+					) : null}
 				</div>
 			),
 			// width: 200
@@ -239,83 +295,118 @@ const ManageOrder = () => {
 						<div>
 							<Row
 								justify="space-evenly"
-								gutter={[16, 16]}
+								gutter={[24, 24]}
 								className="search-container"
 							>
-								<Col>
+								<Col span={8}>
 									<div style={{ marginBottom: "8px" }}>
 										<label>Tên người đặt</label>
 									</div>
-									<Input
-										style={{
-											marginRight: "8px",
-											width: "300px",
-										}}
-									/>
-									<Button className="btn" type="primary">
-										Tìm Kiếm
-									</Button>
+									<Form
+										form={form}
+										className="d-flex align-items-center"
+									>
+										<Form.Item
+											name="title"
+											className="mr-10 search-text"
+										>
+											<Input
+												style={{
+													marginRight: "8px",
+													width: "300px",
+												}}
+												placeholder="Tên Người Đặt"
+												allowClear
+												className="input-text w-100"
+											/>
+										</Form.Item>
+										<Form.Item>
+											<Button
+												type="primary"
+												htmlType="submit"
+												className="btn menu_search"
+												onClick={() => handleSearch()}
+											>
+												TÌm kiếm
+											</Button>
+										</Form.Item>
+									</Form>
 								</Col>
-								<Col>
+								<Col span={6}>
 									<div style={{ marginBottom: "8px" }}>
-										<label>Tháng/Năm</label>
+										<label>Tháng-Năm</label>
 									</div>
 									<DatePicker
+										format="MM-YYYY"
 										picker="month"
 										style={{ marginRight: "10px" }}
-										placeholder="----/--"
+										placeholder="--/----"
+										onChange={(date) =>
+											setSelectedMonth(date)
+										}
 									/>
-									<Button className="btn" type="primary">
+									<Button
+										className="btn"
+										type="primary"
+										onClick={handleMonthSearch}
+									>
 										Tìm Kiếm
 									</Button>
 								</Col>
-								<Col>
+
+								<Col span={6}>
 									<div style={{ marginBottom: "8px" }}>
 										<label>Ngày/Tháng/Năm</label>
 									</div>
 									<DatePicker
+										format="DD-MM-YYYY"
+										picker="day"
 										style={{ marginRight: "10px" }}
-										placeholder="mm/dd/yyyy"
+										placeholder="mm-dd-yyyy"
+										onChange={(date) =>
+											setSelectedDate(date)
+										}
 									/>
-									<Button className="btn" type="primary">
+									<Button
+										className="btn"
+										type="primary"
+										onClick={handleDateSearch}
+									>
 										Tìm Kiếm
 									</Button>
 								</Col>
-								<Col>
-									<div className="mb-8 fs-16 fw-600 pl-10">
-										Trạng thái
-									</div>
-									<div className="select">
-										<Select
-											className="nice-select w-100"
-											allowClear
-											placeholder="Trạng thái"
-											onChange={(e) => setStatusOrder(e)}
-										>
-											<Option key={1} value="Pending">
-												{" "}
-												Đang chờ{" "}
-											</Option>
-											<Option key={2} value="Confirm">
-												{" "}
-												Đã chấp nhận{" "}
-											</Option>
-											<Option key={3} value="Paid">
-												{" "}
-												Đã thanh toán{" "}
-											</Option>
-											<Option key={4} value="Complete">
-												{" "}
-												Đã hoàn thành{" "}
-											</Option>
-											<Option key={5} value="Cancel">
-												{" "}
-												Đã hủy{" "}
-											</Option>
-										</Select>
-									</div>
-								</Col>
 							</Row>
+							<Col className="d-flex-end">
+								<div className="select">
+									<Select
+										className="nice-select w-100"
+										allowClear
+										placeholder="Trạng thái"
+										onChange={(e) => setStatusOrder(e)}
+									>
+										<Option key={1} value="Pending">
+											{" "}
+											Đang chờ{" "}
+										</Option>
+										<Option key={2} value="Confirm">
+											{" "}
+											Đã chấp nhận{" "}
+										</Option>
+										<Option key={3} value="Paid">
+											{" "}
+											Đã thanh toán{" "}
+										</Option>
+										<Option key={4} value="Complete">
+											{" "}
+											Đã hoàn thành{" "}
+										</Option>
+										<Option key={5} value="Cancel">
+											{" "}
+											Đã hủy{" "}
+										</Option>
+									</Select>
+								</div>
+							</Col>
 						</div>
 
 						<Row justify="center">

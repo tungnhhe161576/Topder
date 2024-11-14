@@ -26,8 +26,7 @@ const RestaurantItem = ({
 			nav("/restaurant-detail/" + data?.uid);
 		} else {
 			if (!!user) {
-				setOpenModalBooking(true);
-				setText("Booking");
+				nav("/restaurant-detail/" + data?.uid);
 			} else {
 				setOpenRequestLogin(true);
 				setText("Bạn cần đăng nhập trước khi đặt bàn");

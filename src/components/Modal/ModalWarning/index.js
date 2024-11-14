@@ -3,12 +3,19 @@ import CustomModal from "../../Common/ModalCustom";
 import { ModalSuccessContainer } from "../ModalSuccess/styled";
 import warning from "../../../assets/images/warning.png";
 
-const ModalWarning = ({ open, onCancel, text }) => {
+const ModalWarning = ({ open, onCancel, text, onConfirm }) => {
 	const footer = () => {
 		return (
 			<div className="d-flex justify-content-center">
 				<Button className="mr-10 fw-600" onClick={() => onCancel()}>
 					Đóng
+				</Button>
+				<Button
+					className="mr-10 fw-600"
+					type="primary"
+					onClick={onConfirm}
+				>
+					Đồng ý
 				</Button>
 			</div>
 		);

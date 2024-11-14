@@ -60,26 +60,28 @@ const HomePage = () => {
 								gutter={[30, 24]}
 								className="d-flex justify-content-center"
 							>
-								{data?.newRestaurants?.map(
-									(r, index) => (
-										<Col
-											key={index}
-											xs={12}
-											sm={12}
-											md={12}
-											lg={6}
-											xl={6}
-										>
-											<RestaurantItem
-												data={r}
-												setOpenRequestLogin={setOpenRequestLogin}
-												setOpenModalBooking={setOpenModalBooking}
-												setText={setText}
-												isWishlist={false}
-											/>
-										</Col>
-									)
-								)}
+								{data?.newRestaurants?.map((r, index) => (
+									<Col
+										key={index}
+										xs={12}
+										sm={12}
+										md={12}
+										lg={6}
+										xl={6}
+									>
+										<RestaurantItem
+											data={r}
+											setOpenRequestLogin={
+												setOpenRequestLogin
+											}
+											setOpenModalBooking={
+												setOpenModalBooking
+											}
+											setText={setText}
+											isWishlist={false}
+										/>
+									</Col>
+								))}
 							</Row>
 						</div>
 					</div>
@@ -215,30 +217,28 @@ const HomePage = () => {
 								gutter={[30, 24]}
 								className="d-flex justify-content-center"
 							>
-								{data?.topRatingRestaurant?.map(
-									(r, index) => (
-										<Col
-											key={index}
-											xs={12}
-											sm={12}
-											md={12}
-											lg={6}
-											xl={6}
-										>
-											<RestaurantItem
-												data={r}
-												setOpenRequestLogin={
-													setOpenRequestLogin
-												}
-												setOpenModalBooking={
-													setOpenModalBooking
-												}
-												setText={setText}
-												isWishlist={false}
-											/>
-										</Col>
-									)
-								)}
+								{data?.topRatingRestaurant?.map((r, index) => (
+									<Col
+										key={index}
+										xs={12}
+										sm={12}
+										md={12}
+										lg={6}
+										xl={6}
+									>
+										<RestaurantItem
+											data={r}
+											setOpenRequestLogin={
+												setOpenRequestLogin
+											}
+											setOpenModalBooking={
+												setOpenModalBooking
+											}
+											setText={setText}
+											isWishlist={false}
+										/>
+									</Col>
+								))}
 							</Row>
 						</div>
 					</div>
