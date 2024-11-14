@@ -35,13 +35,14 @@ import ModalChooseFood from "./Modal/ChooseFood";
 import ModalChooseTable from "./Modal/ChooseTable";
 import ModalCalFee from "./Modal/ModalCalFee";
 import Policy from "./Description/Policy";
+import ModalSuccess from "../../../../components/Modal/ModalSuccess";
 
 const RestaurantDetail = () => {
 	const [selectedOption, setSelectedOption] = useState("description");
 	const [loading, setLoading] = useState(false);
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [restaurantDetail, setRestaurantDetail] = useState();
-	const [relatedRestaurant, setRelatedRestaurant] = useState([])
+	const [relatedRestaurant, setRelatedRestaurant] = useState([]);
 	const [openModalChooseTable, setOpenModalChooseTable] = useState(false);
 	const [tables, setTables] = useState([]);
 	const [openModalChooseFood, setOpenModalChooseFood] = useState(false);
@@ -57,7 +58,8 @@ const RestaurantDetail = () => {
 	const [time, setTime] = useState();
 	const { restaurantId } = useParams();
 	const [form] = Form.useForm();
-	const user = useSelector(userInfor)
+	const user = useSelector(userInfor);
+	const [showSuccessModal, setShowSuccessModal] = useState(false);
 
 	//api get data chi tiet nha hang
 	const getDataRestaurantDetail = async () => {
@@ -72,34 +74,37 @@ const RestaurantDetail = () => {
 		}
 	};
 
-    const getAllRelatedRestaurant = async () => {
-        try {
-            setLoading(true)
-            const res = await GuestService.getRelatedRestaurant(restaurantId, restaurantDetail?.categoryRestaurantId)
-            setRelatedRestaurant(res)
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setLoading(false)
-        }
-    }
+	const getAllRelatedRestaurant = async () => {
+		try {
+			setLoading(true);
+			const res = await GuestService.getRelatedRestaurant(
+				restaurantId,
+				restaurantDetail?.categoryRestaurantId
+			);
+			setRelatedRestaurant(res);
+		} catch (error) {
+			console.log(error);
+		} finally {
+			setLoading(false);
+		}
+	};
 
 	const getWishlist = async () => {
-        try {
-            setLoading(true);
-            const res = await UserService.getWishLish(user?.uid)
-            setWishList(res)
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setLoading(false)
-        }
-    }
+		try {
+			setLoading(true);
+			const res = await UserService.getWishLish(user?.uid);
+			setWishList(res);
+		} catch (error) {
+			console.log(error);
+		} finally {
+			setLoading(false);
+		}
+	};
 
 	useEffect(() => {
-		getDataRestaurantDetail()
+		getDataRestaurantDetail();
 		if (user?.uid) {
-			getWishlist()
+			getWishlist();
 		}
 	}, [user]);
 
@@ -113,15 +118,18 @@ const RestaurantDetail = () => {
 	const handleSubmitFormBooking = async () => {
 		try {
 			setLoading(true);
-			const menu = foods.map(({ menuId, quantity }) => ({ menuId, quantity }));
-			const table = tables.map((t) => (t.tableId));
+			const menu = foods.map(({ menuId, quantity }) => ({
+				menuId,
+				quantity,
+			}));
+			const table = tables.map((t) => t.tableId);
 			const total = await UserService.calTotalOrder({
 				customerId: user?.uid,
 				restaurantId: restaurantId,
-				orderMenus: menu
-			})
-			setTotalAmount(total)
-			
+				orderMenus: menu,
+			});
+			setTotalAmount(total);
+
 			const formValues = await form.validateFields();
 			const data = {
 				customerId: user?.uid,
@@ -130,15 +138,17 @@ const RestaurantDetail = () => {
 				categoryRoomId: undefined,
 				nameReceiver: formValues.nameReceiver,
 				phoneReceiver: formValues.phoneReceiver,
-				timeReservation:  formValues?.time,
+				timeReservation: formValues?.time,
 				dateReservation: formValues?.date?.$d,
 				numberPerson: formValues?.numberPerson,
-				numberChild: formValues?.numberChild ? formValues?.numberChild : 0,
+				numberChild: formValues?.numberChild
+					? formValues?.numberChild
+					: 0,
 				contentReservation: formValues?.contentReservation,
 				orderMenus: menu,
 				tableIds: table,
 			};
-			setOpenModalCalFee(data)
+			setOpenModalCalFee(data);
 		} catch (error) {
 			console.log(error);
 		} finally {
@@ -148,22 +158,28 @@ const RestaurantDetail = () => {
 
 	useEffect(() => {
 		if (wishlist) {
-			setIsLiked(wishlist.find(item => item.uid === restaurantDetail?.uid))
-			setIsLikedButton(wishlist.some(item => item.uid === restaurantDetail?.uid))
+			setIsLiked(
+				wishlist.find((item) => item.uid === restaurantDetail?.uid)
+			);
+			setIsLikedButton(
+				wishlist.some((item) => item.uid === restaurantDetail?.uid)
+			);
 		}
 	}, [restaurantDetail, wishlist]);
 
 	const handleAddWishList = async () => {
 		try {
 			if (!user) {
-				setOpenRequestLogin(false)
-				setText("Bạn phải đăng nhập trước khi thêm nhà hàng này vào yêu thích")
+				setOpenRequestLogin(false);
+				setText(
+					"Bạn phải đăng nhập trước khi thêm nhà hàng này vào yêu thích"
+				);
 			} else {
 				await UserService.createWishList({
 					customerId: user?.uid,
-					restaurantId: restaurantId
-				})
-				setIsLikedButton(false)
+					restaurantId: restaurantId,
+				});
+				setIsLikedButton(false);
 				message.open({
 					content: "Thêm thành công",
 					type: "success",
@@ -176,15 +192,14 @@ const RestaurantDetail = () => {
 			}
 		} catch (error) {
 			console.log(error);
-			
-		} 
-	}
+		}
+	};
 
-	const handleDeleteWishlist = async () => { 
+	const handleDeleteWishlist = async () => {
 		try {
 			setLoading(true);
-			await UserService.deleteWishlist(user?.uid, isLiked?.wishlistId)
-			setIsLikedButton(false)
+			await UserService.deleteWishlist(user?.uid, isLiked?.wishlistId);
+			setIsLikedButton(false);
 			message.open({
 				content: "Xóa thành công",
 				type: "success",
@@ -197,7 +212,7 @@ const RestaurantDetail = () => {
 		} finally {
 			setLoading(false);
 		}
-	}
+	};
 
 	//xu ly slider hinh anh nha hang
 	const nextImage = () => {
@@ -230,103 +245,192 @@ const RestaurantDetail = () => {
 									Thông tin cửa hàng
 								</div>
 								<Row gutter={[16, 16]}>
-									<Col xs={20} sm={20} md={12} lg={14} xl={14} >
+									<Col
+										xs={20}
+										sm={20}
+										md={12}
+										lg={14}
+										xl={14}
+									>
 										<div className="image-container">
-											<img src={ restaurantDetail?.images[currentIndex]?.imageUrl} alt="restaurant-image" />
+											<img
+												src={
+													restaurantDetail?.images[
+														currentIndex
+													]?.imageUrl
+												}
+												alt="restaurant-image"
+											/>
 										</div>
 										<div className="album-image">
-											<div className="prev mr-5" onClick={prevImage}>
+											<div
+												className="prev mr-5"
+												onClick={prevImage}
+											>
 												<button> {"<"} </button>
 											</div>
-											<Row gutter={[5, 0]} className="row w-100" >
-												{
-													restaurantDetail?.images?.map( (_, index) => (
-														<Col span={5} key={index} >
-															<div className="image-item" style={currentIndex === index ? { border: "5px #ef7d22 solid", } : {}}>
-																<Image className="img" src={restaurantDetail?.images[index]?.imageUrl} />
+											<Row
+												gutter={[5, 0]}
+												className="row w-100"
+											>
+												{restaurantDetail?.images?.map(
+													(_, index) => (
+														<Col
+															span={5}
+															key={index}
+														>
+															<div
+																className="image-item"
+																style={
+																	currentIndex ===
+																	index
+																		? {
+																				border: "5px #ef7d22 solid",
+																		  }
+																		: {}
+																}
+															>
+																<Image
+																	className="img"
+																	src={
+																		restaurantDetail
+																			?.images[
+																			index
+																		]
+																			?.imageUrl
+																	}
+																/>
 															</div>
 														</Col>
-												))}
+													)
+												)}
 											</Row>
-											<div className="next" onClick={nextImage}>
+											<div
+												className="next"
+												onClick={nextImage}
+											>
 												<button> {">"} </button>
 											</div>
 										</div>
 									</Col>
 
-									<Col xs={15} sm={15} md={12} lg={10} xl={10} >
+									<Col
+										xs={15}
+										sm={15}
+										md={12}
+										lg={10}
+										xl={10}
+									>
 										<div className="pl-20">
 											<div className="name fw-700 fs-26 mb-16">
 												{restaurantDetail?.nameRes}
 											</div>
 											<div className="rate mb-5">
-												<Rate className="primary fs-14" value={restaurantDetail?.star} disabled />
-												- ({ restaurantDetail?.totalFeedbacks } đánh giá)
+												<Rate
+													className="primary fs-14"
+													value={
+														restaurantDetail?.star
+													}
+													disabled
+												/>
+												- (
+												{
+													restaurantDetail?.totalFeedbacks
+												}{" "}
+												đánh giá)
 											</div>
 											<div className="name fw-500 fs-16 mb-20">
-												Loại cửa hàng: {restaurantDetail?.categoryName}
+												Loại cửa hàng:{" "}
+												{restaurantDetail?.categoryName}
 											</div>
 											<div className="action-time mb-8">
 												<div className="fs-16 fw-600 mb-5">
 													Giờ hoạt động
 												</div>
 												<div>
-													Mở cửa: {restaurantDetail?.openTime}
+													Mở cửa:{" "}
+													{restaurantDetail?.openTime}
 												</div>
 												<div>
-													Đóng cửa: {restaurantDetail?.closeTime}
+													Đóng cửa:{" "}
+													{
+														restaurantDetail?.closeTime
+													}
 												</div>
 											</div>
 											<div className="fs-16 fw-500">
-												Giá đặt bàn: {" "}
+												Giá đặt bàn:{" "}
 												<span className="primary">
-													{formatNumberToK(restaurantDetail?.price)}
+													{formatNumberToK(
+														restaurantDetail?.price
+													)}
 												</span>
 											</div>
 											<div className="fs-16 fw-500 mb-15">
-												Giá món ăn từ: {" "}
+												Giá món ăn từ:{" "}
 												<span className="primary">
-													{formatNumberToK(restaurantDetail?.minPriceMenu)} - {formatNumberToK(restaurantDetail?.maxPriceMenu)} 
+													{formatNumberToK(
+														restaurantDetail?.minPriceMenu
+													)}{" "}
+													-{" "}
+													{formatNumberToK(
+														restaurantDetail?.maxPriceMenu
+													)}
 												</span>
 											</div>
 											<div className="address mb-20">
 												<div className="fs-16 fw-600 mb-5">
 													Địa chỉ
 												</div>
-												<div> {restaurantDetail?.address} </div>
+												<div>
+													{" "}
+													{
+														restaurantDetail?.address
+													}{" "}
+												</div>
 											</div>
 											<div className="short-des mb-30">
 												<div className="fs-16 fw-600 mb-5">
 													Mô tả ngắn gọn:
 												</div>
-												<div style={{fontStyle: "italic"}}>
+												<div
+													style={{
+														fontStyle: "italic",
+													}}
+												>
 													{restaurantDetail?.subdescription ? (
-														<div dangerouslySetInnerHTML={{ __html: restaurantDetail?.subdescription }} />
+														<div
+															dangerouslySetInnerHTML={{
+																__html: restaurantDetail?.subdescription,
+															}}
+														/>
 													) : (
-														'Nhà hàng chưa có mô tả ngắn gọn'
+														"Nhà hàng chưa có mô tả ngắn gọn"
 													)}
 												</div>
 											</div>
 											<div>
-												{
-													!isLikedButton 
-														? <Button
-															className="added-like"
-															shape="round"
-															onClick={() => handleAddWishList()}
-														>
-		
-															Thêm vào yêu thích
-														</Button>
-														: <Button
-															className="added-like"
-															shape="round"
-															onClick={() => handleDeleteWishlist()}
-														>
-															Xóa khỏi yêu thích
-														</Button>
-		
-												}
+												{!isLikedButton ? (
+													<Button
+														className="added-like"
+														shape="round"
+														onClick={() =>
+															handleAddWishList()
+														}
+													>
+														Thêm vào yêu thích
+													</Button>
+												) : (
+													<Button
+														className="added-like"
+														shape="round"
+														onClick={() =>
+															handleDeleteWishlist()
+														}
+													>
+														Xóa khỏi yêu thích
+													</Button>
+												)}
 											</div>
 										</div>
 									</Col>
@@ -342,7 +446,7 @@ const RestaurantDetail = () => {
 										value={selectedOption}
 										onChange={setSelectedOption}
 										size="large"
-										style={{minWidth: '400px'}}
+										style={{ minWidth: "400px" }}
 									/>
 								</div>
 								<Divider
@@ -351,10 +455,18 @@ const RestaurantDetail = () => {
 								/>
 								<div>
 									{selectedOption === "description" ? (
-										<RestaurantDescription restaurantDetail={restaurantDetail}/>
+										<RestaurantDescription
+											restaurantDetail={restaurantDetail}
+										/>
 									) : selectedOption === "rate" ? (
-										<RestaurantRate restaurantDetail={restaurantDetail}/>
-									) : <Policy restaurantDetail={restaurantDetail}/>}
+										<RestaurantRate
+											restaurantDetail={restaurantDetail}
+										/>
+									) : (
+										<Policy
+											restaurantDetail={restaurantDetail}
+										/>
+									)}
 								</div>
 							</div>
 						</Col>
@@ -370,29 +482,46 @@ const RestaurantDetail = () => {
 												Đặt bàn
 											</div>
 											<Divider className="bg-white mt-10 mb-20" />
-											<Form form={form} layout="vertical" >
-												<Row gutter={[24, 0]} className="d-flex justify-content-center" >
+											<Form form={form} layout="vertical">
+												<Row
+													gutter={[24, 0]}
+													className="d-flex justify-content-center"
+												>
 													{/* name */}
 													<Col span={10}>
 														<Form.Item
 															name="nameReceiver"
 															label={
 																<span className="fs-14 white ml-8">
-																	Tên người nhận bàn
+																	Tên người
+																	nhận bàn
 																</span>
 															}
 															rules={[
 																{
 																	required: true,
 																	message: (
-																		<span style={{color: "black", marginLeft: "15px"}} >
-																			Hãy nhập tên của bạn!
+																		<span
+																			style={{
+																				color: "black",
+																				marginLeft:
+																					"15px",
+																			}}
+																		>
+																			Hãy
+																			nhập
+																			tên
+																			của
+																			bạn!
 																		</span>
 																	),
 																},
 															]}
 														>
-															<Input className="input" placeholder="Nhập tên" />
+															<Input
+																className="input"
+																placeholder="Nhập tên"
+															/>
 														</Form.Item>
 													</Col>
 													{/* phone number */}
@@ -401,29 +530,58 @@ const RestaurantDetail = () => {
 															name="phoneReceiver"
 															label={
 																<span className="fs-14 white ml-8">
-																	Số điện thoại người nhận
+																	Số điện
+																	thoại người
+																	nhận
 																</span>
 															}
 															rules={[
 																{
 																	required: true,
 																	message: (
-																		<span style={{color: "black", marginLeft: "15px" }}>
-																			Hãy nhập số điện thoại của bạn!
+																		<span
+																			style={{
+																				color: "black",
+																				marginLeft:
+																					"15px",
+																			}}
+																		>
+																			Hãy
+																			nhập
+																			số
+																			điện
+																			thoại
+																			của
+																			bạn!
 																		</span>
 																	),
 																},
 																{
-																	pattern: getRegexPhoneNumber(),
+																	pattern:
+																		getRegexPhoneNumber(),
 																	message: (
-																		<span style={{color: "black", marginLeft: "15px"}}>
-																			Số điện thoại sai định dạng
+																		<span
+																			style={{
+																				color: "black",
+																				marginLeft:
+																					"15px",
+																			}}
+																		>
+																			Số
+																			điện
+																			thoại
+																			sai
+																			định
+																			dạng
 																		</span>
 																	),
 																},
 															]}
 														>
-															<Input className="input" placeholder="Nhập số điện thoại"/>
+															<Input
+																className="input"
+																placeholder="Nhập số điện thoại"
+															/>
 														</Form.Item>
 													</Col>
 													{/* ngay */}
@@ -439,14 +597,29 @@ const RestaurantDetail = () => {
 																{
 																	required: true,
 																	message: (
-																		<span style={{color: "black", marginLeft: "15px" }}>
-																			Hãy chọn ngày nhận!
+																		<span
+																			style={{
+																				color: "black",
+																				marginLeft:
+																					"15px",
+																			}}
+																		>
+																			Hãy
+																			chọn
+																			ngày
+																			nhận!
 																		</span>
 																	),
 																},
 															]}
 														>
-															<DatePicker onChange={(e) => setDate(e)} className="input" placeholder="Chọn ngày"/>
+															<DatePicker
+																onChange={(e) =>
+																	setDate(e)
+																}
+																className="input"
+																placeholder="Chọn ngày"
+															/>
 														</Form.Item>
 													</Col>
 													{/* gio */}
@@ -455,24 +628,42 @@ const RestaurantDetail = () => {
 															noStyle
 															shouldUpdate
 														>
-															{({ getFieldValue }) => {
-																const selectedDate = getFieldValue('date');
+															{({
+																getFieldValue,
+															}) => {
+																const selectedDate =
+																	getFieldValue(
+																		"date"
+																	);
 																return selectedDate ? (
 																	<Form.Item
 																		name="time"
 																		label={
 																			<span className="fs-14 white ml-8">
-																				Giờ đặt bàn
+																				Giờ
+																				đặt
+																				bàn
 																			</span>
 																		}
 																		rules={[
 																			{
 																				required: true,
-																				message: (
-																					<span style={{color: "black", marginLeft: "15px" }}>
-																						Hãy chọn giờ cụ thể!
-																					</span>
-																				),
+																				message:
+																					(
+																						<span
+																							style={{
+																								color: "black",
+																								marginLeft:
+																									"15px",
+																							}}
+																						>
+																							Hãy
+																							chọn
+																							giờ
+																							cụ
+																							thể!
+																						</span>
+																					),
 																			},
 																		]}
 																	>
@@ -483,27 +674,61 @@ const RestaurantDetail = () => {
 																			format="HH:mm"
 																			showTime={{
 																				format: "HH:mm",
-																				disabledHours: () => {
-																					const apiStartTime = dayjs('08:00:00', 'HH:mm:ss')
-																					const apiEndTime = dayjs('23:00:00', 'HH:mm:ss')
-																					const startHour = apiStartTime.hour()
-																					const endHour = apiEndTime.hour()
-																					const disabledHours = []
-													
-																					for (let i = 0; i < startHour; i++) {
-																						disabledHours.push(i)
-																					}
-																					for (let i = endHour + 1; i < 24; i++) {
-																						disabledHours.push(i)
-																					}
-													
-																					return disabledHours;
-																				},
+																				disabledHours:
+																					() => {
+																						const apiStartTime =
+																							dayjs(
+																								"08:00:00",
+																								"HH:mm:ss"
+																							);
+																						const apiEndTime =
+																							dayjs(
+																								"23:00:00",
+																								"HH:mm:ss"
+																							);
+																						const startHour =
+																							apiStartTime.hour();
+																						const endHour =
+																							apiEndTime.hour();
+																						const disabledHours =
+																							[];
+
+																						for (
+																							let i = 0;
+																							i <
+																							startHour;
+																							i++
+																						) {
+																							disabledHours.push(
+																								i
+																							);
+																						}
+																						for (
+																							let i =
+																								endHour +
+																								1;
+																							i <
+																							24;
+																							i++
+																						) {
+																							disabledHours.push(
+																								i
+																							);
+																						}
+
+																						return disabledHours;
+																					},
 																			}}
-																			onChange={(e) => setTime(e)}
+																			onChange={(
+																				e
+																			) =>
+																				setTime(
+																					e
+																				)
+																			}
 																		/>
 																	</Form.Item>
-																) : null
+																) : null;
 															}}
 														</Form.Item>
 													</Col>
@@ -512,7 +737,7 @@ const RestaurantDetail = () => {
 														<Form.Item
 															name="numberPerson"
 															label={
-																<span className="fs-14 white ml-8"> 
+																<span className="fs-14 white ml-8">
 																	Số người lớn
 																</span>
 															}
@@ -520,14 +745,28 @@ const RestaurantDetail = () => {
 																{
 																	required: true,
 																	message: (
-																		<span style={{color: "black", marginLeft: "15px"}}>
-																			Hãy nhập số người lớn!
+																		<span
+																			style={{
+																				color: "black",
+																				marginLeft:
+																					"15px",
+																			}}
+																		>
+																			Hãy
+																			nhập
+																			số
+																			người
+																			lớn!
 																		</span>
 																	),
 																},
 															]}
 														>
-															<InputNumber min={0} className="input w-100" placeholder="Nhập số người lớn"/>
+															<InputNumber
+																min={0}
+																className="input w-100"
+																placeholder="Nhập số người lớn"
+															/>
 														</Form.Item>
 													</Col>
 													{/* so tre em */}
@@ -535,7 +774,7 @@ const RestaurantDetail = () => {
 														<Form.Item
 															name="numberChild"
 															label={
-																<span className="fs-14 white ml-8"> 
+																<span className="fs-14 white ml-8">
 																	Số trẻ em
 																</span>
 															}
@@ -550,7 +789,11 @@ const RestaurantDetail = () => {
 															// 	},
 															// ]}
 														>
-															<InputNumber min={0} className="input w-100" placeholder="Nhập số trẻ em" />
+															<InputNumber
+																min={0}
+																className="input w-100"
+																placeholder="Nhập số trẻ em"
+															/>
 														</Form.Item>
 													</Col>
 													{/* yeu cau */}
@@ -558,19 +801,26 @@ const RestaurantDetail = () => {
 														<Form.Item
 															name="contentReservation"
 															label={
-																<span className="fs-16 white ml-8"> 
+																<span className="fs-16 white ml-8">
 																	Yêu cầu
 																</span>
 															}
 														>
-															<TextArea rows={6} placeholder="Yêu cầu" />
+															<TextArea
+																rows={6}
+																placeholder="Yêu cầu"
+															/>
 														</Form.Item>
 													</Col>
 													<div className="d-flex justify-content-center">
 														<Form.Item name="chooseTable">
 															<Button
 																className="choose fs-16 fw-500 mr-10"
-																onClick={() => setOpenModalChooseTable(true)}
+																onClick={() =>
+																	setOpenModalChooseTable(
+																		true
+																	)
+																}
 															>
 																Chọn bàn
 															</Button>
@@ -578,7 +828,11 @@ const RestaurantDetail = () => {
 														<Form.Item name="ChooseFoods">
 															<Button
 																className="choose fs-16 fw-500"
-																onClick={() => setOpenModalChooseFood(true)}
+																onClick={() =>
+																	setOpenModalChooseFood(
+																		true
+																	)
+																}
 															>
 																Chọn món ăn
 															</Button>
@@ -588,7 +842,9 @@ const RestaurantDetail = () => {
 														<Button
 															className="button-submit w-100"
 															htmlType="submit"
-															onClick={() => handleSubmitFormBooking()}
+															onClick={() =>
+																handleSubmitFormBooking()
+															}
 														>
 															Đặt bàn
 														</Button>
@@ -607,20 +863,32 @@ const RestaurantDetail = () => {
 				<div className="related-restaurant">
 					<div className="fs-26 fw-700"> Cửa hàng liên quan </div>
 					<div>
-						<Row gutter={[24, 24]} className="d-dlex justify-content-center">
-							{
-							relatedRestaurant.length === 0
-								? <div className="red fw-500 fs-18 d-flex justify-content-center">Không có dữ liệu</div>
-								:  <>
-									{
-										relatedRestaurant.slice(0, 3)?.map((r, index) => ( 
-											<Col key={index} xs={12} sm={12} md={6} lg={6} xl={6}>
+						<Row
+							gutter={[24, 24]}
+							className="d-dlex justify-content-center"
+						>
+							{relatedRestaurant.length === 0 ? (
+								<div className="red fw-500 fs-18 d-flex justify-content-center">
+									Không có dữ liệu
+								</div>
+							) : (
+								<>
+									{relatedRestaurant
+										.slice(0, 3)
+										?.map((r, index) => (
+											<Col
+												key={index}
+												xs={12}
+												sm={12}
+												md={6}
+												lg={6}
+												xl={6}
+											>
 												<RelatedRestaurant data={r} />
 											</Col>
-										))
-									}
+										))}
 								</>
-							}
+							)}
 						</Row>
 					</div>
 				</div>
@@ -649,7 +917,10 @@ const RestaurantDetail = () => {
 			{!!openModalCalFee && (
 				<ModalCalFee
 					open={openModalCalFee}
-					onCancel={() => setOpenModalCalFee(false)}
+					onCancel={() => {
+						setOpenModalCalFee(false);
+						setShowSuccessModal(true);
+					}}
 					restaurantId={restaurantDetail?.uid}
 					userId={user?.uid}
 					totalPrice={totalAmount}
@@ -661,6 +932,13 @@ const RestaurantDetail = () => {
 					open={openRequestLogin}
 					onCancel={() => setOpenRequestLogin(false)}
 					text={text}
+				/>
+			)}
+			{!!showSuccessModal && (
+				<ModalSuccess
+					open={showSuccessModal}
+					onCancel={() => setShowSuccessModal(false)}
+					text="Bạn đã đặt bàn thành công, kiểm tra lại trong lịch sử đặt bàn hoặc trong mail của bạn đã đăng ký"
 				/>
 			)}
 		</CommonLayout>

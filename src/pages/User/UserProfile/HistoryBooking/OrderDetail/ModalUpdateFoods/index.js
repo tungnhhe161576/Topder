@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import UserService from "../../../../../../services/UserService";
 import { formatNumberToK } from "../../../../../../lib/stringUtils";
 import SpinCustom from "../../../../../../components/Common/SpinCustom";
+import ModalWarning from "../../../../../../components/Modal/ModalWarning";
 
 const ModalUpdateFoods = ({
 	open,
@@ -21,6 +22,7 @@ const ModalUpdateFoods = ({
 	const [menu, setMenu] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [selectedFoods, setSelectedFoods] = useState(foods);
+	const [showWarningModal, setShowWarningModal] = useState(false);
 
 	const getMenu = async () => {
 		try {
@@ -186,7 +188,7 @@ const ModalUpdateFoods = ({
 					className="mr-10 fw-600"
 					type="primary"
 					onClick={() => {
-						handleUpdate();
+						setShowWarningModal(true);
 						setFoods(selectedFoods);
 					}}
 					loading={loading}
@@ -218,6 +220,17 @@ const ModalUpdateFoods = ({
 					</SpinCustom>
 				</ModalChooseFoodContainer>
 			</CustomModal>
+			{!!showWarningModal && (
+				<ModalWarning
+					open={showWarningModal}
+					onCancel={() => setShowWarningModal(false)}
+					text="Bạn chắc chắn có muốn thay đổi lại món ăn đã chọn hay không? Sẽ ảnh hưởng đến giá tiền và mất đi discount mà bạn đã chọn!!!"
+					onConfirm={() => {
+						setShowWarningModal(false);
+						handleUpdate();
+					}}
+				/>
+			)}
 		</div>
 	);
 };
