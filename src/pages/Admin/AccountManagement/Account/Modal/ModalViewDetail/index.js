@@ -34,9 +34,6 @@ const ModalViewDetail = ({open, onCancel}) => {
         )
     }
 
-    console.log(open);
-    
-    
     return (  
         <CustomModal
             open={!!open}

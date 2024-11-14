@@ -77,6 +77,17 @@ const LeftSide = () => {
 				</div>
 				<div className="item-name"> Quản lý giao dịch </div>
 			</div>
+			<div
+				className={`item contact ${
+					isActive("/admin/manage-ad") ? "active" : ""
+				}`}
+				onClick={() => nav("/admin/manage-ad")}
+			>
+				<div className="item-icon">
+					<InsertRowAboveOutlined />
+				</div>
+				<div className="item-name"> Quản lý giá quảng cáo </div>
+			</div>
 		</div>
 	);
 };

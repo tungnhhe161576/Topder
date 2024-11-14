@@ -6,17 +6,32 @@ import {
 	BellOutlined,
 	UserOutlined,
 } from "@ant-design/icons";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
 	setUserInformation,
-	userInfor,
 } from "../../../../redux/Slice/userSlice";
 import { setAccessToken } from "../../../../redux/Slice/accessTokenSlice";
+import { Dropdown } from "antd";
 
 const Header = () => {
 	const nav = useNavigate();
 	const dispatch = useDispatch();
-	const user = useSelector(userInfor);
+	
+	const items = [
+		{
+			key: '1',
+			label: (
+				<span className="fs-16 fw-600" onClick={() => nav(`/restaurant/manage-restaurant`)}>Thông tin nhà hàng</span>
+			),
+		},
+			{
+			key: '2',
+			label: (
+				<span className="fs-16 fw-600 w-100" onClick={() => handleLogout()}>Đăng xuất</span>
+			),
+		},
+	];
+
 
 	const handleLogout = () => {
 		localStorage.removeItem("token");
@@ -24,6 +39,8 @@ const Header = () => {
 		dispatch(setUserInformation(null));
 		nav("/login");
 	};
+
+	
 	return (
 		<div className="header">
 			<div className="logo" onClick={() => nav("/restaurant/dashboard")}>
@@ -40,15 +57,13 @@ const Header = () => {
 					<BellOutlined />
 				</div>
 				<div className="item user">
-					{user ? (
-						<div className="user-info">
-							<span onClick={handleLogout}>
-								<UserOutlined /> {user?.nameRes}/Đăng xuất
-							</span>
-						</div>
-					) : (
+					<Dropdown
+						menu={{
+							items: items,
+						}}
+					>
 						<UserOutlined />
-					)}
+					</Dropdown>
 				</div>
 			</div>
 		</div>

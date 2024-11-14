@@ -49,6 +49,7 @@ import { useSelector } from "react-redux";
 import { userInfor } from "../redux/Slice/userSlice";
 import CommonRole from "./CommonRole";
 import ManageTransaction from "../pages/Admin/ManageTransaction";
+import AdsManagement from "../pages/Admin/AdsManagement";
 
 const LazyLoadingComponent = ({ children }) => {
 
@@ -337,6 +338,10 @@ export const router = [
 			{
 				path: "manage-transaction",
 				element: <ManageTransaction />,
+			},
+			{
+				path: "manage-ad",
+				element: <AdsManagement />,
 			},
 		],
 	},

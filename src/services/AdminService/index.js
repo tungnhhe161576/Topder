@@ -17,6 +17,13 @@ import {
     apiBanAccount,
     apiGetAllTransaction,
     apiChangeStatusWithdraw,
+    apiGetAddAdvertisement,
+    apiCretaeAdvertisementPrice,
+    apiUpdateAdvertisementPrice,
+    apiDeleteAdvertisementPrice,
+    apiGetAllBookingAds,
+    apiUpdateBookingAds,
+    apiActiveBlog,
 } from './urls'
 
 
@@ -42,6 +49,13 @@ const getDataDashboard = () => http.get(apiGetDataDashboard)
 const banAccount = (userId, status) => http.get(`${apiBanAccount}/${userId}?status=${status}`)
 const getAllTransaction = () => http.get(apiGetAllTransaction)
 const changeStatusWithdraw = (transactionId, status) => http.put(`${apiChangeStatusWithdraw}/${transactionId}?status=${status}`)
+const getAddAdvertisement = () => http.get(apiGetAddAdvertisement)
+const cretaeAdvertisementPrice = (body) => http.post(apiCretaeAdvertisementPrice, body)
+const updateAdvertisementPrice = (body) => http.put(apiUpdateAdvertisementPrice, body)
+const deleteAdvertisementPrice = (id) => http.delete(`${apiDeleteAdvertisementPrice}?id=${id}`)
+const getAllBookingAds = () => http.get(apiGetAllBookingAds)
+const updateBookingAds = (bookingId, status) => http.put(`${apiUpdateBookingAds}/${bookingId}?status=${status}`)
+const activeBlog = (blogId , status) => http.put(`${apiActiveBlog}/${blogId}?status=${status}`)
 
 
 
@@ -61,6 +75,14 @@ const AdminService = {
     banAccount,
     getAllTransaction,
     changeStatusWithdraw,
+    getAddAdvertisement,
+    cretaeAdvertisementPrice,
+    updateAdvertisementPrice,
+    deleteAdvertisementPrice,
+    getAllBookingAds,
+    updateBookingAds,
+    activeBlog,
 }
+
 
 export default AdminService

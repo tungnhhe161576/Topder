@@ -80,7 +80,7 @@ const Dashboard = () => {
                 <SpinCustom spinning={loading}>
                     <div className='part1'>
                         <div className="d-flex justify-content-space-between align-items-center">
-                            <div className="overview"> Overview </div>
+                            <div className="overview"> Tổng quan </div>
                             <div className="d-flex"> 
                                 <Button className="black fs-15 mr-15">
                                     <ShareAltOutlined /> Share
@@ -100,7 +100,7 @@ const Dashboard = () => {
                                     <SpinCustom spinning={loading2}>
                                         <div className="data-by-month">
                                             <div>
-                                                <div className="fw-500 pl-10 pt-5 mb-10">Chọn tháng</div>
+                                                <div className="fw-500 pl-10 pt-5 mb-10  fs-16">Dữ liệu theo tháng</div>
                                                 <div className="date-picker">
                                                     <DatePicker onChange={(e) => setMonth(dayjs(e).format("MM-DD-YYYY"))} picker="month" format='MM-YYYY' placeholder="Chọn tháng"/>
                                                 </div>
@@ -156,7 +156,7 @@ const Dashboard = () => {
                                     <SpinCustom spinning={loading3}>
                                         <div className="data-by-day">
                                             <div>
-                                                <div className="fw-500 pl-10 pt-5 mb-10">Chọn ngày</div>
+                                                <div className="fw-500 pl-10 pt-5 mb-10 fs-16">Dữ liệu theo ngày</div>
                                                 <div className="date-picker">
                                                     <DatePicker onChange={(e) => setDay(dayjs(e).format("MM-DD-YYYY"))} format='DD-MM-YYYY' placeholder="Chọn ngày"/>
                                                 </div>

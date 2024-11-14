@@ -5,6 +5,7 @@ import {
 	Switch,
 	Select,
 	Form,
+	message,
 } from "antd";
 import { useState } from "react";
 import SpinCustom from '../../../../components/Common/SpinCustom'
@@ -15,6 +16,7 @@ import ModalDeleteBlog from "./Modal/ModalDeleteBlog";
 import ModalUpdateBlog from "./Modal/ModalUpdateBlog";
 import ModalCreateBlog from "./Modal/ModalCreateBlog";
 import ModalViewDetail from "./Modal/ModalViewDetail";
+import AdminService from "../../../../services/AdminService";
 
 const { Option } = Select;
 
@@ -38,6 +40,28 @@ const AllBlogs = ({blogs, loading, setDataSearch, getAllBlog, blogCategory}) => 
 			console.log(error);
 		}
 	};
+
+	const handleActive = async (record) => {
+		try {
+			await AdminService.activeBlog(record?.blogId, record?.status === 'Active' ? 'In-Active' : 'Active')
+			message.open({
+                content: 'Cập nhật trạng thái thành công!',
+                type: 'success',
+                style: {
+                    marginTop: '10vh',
+                },
+            })
+			getAllBlog()
+		} catch (error) {
+			message.open({
+                content: 'Cập nhật trạng thái thất bại!',
+                type: 'error',
+                style: {
+                    marginTop: '10vh',
+                },
+            })
+		}
+	}
 
 	const columns = [
 		{
@@ -88,15 +112,16 @@ const AllBlogs = ({blogs, loading, setDataSearch, getAllBlog, blogCategory}) => 
 			render: (value, record) => (
 				<Switch
 					checked={value === 'Active' ? true : false}
-					// onChange={(checked) => {
-					// 	setDataSource((prev) =>
-					// 		prev.map((item) =>
-					// 			item.key === record.key
-					// 				? { ...item, status: checked }
-					// 				: item
-					// 		)
-					// 	);
-					// }}
+					onChange={() => {
+						// setDataSource((prev) =>
+						// 	prev.map((item) =>
+						// 		item.key === record.key
+						// 			? { ...item, status: checked }
+						// 			: item
+						// 	)
+						// );
+						handleActive(record)
+					}}
 				/>
 			),
 		},

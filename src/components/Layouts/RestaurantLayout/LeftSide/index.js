@@ -7,6 +7,7 @@ const LeftSide = () => {
 
 	const isActive = (path) => location.pathname === path;
 
+
 	return (
 		<div className="left-side">
 			<div
@@ -108,7 +109,7 @@ const LeftSide = () => {
 				<div className="item-icon">
 					<InsertRowAboveOutlined />
 				</div>
-				<div className="item-name"> Liên hệ </div>
+				<div className="item-name"> Liên hệ quảng cáo</div>
 			</div>
 		</div>
 	);

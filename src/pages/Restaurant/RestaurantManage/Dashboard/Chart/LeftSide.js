@@ -108,7 +108,7 @@ const LeftSide = ({restaurantData}) => {
                     <div className="chart1">
                         <div className="d-flex justify-content-space-between align-items-center"> 
                             <div>
-                                <div className="fs-22 fw-600"> Market Overview </div>   
+                                <div className="fs-22 fw-600"> Tổng quan về kinh doanh </div>   
                                 <div className="fs-18" style={{color: '#a7b2ba'}}> Tổng hợp số đơn hàng trong năm </div>   
                             </div>
                             <div className="select">
