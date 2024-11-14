@@ -79,8 +79,37 @@ const DepositOrWithdraw = () => {
 		}
 	};
 
+	const checkPaymentBooking = async () => {
+		try {
+			if (status === "PAID") {
+				await UserService.checkPaymentBooking(
+					transactionId,
+					"Successful"
+				);
+				message.open({
+					content: "Thanh toán thành công.",
+					type: "success",
+					style: {
+						marginTop: "10vh",
+					},
+				});
+			} else {
+				await UserService.checkPaymentBooking(transactionId, "Cancelled");
+				message.open({
+					content: "Thanh toán thất bại.",
+					type: "error",
+					style: {
+						marginTop: "10vh",
+					},
+				});
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	}
+
 	useEffect(() => {
-		paymentType === "order" ? order() : deposit();
+		paymentType === "order" ? order() : (paymentType === "booking" ? checkPaymentBooking() : deposit()) ;
 	});
 
 	return (
@@ -114,8 +143,12 @@ const DepositOrWithdraw = () => {
 					<Button
 						onClick={() => 
 							user?.role === 'Restaurant' 
-							 ? nav("/restaurant/wallet")
-							 : nav('/user-profile/user-wallet')
+								? paymentType === "booking"
+									? nav("/restaurant/contact")
+									: nav("/restaurant/wallet")
+								: paymentType === "order"
+									? nav('/user-profile/history-booking')
+									: nav('/user-profile/user-wallet')
 						}
 						type="primary"
 						shape="round"

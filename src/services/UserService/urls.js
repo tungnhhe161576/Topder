@@ -77,5 +77,10 @@ export const apiUpdateCategoryMenu = "CategoryMenu/Update"
 export const apiUploadFileMenu = "Menu/CreateByExcel"
 export const apiSearchDataByMonth = "Dashboard/TaskBarSearchByMonthRestaurant"
 export const apiSearchDataByDay = "Dashboard/TaskBarSearchByDayRestaurant"
+export const apiGetAllBookingAds = "BookingAdvertisement/GetBookingAdvertisementForRestaurant"
+export const apiPaymentBooking = "BookingAdvertisement/ChoosePaymentGatePaymentGateway"
+export const apiCheckPaymentBooking = "BookingAdvertisement/CheckPayment"
+export const apiCretaeAdsBooking = "BookingAdvertisement/Create"
+export const apiCancelBookingAds = "BookingAdvertisement/UpdateStatus"
 
 

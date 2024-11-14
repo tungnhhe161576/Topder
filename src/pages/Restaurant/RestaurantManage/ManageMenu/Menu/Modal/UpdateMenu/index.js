@@ -56,18 +56,21 @@ const ModalUpdateMenu = ({open, onCancel, onOk, userId}) => {
             setLoading(true)
             const formValues = await form.validateFields()
             console.log(formValues);
-            
-            const file = formValues.image.file;
-            const formData = new FormData();
-            formData.append("file", file);
-            const getImage = await ImageService.uploadImage(formData)
-            setImage(getImage.url)
+            let url = ''
+            if (formValues.image.file) {
+                const file = formValues.image.file;
+                const formData = new FormData();
+                formData.append("file", file);
+                const getImage = await ImageService.uploadImage(formData)
+                setImage(getImage.url)
+                url = getImage.url
+            }
 
             await UserService.updateMenu({
                 ...formValues,
                 restaurantId: userId,
                 menuId: open?.menuId,
-                image: image,
+                image: url,
             })
             message.open({
                 content: 'Cập nhật món ăn thành công!',

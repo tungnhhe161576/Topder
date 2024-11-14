@@ -59,7 +59,7 @@ const ModalCreateMenu = ({open, onCancel, onOk, userId}) => {
                 ...formValues,
                 restaurantId: userId,
                 menuId: open?.menuId,
-                image: image,
+                image: getImage.url,
             })
             message.open({
                 content: 'Tạo món ăn thành công!',

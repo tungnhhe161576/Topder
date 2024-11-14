@@ -79,6 +79,11 @@ import {
 	apiUploadFileMenu,
 	apiSearchDataByMonth,
 	apiSearchDataByDay,
+	apiGetAllBookingAds,
+	apiPaymentBooking,
+	apiCheckPaymentBooking,
+	apiCretaeAdsBooking,
+	apiCancelBookingAds,
 } from "./urls";
 
 
@@ -215,6 +220,12 @@ const uploadFileMenu = (restaurantId, file) => {
 }
 const searchDataByMonth = (restaurantId, searchMonth) => http.get(`${apiSearchDataByMonth}/${restaurantId}?searchMonth=${searchMonth}`)
 const searchDataByDay = (restaurantId, searchDay) => http.get(`${apiSearchDataByDay}/${restaurantId}?searchDay=${searchDay}`)
+const getAllBookingAds = (restaurantId) => http.get(`${apiGetAllBookingAds}/${restaurantId}`)
+const paymentBooking = (bookingId, paymentGateway) => http.post(`${apiPaymentBooking}?bookingId=${bookingId}&paymentGateway=${paymentGateway}`)
+const checkPaymentBooking = (bookingId, status) => http.put(`${apiCheckPaymentBooking}/${bookingId}?status=${status}`)
+const cretaeAdsBooking = (body) => http.post(apiCretaeAdsBooking, body)
+const cancelBookingAds = (bookingId, status) => http.put(`${apiCancelBookingAds}/${bookingId}?status=${status}`)
+
 
 
 
@@ -298,6 +309,11 @@ const UserService = {
 	uploadFileMenu,
 	searchDataByMonth,
 	searchDataByDay,
+	getAllBookingAds,
+	paymentBooking,
+	checkPaymentBooking,
+	cretaeAdsBooking,
+	cancelBookingAds,
 };
 
 
