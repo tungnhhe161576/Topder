@@ -1,3 +1,4 @@
+import QueryString from "qs";
 import http from "../index";
 
 import {
@@ -76,6 +77,8 @@ import {
 	apiCreateCategoryMenu,
 	apiUpdateCategoryMenu,
 	apiUploadFileMenu,
+	apiSearchDataByMonth,
+	apiSearchDataByDay,
 } from "./urls";
 
 
@@ -210,7 +213,9 @@ const uploadFileMenu = (restaurantId, file) => {
     formData.append('File', file);
 	http.post(apiUploadFileMenu, formData);
 }
-	
+const searchDataByMonth = (restaurantId, searchMonth) => http.get(`${apiSearchDataByMonth}/${restaurantId}?searchMonth=${searchMonth}`)
+const searchDataByDay = (restaurantId, searchDay) => http.get(`${apiSearchDataByDay}/${restaurantId}?searchDay=${searchDay}`)
+
 
 
 
@@ -291,6 +296,8 @@ const UserService = {
 	createCategoryMenu,
 	updateCategoryMenu,
 	uploadFileMenu,
+	searchDataByMonth,
+	searchDataByDay,
 };
 
 

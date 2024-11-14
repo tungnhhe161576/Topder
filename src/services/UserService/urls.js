@@ -75,5 +75,7 @@ export const apiDeleteCategoryMenu = "CategoryMenu/Invisible"
 export const apiCreateCategoryMenu = "CategoryMenu/Create"
 export const apiUpdateCategoryMenu = "CategoryMenu/Update"
 export const apiUploadFileMenu = "Menu/CreateByExcel"
+export const apiSearchDataByMonth = "Dashboard/TaskBarSearchByMonthRestaurant"
+export const apiSearchDataByDay = "Dashboard/TaskBarSearchByDayRestaurant"
 
 

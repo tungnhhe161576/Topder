@@ -6,9 +6,13 @@ import reportWebVitals from "./reportWebVitals";
 import "../src/assets/scss/index.scss";
 import { Provider } from "react-redux";
 import store from "./redux/store";
-import { BrowserRouter, RouterProvider } from "react-router-dom";
-import router from "./router";
+import { BrowserRouter } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { ConfigProvider } from "antd";
+import 'dayjs/locale/vi'; // Import locale tiếng Việt
+import viVN from 'antd/lib/locale/vi_VN'; // Import locale từ antd
+import dayjs from 'dayjs';
+dayjs.locale('vi');
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const clientId = process.env.REACT_APP_GG_CLIENT_ID;
@@ -16,7 +20,9 @@ root.render(
 	<GoogleOAuthProvider clientId={clientId}>
 		<BrowserRouter>
 			<Provider store={store}>
-				<App />
+				<ConfigProvider locale={viVN}>
+					<App />
+				</ConfigProvider>
 			</Provider>
 		</BrowserRouter>
 	</GoogleOAuthProvider>

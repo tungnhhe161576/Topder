@@ -23,6 +23,35 @@ export const DashboardContainer = styled.div `
             color: rgb(31, 59, 179);
         }
 
+        .data-by-month, .data-by-day{
+            border : 1px solid #d5d5d5;
+            background-color: white;;
+            border-radius: 15px;
+            width: 100%;
+            height: 180px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+        .date-picker {
+            padding-left: 20px;
+            width: 80%;
+            height: 25px;
+        }
+        .data {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 10px;
+        }
+        .ant-picker {
+            height: 30px;
+        }
+        :where(.css-dev-only-do-not-override-14qglws).ant-picker-outlined:focus-within {
+            border-color: #ff9800;
+        }
+        :where(.css-dev-only-do-not-override-14qglws).ant-picker-outlined:hover {
+            border-color: #ff9800;
+        }
+
         .background-count {
             border-radius: 20px;
             font-size: 25px;
