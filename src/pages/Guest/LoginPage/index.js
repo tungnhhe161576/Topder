@@ -31,7 +31,6 @@ const LoginPage = () => {
 			} else {
 				sessionStorage.setItem("token", res.data.token);
 			}
-			localStorage.setItem("token", res.data.token);
 			dispatch(setUserInformation(res.data.userInfo));
 			dispatch(setAccessToken(res.data.token));
 			if (res.data.userInfo.role === "Customer") {
