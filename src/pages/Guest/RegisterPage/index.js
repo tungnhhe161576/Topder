@@ -20,6 +20,8 @@ import {
 } from "../../../lib/stringUtils";
 import dayjs from "dayjs";
 import UserService from "../../../services/UserService";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const RegisterPage = () => {
 	const [form] = Form.useForm();
@@ -28,8 +30,8 @@ const RegisterPage = () => {
 	const nav = useNavigate();
 
 	const handleRegister = async () => {
-		const values = await form.validateFields();
 		try {
+			const values = await form.validateFields();
 			const emails = values.email;
 			const emailCheck = await UserService.checkExisEmail(emails);
 			if (
@@ -44,6 +46,7 @@ const RegisterPage = () => {
 			try {
 				setLoading(true);
 				{
+					const values = await form.validateFields();
 					const data = {
 						...values,
 						uid: 0,
@@ -57,17 +60,23 @@ const RegisterPage = () => {
 								? "Female"
 								: "Other",
 					};
-					const res = await UserService.registerCustomer({
+					await UserService.registerCustomer({
 						...data,
 					});
-					message.open({
-						content: res.message || "Đăng ký tài khoản thành công.",
-						type: "success",
-					});
+					toast.success(
+						"Đăng ký thành công. Vui lòng kiểm tra email để xác minh tài khoản",
+						{
+							autoClose: 5000,
+							style: {
+								fontSize: "18px",
+								padding: "20px",
+								borderRadius: "8px",
+							},
+						}
+					);
 					setTimeout(() => {
 						nav("/login");
-					}, 1500);
-					// }
+					}, 1000);
 				}
 			} catch (error) {
 				message.open({
@@ -201,7 +210,7 @@ const RegisterPage = () => {
 									</span>
 								}
 							>
-								<DatePicker />
+								<DatePicker placeholder="Hãy chọn ngày-tháng-năm sinh của bạn" />
 							</Form.Item>
 							<Form.Item
 								name="gender"
