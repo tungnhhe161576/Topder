@@ -24,6 +24,8 @@ import logo from "../../../assets/images/logo.png";
 import dayjs from "dayjs";
 import axios from "axios";
 import UserService from "../../../services/UserService";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const getBase64 = (file) =>
 	new Promise((resolve, reject) => {
 		const reader = new FileReader();
@@ -237,6 +239,17 @@ const RegisterRestaurant = () => {
 						marginTop: "20vh",
 					},
 				});
+				toast.success(
+					"Đăng ký thành công. Vui lòng kiểm tra email để xác minh tài khoản",
+					{
+						autoClose: 5000,
+						style: {
+							fontSize: "18px",
+							padding: "20px",
+							borderRadius: "8px",
+						},
+					}
+				);
 				setTimeout(() => {
 					nav("/login");
 				}, 1500);

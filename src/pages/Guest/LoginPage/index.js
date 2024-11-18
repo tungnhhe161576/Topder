@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { LoginContainer } from "./styled";
 import LeftSide from "../../../components/LeftSideLogin";
-import { Button, Checkbox, Col, Form, Input, Row } from "antd";
+import { Button, Checkbox, Col, Form, Input, message, Row } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { CloseOutlined, GoogleOutlined } from "@ant-design/icons";
 import { getRegexEmail } from "../../../lib/stringUtils";
@@ -12,6 +12,7 @@ import { setUserInformation } from "../../../redux/Slice/userSlice";
 import { setAccessToken } from "../../../redux/Slice/accessTokenSlice";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
+import "react-toastify/dist/ReactToastify.css";
 
 const LoginPage = () => {
 	const [form] = Form.useForm();
@@ -19,12 +20,11 @@ const LoginPage = () => {
 	const nav = useNavigate();
 	const dispatch = useDispatch();
 	const [rememberMe, setRememberMe] = useState(false);
-	const [textError, setTextError] = useState(false);
 
 	const handleLoginByForm = async () => {
-		const values = await form.validateFields();
 		try {
 			setLoading(true);
+			const values = await form.validateFields();
 			const res = await UserService.loginApi(values);
 			if (rememberMe) {
 				localStorage.setItem("token", res.data.token);
@@ -34,8 +34,6 @@ const LoginPage = () => {
 			localStorage.setItem("token", res.data.token);
 			dispatch(setUserInformation(res.data.userInfo));
 			dispatch(setAccessToken(res.data.token));
-			toast("Đăng nhập thành công!");
-
 			if (res.data.userInfo.role === "Customer") {
 				nav("/");
 			} else if (res.data.userInfo.role === "Restaurant") {
@@ -43,25 +41,29 @@ const LoginPage = () => {
 			} else {
 				nav("/admin/dashboard");
 			}
+			toast.success("Đăng nhập thành công", {
+				autoClose: 3000,
+				style: {
+					fontSize: "18px",
+					padding: "20px",
+					borderRadius: "8px",
+				},
+			});
 		} catch (error) {
-			console.log("dsdasd", error);
+			message.open({
+				content: "Đăng nhập tài khoản không thành công",
+				type: "error",
+			});
 		} finally {
 			setLoading(false);
 		}
 	};
-
-	const handleGoogleLoginSuccess = async (response) => {
-		try {
-			setLoading(true);
-			const accessToken = response.credential;
-			// console.log("Access Token:", accessToken);
-			const res = await UserService.loginGG(accessToken);
-			const token = jwtDecode(res.data);
-			// console.log("Token:", token);
-			localStorage.setItem("token", res.data);
+	useEffect(() => {
+		const storedToken = localStorage.getItem("token");
+		if (storedToken) {
+			const token = jwtDecode(storedToken);
 			dispatch(setUserInformation(token));
-			dispatch(setAccessToken(res.data));
-			toast("Đăng nhập thành công!");
+			dispatch(setAccessToken(storedToken));
 			if (token.role === "Customer") {
 				nav("/");
 			} else if (token.role === "Restaurant") {
@@ -69,8 +71,37 @@ const LoginPage = () => {
 			} else {
 				nav("/admin/dashboard");
 			}
+		}
+	}, [dispatch, nav]);
+	const handleGoogleLoginSuccess = async (response) => {
+		try {
+			setLoading(true);
+			const accessToken = response.credential;
+			console.log("Access Token:", accessToken);
+			const res = await UserService.loginGG(accessToken);
+			const token = jwtDecode(res.data);
+			console.log("Token:", token);
+			localStorage.setItem("token", res.data);
+			dispatch(setUserInformation(token));
+			dispatch(setAccessToken(res.data));
+			toast("Đăng nhập thành công!");
+			if (token.role === "Customer") {
+				if (token.dob === "" || token.phone === "") {
+					nav("/user-profile");
+					message.warning(
+						"Vui lòng cập nhật thông tin để tôi có thể hỗ trợ bạn nhiều nhất.",
+						5
+					);
+				} else {
+					nav("/");
+				}
+			} else if (token.role === "Restaurant") {
+				nav("/restaurant/dashboard");
+			} else {
+				nav("/admin/dashboard");
+			}
 		} catch (error) {
-			console.error("Error during Google Login:", error);
+			message.error("Tài khoản hoặc mật khẩu không đúng.");
 		} finally {
 			setLoading(false);
 		}
