@@ -20,4 +20,5 @@ export const apiDeleteAdvertisementPrice = "AdvertisementPricing/Delete"
 export const apiGetAllBookingAds = "BookingAdvertisement/GetBookingAdvertisementForAdmin"
 export const apiUpdateBookingAds = "BookingAdvertisement/UpdateStatus"
 export const apiActiveBlog = "Blog/Active"
+export const apiGetAllOrder = "Order/GetOrderListForAdmin"
 

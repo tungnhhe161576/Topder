@@ -2,41 +2,51 @@ import styled from "styled-components";
 
 export const OrderManagementContainer = styled.div`
 	width: 100%;
-	.body {
-		background-color: #fff;
-		border-radius: 10px;
-		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-		padding: 40px 20px;
+	min-height: 100vh;
+
+	.input-search {
+		.ant-input-affix-wrapper {
+			border-radius: 25px;
+		}
+		:where(.css-dev-only-do-not-override-14qglws).ant-input-outlined:hover {
+			border-color: #ff7c08;
+		}
+		:where(.css-dev-only-do-not-override-14qglws).ant-input-outlined:focus-within {
+			border-color: #ff7c08;
+		}
 	}
-	.ant-table {
-		width: 100%;
-		margin: 20px 0;
+	
+	.picker {
+		.ant-picker {
+			width: 100% !important;
+			border-radius: 25px;
+		}
+		:where(.css-dev-only-do-not-override-14qglws).ant-picker-outlined:hover {
+			border-color: #ff7c08;
+		}
+		:where(.css-dev-only-do-not-override-14qglws).ant-picker-outlined:focus-within {
+			border-color: #ff7c08;
+		}
 	}
 
-	.ant-table-thead > tr > th {
-		background-color: #f5f5f5;
-		font-weight: bold;
-		text-align: center;
-	}
+	.select {
+		width: 300px;
 
-	.ant-table-tbody > tr > td {
-		text-align: center;
-		padding: 16px;
-	}
-	.status-bar {
-		display: flex;
-		gap: 10px;
-		justify-content: space-evenly;
-		align-items: center;
-		flex-wrap: wrap;
-		margin-bottom: 20px;
-	}
+		/* :where(.css-dev-only-do-not-override-14qglws).ant-select-outlined:not(.ant-select-customize-input) .ant-select-selector {
+			border: 1px solid #ff7c08;
+		} */
+		.ant-select:not(.ant-select-customize-input) .ant-select-selector {
+			border-radius: 25px !important;
 
-	.status-item {
-		cursor: pointer;
-		padding: 8px 12px;
-		border-radius: 30px;
+		}
+		.ant-select-focused:where(.css-dev-only-do-not-override-14qglws).ant-select-outlined:not(.ant-select-disabled):not(.ant-select-customize-input):not(.ant-pagination-size-changer) .ant-select-selector {
+			border-color: #ff7c08 !important;
+		}
+		:where(.css-dev-only-do-not-override-14qglws).ant-select-outlined:not(.ant-select-disabled):not(.ant-select-customize-input):not(.ant-pagination-size-changer):hover .ant-select-selector {
+			border-color: #ff7c08 !important;
+		}
 	}
+	
 	.tag-waiting {
 		color: #1e283d;
 		border: 1px solid #1e283d;
@@ -78,34 +88,7 @@ export const OrderManagementContainer = styled.div`
 		cursor: pointer;
 	}
 
-	.ant-table-tbody > tr > td {
-		text-align: center;
-	}
-	.order-detail {
-		margin-top: 20px;
-	}
-
-	.order-detail table {
-		width: 100%;
-		border-collapse: collapse;
-		margin-top: 10px;
-	}
-
-	.order-detail table th,
-	.order-detail table td {
-		padding: 10px;
-		text-align: center;
-		border-bottom: 1px solid #f0f0f0;
-	}
-
-	.order-detail table th {
-		font-weight: bold;
-		background-color: #f5f5f5;
-	}
-
-	.order-detail table td {
-		font-size: 16px;
-	}
+	
 	.btn {
 		background-color: #20c997;
 		color: white;

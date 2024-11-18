@@ -178,65 +178,7 @@ const Dashboard = () => {
                                         </div>
                                     </SpinCustom>
                                 </Col>
-                                {/* <Col xs={8} sm={8} md={3} lg={3} xl={3}>
-                                    <div className="total-order">
-                                        <div className="title">Tổng đơn đặt</div>
-                                        <div className="background-count"> {restaurantData?.taskBar?.totalOrder}</div>
-                                    </div>
-                                </Col>
-                                <Col xs={8} sm={8} md={4} lg={4} xl={4}>
-                                    <div className="total-income">
-                                        <div className="title">Tổng thu nhập</div>
-                                        <div className="background-count income"> {formatNumberToK(restaurantData?.taskBar?.totalIncome)} </div>
-                                    </div>
-                                </Col>
-                                <Col xs={8} sm={8} md={7} lg={7} xl={7}>
-                                    <div className="total-order-by-month">
-                                        <div className="title">Tổng đơn của tháng hiện tại</div>
-                                        <div className="order-by-month"> 
-                                            <div> {restaurantData?.taskBar?.currentMonthOrder?.currentMonthOrder} </div>
-                                            <div> 
-                                                <Statistic
-                                                    value={restaurantData?.taskBar?.currentMonthOrder?.orderGrowthRate}
-                                                    precision={2}
-                                                    valueStyle={restaurantData?.taskBar?.currentMonthOrder?.orderGrowthRate >= 0 ?{
-                                                        color: '#3f8600',
-                                                        fontSize: '14px'
-                                                    } : {
-                                                        color: '#cf1322',
-                                                        fontSize: '14px'
-                                                    }}
-                                                    prefix={restaurantData?.taskBar?.currentMonthOrder?.orderGrowthRate >= 0 ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
-                                                    suffix="%"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Col>
-                                <Col xs={12} sm={12} md={7} lg={7} xl={7}>
-                                    <div className="total-income-by-month">
-                                        <div className="title">Tổng thu nhập của tháng hiện tại</div>
-                                        <div className="income-by-month"> 
-                                            <div>{formatNumberToK(restaurantData?.taskBar?.currentMonthIncome?.currentMonthIncome)} </div>
-                                            <div>
-                                                <Statistic
-                                                    value={restaurantData?.taskBar?.currentMonthIncome?.incomeGrowthRate}
-                                                    precision={2}
-                                                    valueStyle={restaurantData?.taskBar?.currentMonthIncome?.incomeGrowthRate >= 0 ? {
-                                                        color: '#3f8600',
-                                                        fontSize: '14px'
-                                                    } : {
-                                                        color: '#cf1322',
-                                                        fontSize: '14px'
-                                                    }}
-                                                    prefix={restaurantData?.taskBar?.currentMonthIncome?.incomeGrowthRate >= 0 ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
-                                                    suffix="%"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Col> */}
-                                <Col xs={12} sm={12} md={3} lg={3} xl={3}>
+                                <Col xs={12} sm={12} md={8} lg={8} xl={8}>
                                     <div className="star">
                                         <div className="title">Số sao</div>
                                         <div className="background-count"> {restaurantData?.star ? restaurantData?.star : '0'} </div>

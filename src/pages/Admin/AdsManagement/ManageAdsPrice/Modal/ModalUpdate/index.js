@@ -65,7 +65,7 @@ const ModalUpdate = ({open, onCancel, onOk}) => {
             onCancel={onCancel}
             footer={footer}
             width={600}
-            style={{marginTop: '100px'}}
+            // style={{marginTop: '100px'}}
         >
             <div className="title-type-1">
                 Cập nhật giá quảng cáo

@@ -23,7 +23,7 @@ export const DashboardContainer = styled.div `
             color: rgb(31, 59, 179);
         }
 
-        .data-by-month, .data-by-day{
+        .data-by-month, .data-by-day, .star{
             border : 1px solid #d5d5d5;
             background-color: white;;
             border-radius: 15px;
@@ -55,8 +55,9 @@ export const DashboardContainer = styled.div `
         .background-count {
             border-radius: 20px;
             font-size: 25px;
-            padding: 5px;
-            width: 35px;
+            width: 50px;
+            border: 1px solid red;
+            margin-left: 30px;
             font-weight: 600;
             display: flex;
             justify-content: center;
@@ -92,6 +93,7 @@ export const DashboardContainer = styled.div `
         .title {
             font-size: 22px;
             font-weight: 600;
+            padding: 20px 0 0 20px;
         }
     }
 

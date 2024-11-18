@@ -22,6 +22,7 @@ import dayjs from "dayjs";
 import { formatNumberToK } from "../../../../lib/stringUtils";
 import ModalDetail from "./Modal/ModalDetail";
 import ModalUpdateOrder from "./Modal/ModalUpdateOrder";
+import { FileAddOutlined } from '@ant-design/icons'
 const { Option } = Select;
 
 const ManageOrder = () => {
@@ -240,44 +241,43 @@ const ManageOrder = () => {
 							Xác nhận đơn
 						</Button>
 					)}
-					{(record?.statusOrder === "Confirm" &&
-						record?.totalAmount === 0) ||
-					record?.statusOrder === "Paid" ? (
-						<Button
-							onClick={() => {
-								setOpenModalUpdateOrder(record);
-								setText(
-									"Bạn có chắc chắn muốn hoàn thành đơn hàng này không ?"
-								);
-								setStatus("Complete");
-							}}
-							shape="round"
-							type="primary"
-						>
-							Hoàn thành đơn
-						</Button>
-					) : null}
-					{record?.statusOrder === "Pending" ||
-					record?.statusOrder === "Confirm" ||
-					record?.statusOrder === "Paid" ? (
-						<Button
-							className="huydon"
-							onClick={() => {
-								setOpenModalUpdateOrder(record);
-								setText(
-									`${
-										record?.statusOrder !== "Paid"
-											? "Bạn có chắc chắn muốn hủy đơn hàng này không ?"
-											: "Bạn sẽ mất đi 100% số tiền đơn hàng này và sẽ hoàn về ví của khách hàng!"
-									}`
-								);
-								setStatus("Cancel");
-							}}
-							shape="round"
-						>
-							Hủy
-						</Button>
-					) : null}
+					{(record?.statusOrder === "Confirm" && record?.totalAmount === 0) || record?.statusOrder === "Paid" 
+						? (
+							<Button
+								onClick={() => {
+									setOpenModalUpdateOrder(record);
+									setText(
+										"Bạn có chắc chắn muốn hoàn thành đơn hàng này không ?"
+									);
+									setStatus("Complete");
+								}}
+								shape="round"
+								type="primary"
+								className="mr-5"
+							>
+								Hoàn thành đơn
+							</Button>
+						) : null}
+					{record?.statusOrder === "Pending" || record?.statusOrder === "Confirm" || record?.statusOrder === "Paid" 
+						? (
+							<Button
+								className="huydon"
+								onClick={() => {
+									setOpenModalUpdateOrder(record);
+									setText(
+										`${
+											record?.statusOrder !== "Paid"
+												? "Bạn có chắc chắn muốn hủy đơn hàng này không ?"
+												: "Bạn sẽ mất đi 100% số tiền đơn hàng này và sẽ hoàn về ví của khách hàng!"
+										}`
+									);
+									setStatus("Cancel");
+								}}
+								shape="round"
+							>
+								Hủy
+							</Button>
+						) : null}
 				</div>
 			),
 			// width: 200
@@ -289,8 +289,15 @@ const ManageOrder = () => {
 			<ManageOrderContainer>
 				<div className="body">
 					<SpinCustom spinning={loading}>
-						<div className="d-flex justify-content-space-between align-items-center mb-20">
-							<div className="fw-600 fs-22"> Đơn đặt bàn </div>
+						<div className="d-flex justify-content-space-between">
+							<div className="d-flex justify-content-space-between align-items-center mb-20">
+								<div className="fw-600 fs-22"> Đơn đặt bàn </div>
+							</div>
+							<div>
+								<Button type="primary" className="white fs-15">
+                                    <FileAddOutlined /> Tải về file Excel
+                                </Button>
+							</div>
 						</div>
 						<div>
 							<Row
