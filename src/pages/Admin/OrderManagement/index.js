@@ -1,363 +1,182 @@
 import AdminLayout from "../../../components/Layouts/AdminLayout";
 import { OrderManagementContainer } from "./styled";
-import React, { useState } from "react";
-import { Button, Col, Row, Table, Tag, DatePicker } from "antd";
-import ModalCustom from "../../../components/Common/ModalCustom";
+import React, { useEffect, useState } from "react";
+import { Button, Col, Row, Table, Tag, DatePicker, Select, Input } from "antd";
 import { FileAddOutlined } from "@ant-design/icons";
+import AdminService from '../../../services/AdminService'
+import SpinCustom from "../../../components/Common/SpinCustom";
+import { formatNumberToK } from "../../../lib/stringUtils";
+import dayjs from "dayjs";
+import ModalViewDetail from "./Modal";
+const {Option} = Select
 const OrderManagement = () => {
-	const initialData = [
-		{
-			key: "1",
-			id: "1006",
-			nameOrderer: "Huân Bá",
-			phoneOrderer: "0327765248",
-			nameReceiver: "Huân Bá",
-			phoneReceiver: "0327765248",
-			orderDate: "18/06/2024",
-			status: "Chờ Duyệt",
-			history: [
-				{ status: "Chờ duyệt", time: "18:30 12/06/2024" },
-				{ status: "Chấp Nhận", time: "04:29 13/06/2024" },
-				{ status: "Đã Nhận Bàn", time: "13:28 14/06/2024" },
-			],
-			details: {
-				dateReceived: "18/06/2024",
-				timeReceived: "08:00",
-				adults: 4,
-				children: 2,
-				notes: "Không có ghi chú",
-			},
-		},
-		{
-			key: "2",
-			id: "1007",
-			nameOrderer: "Đỗ Văn Đạt",
-			phoneOrderer: "0968519615",
-			nameReceiver: "Đỗ Văn Đạt",
-			phoneReceiver: "0968519615",
-			orderDate: "14/06/2024",
-			status: "Chấp Nhận",
-			history: [
-				{ status: "Chờ duyệt", time: "12:00 14/06/2024" },
-				{ status: "Chấp Nhận", time: "13:00 14/06/2024" },
-			],
-			details: {
-				dateReceived: "14/06/2024",
-				timeReceived: "09:00",
-				adults: 3,
-				children: 1,
-				notes: "Mang thêm ghế",
-			},
-		},
-		{
-			key: "3",
-			id: "1008",
-			nameOrderer: "Nguyễn Văn An",
-			phoneOrderer: "0967778888",
-			nameReceiver: "Nguyễn Văn An",
-			phoneReceiver: "0967778888",
-			orderDate: "13/07/2024",
-			status: "Đã Nhận Bàn",
-			history: [
-				{ status: "Chờ duyệt", time: "11:30 13/07/2024" },
-				{ status: "Chấp Nhận", time: "12:30 13/07/2024" },
-				{ status: "Đã Nhận Bàn", time: "14:00 13/07/2024" },
-			],
-			details: {
-				dateReceived: "13/07/2024",
-				timeReceived: "12:00",
-				adults: 2,
-				children: 0,
-				notes: "Không có ghi chú",
-			},
-		},
-		{
-			key: "4",
-			id: "1009",
-			nameOrderer: "Ngô Quang Huy",
-			phoneOrderer: "0967891234",
-			nameReceiver: "Ngô Quang Huy",
-			phoneReceiver: "0967891234",
-			orderDate: "15/06/2024",
-			status: "Hoàn Thành",
-			history: [
-				{ status: "Chờ duyệt", time: "08:00 15/06/2024" },
-				{ status: "Chấp Nhận", time: "09:00 15/06/2024" },
-				{ status: "Đã Nhận Bàn", time: "10:00 15/06/2024" },
-				{ status: "Hoàn Thành", time: "12:00 15/06/2024" },
-			],
-			details: {
-				dateReceived: "15/06/2024",
-				timeReceived: "10:30",
-				adults: 5,
-				children: 2,
-				notes: "Đặt tiệc sinh nhật",
-			},
-		},
-		{
-			key: "5",
-			id: "1010",
-			nameOrderer: "Phạm Văn Tân",
-			phoneOrderer: "0979999999",
-			nameReceiver: "Phạm Văn Tân",
-			phoneReceiver: "0979999999",
-			orderDate: "16/06/2024",
-			status: "Chờ Duyệt",
-			history: [{ status: "Chờ duyệt", time: "10:00 16/06/2024" }],
-			details: {
-				dateReceived: "16/06/2024",
-				timeReceived: "11:00",
-				adults: 2,
-				children: 1,
-				notes: "Không có ghi chú",
-			},
-		},
-		{
-			key: "6",
-			id: "1011",
-			nameOrderer: "Trần Thị Mai",
-			phoneOrderer: "0968888888",
-			nameReceiver: "Trần Thị Mai",
-			phoneReceiver: "0968888888",
-			orderDate: "17/06/2024",
-			status: "Hoàn Thành",
-			history: [
-				{ status: "Chờ duyệt", time: "08:00 17/06/2024" },
-				{ status: "Chấp Nhận", time: "09:00 17/06/2024" },
-				{ status: "Đã Nhận Bàn", time: "10:30 17/06/2024" },
-				{ status: "Hoàn Thành", time: "12:00 17/06/2024" },
-			],
-			details: {
-				dateReceived: "17/06/2024",
-				timeReceived: "12:30",
-				adults: 6,
-				children: 3,
-				notes: "Đặt tiệc gia đình",
-			},
-		},
-	];
+	const [loading, setLoading] = useState(false)
+	const [orders, setOrders] = useState([]);
+	const [statusOrder, setStatusOrder] = useState("");
+	const [nameReceiver, setNameReceiver] = useState("")
+	const [selectedDate, setSelectedDate] = useState()
+	const [openModalDetail, setOpenModalDetail] = useState(false);
 
-	const [data, setData] = useState(initialData);
-	const [isModalVisible, setIsModalVisible] = useState(false);
-	const [selectedOrder, setSelectedOrder] = useState(null);
-	const [filteredData, setFilteredData] = useState(initialData);
-	//const [selectedStatuses, setSelectedStatuses] = useState({});
-	const [selectedStatus, setSelectedStatus] = useState(null);
-
-	const showDetail = (record) => {
-		setSelectedOrder(record);
-		setIsModalVisible(true);
+	const getAllOrders = async () => {
+		try {
+			setLoading(true);
+			const res = await AdminService.getAllOrder();
+			statusOrder 
+				? nameReceiver
+					? selectedDate
+						? setOrders(res.filter((o) => {return o?.statusOrder === statusOrder && o.nameReceiver.toLowerCase().includes(nameReceiver.toLowerCase()) && dayjs(o?.dateReservation).isSame(dayjs(selectedDate))}))
+						: setOrders(res.filter(o => {return o?.statusOrder === statusOrder && o.nameReceiver.toLowerCase().includes(nameReceiver.toLowerCase())}))
+					: selectedDate
+						? setOrders(res.filter((o) => {return o?.statusOrder === statusOrder && dayjs(o?.dateReservation).isSame(dayjs(selectedDate))}))
+						: setOrders(res.filter(o => o?.statusOrder === statusOrder))
+				: nameReceiver
+					? selectedDate
+						? setOrders(res.filter((o) => {return o.nameReceiver.toLowerCase().includes(nameReceiver.toLowerCase()) && dayjs(o?.dateReservation).isSame(dayjs(selectedDate))}))
+						: setOrders(res.filter(o => {return o.nameReceiver.toLowerCase().includes(nameReceiver.toLowerCase())}))
+					: selectedDate
+						? setOrders(res.filter((o) => {return dayjs(o?.dateReservation).isSame(selectedDate)}))
+						: setOrders(res)
+		} catch (error) {
+			console.log(error);
+		} finally {
+			setLoading(false);
+		}
 	};
 
-	const handleOk = () => {
-		setIsModalVisible(false);
-		setSelectedOrder(null);
-	};
+	useEffect(() => {
+		getAllOrders();
+	}, [statusOrder, nameReceiver, selectedDate]);
 
-	const handleCancel = () => {
-		setIsModalVisible(false);
-		setSelectedOrder(null);
-	};
-
-	// const updateStatus = (key, newStatus) => {
-	// 	const newData = data.map((item) => {
-	// 		if (item.key === key) {
-	// 			return { ...item, status: newStatus };
-	// 		}
-	// 		return item;
-	// 	});
-	// 	setData(newData);
-	// 	setFilteredData(newData);
-	// };
-
-	// Cột cho bảng
+	
 	const columns = [
 		{
 			title: "Tên Người Đặt",
-			dataIndex: "nameOrderer",
-			key: "nameOrderer",
+			key: "nameReceiver",
+			dataIndex: "nameReceiver",
+			align: 'center',
+			width: 150,
 		},
 		{
 			title: "SĐT Người Đặt",
-			dataIndex: "phoneOrderer",
-			key: "phoneOrderer",
-		},
-		{
-			title: "Tên Người Nhận",
-			dataIndex: "nameReceiver",
-			key: "nameReceiver",
-		},
-		{
-			title: "SĐT Người Nhận",
 			dataIndex: "phoneReceiver",
+			align: 'center',
 			key: "phoneReceiver",
 		},
 		{
-			title: "Thời Gian Tạo Đơn",
+			title: "Thời gian nhận bàn",
+			align: 'center',
 			dataIndex: "orderDate",
 			key: "orderDate",
+			sorter: (a, b) =>
+				dayjs(a.dateReservation).unix() -
+				dayjs(b.dateReservation).unix(),
+			render: (_, record) => (
+				<div>
+					<div>
+						<span className="fw-500"> Ngày: </span>
+						<span>
+							{dayjs(record?.dateReservation).format(
+								"DD-MM-YYYY"
+							)}
+						</span>
+					</div>
+					<div>
+						<span className="fw-500">Thời gian: </span>
+						<span>{record?.timeReservation}</span>
+					</div>
+				</div>
+			),
 		},
-		// {
-		// 	title: "Lịch Sử Trạng Thái",
-		// 	dataIndex: "history",
-		// 	key: "history",
-		// 	render: (history) => (
-		// 		<Space direction="vertical">
-		// 			{history.map((item, index) => (
-		// 				<Tag
-		// 					key={index}
-		// 					className={
-		// 						item.status === "Chấp Nhận"
-		// 							? "tag-accepted"
-		// 							: item.status === "Đã Nhận Bàn"
-		// 							? "tag-received"
-		// 							: item.status === "Thành Công"
-		// 							? "tag-success"
-		// 							: item.status === "Hủy"
-		// 							? "tag-cancelled"
-		// 							: "tag-default"
-		// 					}
-		// 				>
-		// 					{item.status}: {item.time}
-		// 				</Tag>
-		// 			))}
-		// 		</Space>
-		// 	),
-		// },
+		{
+			title: "Số lượng",
+			dataIndex: "number",
+			key: "number",
+			align: 'center',
+			render: (_, record) => (
+				<div>
+					<div>
+						<span className="fw-500"> Người lớn: </span>
+						<span>{record?.numberPerson}</span>
+					</div>
+					<div>
+						<span className="fw-500">Trẻ em: </span>
+						<span>{record?.numberChild}</span>
+					</div>
+				</div>
+			),
+		},
+		{
+			title: "Lời nhắc",
+			dataIndex: "contentReservation",
+			key: "contentReservation",
+			align: 'center',
+			wdith: 300,
+		},
+		{
+			title: "Tổng tiền",
+			dataIndex: "totalAmount",
+			align: 'center',
+			key: "totalAmount",
+			render: (value) => (
+				<div className="fw-500 fs-16">{formatNumberToK(value)}</div>
+			),
+		},
 		{
 			title: "Trạng Thái",
-			dataIndex: "status",
-			key: "status",
-			render: (status) => {
+			align: 'center',
+			dataIndex: "statusOrder",
+			key: "",
+			render: (value) => {
 				let className;
-				if (status === "Chờ Duyệt") className = "tag-waiting";
-				else if (status === "Chấp Nhận") className = "tag-accepted";
-				else if (status === "Đã Nhận Bàn") className = "tag-received";
-				else if (status === "Hoàn Thành") className = "tag-success";
-				else if (status === "Hủy") className = "tag-cancelled";
-
+				let status;
+				if (value === "Pending") {
+					className = "tag-waiting";
+					status = "Đang chờ";
+				} else if (value === "Confirm") {
+					className = "tag-accepted";
+					status = "Đã chấp nhận";
+				} else if (value === "Paid") {
+					className = "tag-received";
+					status = "Đã thanh toán";
+				} else if (value === "Complete") {
+					className = "tag-success";
+					status = "Đã hoàn thành";
+				} else if (value === "Cancel") {
+					className = "tag-cancelled";
+					status = "Đã hủy";
+				}
 				return <Tag className={className}>{status}</Tag>;
 			},
 		},
 		{
-			title: "Chi Tiết",
-			key: "detail",
+			title: "Chi tiết",
+			align: 'center',
+			dataIndex: "update",
+			key: "update",
 			render: (_, record) => (
-				<Button
-					className="btn-detail"
-					onClick={() => showDetail(record)}
-				>
-					Detail
-				</Button>
+				<div className="d-flex justify-content-center align-items-center">
+					<Button
+						className="mb-5 mr-5"
+						type="primary"
+						shape="round"
+						onClick={() => setOpenModalDetail(record)}
+					>
+						Chi tiết
+					</Button>
+				</div>
 			),
+			width: 100,
 		},
-		// {
-		// 	title: "Cập Nhật Trạng Thái",
-		// 	key: "updateStatus",
-		// 	render: (_, record) => {
-		// 		const handleSelectChange = (value) => {
-		// 			setSelectedStatuses((prev) => ({
-		// 				...prev,
-		// 				[record.key]: value, // Cập nhật trạng thái đã chọn cho từng đơn hàng
-		// 			}));
-		// 		};
-
-		// 		return (
-		// 			<span>
-		// 				<Select
-		// 					style={{ marginRight: 10, width: 150 }}
-		// 					value={
-		// 						selectedStatuses[record.key] || record.status
-		// 					} // Lấy giá trị từ selectedStatuses
-		// 					onChange={handleSelectChange}
-		// 				>
-		// 					{renderOptions(record.status)}
-		// 				</Select>
-		// 				<Button
-		// 					className="btn"
-		// 					type="primary"
-		// 					onClick={() =>
-		// 						updateStatus(
-		// 							record.key,
-		// 							selectedStatuses[record.key] ||
-		// 								record.status
-		// 						)
-		// 					}
-		// 				>
-		// 					Cập Nhật
-		// 				</Button>
-		// 			</span>
-		// 		);
-		// 	},
-		// },
 	];
 
-	// const renderOptions = (status) => {
-	// 	switch (status) {
-	// 		case "Chờ Duyệt":
-	// 			return (
-	// 				<>
-	// 					<Select.Option value="Hủy">Hủy</Select.Option>
-	// 					<Select.Option value="Chấp Nhận">
-	// 						Chấp Nhận
-	// 					</Select.Option>
-	// 				</>
-	// 			);
-	// 		case "Chấp Nhận":
-	// 			return (
-	// 				<>
-	// 					<Select.Option value="Hủy">Hủy</Select.Option>
-	// 					<Select.Option value="Đã Nhận Bàn">
-	// 						Đã Nhận Bàn
-	// 					</Select.Option>
-	// 					<Select.Option value="Chờ Duyệt">
-	// 						Chờ Duyệt
-	// 					</Select.Option>
-	// 				</>
-	// 			);
-	// 		case "Đã Nhận Bàn":
-	// 			return (
-	// 				<>
-	// 					<Select.Option value="Hủy">Hủy</Select.Option>
-	// 					<Select.Option value="Hoàn Thành">
-	// 						Thành Công
-	// 					</Select.Option>
-	// 				</>
-	// 			);
-	// 		default:
-	// 			return null; // Trạng thái Hủy hoặc Thành Công sẽ không có tùy chọn
-	// 	}
-	// };
-	const onSearchByMonth = (value) => {
-		console.log(
-			"Tìm kiếm theo Tháng/Năm:",
-			value ? value.format("YYYY-MM") : "No date selected"
-		);
-	};
-
-	const onSearchByDate = (value) => {
-		console.log(
-			"Tìm kiếm theo Ngày/Tháng/Năm:",
-			value ? value.format("MM/DD/YYYY") : "No date selected"
-		);
-	};
-	const onSearchByStatus = (status) => {
-		if (selectedStatus === status) {
-			setFilteredData(data);
-			setSelectedStatus(null);
-		} else {
-			const newFilteredData = data.filter(
-				(item) => item.status === status
-			);
-			setFilteredData(newFilteredData);
-			setSelectedStatus(status);
-		}
-	};
+	// console.log(nameReceiver);
+	console.log(selectedDate);
+	
 
 	return (
 		<AdminLayout>
 			<OrderManagementContainer>
-				<div className="body">
+				<SpinCustom spinning={loading}>
 					<div className="d-flex justify-content-space-between align-items-center">
 						<div>
 							<h3 className="card-title card-title-dash">
@@ -370,163 +189,105 @@ const OrderManagement = () => {
 							</Button>
 						</div>
 					</div>
+
 					<div>
 						<Row
 							justify="center"
 							gutter={[16, 16]}
 							className="search-container"
 						>
-							<Col>
-								<label>Tháng/Năm</label>
-								<DatePicker
-									picker="month"
-									style={{ marginRight: "10px" }}
-									placeholder="----/--"
-								/>
-								<Button
-									className="btn"
-									type="primary"
-									onClick={() => onSearchByMonth()}
-								>
-									Tìm Kiếm
-								</Button>
+							<Col span={12} className="input-search">
+							    <label className="pl-10">Tên người đặt</label>
+								<Input allowClear className="w-100 mt-5 input" placeholder="Tên người đặt" onChange={(e) => setNameReceiver(e.target.value)}/>
 							</Col>
-							<Col>
-								<label>Ngày/Tháng/Năm</label>
+
+							<Col span={6} className="picker">
+								<label className="pl-10">Ngày/Tháng/Năm</label>
 								<DatePicker
-									style={{ marginRight: "10px" }}
-									placeholder="mm/dd/yyyy"
+									allowClear
+									className='mt-5'
+									placeholder="----/--/--"
+									onChange={(e) => setSelectedDate(e)}
 								/>
-								<Button
-									className="btn"
-									type="primary"
-									onClick={() => onSearchByDate()}
-								>
-									Tìm Kiếm
-								</Button>
+							</Col>
+
+							<Col className="d-flex flex-column" span={6}>
+							<label className="pl-10">Trạng thái đơn hàng</label>
+								<div className="select">
+									<Select
+										className="nice-select w-100 mt-5"
+										allowClear
+										placeholder="Trạng thái"
+										onChange={(e) => setStatusOrder(e)}
+									>
+										<Option key={1} value="Pending">
+											Đang chờ
+										</Option>
+										<Option key={2} value="Confirm">
+											Đã chấp nhận
+										</Option>
+										<Option key={3} value="Paid">
+											Đã thanh toán
+										</Option>
+										<Option key={4} value="Complete">
+											Đã hoàn thành
+										</Option>
+										<Option key={5} value="Cancel">
+											Đã hủy
+										</Option>
+									</Select>
+								</div>
 							</Col>
 						</Row>
 					</div>
 
-					<Row justify="center">
-						<Col xs={24} sm={24} md={24} lg={24} xl={24}>
-							<div className="status-bar">
-								<div
-									className="status-item tag-waiting"
-									onClick={() =>
-										onSearchByStatus("Chờ Duyệt")
-									}
-								>
-									Chờ Duyệt: 7
+					<div>
+						<div className="pl-30">
+							{!statusOrder ? (
+								<div className="fs-18 fw-500">
+									Danh sách:
 								</div>
-								<div
-									className="status-item tag-accepted"
-									onClick={() =>
-										onSearchByStatus("Chấp Nhận")
-									}
-								>
-									Chấp Nhận: 1
+							) : (
+								<div>
+									<span className="fs-18 fw-500">
+										{statusOrder === "Pending"
+											? "Đang chờ"
+											: statusOrder === "Confirm"
+											? "Đã chấp nhận"
+											: statusOrder === "Paid"
+											? "Đã thanh toán"
+											: statusOrder === "Complete"
+											? "Đã hoàn thành"
+											: "Đã hủy"}
+										:
+									</span>
+									<span className="fs-19 fw-500 primary ml-10">
+										{orders.length}
+									</span>
 								</div>
-								<div
-									className="status-item tag-received"
-									onClick={() =>
-										onSearchByStatus("Đã Nhận Bàn")
-									}
-								>
-									Đã Nhận Bàn: 1
-								</div>
-								<div
-									className="status-item tag-success"
-									onClick={() =>
-										onSearchByStatus("Hoàn Thành")
-									}
-								>
-									Hoàn Thành: 1
-								</div>
-								<div
-									className="status-item tag-cancelled"
-									onClick={() => onSearchByStatus("Hủy")}
-								>
-									Hủy: 0
-								</div>
-							</div>
-
+							)}
+						</div>
+						<div className="mt-30">
 							<Table
 								columns={columns}
-								dataSource={filteredData}
+								dataSource={orders}
 								pagination={{
-									pageSize: 4,
+									pageSize: 5,
 									position: ["bottomCenter"],
 								}}
 							/>
+						</div>
+					</div>
+				</SpinCustom>
 
-							<ModalCustom
-								title="Chi Tiết Đơn Hàng"
-								visible={isModalVisible}
-								onOk={handleOk}
-								onCancel={handleCancel}
-								footer={null}
-								width={1000}
-								style={{ textAlign: "center" }}
-							>
-								{selectedOrder && (
-									<div className="order-detail">
-										<table className="w-100">
-											<thead>
-												<tr>
-													<th>
-														Ngày/Tháng/Năm Nhận Bàn
-													</th>
-													<th>Thời Gian Nhận Bàn</th>
-													<th>Số Người Lớn</th>
-													<th>Số Trẻ Nhỏ</th>
-													<th>Ghi Chú</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr>
-													<td>
-														{
-															selectedOrder
-																.details
-																.dateReceived
-														}
-													</td>
-													<td>
-														{
-															selectedOrder
-																.details
-																.timeReceived
-														}
-													</td>
-													<td>
-														{
-															selectedOrder
-																.details.adults
-														}
-													</td>
-													<td>
-														{
-															selectedOrder
-																.details
-																.children
-														}
-													</td>
-													<td>
-														{
-															selectedOrder
-																.details.notes
-														}
-													</td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
-								)}
-							</ModalCustom>
-						</Col>
-					</Row>
-				</div>
+				{
+					!!openModalDetail && (
+						<ModalViewDetail
+							open={openModalDetail}
+							onCancel={() => setOpenModalDetail(false)}
+						/>
+					)
+				}
 			</OrderManagementContainer>
 		</AdminLayout>
 	);

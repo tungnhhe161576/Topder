@@ -40,17 +40,21 @@ const LoginPage = () => {
 			} else {
 				nav("/admin/dashboard");
 			}
-			toast.success("Đăng nhập thành công", {
-				autoClose: 3000,
-				style: {
-					fontSize: "18px",
-					padding: "20px",
-					borderRadius: "8px",
-				},
+			// toast.success("Đăng nhập thành công", {
+			// 	autoClose: 3000,
+			// 	style: {
+			// 		fontSize: "18px",
+			// 		padding: "20px",
+			// 		borderRadius: "8px",
+			// 	},
+			// });
+			message.open({
+				content: "Đăng nhập thành công",
+				type: "success",
 			});
 		} catch (error) {
 			message.open({
-				content: "Đăng nhập tài khoản không thành công",
+				content: error.message,
 				type: "error",
 			});
 		} finally {

@@ -18,7 +18,7 @@ const columns = [
         dataIndex: 'number',
         key: 'number',
         align: 'center',
-        width: 150,
+        // width: 150,
         render: (_, __, index) => <span className="fs-15"> {index + 1} </span>,
     },
     {
@@ -106,7 +106,7 @@ const columns = [
                             <Button disabled type="primary" shape="round"> Đã chấp nhận </Button>
                         </div> 
                         :  value === "In-Active" 
-                            ? <div>
+                            ? <div className="d-flex">
                                 <Button type="primary" shape="round" className='mr-3' onClick={() => {setOpenModalActive(record); setValue('Active')}}> Chấp nhận </Button>
                                 <Button type="primary" shape="round" danger onClick={() => {setOpenModalActive(record); setValue('Cancelled')}}> Hủy </Button>
                             </div>
