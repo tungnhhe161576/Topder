@@ -55,7 +55,7 @@ const LoginPage = () => {
 			});
 		} catch (error) {
 			message.open({
-				content: error.message,
+				content: 'Đăng nhập thất bại',
 				type: "error",
 			});
 		} finally {

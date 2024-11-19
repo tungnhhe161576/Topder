@@ -6,6 +6,7 @@ import { TableAllContainer } from "../Table/styled";
 import ModalDeleteRoom from "./Modal/ModalDelete";
 import ModalUpdateRoom from "./Modal/ModalUpdate";
 import ModalCreateRoom from "./Modal/ModalCreate";
+import ModalUploadExcel from "./Modal/ModalUploadExcel";
 
 const RestaurantRoom = ({user, getAllTables}) => {
 	const [loading, setLoading] = useState(false)
@@ -13,6 +14,7 @@ const RestaurantRoom = ({user, getAllTables}) => {
 	const [openModalCreateRoom, setOpenModalCreateRoom] = useState(false)
 	const [openModalUpdateRoom, setOpenModalUpdateRoom] = useState(false)
 	const [openModalDeleteRoom, setOpenModalDeleteRoom] = useState(false)
+	const [openModalUploadExcel, setOpenModalUploadExcel] = useState(false)
 
 	const getAllRooms = async () => {
 		try {
@@ -180,6 +182,14 @@ const RestaurantRoom = ({user, getAllTables}) => {
 					<ModalCreateRoom
 						open={openModalCreateRoom}
 						onCancel={() => setOpenModalCreateRoom(false)}
+						onOk={getAllRooms}
+						userId={user?.uid}
+					/>
+				)}
+				{!!openModalUploadExcel && (
+					<ModalUploadExcel
+						open={openModalUploadExcel}
+						onCancel={() => setOpenModalUploadExcel(false)}
 						onOk={getAllRooms}
 						userId={user?.uid}
 					/>

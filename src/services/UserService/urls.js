@@ -82,5 +82,7 @@ export const apiPaymentBooking = "BookingAdvertisement/ChoosePaymentGatePaymentG
 export const apiCheckPaymentBooking = "BookingAdvertisement/CheckPayment"
 export const apiCretaeAdsBooking = "BookingAdvertisement/Create"
 export const apiCancelBookingAds = "BookingAdvertisement/UpdateStatus"
+export const apiCreateTableByExcel = "RestaurantTables/CreateByExcel"
+export const apiEnableBooking = "Restaurant/IsEnabledBooking"
 
 

@@ -59,6 +59,9 @@ export const CommonLayoutContainer = styled.div`
         }
     }
 
+    .notification {
+        cursor: pointer;
+    }
     .nav {
         width: 100%;
         position: sticky;

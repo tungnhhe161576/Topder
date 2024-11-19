@@ -60,6 +60,8 @@ const RestaurantDetail = () => {
 	const [form] = Form.useForm();
 	const user = useSelector(userInfor);
 	const [showSuccessModal, setShowSuccessModal] = useState(false);
+	const [openModalLoginRequest, setOpenModalLoginRequest] = useState(false);
+	// const [text, setText] = useState(false);
 
 	//api get data chi tiet nha hang
 	const getDataRestaurantDetail = async () => {
@@ -117,38 +119,45 @@ const RestaurantDetail = () => {
 	//form dat ban
 	const handleSubmitFormBooking = async () => {
 		try {
-			setLoading(true);
-			const menu = foods.map(({ menuId, quantity }) => ({
-				menuId,
-				quantity,
-			}));
-			const table = tables.map((t) => t.tableId);
-			const total = await UserService.calTotalOrder({
-				customerId: user?.uid,
-				restaurantId: restaurantId,
-				orderMenus: menu,
-			});
-			setTotalAmount(total);
-
-			const formValues = await form.validateFields();
-			const data = {
-				customerId: user?.uid,
-				restaurantId: restaurantId,
-				discountId: undefined,
-				categoryRoomId: undefined,
-				nameReceiver: formValues.nameReceiver,
-				phoneReceiver: formValues.phoneReceiver,
-				timeReservation: formValues?.time,
-				dateReservation: formValues?.date?.$d,
-				numberPerson: formValues?.numberPerson,
-				numberChild: formValues?.numberChild
-					? formValues?.numberChild
-					: 0,
-				contentReservation: formValues?.contentReservation,
-				orderMenus: menu,
-				tableIds: table,
-			};
-			setOpenModalCalFee(data);
+			if (!user) {
+				setOpenRequestLogin(true);
+				setText(
+					"Bạn phải đăng nhập trước khi đặt bàn"
+				);
+			} else {
+				setLoading(true);
+				const menu = foods.map(({ menuId, quantity }) => ({
+					menuId,
+					quantity,
+				}));
+				const table = tables.map((t) => t.tableId);
+				const total = await UserService.calTotalOrder({
+					customerId: user?.uid,
+					restaurantId: restaurantId,
+					orderMenus: menu,
+				});
+				setTotalAmount(total);
+	
+				const formValues = await form.validateFields();
+				const data = {
+					customerId: user?.uid,
+					restaurantId: restaurantId,
+					discountId: undefined,
+					categoryRoomId: undefined,
+					nameReceiver: formValues.nameReceiver,
+					phoneReceiver: formValues.phoneReceiver,
+					timeReservation: formValues?.time,
+					dateReservation: formValues?.date?.$d,
+					numberPerson: formValues?.numberPerson,
+					numberChild: formValues?.numberChild
+						? formValues?.numberChild
+						: 0,
+					contentReservation: formValues?.contentReservation,
+					orderMenus: menu,
+					tableIds: table,
+				};
+				setOpenModalCalFee(data);
+			}
 		} catch (error) {
 			console.log(error);
 		} finally {
@@ -170,7 +179,7 @@ const RestaurantDetail = () => {
 	const handleAddWishList = async () => {
 		try {
 			if (!user) {
-				setOpenRequestLogin(false);
+				setOpenRequestLogin(true);
 				setText(
 					"Bạn phải đăng nhập trước khi thêm nhà hàng này vào yêu thích"
 				);

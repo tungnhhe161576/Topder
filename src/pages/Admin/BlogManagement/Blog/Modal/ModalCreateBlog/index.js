@@ -40,8 +40,6 @@ const ModalCreateBlog = ({open, onCancel, onOk, blogCategory}) => {
         try {
             setLoading(true)
             const formValues = await form.validateFields()
-            console.log(formValues);
-            
             const file = formValues.image.file;
             const formData = new FormData();
             formData.append("file", file);

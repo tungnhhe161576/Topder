@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
-import { Avatar, Col, Dropdown, Row } from "antd";
+import React, { useEffect, useState } from "react";
+import { Avatar, Badge, Col, Dropdown, Row } from "antd";
 import { useNavigate } from "react-router-dom";
 import {
+	BellOutlined,
 	MailOutlined,
 	PhoneOutlined,
 	TikTokOutlined,
@@ -9,15 +10,15 @@ import {
 } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { getNav, setActiveButton } from "../../../../redux/Slice/navSlice";
-import image from "../../../../assets/images/foot-image.png";
-import image2 from "../../../../assets/images/blog-item.jpg";
-import image3 from "../../../../assets/images/8.3.jpg";
+import topder from "../../../../assets/images/LOGO-TOPDER_qonl9l.png";
 import logo2 from "../../../../assets/images/Logo2.png";
 import {
 	setUserInformation,
 	userInfor,
 } from "../../../../redux/Slice/userSlice";
 import { setAccessToken } from "../../../../redux/Slice/accessTokenSlice";
+import GuestService from "../../../../services/GuestService";
+import SpinCustom from '../../../Common/SpinCustom'
 
 const IconFont = createFromIconfontCN({
 	scriptUrl: "//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js",
@@ -28,6 +29,23 @@ const Header = () => {
 	const dispatch = useDispatch();
 	const activeButton = useSelector(getNav);
 	const user = useSelector(userInfor);
+	const [loading, setLoading] = useState(true)
+	const [ads, setAds] = useState([])
+
+	const getAds = async () => {
+		try {
+			// setLoading(true)
+			const res = await GuestService.getAllAds()	
+			setAds(res)
+		} catch (error) {
+			console.log(error);
+		} finally {
+			setLoading(false)
+		}
+	}
+	useEffect(() => {
+        getAds()
+    }, [])
 
 	const itemsDropdown = [
 		{
@@ -147,6 +165,9 @@ const Header = () => {
 		dispatch(setUserInformation(null));
 		nav("/login");
 	};
+
+	console.log(ads);
+	
 
 	return (
 		<>
@@ -277,7 +298,14 @@ const Header = () => {
 								</span>
 							</div>
 						</Col>
-						<Col xs={3} sm={3} md={3} lg={3} xl={3}>
+						<Col xs={3} sm={3} md={3} lg={3} xl={3} className="d-flex align-items-center">
+							<div className="notification mr-20">
+								<Badge count={5} size="small">
+									<div className="fs-22 fw-500">
+										<BellOutlined />
+									</div>
+								</Badge>
+							</div>
 							<div className="user-info">
 								{!user ? (
 									<div className="lo-re">
@@ -315,98 +343,75 @@ const Header = () => {
 				</div>
 			</div>
 
-			<div className="carousel">
-				<div className="list">
-					<div className="item ">
-						<figure>
-							<img src={image} alt="img" />
-						</figure>
-						<div className="content">
-							<p
-								className="category"
-								onClick={() => nav("/restaurant-view")}
-							>
-								Cà phê | Trà sữa
-							</p>
-							<h2>Mer.Coffee & Tea</h2>
-							<p className="description">
-								Menu 4 món bánh kem hương vị, nhiệt đới mới
-								toanh tại Mer. cả nhà đã update chưa? Ai thử
-								cũng "nghiện" - vậy mà có Hommies vẫn chưa đu
-								trand Bánh Kem tại Mer sao ?
-							</p>
-							<div className="more">
-								<button
-									onClick={() => nav("/restaurant-detail")}
-								>
-									Đặt bàn
-								</button>
-								<button
-									onClick={() => nav("/restaurant-detail")}
-								>
-									Xem chi tiết
-								</button>
+			<SpinCustom spinning={loading}>
+				<div className="carousel">
+					<div className="list">
+						{
+							(!loading && ads.length > 0) ?
+								ads?.map((i, index) => (
+									<div className="item " key={index}>
+										<figure>
+											<img style={{borderRadius: '20px'}} src={i?.logo} alt="img" />
+										</figure>
+										<div className="content">
+											<p
+												className="category"
+												onClick={() => nav("/restaurant-view")}
+											>
+												{i?.categoryName}
+											</p>
+											<h2>{i?.nameRes}</h2>
+											<p className="description">
+												{i?.title}
+											</p>
+											<div className="more">
+												<button
+													onClick={() => nav("/restaurant-detail/" + i?.uid)}
+												>
+													Đặt bàn
+												</button>
+												<button
+													onClick={() => nav("/restaurant-detail/" + i?.uid)}
+												>
+													Xem chi tiết
+												</button>
+											</div>
+										</div>
+									</div>
+								))
+							: <div className="item ">
+								<figure>
+									<img src={topder} alt="img" />
+								</figure>
+								<div className="content">
+									<p
+										className="category"
+										onClick={() => nav("/restaurant-view")}
+									>
+										Việt Nam
+									</p>
+									<h2>Topder</h2>
+									<p className="description">
+										Nền tàng đặt bàn và món ăn 
+									</p>
+								</div>
 							</div>
-						</div>
+						}
 					</div>
-					<div className="item ">
-						<figure>
-							<img src={image2} alt="img" />
-						</figure>
-						<div className="content">
-							<p className="category">Cà phê | Trà sữa</p>
-							<h2>Mer.Coffee & Tea</h2>
-							<p className="description">
-								Menu 4 món bánh kem hương vị, nhiệt đới mới
-								toanh tại Mer. cả nhà đã update chưa? Ai thử
-								cũng "nghiện" - vậy mà có Hommies vẫn chưa đu
-								trand Bánh Kem tại Mer sao ?
-							</p>
-							<div className="more">
-								<button>Đặt bàn</button>
-								<button>
-									<i className="fa-solid fa-play"></i> Xem chi
-									tiết
-								</button>
-							</div>
-						</div>
+					<div className="arrows">
+						<button id="prev"> {"<"} </button>
+						<button id="next"> {">"} </button>
 					</div>
-					<div className="item ">
-						<figure>
-							<img src={image3} alt="img" />
-						</figure>
-						<div className="content">
-							<p className="category">Cà phê | Trà sữa</p>
-							<h2>Mer.Coffee & Tea</h2>
-							<p className="description">
-								Menu 4 món bánh kem hương vị, nhiệt đới mới
-								toanh tại Mer. cả nhà đã update chưa? Ai thử
-								cũng "nghiện" - vậy mà có Hommies vẫn chưa đu
-								trand Bánh Kem tại Mer sao ?
-							</p>
-							<div className="more">
-								<button>Đặt bàn</button>
-								<button>
-									<i className="fa-solid fa-play"></i> Xem chi
-									tiết
-								</button>
-							</div>
-						</div>
+					<div className="indicators">
+						<div className="number">02</div>
+						<ul>
+							<li className="active"></li>
+							<li></li>
+							<li></li>
+						</ul>
 					</div>
 				</div>
-				<div className="arrows">
-					<button id="prev"> {"<"} </button>
-					<button id="next"> {">"} </button>
-				</div>
-				<div className="indicators">
-					<div className="number">02</div>
-					<ul>
-						<li className="active"></li>
-						<li></li>
-						<li></li>
-					</ul>
-				</div>
-			</div>
+			</SpinCustom>
 		</>
 	);
 };

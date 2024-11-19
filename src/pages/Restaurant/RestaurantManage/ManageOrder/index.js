@@ -22,7 +22,12 @@ import dayjs from "dayjs";
 import { formatNumberToK } from "../../../../lib/stringUtils";
 import ModalDetail from "./Modal/ModalDetail";
 import ModalUpdateOrder from "./Modal/ModalUpdateOrder";
+<<<<<<< Updated upstream
 import { FileAddOutlined } from "@ant-design/icons";
+=======
+import { FileAddOutlined } from '@ant-design/icons'
+import * as XLSX from "xlsx";
+>>>>>>> Stashed changes
 const { Option } = Select;
 
 const ManageOrder = () => {
@@ -38,10 +43,6 @@ const ManageOrder = () => {
 	const [selectedMonth, setSelectedMonth] = useState(null);
 	const [selectedDate, setSelectedDate] = useState(null);
 	const [allOrders, setAllOrders] = useState([]);
-
-	console.log("check", orders);
-	console.log("month", dayjs(selectedMonth).format("MM-YYYY"));
-	console.log("date", dayjs(selectedDate).format("DD-MM-YYYY"));
 
 	const handleMonthSearch = () => {
 		if (selectedMonth) {
@@ -107,6 +108,33 @@ const ManageOrder = () => {
 			getAllOrders();
 		}
 	}, [user, statusOrder]);
+
+
+	const exportToExcel = () => {
+        const table = document.getElementById("myTable");
+        if (!table) {
+            console.error("Table element not found");
+            return;
+        }
+        const wb = XLSX.utils.table_to_book(table, { sheet: "SheetJS" });
+        const wbout = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+        saveAsExcelFile(wbout, "excel.xlsx");
+    };
+    
+    const saveAsExcelFile = (buffer, fileName) => {
+        try {
+            const data = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(data);
+            link.download = fileName;
+            document.body.appendChild(link); 
+            link.click(); 
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href); 
+        } catch (error) {
+            console.error("File download failed:", error);
+        }
+    };
 
 	const columns = [
 		{
@@ -299,9 +327,69 @@ const ManageOrder = () => {
 								</div>
 							</div>
 							<div>
+<<<<<<< Updated upstream
 								<Button type="primary" className="white fs-15">
 									<FileAddOutlined /> Tải về file Excel
 								</Button>
+=======
+								<Button type="primary" className="white fs-15" onClick={() => exportToExcel()}>
+                                    <FileAddOutlined /> Tải về file Excel
+									<div style={{display: 'none'}}>
+										<table id="myTable">
+											<thead>
+												<tr>
+													<th>Tên Người Đặt</th>
+													<th>SĐT</th>
+													<th>Thời gian nhận bàn</th>
+													<th>Số lượng</th>
+													<th>Tổng tiền</th>
+													<th>Lời nhắc</th>
+													<th>Trạng thái</th>
+												</tr>
+											</thead>
+											<tbody>
+												{
+													orders.map(i => (
+														<tr key={i?.orderId}>
+															<td>{i?.nameReceiver}</td>
+                                                            <td>{i?.phoneReceiver}</td>
+                                                            <td>
+																<span>Ngày: {dayjs(i?.dateReservation).format('DD-MM-YYYY')}</span>
+																<span>Giờ: {i?.timeReservation}</span>
+															</td>
+                                                            <td>
+																<div>
+																	<span className="fw-500"> Người lớn: </span>
+																	<span>{i?.numberPerson}</span>
+																</div>
+																<div>
+																	<span className="fw-500">Trẻ em: </span>
+																	<span>{i?.numberChild}</span>
+																</div>
+															</td>
+                                                            <td>{formatNumberToK(i?.totalAmount)}</td>
+                                                            <td>{i?.contentReservation}</td>
+                                                            <td>
+																{
+																	i?.statusOrder === "Pending" 
+																		? 'Đang chờ'
+																		: i?.statusOrder === 'Confirm'
+																		? 'Đã chấp nhận'
+																		: i?.statusOrder === 'Paid'
+																		? 'Đã Thanh toán'
+																		: i?.statusOrder === 'Complete'
+																		? 'Đã hoàn thành'
+																		: 'Đã hủy'
+																}
+															</td>
+                                                        </tr>
+													))
+												}
+											</tbody>
+										</table>
+									</div>
+                                </Button>
+>>>>>>> Stashed changes
 							</div>
 						</div>
 						<div>

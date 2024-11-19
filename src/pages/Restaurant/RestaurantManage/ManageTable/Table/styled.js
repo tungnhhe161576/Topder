@@ -2,6 +2,7 @@ import styled from 'styled-components'
 
 export const TableAllContainer = styled.div ` 
     width: 100%;
+    height: 100vh;
 
     .huy-mo {
         background-color: #bc6b6c !important;

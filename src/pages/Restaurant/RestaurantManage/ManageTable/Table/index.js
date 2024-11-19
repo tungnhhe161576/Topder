@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import UserService from "../../../../../services/UserService";
 import { Button, Select, Table } from "antd";
 import SpinCustom from "../../../../../components/Common/SpinCustom";
@@ -6,38 +6,14 @@ import { TableAllContainer } from "./styled";
 import ModalDeleteTable from "./Modal/ModalDeleteTable";
 import ModalCreateTable from "./Modal/ModalCreateTable";
 import ModalUpdateTable from "./Modal/ModalUpdateTable";
+import ModalCreateTableByExcel from "./Modal/ModalCreateByExcel";
 const {Option} = Select
 
 const AllTable = ({user, loading, setLoading, tables, getAllTables, setType}) => {
-	// const [loading, setLoading] = useState(false)
-	// const [tables, setTables] = useState([])
 	const [openModalDeleteTable, setOpenModalDeleteTable] = useState(false)
 	const [openModalCreateTable, setOpenModalCreateTable] = useState(false)
 	const [openModalUpdateTable, setOpenModalUpdateTable] = useState(false)
-	// const [type, setType] = useState()
-
-	// const getAllTables = async () => {
-	// 	try {
-	// 		setLoading(true)
-	// 		const res = await UserService.getAllRestaurantTable(user?.uid)
-	// 		if (type) {
-	// 			type === 'free' 
-	// 				? setTables(res.items.filter(i => i?.roomId === null))
-	// 				: setTables(res.items.filter(i => i?.roomId !== null))
-	// 		} else {
-	// 			setTables(res.items)
-	// 		}
-	// 	} catch (error) {
-	// 		console.log(error);
-	// 	} finally {
-	// 		setLoading(false)
-	// 	}
-	// }
-	// useEffect(() => {
-	// 	if (!!user?.uid) {
-	// 		getAllTables()
-	// 	}
-	// }, [user, type])
+	const [openModalCreateByExcel, setOpenModalCreateByExcel] = useState(false)
 
 	const handleUpdateStatus = async (record) => {
 		try {
@@ -153,7 +129,7 @@ const AllTable = ({user, loading, setLoading, tables, getAllTables, setType}) =>
 						<Button className="mr-10" type="primary" onClick={() => setOpenModalCreateTable(true)}>
 							Tạo bàn mới
 						</Button>
-						<Button className="" type="primary" onClick={() => setOpenModalCreateTable(true)}>
+						<Button className="" type="primary" onClick={() => setOpenModalCreateByExcel(true)}>
 							Tạo bằng File Excel
 						</Button>
 					</div>
@@ -204,6 +180,14 @@ const AllTable = ({user, loading, setLoading, tables, getAllTables, setType}) =>
 				<ModalUpdateTable
 					open={openModalUpdateTable}
 					onCancel={() => setOpenModalUpdateTable(false)}
+					onOk={getAllTables}
+					userId={user?.uid}
+				/>
+			)}
+			{!!openModalCreateByExcel && (
+				<ModalCreateTableByExcel
+					open={openModalCreateByExcel}
+					onCancel={() => setOpenModalCreateByExcel(false)}
 					onOk={getAllTables}
 					userId={user?.uid}
 				/>

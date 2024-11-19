@@ -6,6 +6,7 @@ import ModalCreateSchedule from "./Modal/CreateSchedule";
 import SpinCustom from "../../../../../components/Common/SpinCustom";
 import ModalDeleteSchedule from "./Modal/DeleteSchedule";
 import ModalUpdateSchedule from "./Modal/UpdateSchedule";
+import { TableBookingScheduleContainer } from "./styled";
 
 const TableBookingSchedule = ({user}) => {
 	const [loading, setLoading] = useState(false)
@@ -101,7 +102,7 @@ const TableBookingSchedule = ({user}) => {
 
 
 	return (
-		<>
+		<TableBookingScheduleContainer>
 			<div className="body">
 				<div style={{ marginBottom: "20px", textAlign: "right" }}>
 					<Button
@@ -148,7 +149,7 @@ const TableBookingSchedule = ({user}) => {
 					userId={user?.uid}
 				/>
 			)}
-		</>
+		</TableBookingScheduleContainer>
 	);
 };
 export default TableBookingSchedule;

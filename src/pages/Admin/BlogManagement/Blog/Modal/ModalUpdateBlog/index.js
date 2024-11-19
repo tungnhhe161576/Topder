@@ -42,10 +42,6 @@ const ModalUpdateBlog = ({open, onCancel, onOk, blogCategory}) => {
         setContent(newContent);
     };
 
-    console.log("image", image);
-    
-
-    
     const hanldeUpdateBlog = async () => {
         try {
             setLoading(true)
@@ -67,7 +63,7 @@ const ModalUpdateBlog = ({open, onCancel, onOk, blogCategory}) => {
                 blogId: open?.blogId,
                 imageFile: null,
                 image: formValues.image.file ? url : open?.image,
-                content: 'abc',
+                content: content,
             })
             message.open({
                 content: 'Cập nhật bài viết bàn thành công!',
@@ -78,7 +74,6 @@ const ModalUpdateBlog = ({open, onCancel, onOk, blogCategory}) => {
             })
             onOk()
             onCancel()
-
         } catch (error) {
             console.log(error)
         } finally {
@@ -207,7 +202,7 @@ const ModalUpdateBlog = ({open, onCancel, onOk, blogCategory}) => {
                                         alignleft aligncenter alignright alignjustify | \
                                         bullist numlist outdent indent | removeformat | help'
                                     }}
-                                    initialValue={open?.description}
+                                    initialValue={open?.content}
                                 />
                             </Form.Item>
                         </Col>

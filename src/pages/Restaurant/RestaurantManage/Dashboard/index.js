@@ -11,6 +11,7 @@ import UserService from '../../../../services/UserService';
 import { formatNumberToK } from "../../../../lib/stringUtils";
 import SpinCustom from "../../../../components/Common/SpinCustom";
 import dayjs from "dayjs";
+import * as XLSX from "xlsx";
 
 
 const Dashboard = () => {
@@ -70,8 +71,33 @@ const Dashboard = () => {
         getDataByDay()
     }, [day])
 
-    // console.log('month', month);
-    console.log('day', day);
+    const exportToExcel = () => {
+        const table = document.getElementById("myTable");
+        if (!table) {
+            console.error("Table element not found");
+            return;
+        }
+        const wb = XLSX.utils.table_to_book(table, { sheet: "SheetJS" });
+        const wbout = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+        saveAsExcelFile(wbout, "excel.xlsx");
+    };
+    
+    const saveAsExcelFile = (buffer, fileName) => {
+        try {
+            const data = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(data);
+            link.download = fileName;
+            document.body.appendChild(link); 
+            link.click(); 
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href); 
+        } catch (error) {
+            console.error("File download failed:", error);
+        }
+    };
+
+    const currentDate = dayjs()
     
 
     return (  
@@ -82,14 +108,34 @@ const Dashboard = () => {
                         <div className="d-flex justify-content-space-between align-items-center">
                             <div className="overview"> Tổng quan </div>
                             <div className="d-flex"> 
-                                <Button className="black fs-15 mr-15">
+                                {/* <Button className="black fs-15 mr-15">
                                     <ShareAltOutlined /> Share
                                 </Button>
                                 <Button className="black fs-15 mr-15">
                                     <PrinterOutlined /> Print
-                                </Button>
-                                <Button type="primary" className="white fs-15">
-                                    <FileAddOutlined /> Export
+                                </Button> */}
+                                <Button style={{width: '200px'}} type="primary" className="white fs-15" onClick={() => exportToExcel()}>
+                                    <FileAddOutlined /> Tải về file Excel
+                                    <div style={{display: 'none'}}>
+										<table id="myTable">
+											<thead>
+												<tr>
+													<th>Số đơn tháng: {!!month ? dayjs(month).format('MM-YYYY') : currentDate.format("MM-YYYY")} </th>
+													<th>Thu nhập tháng: {!!month ? dayjs(month).format('MM-YYYY') : currentDate.format("MM-YYYY")}</th>
+													<th>Số đơn ngày: {!!day ? dayjs(day).format('DD-MM-YYYY') : currentDate.format('DD-MM-YYYY')}</th>
+													<th>Thu nhập ngày: {!!day ? dayjs(day).format('DD-MM-YYYY') : currentDate.format('DD-MM-YYYY')}</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+                                                    <td>{dataByMonth?.currentMonthOrder?.currentMonthOrder}</td>
+                                                    <td>{dataByMonth?.currentMonthIncome?.currentMonthIncome ? formatNumberToK(dataByMonth?.currentMonthIncome?.currentMonthIncome) : '0đ'}</td>
+                                                    <td>{dataByDay?.dayOrders}</td>
+                                                    <td>{dataByDay?.dayIncomes ? formatNumberToK(dataByDay?.dayIncomes) : '0đ'}</td>
+                                                </tr>
+											</tbody>
+										</table>
+									</div>
                                 </Button>
                             </div>
                         </div>

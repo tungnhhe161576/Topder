@@ -173,6 +173,7 @@ const ModalUpdateInfo = ({open, onCancel}) => {
             onCancel={onCancel}
             footer={footer}
             width={1600}
+            style={{marginTop: '-80px'}}
         >
             <ModalUpdateContainer>
                 <div className="title-type-1">

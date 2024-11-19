@@ -1,4 +1,3 @@
-import QueryString from "qs";
 import http from "../index";
 
 import {
@@ -84,6 +83,8 @@ import {
 	apiCheckPaymentBooking,
 	apiCretaeAdsBooking,
 	apiCancelBookingAds,
+	apiCreateTableByExcel,
+	apiEnableBooking,
 } from "./urls";
 
 
@@ -225,6 +226,13 @@ const paymentBooking = (bookingId, paymentGateway) => http.post(`${apiPaymentBoo
 const checkPaymentBooking = (bookingId, status) => http.put(`${apiCheckPaymentBooking}/${bookingId}?status=${status}`)
 const cretaeAdsBooking = (body) => http.post(apiCretaeAdsBooking, body)
 const cancelBookingAds = (bookingId, status) => http.put(`${apiCancelBookingAds}/${bookingId}?status=${status}`)
+const createTableByExcel = (restaurantId, file) => {
+	const formData = new FormData();
+    formData.append('RestaurantId', restaurantId);
+    formData.append('File', file);
+	http.post(apiCreateTableByExcel, formData);
+}
+const enableBooking = (restaurantId, isEnabledBooking) => http.put(`${apiEnableBooking}/${restaurantId}?isEnabledBooking=${isEnabledBooking}`)
 
 
 
@@ -314,6 +322,8 @@ const UserService = {
 	checkPaymentBooking,
 	cretaeAdsBooking,
 	cancelBookingAds,
+	createTableByExcel,
+	enableBooking
 };
 
 

@@ -7,6 +7,7 @@ import {
 	Form,
 	Upload,
 	message,
+	Switch,
 } from "antd";
 
 import { formatNumberToK } from "../../../../../lib/stringUtils";
@@ -16,20 +17,16 @@ import ModalUpdateInfo from "./Modal/ModalUpdateInfo";
 import ImageService from '../../../../../services/ImageService'
 import { useDispatch } from "react-redux";
 import { updateUserInformation } from "../../../../../redux/Slice/userSlice";
+import ModalEnabledBooking from "./Modal/ModalEnabledBooking";
 
-const getBase64 = (file) =>
-	new Promise((resolve, reject) => {
-		const reader = new FileReader();
-		reader.readAsDataURL(file);
-		reader.onload = () => resolve(reader.result);
-		reader.onerror = (error) => reject(error);
-	});
 
 const ManageInfomation = ({user}) => {
 	const [openModalUpdate, setOpenModalUpdate] = useState(false);
 	const [loading, setLoading] = useState(false)
 	const [logo, setLogo] = useState(null)
 	const [wallet, setWallet] = useState()
+	const [openModalActive, setOpenModalActive] = useState(false)
+	const [active, setActive] = useState(user?.isBookingEnabled)
 	const [form] = Form.useForm()
 	const dispatch = useDispatch()
 
@@ -49,6 +46,9 @@ const ManageInfomation = ({user}) => {
             getWalletInfo()
         }
     }, [user])
+
+	console.log(user);
+	
 
 
 
@@ -110,10 +110,21 @@ const ManageInfomation = ({user}) => {
 	return (
 		<ManageInfoContainer>
 			<div>
-				<div style={{ marginBottom: "20px", textAlign: "right" }}>
-					<Button type="primary" shape="round" onClick={() => setOpenModalUpdate(user)}>
-						Chỉnh Sửa Thông Tin
-					</Button>
+				<div style={{ marginBottom: "20px", textAlign: "right"}}>
+					<div className="d-flex align-items-center justify-content-flex-end">
+						<div className="mr-10">
+							<Switch
+								checked={active}
+								onChange={() => setOpenModalActive(true)}
+								title="Bật/Tắt trạng thái đặt bàn"
+							/>
+						</div>
+						<div>
+							<Button type="primary" shape="round" onClick={() => setOpenModalUpdate(user)}>
+								Chỉnh Sửa Thông Tin
+							</Button>
+						</div>
+					</div>
 				</div>
 				<div className="des mt-20">
 					<Row gutter={[16, 16]}>
@@ -235,6 +246,17 @@ const ManageInfomation = ({user}) => {
 						<ModalUpdateInfo
 							open={openModalUpdate}
 							onCancel={() => setOpenModalUpdate(false)}
+						/>
+					)
+				}
+				{
+					!!openModalActive && (
+						<ModalEnabledBooking
+							open={openModalActive}
+							onCancel={() => setOpenModalActive(false)}
+							setActive={setActive}
+							active={active}
+							user={user}
 						/>
 					)
 				}
