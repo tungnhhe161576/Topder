@@ -105,12 +105,19 @@ const LoginPage = () => {
 				nav("/admin/dashboard");
 			}
 		} catch (error) {
-			message.error("Tài khoản hoặc mật khẩu không đúng.");
+			message.error(
+				"Tài khoản của bạn không được phép đăng nhập bằng Google."
+			);
 		} finally {
 			setLoading(false);
 		}
 	};
-
+	useEffect(() => {
+		window.google.accounts.id.initialize({
+			client_id: process.env.REACT_APP_GG_CLIENT_ID,
+			callback: handleGoogleLoginSuccess,
+		});
+	}, []);
 	const handleGoogleLoginFailure = (error) => {
 		console.error("Google Login Failed:", error);
 		toast.error("Đăng nhập bằng Google thất bại. Vui lòng thử lại.");
@@ -231,6 +238,7 @@ const LoginPage = () => {
 								<GoogleOutlined className="fs-20" />
 							</Button> */}
 							<GoogleLogin
+								className="login-gg"
 								onSuccess={handleGoogleLoginSuccess}
 								onFailure={handleGoogleLoginFailure}
 								cookiePolicy={"single_host_origin"}

@@ -919,6 +919,8 @@ const RestaurantDetail = () => {
 					open={openModalCalFee}
 					onCancel={() => {
 						setOpenModalCalFee(false);
+					}}
+					openSucces={() => {
 						setShowSuccessModal(true);
 					}}
 					restaurantId={restaurantDetail?.uid}
