@@ -22,7 +22,7 @@ import dayjs from "dayjs";
 import { formatNumberToK } from "../../../../lib/stringUtils";
 import ModalDetail from "./Modal/ModalDetail";
 import ModalUpdateOrder from "./Modal/ModalUpdateOrder";
-import { FileAddOutlined } from '@ant-design/icons'
+import { FileAddOutlined } from "@ant-design/icons";
 const { Option } = Select;
 
 const ManageOrder = () => {
@@ -241,43 +241,45 @@ const ManageOrder = () => {
 							Xác nhận đơn
 						</Button>
 					)}
-					{(record?.statusOrder === "Confirm" && record?.totalAmount === 0) || record?.statusOrder === "Paid" 
-						? (
-							<Button
-								onClick={() => {
-									setOpenModalUpdateOrder(record);
-									setText(
-										"Bạn có chắc chắn muốn hoàn thành đơn hàng này không ?"
-									);
-									setStatus("Complete");
-								}}
-								shape="round"
-								type="primary"
-								className="mr-5"
-							>
-								Hoàn thành đơn
-							</Button>
-						) : null}
-					{record?.statusOrder === "Pending" || record?.statusOrder === "Confirm" || record?.statusOrder === "Paid" 
-						? (
-							<Button
-								className="huydon"
-								onClick={() => {
-									setOpenModalUpdateOrder(record);
-									setText(
-										`${
-											record?.statusOrder !== "Paid"
-												? "Bạn có chắc chắn muốn hủy đơn hàng này không ?"
-												: "Bạn sẽ mất đi 100% số tiền đơn hàng này và sẽ hoàn về ví của khách hàng!"
-										}`
-									);
-									setStatus("Cancel");
-								}}
-								shape="round"
-							>
-								Hủy
-							</Button>
-						) : null}
+					{(record?.statusOrder === "Confirm" &&
+						record?.totalAmount === 0) ||
+					record?.statusOrder === "Paid" ? (
+						<Button
+							onClick={() => {
+								setOpenModalUpdateOrder(record);
+								setText(
+									"Bạn có chắc chắn muốn hoàn thành đơn hàng này không ?"
+								);
+								setStatus("Complete");
+							}}
+							shape="round"
+							type="primary"
+							className="mr-5"
+						>
+							Hoàn thành đơn
+						</Button>
+					) : null}
+					{record?.statusOrder === "Pending" ||
+					record?.statusOrder === "Confirm" ||
+					record?.statusOrder === "Paid" ? (
+						<Button
+							className="huydon"
+							onClick={() => {
+								setOpenModalUpdateOrder(record);
+								setText(
+									`${
+										record?.statusOrder !== "Paid"
+											? "Bạn có chắc chắn muốn hủy đơn hàng này không ?"
+											: "Bạn sẽ mất đi 100% số tiền đơn hàng này và sẽ hoàn về ví của khách hàng!"
+									}`
+								);
+								setStatus("Cancel");
+							}}
+							shape="round"
+						>
+							Hủy
+						</Button>
+					) : null}
 				</div>
 			),
 			// width: 200
@@ -291,12 +293,15 @@ const ManageOrder = () => {
 					<SpinCustom spinning={loading}>
 						<div className="d-flex justify-content-space-between">
 							<div className="d-flex justify-content-space-between align-items-center mb-20">
-								<div className="fw-600 fs-22"> Đơn đặt bàn </div>
+								<div className="fw-600 fs-22">
+									{" "}
+									Đơn đặt bàn{" "}
+								</div>
 							</div>
 							<div>
 								<Button type="primary" className="white fs-15">
-                                    <FileAddOutlined /> Tải về file Excel
-                                </Button>
+									<FileAddOutlined /> Tải về file Excel
+								</Button>
 							</div>
 						</div>
 						<div>
@@ -305,7 +310,7 @@ const ManageOrder = () => {
 								gutter={[24, 24]}
 								className="search-container"
 							>
-								<Col span={8}>
+								<Col>
 									<div style={{ marginBottom: "8px" }}>
 										<label>Tên người đặt</label>
 									</div>
@@ -320,7 +325,7 @@ const ManageOrder = () => {
 											<Input
 												style={{
 													marginRight: "8px",
-													width: "300px",
+													width: 400,
 												}}
 												placeholder="Tên Người Đặt"
 												allowClear
@@ -339,7 +344,7 @@ const ManageOrder = () => {
 										</Form.Item>
 									</Form>
 								</Col>
-								<Col span={6}>
+								<Col>
 									<div style={{ marginBottom: "8px" }}>
 										<label>Tháng-Năm</label>
 									</div>
@@ -361,7 +366,7 @@ const ManageOrder = () => {
 									</Button>
 								</Col>
 
-								<Col span={6}>
+								<Col>
 									<div style={{ marginBottom: "8px" }}>
 										<label>Ngày/Tháng/Năm</label>
 									</div>

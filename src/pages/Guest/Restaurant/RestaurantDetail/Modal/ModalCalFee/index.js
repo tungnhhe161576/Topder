@@ -15,6 +15,7 @@ const ModalCalFee = ({
 	userId,
 	totalPrice,
 	form,
+	openSucces,
 }) => {
 	const [loading, setLoading] = useState(false);
 	const [discounts, setDiscounts] = useState([]);
@@ -71,6 +72,7 @@ const ModalCalFee = ({
 			});
 			onCancel();
 			form.resetFields();
+			openSucces();
 		} catch (error) {
 			message.open({
 				content: "Đặt bàn thất bại",
