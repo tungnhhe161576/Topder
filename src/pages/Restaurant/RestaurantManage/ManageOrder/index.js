@@ -7,7 +7,6 @@ import {
 	Tag,
 	Select,
 	DatePicker,
-	Dropdown,
 	Input,
 	Form,
 } from "antd";
@@ -22,12 +21,8 @@ import dayjs from "dayjs";
 import { formatNumberToK } from "../../../../lib/stringUtils";
 import ModalDetail from "./Modal/ModalDetail";
 import ModalUpdateOrder from "./Modal/ModalUpdateOrder";
-<<<<<<< Updated upstream
-import { FileAddOutlined } from "@ant-design/icons";
-=======
 import { FileAddOutlined } from '@ant-design/icons'
 import * as XLSX from "xlsx";
->>>>>>> Stashed changes
 const { Option } = Select;
 
 const ManageOrder = () => {
@@ -327,11 +322,6 @@ const ManageOrder = () => {
 								</div>
 							</div>
 							<div>
-<<<<<<< Updated upstream
-								<Button type="primary" className="white fs-15">
-									<FileAddOutlined /> Tải về file Excel
-								</Button>
-=======
 								<Button type="primary" className="white fs-15" onClick={() => exportToExcel()}>
                                     <FileAddOutlined /> Tải về file Excel
 									<div style={{display: 'none'}}>
@@ -389,7 +379,6 @@ const ManageOrder = () => {
 										</table>
 									</div>
                                 </Button>
->>>>>>> Stashed changes
 							</div>
 						</div>
 						<div>
