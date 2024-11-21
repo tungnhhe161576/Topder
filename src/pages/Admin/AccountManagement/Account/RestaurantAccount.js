@@ -48,7 +48,7 @@ const RestaurantAccount = ({loading, accounts, getAccount}) => {
 			key: "address",
 			width: 150,
 			align: 'center',
-            render: (value) => <span> {dayjs(value).format('DD-MM-YYYY')} </span>
+            // render: (value) => <span> {dayjs(value).format('DD-MM-YYYY')} </span>
 		},
 		{
 			title: "Số điện thoại",
@@ -86,44 +86,66 @@ const RestaurantAccount = ({loading, accounts, getAccount}) => {
 			dataIndex: "status",
 			key: "status",
 			align: 'center',
-			render: (value, record) => (
-				<div className="d-flex">
-					{value === 'Active' 
-						? <Button
-							type="primary"
-							shape="round"
-							className="mr-3"
-							onClick={() => setOpenModalBanAccount(record)}
-						>
-							Khóa tài khoản
-						</Button>
-						: <Button
-							type="primary"
-							shape="round"
-							className="mr-3"
-							onClick={() => setOpenModalBanAccount(record)}
-						>
-							Mở tài khoản
-						</Button>
-					}
-				</div>
-			),
+			// render: (value, record) => (
+			// 	<div className="d-flex">
+			// 		{value === 'Active' 
+			// 			? <Button
+			// 				type="primary"
+			// 				shape="round"
+			// 				className="mr-3"
+			// 				onClick={() => setOpenModalBanAccount(record)}
+			// 			>
+			// 				Khóa tài khoản
+			// 			</Button>
+			// 			: <Button
+			// 				type="primary"
+			// 				shape="round"
+			// 				className="mr-3"
+			// 				onClick={() => setOpenModalBanAccount(record)}
+			// 			>
+			// 				Mở tài khoản
+			// 			</Button>
+			// 		}
+			// 	</div>
+			// ),
 		},
 		{
 			title: "",
 			dataIndex: "",
 			key: "action",
 			align: 'center',
-			render: (text, record) => (
-				<div className="d-flex">
-					<Button
-						type="primary"
-						shape="round"
-						className="mr-3"
-						onClick={() => setOpenModalViewDetail(record)}
-					>
-						Chi tiết
-					</Button>
+			render: (value, record) => (
+				<div className='d-flex flex-column align-items-center'>
+					<div className="d-flex mb-3">
+						<Button
+							type="primary"
+							shape="round"
+							className="mr-3"
+							onClick={() => setOpenModalViewDetail(record)}
+						>
+							Chi tiết
+						</Button>
+					</div>
+					<div className="d-flex">
+						{record?.status === 'Active' 
+							? <Button
+								type="primary"
+								shape="round"
+								className="mr-3"
+								onClick={() => setOpenModalBanAccount(record)}
+							>
+								Khóa tài khoản
+							</Button>
+							: <Button
+								type="primary"
+								shape="round"
+								className="mr-3"
+								onClick={() => setOpenModalBanAccount(record)}
+							>
+								Mở tài khoản
+							</Button>
+						}
+					</div>
 				</div>
 			),
 		},

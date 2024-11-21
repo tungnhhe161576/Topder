@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Avatar, Badge, Col, Dropdown, Row } from "antd";
+import { Avatar, Badge, Col, Dropdown, Menu, Row } from "antd";
 import { useNavigate } from "react-router-dom";
 import {
 	BellOutlined,
@@ -20,9 +20,9 @@ import { setAccessToken } from "../../../../redux/Slice/accessTokenSlice";
 import GuestService from "../../../../services/GuestService";
 import SpinCustom from '../../../Common/SpinCustom'
 import dayjs from "dayjs";
-import { addNoti, allNoti, updateListNoti } from "../../../../redux/Slice/notiSlice";
 import { onReceiveNoti, startConnection } from "../../../../hub";
 import UserService from "../../../../services/UserService";
+import { CustomMenuItem } from "../styled";
 
 const IconFont = createFromIconfontCN({
 	scriptUrl: "//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js",
@@ -34,21 +34,24 @@ const Header = () => {
 	const activeButton = useSelector(getNav);
 	const user = useSelector(userInfor);
 	const [loading, setLoading] = useState(true)
+	const [loading2, setLoading2] = useState(true)
 	const [ads, setAds] = useState([])
 	const [notis, setNotis] = useState([])
-	// const notis = useSelector(allNoti)
+	const [numberNoti, setNumberNoti] = useState(6)
 
 	console.log('list', notis);
 
 	const getListNoti = async () => {
 		try {
-            // setLoading(true)
+            setLoading2(true)
             const notisRes = await UserService.getAllNoti(user?.uid) 
 			setNotis(notisRes)
             // dispatch(updateListNoti(res))
         } catch (error) {
             console.log(error)
-        } 
+        } finally {
+			setLoading2(false)
+		}
 	}
 	useEffect(() => {
 		if (!!user) {
@@ -143,19 +146,104 @@ const Header = () => {
 		},
 	];
 
-	const itemNotis =  notis.map(notification => ({
-		key: notification?.notificationId,
-		label: (
-			<div className={notification?.isRead ? 'no-read' : 'read'}>
-			<div> {notification?.type} </div>
-			<div>
-				{notification?.content}
-			</div>
-			<div> {dayjs(notification?.createdAt).format('DD-MM-YYYY')} </div>
-			</div>
-		),
-		}));
+	const handleHandleRead = async (notification) => {
+		try {
+			await UserService.readNoti(notification?.notificationId)
+			getListNoti()
+			if (notification.type === 'Đơn Hàng') {
+				nav('/user-profile/history-booking')
+			} else if (notification.type === 'Hệ Thống Trừ Tiền Từ Ví') {
+				nav('/user-profile/transactiom-history')
+			} 
+		} catch (error) {
+			console.log(error);
+		}
+	}
+	const handleDeleteNotification = async (notification) => {
+		try {
+			await UserService.deleteNoti(user?.uid, notification?.notificationId)
+			getListNoti()
+		} catch (error) {
+			console.log(error);
+		}
+	}
+	const handleReadAllNoti = async () => {
+		try {
+			await UserService.readAllNoti(user?.uid)
+			getListNoti()
+		} catch (error) {
+			console.log(error);
+		}
+	}
+	const handleDeleteAllNoti = async () => {
+		try {
+			// await UserService.readAllNoti(user?.uid)
+			getListNoti()
+		} catch (error) {
+			console.log(error);
+		}
+	}
 	
+	const itemNotis = (
+		<Menu>
+			{
+				notis?.length === 0
+					? <div>Không có thông báo nào</div>
+					: <SpinCustom spinning={loading2}>
+						<div style={{maxHeight: '600px', overflow: 'auto', position: 'relative'}}>
+							{
+								notis.slice(0, numberNoti).map(notification => (
+									<CustomMenuItem key={notification?.notificationId} style={notification?.isRead ? {backgroundColor: 'red'} : {fontWeight: '500', color: '#f07d22'}}>
+										<div 
+											className='w-90 mb-10'
+											onClick={() => handleHandleRead(notification)}
+										>
+											<div className="d-flex justify-content-space-between align-items-center pl-8 pr-8">
+												<div className="fs-12" style={notification?.isRead ? {color: 'gray'} : {color: '#e9a671'}}>Ngày: {dayjs(notification?.createdAt).format('DD-MM-YYYY')} </div>
+												<div className=""> {notification?.type} </div>
+											</div>
+											<div className="mt-3"> {notification?.content} </div>
+										</div>
+										<div 
+											className="w-10 d-flex justify-content-center align-items-center delete"
+											onClick={(e) => {
+												e.stopPropagation();
+												handleDeleteNotification(notification)
+											}}
+										> 
+											x 
+										</div>
+									</CustomMenuItem>
+
+								))}
+								<div className="d-flex justify-content-space-between align-items-center pl-5 pr-5 mt-5" style={{position: 'sticky', bottom: 0, height: '40px', background: '#ddd', color: 'black'}}>
+									<div 
+									style={{cursor: 'pointer'}} 
+										onClick={(e) => {
+											handleReadAllNoti()
+											e.stopPropagation();
+										}}
+									>
+										Đánh dấu đọc tất cả thông báo
+									</div>
+									<div style={{cursor: 'pointer'}} onClick={() => setNumberNoti(prev => prev+4)}>Hiển thị thêm thông báo</div>
+									<div 
+										style={{cursor: 'pointer'}}
+										onClick={(e) => {
+											handleDeleteAllNoti()
+											e.stopPropagation();
+										}}
+									>
+										Xóa tất cả thông báo
+									</div>
+								</div>
+						</div>
+					</SpinCustom> 
+					
+			}
+		</Menu>
+	)
+
 		
 
 	const handleButtonClick = (buttonName) => {
@@ -366,13 +454,8 @@ const Header = () => {
 						<Col xs={3} sm={3} md={3} lg={3} xl={3} className="d-flex align-items-center">
 							<div className="notification mr-20">
 								<Badge count={notis?.length} size="small">
-									<div className="fs-22 fw-500">
-										<Dropdown
-											menu={{
-												items: itemNotis,
-											}}
-											trigger={['click']}
-										>
+									<div className="fs-22 fw-500 w-100 notification">
+										<Dropdown overlay={itemNotis} trigger={['click']}>
 											<BellOutlined />
 										</Dropdown>
 									</div>

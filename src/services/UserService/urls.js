@@ -85,5 +85,8 @@ export const apiCancelBookingAds = "BookingAdvertisement/UpdateStatus"
 export const apiCreateTableByExcel = "RestaurantTables/CreateByExcel"
 export const apiEnableBooking = "Restaurant/IsEnabledBooking"
 export const apiGetAllNoti = "Notification/GetNotificationList?pageNumber"
+export const apiReadNoti = "Notification/IsRead"
+export const apiDeleteNoti = "Notification/Delete"
+export const apiReadAllNoti = "Notification/IsReadAl"
 
 

@@ -86,6 +86,9 @@ import {
 	apiCreateTableByExcel,
 	apiEnableBooking,
 	apiGetAllNoti,
+	apiReadNoti,
+	apiDeleteNoti,
+	apiReadAllNoti,
 } from "./urls";
 
 
@@ -235,6 +238,9 @@ const createTableByExcel = (restaurantId, file) => {
 }
 const enableBooking = (restaurantId, isEnabledBooking) => http.put(`${apiEnableBooking}/${restaurantId}?isEnabledBooking=${isEnabledBooking}`)
 const getAllNoti = (userId) => http.get(`${apiGetAllNoti}?pageNumber=1&pageSize=10000&userId=${userId}`)
+const readNoti = (notiId) => http.put(`${apiReadNoti}/${notiId}`)
+const deleteNoti = (userId, notificationId) => http.delete(`${apiDeleteNoti}/${userId}/${notificationId}`)
+const readAllNoti = (userId) => http.put(`${apiReadAllNoti}/${userId}`)
 
 
 
@@ -327,6 +333,9 @@ const UserService = {
 	createTableByExcel,
 	enableBooking,
 	getAllNoti,
+	readNoti,
+	deleteNoti,
+	readAllNoti,
 };
 
 
