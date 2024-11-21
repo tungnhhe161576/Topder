@@ -85,6 +85,7 @@ import {
 	apiCancelBookingAds,
 	apiCreateTableByExcel,
 	apiEnableBooking,
+	apiGetAllNoti,
 } from "./urls";
 
 
@@ -233,6 +234,7 @@ const createTableByExcel = (restaurantId, file) => {
 	http.post(apiCreateTableByExcel, formData);
 }
 const enableBooking = (restaurantId, isEnabledBooking) => http.put(`${apiEnableBooking}/${restaurantId}?isEnabledBooking=${isEnabledBooking}`)
+const getAllNoti = (userId) => http.get(`${apiGetAllNoti}?pageNumber=1&pageSize=10000&userId=${userId}`)
 
 
 
@@ -323,7 +325,8 @@ const UserService = {
 	cretaeAdsBooking,
 	cancelBookingAds,
 	createTableByExcel,
-	enableBooking
+	enableBooking,
+	getAllNoti,
 };
 
 

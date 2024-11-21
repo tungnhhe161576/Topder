@@ -30,7 +30,6 @@ const ModalDiscount = ({
 			};
 		});
 	};
-	console.log("check", open);
 
 	const items = [
 		{

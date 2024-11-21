@@ -6,16 +6,23 @@ import {
 	BellOutlined,
 	UserOutlined,
 } from "@ant-design/icons";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
 	setUserInformation,
+	userInfor,
 } from "../../../../redux/Slice/userSlice";
 import { setAccessToken } from "../../../../redux/Slice/accessTokenSlice";
-import { Dropdown } from "antd";
+import { Badge, Dropdown } from "antd";
+import { useEffect } from "react";
+import { onReceiveNoti, startConnection } from "../../../../hub";
+import { addNoti, allNoti } from "../../../../redux/Slice/notiSlice";
+import dayjs from "dayjs";
 
 const Header = () => {
 	const nav = useNavigate();
 	const dispatch = useDispatch();
+	const user = useSelector(userInfor);
+	const notis = useSelector(allNoti)
 	
 	const items = [
 		{
@@ -32,6 +39,25 @@ const Header = () => {
 		},
 	];
 
+	useEffect(() => {
+		if (!!user) {
+			const initSignalR = async () => {
+				await startConnection();
+				onReceiveNoti((data) => {
+					const notiData = data.find(i => i?.uid === user?.uid)
+					
+					dispatch(addNoti(notiData))
+				});
+			};
+	
+			initSignalR();
+	
+			return () => {
+				// connection.stop();
+			};
+		}
+    }, [user]);
+
 
 	const handleLogout = () => {
 		localStorage.removeItem("token");
@@ -39,6 +65,19 @@ const Header = () => {
 		dispatch(setUserInformation(null));
 		nav("/login");
 	};
+
+	const itemNotis =  notis.map(notification => ({
+		key: notification.notificationId,
+		label: (
+			<div className={notification?.isRead ? 'no-read' : 'read'}>
+			<div> {notification?.type} </div>
+			<div>
+				{notification.content}
+			</div>
+			<div> {dayjs(notification?.createdAt).format('DD-MM-YYYY')} </div>
+			</div>
+		),
+		}));
 
 	
 	return (
@@ -54,7 +93,18 @@ const Header = () => {
 					<MailOutlined />
 				</div>
 				<div className="item notification">
-					<BellOutlined />
+					<Badge count={notis?.length} size="small">
+						<div className="fs-22 fw-500">
+							<Dropdown
+								menu={{
+									items: itemNotis,
+								}}
+								trigger={['click']}
+							>
+								<BellOutlined />
+							</Dropdown>
+						</div>
+					</Badge>
 				</div>
 				<div className="item user">
 					<Dropdown

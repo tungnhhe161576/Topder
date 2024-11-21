@@ -19,6 +19,9 @@ import {
 import { setAccessToken } from "../../../../redux/Slice/accessTokenSlice";
 import GuestService from "../../../../services/GuestService";
 import SpinCustom from '../../../Common/SpinCustom'
+import dayjs from "dayjs";
+import { addNoti, allNoti, updateListNoti } from "../../../../redux/Slice/notiSlice";
+import { onReceiveNoti, startConnection } from "../../../../hub";
 
 const IconFont = createFromIconfontCN({
 	scriptUrl: "//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js",
@@ -31,6 +34,26 @@ const Header = () => {
 	const user = useSelector(userInfor);
 	const [loading, setLoading] = useState(true)
 	const [ads, setAds] = useState([])
+	const notis = useSelector(allNoti)
+
+	useEffect(() => {
+		if (!!user) {
+			const initSignalR = async () => {
+				await startConnection();
+				onReceiveNoti((data) => {
+					const notiData = data.find(i => i?.uid === user?.uid)
+					
+					dispatch(addNoti(notiData))
+				});
+			};
+	
+			initSignalR();
+	
+			return () => {
+				// connection.stop();
+			};
+		}
+    }, [user]);
 
 	const getAds = async () => {
 		try {
@@ -71,6 +94,7 @@ const Header = () => {
 			),
 		},
 	];
+
 	const itemsDropdownProfile = [
 		{
 			key: "1",
@@ -92,6 +116,21 @@ const Header = () => {
 			),
 		},
 	];
+
+	const itemNotis =  notis.map(notification => ({
+		key: notification.notificationId,
+		label: (
+			<div className={notification?.isRead ? 'no-read' : 'read'}>
+			<div> {notification?.type} </div>
+			<div>
+				{notification.content}
+			</div>
+			<div> {dayjs(notification?.createdAt).format('DD-MM-YYYY')} </div>
+			</div>
+		),
+		}));
+	
+		
 
 	const handleButtonClick = (buttonName) => {
 		dispatch(setActiveButton(buttonName));
@@ -300,9 +339,16 @@ const Header = () => {
 						</Col>
 						<Col xs={3} sm={3} md={3} lg={3} xl={3} className="d-flex align-items-center">
 							<div className="notification mr-20">
-								<Badge count={5} size="small">
+								<Badge count={notis?.length} size="small">
 									<div className="fs-22 fw-500">
-										<BellOutlined />
+										<Dropdown
+											menu={{
+												items: itemNotis,
+											}}
+											trigger={['click']}
+										>
+											<BellOutlined />
+										</Dropdown>
 									</div>
 								</Badge>
 							</div>

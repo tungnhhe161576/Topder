@@ -36,6 +36,7 @@ import ModalChooseTable from "./Modal/ChooseTable";
 import ModalCalFee from "./Modal/ModalCalFee";
 import Policy from "./Description/Policy";
 import ModalSuccess from "../../../../components/Modal/ModalSuccess";
+import { onReceiveNoti, startConnection } from "../../../../hub";
 
 const RestaurantDetail = () => {
 	const [selectedOption, setSelectedOption] = useState("description");
@@ -222,6 +223,13 @@ const RestaurantDetail = () => {
 			setLoading(false);
 		}
 	};
+
+
+		
+	// useEffect(() => {
+	// 	startConnection();
+	// 	onReceiveNoti()
+	// }, [showSuccessModal])
 
 	//xu ly slider hinh anh nha hang
 	const nextImage = () => {

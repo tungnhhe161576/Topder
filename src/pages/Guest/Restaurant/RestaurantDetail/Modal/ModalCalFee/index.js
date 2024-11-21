@@ -7,6 +7,10 @@ import UserService from "../../../../../../services/UserService";
 import { formatNumberToK } from "../../../../../../lib/stringUtils";
 import ModalDiscount from "../ModalDiscount";
 import { ModalTotalContainer } from "./styled";
+import { onReceiveNoti, startConnection } from "../../../../../../hub";
+import { addNoti } from "../../../../../../redux/Slice/notiSlice";
+import { useDispatch } from "react-redux";
+// import { onReceiveNoti, startConnection } from "../../../../../../hub";
 
 const ModalCalFee = ({
 	open,
@@ -21,6 +25,7 @@ const ModalCalFee = ({
 	const [discounts, setDiscounts] = useState([]);
 	const [selectedVoucher, setSelectedVoucher] = useState();
 	const [openModalDiscounts, setOpenModalDiscount] = useState(false);
+	const dispatch = useDispatch()
 
 	const getAllDiscount = async () => {
 		try {
@@ -40,6 +45,49 @@ const ModalCalFee = ({
 	useEffect(() => {
 		getAllDiscount();
 	}, []);
+
+	useEffect(() => {
+		if (!!userId) {
+			const initSignalR = async () => {
+				await startConnection();
+				onReceiveNoti((data) => {
+					const notiData = data.find(i => i?.uid === userId)
+					
+					dispatch(addNoti(notiData))
+				});
+			};
+	
+			initSignalR();
+	
+			return () => {
+				// connection.stop();
+			};
+		}
+    }, [userId]);
+
+
+	// useEffect(() => {
+    //     const initSignalR = async () => {
+    //         await startConnection();
+    //         onReceiveNoti(); // Đăng ký listener cho thông báo
+    //     };
+
+    //     initSignalR();
+
+    //     return () => {
+    //         // Nếu cần, bạn có thể ngắt kết nối ở đây
+    //         // connection.stop();
+    //     };
+    // }, [startConnection, onReceiveNoti]);
+
+	// onReceiveNoti()
+
+    // const onReceiveNoti = () => {
+    //     connection.on('CreateNotification', (notification) => {
+    //         console.log('be send data: ', notification);
+    //     });
+    // };
+
 
 	const handleCreateOrder = async () => {
 		try {
@@ -70,6 +118,10 @@ const ModalCalFee = ({
 					marginTop: "10vh",
 				},
 			});
+			// startConnection();
+			// onReceiveNoti()
+
+
 			onCancel();
 			form.resetFields();
 			openSucces();
@@ -85,6 +137,10 @@ const ModalCalFee = ({
 			setLoading(false);
 		}
 	};
+
+	// useEffect(() => {
+		
+	// })
 
 	const footer = () => {
 		return (
