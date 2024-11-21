@@ -13,16 +13,18 @@ import {
 } from "../../../../redux/Slice/userSlice";
 import { setAccessToken } from "../../../../redux/Slice/accessTokenSlice";
 import { Badge, Dropdown } from "antd";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { onReceiveNoti, startConnection } from "../../../../hub";
 import { addNoti, allNoti } from "../../../../redux/Slice/notiSlice";
 import dayjs from "dayjs";
+import UserService from "../../../../services/UserService";
 
 const Header = () => {
 	const nav = useNavigate();
 	const dispatch = useDispatch();
 	const user = useSelector(userInfor);
-	const notis = useSelector(allNoti)
+	// const notis = useSelector(allNoti)
+	const [notis, setNotis] = useState([])
 	
 	const items = [
 		{
@@ -39,14 +41,36 @@ const Header = () => {
 		},
 	];
 
+	const getListNoti = async () => {
+		try {
+            // setLoading(true)
+            const notisRes = await UserService.getAllNoti(user?.uid) 
+			setNotis(notisRes)
+            // dispatch(updateListNoti(res))
+        } catch (error) {
+            console.log(error)
+        } 
+	}
+	useEffect(() => {
+		if (!!user) {
+			getListNoti()
+		}
+	}, [user])
+
 	useEffect(() => {
 		if (!!user) {
 			const initSignalR = async () => {
 				await startConnection();
 				onReceiveNoti((data) => {
-					const notiData = data.find(i => i?.uid === user?.uid)
+					console.log("data", data);
 					
-					dispatch(addNoti(notiData))
+					const notiData = data.find(i => i?.uid === user?.uid)
+					console.log("noti", notiData);
+					if (!!notiData) {
+						setNotis(prev => [notiData, ...prev])
+					}
+					
+					// dispatch(addNoti(notiData))
 				});
 			};
 	
@@ -67,12 +91,12 @@ const Header = () => {
 	};
 
 	const itemNotis =  notis.map(notification => ({
-		key: notification.notificationId,
+		key: notification?.notificationId,
 		label: (
 			<div className={notification?.isRead ? 'no-read' : 'read'}>
 			<div> {notification?.type} </div>
 			<div>
-				{notification.content}
+				{notification?.content}
 			</div>
 			<div> {dayjs(notification?.createdAt).format('DD-MM-YYYY')} </div>
 			</div>

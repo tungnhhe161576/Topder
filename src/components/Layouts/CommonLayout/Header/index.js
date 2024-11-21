@@ -22,6 +22,7 @@ import SpinCustom from '../../../Common/SpinCustom'
 import dayjs from "dayjs";
 import { addNoti, allNoti, updateListNoti } from "../../../../redux/Slice/notiSlice";
 import { onReceiveNoti, startConnection } from "../../../../hub";
+import UserService from "../../../../services/UserService";
 
 const IconFont = createFromIconfontCN({
 	scriptUrl: "//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js",
@@ -34,16 +35,41 @@ const Header = () => {
 	const user = useSelector(userInfor);
 	const [loading, setLoading] = useState(true)
 	const [ads, setAds] = useState([])
-	const notis = useSelector(allNoti)
+	const [notis, setNotis] = useState([])
+	// const notis = useSelector(allNoti)
+
+	console.log('list', notis);
+
+	const getListNoti = async () => {
+		try {
+            // setLoading(true)
+            const notisRes = await UserService.getAllNoti(user?.uid) 
+			setNotis(notisRes)
+            // dispatch(updateListNoti(res))
+        } catch (error) {
+            console.log(error)
+        } 
+	}
+	useEffect(() => {
+		if (!!user) {
+			getListNoti()
+		}
+	}, [user])
+	
 
 	useEffect(() => {
 		if (!!user) {
 			const initSignalR = async () => {
 				await startConnection();
 				onReceiveNoti((data) => {
+					console.log("data", data);
 					const notiData = data.find(i => i?.uid === user?.uid)
+					console.log("noti", notiData);
+					if (!!notiData) {
+						setNotis(prev => [notiData, ...prev])
+					}
 					
-					dispatch(addNoti(notiData))
+					// dispatch(addNoti(notiData))
 				});
 			};
 	
@@ -118,12 +144,12 @@ const Header = () => {
 	];
 
 	const itemNotis =  notis.map(notification => ({
-		key: notification.notificationId,
+		key: notification?.notificationId,
 		label: (
 			<div className={notification?.isRead ? 'no-read' : 'read'}>
 			<div> {notification?.type} </div>
 			<div>
-				{notification.content}
+				{notification?.content}
 			</div>
 			<div> {dayjs(notification?.createdAt).format('DD-MM-YYYY')} </div>
 			</div>

@@ -10,7 +10,10 @@ export const notiSlice = createSlice({
             state.value = action.payload;
         },
         addNoti: (state, action) => {
-            state.value.push(action.payload);
+            state.value = [
+                ...state.value,   
+                action.payload
+            ];
         },
     }
 })

@@ -21,9 +21,7 @@ function App() {
         try {
             const user = jwtDecode(localStorage.getItem('token'))
             const res = await UserService.getCurrentUser(user?.uid)
-            const notisRes = await UserService.getAllNoti(user?.uid)   
             dispatch(setUserInformation(res))
-            dispatch(setAllNoti(notisRes.sort((a, b) => b.notificationId - a.notificationId)))
         } catch (error) {
             console.log(error);
         }
