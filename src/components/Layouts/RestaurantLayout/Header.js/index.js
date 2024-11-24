@@ -24,38 +24,48 @@ const Header = () => {
 	const dispatch = useDispatch();
 	const user = useSelector(userInfor);
 	// const notis = useSelector(allNoti)
-	const [notis, setNotis] = useState([])
-	
+	const [notis, setNotis] = useState([]);
+
 	const items = [
 		{
-			key: '1',
+			key: "1",
 			label: (
-				<span className="fs-16 fw-600" onClick={() => nav(`/restaurant/manage-restaurant`)}>Thông tin nhà hàng</span>
+				<span
+					className="fs-16 fw-600"
+					onClick={() => nav(`/restaurant/manage-restaurant`)}
+				>
+					Thông tin nhà hàng
+				</span>
 			),
 		},
-			{
-			key: '2',
+		{
+			key: "2",
 			label: (
-				<span className="fs-16 fw-600 w-100" onClick={() => handleLogout()}>Đăng xuất</span>
+				<span
+					className="fs-16 fw-600 w-100"
+					onClick={() => handleLogout()}
+				>
+					Đăng xuất
+				</span>
 			),
 		},
 	];
 
 	const getListNoti = async () => {
 		try {
-            // setLoading(true)
-            const notisRes = await UserService.getAllNoti(user?.uid) 
-			setNotis(notisRes)
-            // dispatch(updateListNoti(res))
-        } catch (error) {
-            console.log(error)
-        } 
-	}
+			// setLoading(true)
+			const notisRes = await UserService.getAllNoti(user?.uid);
+			setNotis(notisRes);
+			// dispatch(updateListNoti(res))
+		} catch (error) {
+			console.log(error);
+		}
+	};
 	useEffect(() => {
 		if (!!user) {
-			getListNoti()
+			getListNoti();
 		}
-	}, [user])
+	}, [user]);
 
 	useEffect(() => {
 		if (!!user) {
@@ -63,25 +73,24 @@ const Header = () => {
 				await startConnection();
 				onReceiveNoti((data) => {
 					console.log("data", data);
-					
-					const notiData = data.find(i => i?.uid === user?.uid)
+
+					const notiData = data.find((i) => i?.uid === user?.uid);
 					console.log("noti", notiData);
 					if (!!notiData) {
-						setNotis(prev => [notiData, ...prev])
+						setNotis((prev) => [notiData, ...prev]);
 					}
-					
+
 					// dispatch(addNoti(notiData))
 				});
 			};
-	
+
 			initSignalR();
-	
+
 			return () => {
 				// connection.stop();
 			};
 		}
-    }, [user]);
-
+	}, [user]);
 
 	const handleLogout = () => {
 		localStorage.removeItem("token");
@@ -90,20 +99,20 @@ const Header = () => {
 		nav("/login");
 	};
 
-	const itemNotis =  notis.map(notification => ({
+	const itemNotis = notis.map((notification) => ({
 		key: notification?.notificationId,
 		label: (
-			<div className={notification?.isRead ? 'no-read' : 'read'}>
-			<div> {notification?.type} </div>
-			<div>
-				{notification?.content}
-			</div>
-			<div> {dayjs(notification?.createdAt).format('DD-MM-YYYY')} </div>
+			<div className={notification?.isRead ? "no-read" : "read"}>
+				<div> {notification?.type} </div>
+				<div>{notification?.content}</div>
+				<div>
+					{" "}
+					{dayjs(notification?.createdAt).format("DD-MM-YYYY")}{" "}
+				</div>
 			</div>
 		),
-		}));
+	}));
 
-	
 	return (
 		<div className="header">
 			<div className="logo" onClick={() => nav("/restaurant/dashboard")}>
@@ -123,7 +132,7 @@ const Header = () => {
 								menu={{
 									items: itemNotis,
 								}}
-								trigger={['click']}
+								trigger={["click"]}
 							>
 								<BellOutlined />
 							</Dropdown>
@@ -136,7 +145,9 @@ const Header = () => {
 							items: items,
 						}}
 					>
-						<UserOutlined />
+						<div>
+							<UserOutlined /> {user?.nameRes}
+						</div>
 					</Dropdown>
 				</div>
 			</div>

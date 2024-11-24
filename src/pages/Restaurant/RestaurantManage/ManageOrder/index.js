@@ -21,7 +21,7 @@ import dayjs from "dayjs";
 import { formatNumberToK } from "../../../../lib/stringUtils";
 import ModalDetail from "./Modal/ModalDetail";
 import ModalUpdateOrder from "./Modal/ModalUpdateOrder";
-import { FileAddOutlined } from '@ant-design/icons'
+import { FileAddOutlined } from "@ant-design/icons";
 import * as XLSX from "xlsx";
 const { Option } = Select;
 
@@ -104,32 +104,33 @@ const ManageOrder = () => {
 		}
 	}, [user, statusOrder]);
 
-
 	const exportToExcel = () => {
-        const table = document.getElementById("myTable");
-        if (!table) {
-            console.error("Table element not found");
-            return;
-        }
-        const wb = XLSX.utils.table_to_book(table, { sheet: "SheetJS" });
-        const wbout = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-        saveAsExcelFile(wbout, "excel.xlsx");
-    };
-    
-    const saveAsExcelFile = (buffer, fileName) => {
-        try {
-            const data = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(data);
-            link.download = fileName;
-            document.body.appendChild(link); 
-            link.click(); 
-            document.body.removeChild(link);
-            URL.revokeObjectURL(link.href); 
-        } catch (error) {
-            console.error("File download failed:", error);
-        }
-    };
+		const table = document.getElementById("myTable");
+		if (!table) {
+			console.error("Table element not found");
+			return;
+		}
+		const wb = XLSX.utils.table_to_book(table, { sheet: "SheetJS" });
+		const wbout = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+		saveAsExcelFile(wbout, "excel.xlsx");
+	};
+
+	const saveAsExcelFile = (buffer, fileName) => {
+		try {
+			const data = new Blob([buffer], {
+				type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+			});
+			const link = document.createElement("a");
+			link.href = URL.createObjectURL(data);
+			link.download = fileName;
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+			URL.revokeObjectURL(link.href);
+		} catch (error) {
+			console.error("File download failed:", error);
+		}
+	};
 
 	const columns = [
 		{
@@ -247,7 +248,7 @@ const ManageOrder = () => {
 			dataIndex: "a",
 			key: "a",
 			render: (_, record) => (
-				<div className="d-flex align-items-center justify-content-center">
+				<div className="d-flex-center">
 					{record?.statusOrder === "Pending" && (
 						<Button
 							className="mr-5"
@@ -322,9 +323,13 @@ const ManageOrder = () => {
 								</div>
 							</div>
 							<div>
-								<Button type="primary" className="white fs-15" onClick={() => exportToExcel()}>
-                                    <FileAddOutlined /> Tải về file Excel
-									<div style={{display: 'none'}}>
+								<Button
+									type="primary"
+									className="white fs-15"
+									onClick={() => exportToExcel()}
+								>
+									<FileAddOutlined /> Tải về file Excel
+									<div style={{ display: "none" }}>
 										<table id="myTable">
 											<thead>
 												<tr>
@@ -338,47 +343,84 @@ const ManageOrder = () => {
 												</tr>
 											</thead>
 											<tbody>
-												{
-													orders.map(i => (
-														<tr key={i?.orderId}>
-															<td>{i?.nameReceiver}</td>
-                                                            <td>{i?.phoneReceiver}</td>
-                                                            <td>
-																<span>Ngày: {dayjs(i?.dateReservation).format('DD-MM-YYYY')}</span>
-																<span>Giờ: {i?.timeReservation}</span>
-															</td>
-                                                            <td>
-																<div>
-																	<span className="fw-500"> Người lớn: </span>
-																	<span>{i?.numberPerson}</span>
-																</div>
-																<div>
-																	<span className="fw-500">Trẻ em: </span>
-																	<span>{i?.numberChild}</span>
-																</div>
-															</td>
-                                                            <td>{formatNumberToK(i?.totalAmount)}</td>
-                                                            <td>{i?.contentReservation}</td>
-                                                            <td>
+												{orders.map((i) => (
+													<tr key={i?.orderId}>
+														<td>
+															{i?.nameReceiver}
+														</td>
+														<td>
+															{i?.phoneReceiver}
+														</td>
+														<td>
+															<span>
+																Ngày:{" "}
+																{dayjs(
+																	i?.dateReservation
+																).format(
+																	"DD-MM-YYYY"
+																)}
+															</span>
+															<span>
+																Giờ:{" "}
 																{
-																	i?.statusOrder === "Pending" 
-																		? 'Đang chờ'
-																		: i?.statusOrder === 'Confirm'
-																		? 'Đã chấp nhận'
-																		: i?.statusOrder === 'Paid'
-																		? 'Đã Thanh toán'
-																		: i?.statusOrder === 'Complete'
-																		? 'Đã hoàn thành'
-																		: 'Đã hủy'
+																	i?.timeReservation
 																}
-															</td>
-                                                        </tr>
-													))
-												}
+															</span>
+														</td>
+														<td>
+															<div>
+																<span className="fw-500">
+																	{" "}
+																	Người lớn:{" "}
+																</span>
+																<span>
+																	{
+																		i?.numberPerson
+																	}
+																</span>
+															</div>
+															<div>
+																<span className="fw-500">
+																	Trẻ em:{" "}
+																</span>
+																<span>
+																	{
+																		i?.numberChild
+																	}
+																</span>
+															</div>
+														</td>
+														<td>
+															{formatNumberToK(
+																i?.totalAmount
+															)}
+														</td>
+														<td>
+															{
+																i?.contentReservation
+															}
+														</td>
+														<td>
+															{i?.statusOrder ===
+															"Pending"
+																? "Đang chờ"
+																: i?.statusOrder ===
+																  "Confirm"
+																? "Đã chấp nhận"
+																: i?.statusOrder ===
+																  "Paid"
+																? "Đã Thanh toán"
+																: i?.statusOrder ===
+																  "Complete"
+																? "Đã hoàn thành"
+																: "Đã hủy"}
+														</td>
+													</tr>
+												))}
 											</tbody>
 										</table>
 									</div>
-                                </Button>
+								</Button>
 							</div>
 						</div>
 						<div>

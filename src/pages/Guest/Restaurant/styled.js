@@ -27,7 +27,7 @@ export const RestaurantContainer = styled.div`
 	.ant-input-number {
 		height: 40px;
 		border-radius: 50px !important;
-		border: 1px solid #ddd !important; 
+		border: 1px solid #ddd !important;
 		width: 100%;
 		margin-bottom: -10px;
 		display: flex;
@@ -50,13 +50,19 @@ export const RestaurantContainer = styled.div`
 		height: 40px;
 		margin: 0 5px;
 	}
-	:where(.css-dev-only-do-not-override-14qglws).ant-input-group-wrapper-outlined .ant-input-group-addon {
+	:where(
+			.css-dev-only-do-not-override-14qglws
+		).ant-input-group-wrapper-outlined
+		.ant-input-group-addon {
 		border-top-right-radius: 25px;
 		border-bottom-right-radius: 25px;
 		background-color: #fff;
 		cursor: pointer;
 	}
-	:where(.css-dev-only-do-not-override-14qglws).ant-input-group-wrapper-outlined .ant-input-group-addon:hover {
+	:where(
+			.css-dev-only-do-not-override-14qglws
+		).ant-input-group-wrapper-outlined
+		.ant-input-group-addon:hover {
 		background-color: #ddd;
 	}
 	:where(.css-dev-only-do-not-override-14qglws).ant-input-outlined:hover {
@@ -69,8 +75,6 @@ export const RestaurantContainer = styled.div`
 	.search-text {
 		margin-bottom: 15px;
 	}
-
-	
 
 	.custom-pagination .ant-pagination-item-active {
 		background-color: #fa8c16;
@@ -125,7 +129,7 @@ export const RestaurantContainer = styled.div`
 		border: 1px solid #ddd;
 		width: 100%;
 		height: 40px;
-		margin-left: 30pxpx;
+		margin-left: 30px;
 		margin-top: 10px !important;
 	}
 
@@ -152,7 +156,7 @@ export const RestaurantContainer = styled.div`
 		width: 100%;
 		border-radius: 25px;
 		margin-right: 10px;
-		margin-top: 10px !important;
+		margin-top: 20px !important;
 		cursor: pointer;
 	}
 

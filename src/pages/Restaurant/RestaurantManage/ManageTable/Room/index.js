@@ -8,73 +8,80 @@ import ModalUpdateRoom from "./Modal/ModalUpdate";
 import ModalCreateRoom from "./Modal/ModalCreate";
 import ModalUploadExcel from "./Modal/ModalUploadExcel";
 
-const RestaurantRoom = ({user, getAllTables}) => {
-	const [loading, setLoading] = useState(false)
-	const [rooms, setRooms] = useState([])
-	const [openModalCreateRoom, setOpenModalCreateRoom] = useState(false)
-	const [openModalUpdateRoom, setOpenModalUpdateRoom] = useState(false)
-	const [openModalDeleteRoom, setOpenModalDeleteRoom] = useState(false)
-	const [openModalUploadExcel, setOpenModalUploadExcel] = useState(false)
+const RestaurantRoom = ({ user, getAllTables }) => {
+	const [loading, setLoading] = useState(false);
+	const [rooms, setRooms] = useState([]);
+	const [openModalCreateRoom, setOpenModalCreateRoom] = useState(false);
+	const [openModalUpdateRoom, setOpenModalUpdateRoom] = useState(false);
+	const [openModalDeleteRoom, setOpenModalDeleteRoom] = useState(false);
+	const [openModalUploadExcel, setOpenModalUploadExcel] = useState(false);
 
 	const getAllRooms = async () => {
 		try {
-			setLoading(true)
-			const res = await UserService.getAllRoom(user?.uid)
-			setRooms(res?.items)
+			setLoading(true);
+			const res = await UserService.getAllRoom(user?.uid);
+			setRooms(res?.items);
 		} catch (error) {
 			console.log(error);
 		} finally {
-			setLoading(false)
+			setLoading(false);
 		}
-	}
+	};
 	useEffect(() => {
 		if (!!user?.uid) {
-			getAllRooms()
+			getAllRooms();
 		}
-	}, [user])
+	}, [user]);
 
 	const handleUpdateStatus = async (record) => {
 		try {
-			setLoading(true)
+			setLoading(true);
 			await UserService.isEnabledRoom(
 				user?.uid,
 				record.roomId,
 				!record.isBookingEnabled
-			)
-			getAllRooms()
+			);
+			getAllRooms();
 		} catch (error) {
 			console.log(error);
 		} finally {
-			setLoading(false)
+			setLoading(false);
 		}
-	}
+	};
 
 	const columns = [
 		{
 			title: "STT",
 			dataIndex: "number",
 			key: "number",
-			render: (_, __, index) => <span className="fs-15"> {index+1} </span>,
+			render: (_, __, index) => (
+				<span className="fs-15"> {index + 1} </span>
+			),
 		},
-		{
-			title: "Tên bàn",
-			dataIndex: "roomName",
-			key: "roomName",
-			align: 'center',
-			render: (value) => <span className="fs-15"> {value} </span>,
-		},
+		// {
+		// 	title: "Tên bàn",
+		// 	dataIndex: "roomName",
+		// 	key: "roomName",
+		// 	align: 'center',
+		// 	render: (value) => <span className="fs-15"> {value} </span>,
+		// },
 		{
 			title: "Tên phòng",
 			dataIndex: "roomName",
 			key: "roomName",
-			align: 'center',
-			render: (value) => <span className="fs-15"> {!!value ? value : 'Phòng tự do'} </span>,
+			align: "center",
+			render: (value) => (
+				<span className="fs-15">
+					{" "}
+					{!!value ? value : "Phòng tự do"}{" "}
+				</span>
+			),
 		},
 		{
 			title: "Sức chứa",
 			dataIndex: "maxCapacity",
 			key: "maxCapacity",
-			align: 'center',
+			align: "center",
 			sorter: (a, b) => a.maxCapacity - b.maxCapacity,
 			render: (value) => <span className="fs-14"> {value} </span>,
 		},
@@ -82,41 +89,46 @@ const RestaurantRoom = ({user, getAllTables}) => {
 			title: "Mô tả",
 			dataIndex: "description",
 			key: "description",
-			align: 'center',
-			render: (value) => <span className="fs-14"> {!!value ? value : 'Không có mô tả'} </span>,
+			align: "center",
+			render: (value) => (
+				<span className="fs-14">
+					{" "}
+					{!!value ? value : "Không có mô tả"}{" "}
+				</span>
+			),
 		},
 		{
 			title: "",
 			key: "note",
-			align: 'center',
+			align: "center",
 			render: (_, record) => (
 				<div className="d-flex justify-content-center">
-					{
-						record?.isBookingEnabled 
-							? <Button
-								className="huy-mo"
-								type="primary"
-								shape="round"
-								onClick={() => handleUpdateStatus(record)}
-							>
-								Hủy mở bàn
-							</Button>
-							: <Button
-								className="mo"
-								type="primary"
-								shape="round"
-								onClick={() => handleUpdateStatus(record)}
-							>
-								Mở bàn
-							</Button>
-					}
+					{record?.isBookingEnabled ? (
+						<Button
+							className="huy-mo"
+							type="primary"
+							shape="round"
+							onClick={() => handleUpdateStatus(record)}
+						>
+							Hủy mở bàn
+						</Button>
+					) : (
+						<Button
+							className="mo"
+							type="primary"
+							shape="round"
+							onClick={() => handleUpdateStatus(record)}
+						>
+							Mở bàn
+						</Button>
+					)}
 				</div>
 			),
 		},
 		{
 			title: "",
 			key: "note",
-			align: 'center',
+			align: "center",
 			render: (_, record) => (
 				<div className="d-flex justify-content-center">
 					<Button
@@ -137,13 +149,17 @@ const RestaurantRoom = ({user, getAllTables}) => {
 			),
 		},
 	];
-	
+
 	return (
 		<SpinCustom spinning={loading}>
 			<TableAllContainer>
 				<div className="d-flex justify-content-space-between mt-20 mb-30">
 					<div className="d-flex">
-						<Button className="mr-10" type="primary" onClick={() => setOpenModalCreateRoom(true)}>
+						<Button
+							className="mr-10"
+							type="primary"
+							onClick={() => setOpenModalCreateRoom(true)}
+						>
 							Tạo phòng mới
 						</Button>
 						<Button className="" type="primary">
@@ -160,7 +176,6 @@ const RestaurantRoom = ({user, getAllTables}) => {
 					/>
 				</div>
 
-
 				{!!openModalDeleteRoom && (
 					<ModalDeleteRoom
 						open={openModalDeleteRoom}
@@ -168,8 +183,8 @@ const RestaurantRoom = ({user, getAllTables}) => {
 						onOk={getAllRooms}
 						userId={user?.uid}
 						getAllTables={getAllTables}
-						/>
-					)}
+					/>
+				)}
 				{!!openModalUpdateRoom && (
 					<ModalUpdateRoom
 						open={openModalUpdateRoom}
@@ -196,6 +211,6 @@ const RestaurantRoom = ({user, getAllTables}) => {
 				)}
 			</TableAllContainer>
 		</SpinCustom>
-	)
+	);
 };
 export default RestaurantRoom;

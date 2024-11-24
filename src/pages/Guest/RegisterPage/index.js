@@ -260,8 +260,8 @@ const RegisterPage = () => {
 								style={{ fontStyle: "italic" }}
 							>
 								{" "}
-								(Mật khẩu gồm 6 kí tự: bao gồm chữ thường, chữ
-								in hoa và 1 số){" "}
+								(* Lưu ý: Mật khẩu gồm ít nhất 6 kí tự, bao gồm
+								chữ thường, chữ in hoa và 1 số){" "}
 							</div>
 							<Form.Item
 								name="confirmPassword"

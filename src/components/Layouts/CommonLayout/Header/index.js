@@ -18,7 +18,7 @@ import {
 } from "../../../../redux/Slice/userSlice";
 import { setAccessToken } from "../../../../redux/Slice/accessTokenSlice";
 import GuestService from "../../../../services/GuestService";
-import SpinCustom from '../../../Common/SpinCustom'
+import SpinCustom from "../../../Common/SpinCustom";
 import dayjs from "dayjs";
 import { onReceiveNoti, startConnection } from "../../../../hub";
 import UserService from "../../../../services/UserService";
@@ -33,69 +33,77 @@ const Header = () => {
 	const dispatch = useDispatch();
 	const activeButton = useSelector(getNav);
 	const user = useSelector(userInfor);
-	const [loading, setLoading] = useState(true)
-	const [loading2, setLoading2] = useState(true)
-	const [ads, setAds] = useState([])
-	const [notis, setNotis] = useState([])
-	const [numberNoti, setNumberNoti] = useState(6)
+	const [loading, setLoading] = useState(true);
+	const [loading2, setLoading2] = useState(true);
+	const [ads, setAds] = useState([]);
+	const [notis, setNotis] = useState([]);
+	const [numberNoti, setNumberNoti] = useState(6);
+	const [isExpanded, setIsExpanded] = useState(false);
 
-	console.log('list', notis);
+	console.log("list", notis);
+	const handleToggleNoti = () => {
+		if (isExpanded) {
+			setNumberNoti(6);
+		} else {
+			setNumberNoti((prev) => prev + 4);
+		}
+		setIsExpanded(!isExpanded);
+	};
 
 	const getListNoti = async () => {
 		try {
-            setLoading2(true)
-            const notisRes = await UserService.getAllNoti(user?.uid) 
-			setNotis(notisRes)
-            // dispatch(updateListNoti(res))
-        } catch (error) {
-            console.log(error)
-        } finally {
-			setLoading2(false)
+			setLoading2(true);
+			const notisRes = await UserService.getAllNoti(user?.uid);
+			setNotis(notisRes);
+			// dispatch(updateListNoti(res))
+		} catch (error) {
+			console.log(error);
+		} finally {
+			setLoading2(false);
 		}
-	}
+	};
 	useEffect(() => {
 		if (!!user) {
-			getListNoti()
+			getListNoti();
 		}
-	}, [user])
-	
+	}, [user]);
 
 	useEffect(() => {
 		if (!!user) {
 			const initSignalR = async () => {
 				await startConnection();
 				onReceiveNoti((data) => {
-					const notiData = data.find(i => i?.uid === user?.uid)
+					const notiData = data.find((i) => i?.uid === user?.uid);
 					if (!!notiData) {
-						setNotis(prev => [notiData, ...prev])
+						setNotis((prev) => [notiData, ...prev]);
 					}
-					
+
 					// dispatch(addNoti(notiData))
 				});
 			};
-	
+
 			initSignalR();
-	
+
 			return () => {
 				// connection.stop();
 			};
 		}
-    }, [user]);
+	}, [user]);
 
 	const getAds = async () => {
 		try {
 			// setLoading(true)
-			const res = await GuestService.getAllAds()	
-			setAds(res)
+			const res = await GuestService.getAllAds();
+			setAds(res);
 		} catch (error) {
 			console.log(error);
 		} finally {
-			setLoading(false)
+			setLoading(false);
 		}
-	}
+	};
 	useEffect(() => {
-        getAds()
-    }, [])
+		getAds();
+	}, []);
 
 	const itemsDropdown = [
 		{
@@ -146,103 +154,158 @@ const Header = () => {
 
 	const handleHandleRead = async (notification) => {
 		try {
-			await UserService.readNoti(notification?.notificationId)
-			getListNoti()
-			if (notification.type === 'Đơn Hàng') {
-				nav('/user-profile/history-booking')
-			} else if (notification.type === 'Hệ Thống Trừ Tiền Từ Ví') {
-				nav('/user-profile/transactiom-history')
-			} 
+			await UserService.readNoti(notification?.notificationId);
+			getListNoti();
+			if (notification.type === "Đơn Hàng") {
+				nav("/user-profile/history-booking");
+			} else if (notification.type === "Hệ Thống Trừ Tiền Từ Ví") {
+				nav("/user-profile/transactiom-history");
+			}
 		} catch (error) {
 			console.log(error);
 		}
-	}
+	};
 	const handleDeleteNotification = async (notification) => {
 		try {
-			await UserService.deleteNoti(user?.uid, notification?.notificationId)
-			getListNoti()
+			await UserService.deleteNoti(
+				user?.uid,
+				notification?.notificationId
+			);
+			getListNoti();
 		} catch (error) {
 			console.log(error);
 		}
-	}
+	};
 	const handleReadAllNoti = async () => {
 		try {
-			await UserService.readAllNoti(user?.uid)
-			getListNoti()
+			await UserService.readAllNoti(user?.uid);
+			getListNoti();
 		} catch (error) {
 			console.log(error);
 		}
-	}
+	};
 	const handleDeleteAllNoti = async () => {
 		try {
-			await UserService.deleteAllNoti(user?.uid)
-			getListNoti()
+			await UserService.deleteAllNoti(user?.uid);
+			getListNoti();
 		} catch (error) {
 			console.log(error);
 		}
-	}
-	
+	};
+
 	const itemNotis = (
 		<Menu>
-			{
-				notis?.length === 0
-					? <div className="w-100 pt-10 pb-10 pl-20 pr-20 d-flex fw-500" style={{minWidth: '300px'}}>Không có thông báo nào</div>
-					: <SpinCustom spinning={loading2}>
-						<div style={{maxHeight: '600px', overflow: 'auto', position: 'relative'}}>
-							{
-								notis.slice(0, numberNoti).map(notification => (
-									<CustomMenuItem key={notification?.notificationId} style={notification?.isRead ? {backgroundColor: 'red'} : {fontWeight: '500', color: '#f07d22'}}>
-										<div 
-											className='w-90 mb-10'
-											onClick={() => handleHandleRead(notification)}
+			{notis?.length === 0 ? (
+				<div
+					className="w-100 pt-10 pb-10 pl-20 pr-20 d-flex fw-500"
+					style={{ minWidth: "300px" }}
+				>
+					Không có thông báo nào
+				</div>
+			) : (
+				<SpinCustom spinning={loading2}>
+					<div
+						style={{
+							maxHeight: "600px",
+							overflow: "auto",
+							position: "relative",
+						}}
+					>
+						{notis.slice(0, numberNoti).map((notification) => (
+							<CustomMenuItem
+								key={notification?.notificationId}
+								style={
+									notification?.isRead
+										? { backgroundColor: "red" }
+										: {
+												fontWeight: "500",
+												color: "#f07d22",
+										  }
+								}
+							>
+								<div
+									className="w-90 mb-10"
+									onClick={() =>
+										handleHandleRead(notification)
+									}
+								>
+									<div className="d-flex justify-content-space-between align-items-center pl-8 pr-8">
+										<div
+											className="fs-12"
+											style={
+												notification?.isRead
+													? { color: "gray" }
+													: { color: "#e9a671" }
+											}
 										>
-											<div className="d-flex justify-content-space-between align-items-center pl-8 pr-8">
-												<div className="fs-12" style={notification?.isRead ? {color: 'gray'} : {color: '#e9a671'}}>Ngày: {dayjs(notification?.createdAt).format('DD-MM-YYYY')} </div>
-												<div className=""> {notification?.type} </div>
-											</div>
-											<div className="mt-3"> {notification?.content} </div>
+											Ngày:{" "}
+											{dayjs(
+												notification?.createdAt
+											).format("DD-MM-YYYY")}{" "}
 										</div>
-										<div 
-											className="w-10 d-flex justify-content-center align-items-center delete"
-											onClick={(e) => {
-												e.stopPropagation();
-												handleDeleteNotification(notification)
-											}}
-										> 
-											x 
+										<div className="">
+											{" "}
+											{notification?.type}{" "}
 										</div>
-									</CustomMenuItem>
-
-								))}
-								<div className="d-flex justify-content-space-between align-items-center pl-5 pr-5 mt-5" style={{position: 'sticky', bottom: 0, height: '40px', background: '#ddd', color: 'black'}}>
-									<div 
-									style={{cursor: 'pointer'}} 
-										onClick={(e) => {
-											handleReadAllNoti()
-											// e.stopPropagation();
-										}}
-									>
-										Đánh dấu đọc tất cả thông báo
 									</div>
-									<div style={{cursor: 'pointer'}} onClick={() => setNumberNoti(prev => prev+4)}>Hiển thị thêm thông báo</div>
-									<div 
-										style={{cursor: 'pointer'}}
-										onClick={(e) => {
-											handleDeleteAllNoti()
-											// e.stopPropagation();
-										}}
-									>
-										Xóa tất cả thông báo
+									<div className="mt-3">
+										{" "}
+										{notification?.content}{" "}
 									</div>
 								</div>
+								<div
+									className="w-10 d-flex justify-content-center align-items-center delete"
+									onClick={(e) => {
+										e.stopPropagation();
+										handleDeleteNotification(notification);
+									}}
+								>
+									x
+								</div>
+							</CustomMenuItem>
+						))}
+						<div
+							className="d-flex justify-content-space-between align-items-center pl-5 pr-5 mt-5"
+							style={{
+								position: "sticky",
+								bottom: 0,
+								height: "40px",
+								background: "#ddd",
+								color: "black",
+							}}
+						>
+							<div
+								style={{ cursor: "pointer" }}
+								onClick={(e) => {
+									handleReadAllNoti();
+									// e.stopPropagation();
+								}}
+							>
+								Đánh dấu đọc tất cả thông báo
+							</div>
+							<div
+								style={{ cursor: "pointer" }}
+								onClick={handleToggleNoti}
+							>
+								{isExpanded
+									? "Ẩn bớt thông báo"
+									: "Hiển thị thêm thông báo"}
+							</div>
+							<div
+								style={{ cursor: "pointer" }}
+								onClick={(e) => {
+									handleDeleteAllNoti();
+									// e.stopPropagation();
+								}}
+							>
+								Xóa tất cả thông báo
+							</div>
 						</div>
-					</SpinCustom> 
-					
-			}
+					</div>
+				</SpinCustom>
+			)}
 		</Menu>
-	)
-
-		
+	);
 
 	const handleButtonClick = (buttonName) => {
 		dispatch(setActiveButton(buttonName));
@@ -446,11 +509,28 @@ const Header = () => {
 								</span>
 							</div>
 						</Col>
-						<Col xs={3} sm={3} md={3} lg={3} xl={3} className="d-flex align-items-center">
+						<Col
+							xs={3}
+							sm={3}
+							md={3}
+							lg={3}
+							xl={3}
+							className="d-flex align-items-center"
+						>
 							<div className="notification mr-20">
-								<Badge count={notis?.filter(i => i?.isRead === false).length} size="small">
+								<Badge
+									count={
+										notis?.filter(
+											(i) => i?.isRead === false
+										).length
+									}
+									size="small"
+								>
 									<div className="fs-22 fw-500 w-100 notification">
-										<Dropdown overlay={itemNotis} trigger={['click']}>
+										<Dropdown
+											overlay={itemNotis}
+											trigger={["click"]}
+										>
 											<BellOutlined />
 										</Dropdown>
 									</div>
@@ -496,40 +576,56 @@ const Header = () => {
 			<SpinCustom spinning={loading}>
 				<div className="carousel">
 					<div className="list">
-						{
-							(!loading && ads.length > 0) ?
-								ads?.map((i, index) => (
-									<div className="item " key={index}>
-										<figure>
-											<img style={{borderRadius: '20px'}} src={i?.logo} alt="img" />
-										</figure>
-										<div className="content">
-											<p
-												className="category"
-												onClick={() => nav("/restaurant-view")}
+						{!loading && ads.length > 0 ? (
+							ads?.map((i, index) => (
+								<div className="item " key={index}>
+									<figure>
+										<img
+											style={{ borderRadius: "20px" }}
+											src={i?.logo}
+											alt="img"
+										/>
+									</figure>
+									<div className="content">
+										<p
+											className="category"
+											onClick={() =>
+												nav("/restaurant-view")
+											}
+										>
+											{i?.categoryName}
+										</p>
+										<h2>{i?.nameRes}</h2>
+										<p className="description">
+											{i?.title}
+										</p>
+										<div className="more">
+											<button
+												onClick={() =>
+													nav(
+														"/restaurant-detail/" +
+															i?.uid
+													)
+												}
 											>
-												{i?.categoryName}
-											</p>
-											<h2>{i?.nameRes}</h2>
-											<p className="description">
-												{i?.title}
-											</p>
-											<div className="more">
-												<button
-													onClick={() => nav("/restaurant-detail/" + i?.uid)}
-												>
-													Đặt bàn
-												</button>
-												<button
-													onClick={() => nav("/restaurant-detail/" + i?.uid)}
-												>
-													Xem chi tiết
-												</button>
-											</div>
+												Đặt bàn
+											</button>
+											<button
+												onClick={() =>
+													nav(
+														"/restaurant-detail/" +
+															i?.uid
+													)
+												}
+											>
+												Xem chi tiết
+											</button>
 										</div>
 									</div>
-								))
-							: <div className="item ">
+								</div>
+							))
+						) : (
+							<div className="item ">
 								<figure>
 									<img src={topder} alt="img" />
 								</figure>
@@ -542,11 +638,11 @@ const Header = () => {
 									</p>
 									<h2>Topder</h2>
 									<p className="description">
-										Nền tàng đặt bàn và món ăn 
+										Nền tàng đặt bàn và món ăn
 									</p>
 								</div>
 							</div>
-						}
+						)}
 					</div>
 					<div className="arrows">
 						<button id="prev"> {"<"} </button>

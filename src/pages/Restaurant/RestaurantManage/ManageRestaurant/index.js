@@ -9,7 +9,7 @@ import ManagePolicy from "../ManageRestaurant/MangePolicy";
 import { useSelector } from "react-redux";
 import { userInfor } from "../../../../redux/Slice/userSlice";
 const ManageRestaurant = () => {
-	const user = useSelector(userInfor)
+	const user = useSelector(userInfor);
 
 	return (
 		<RestaurantLayout>
@@ -26,17 +26,17 @@ const ManageRestaurant = () => {
 							{
 								label: "Thông tin",
 								key: "1",
-								children: <ManageInformation user={user}/>,
+								children: <ManageInformation user={user} />,
 							},
 							{
 								label: "Ảnh",
 								key: "3",
-								children: <ManageImages user={user}/>,
+								children: <ManageImages user={user} />,
 							},
 							{
 								label: "Quản lý chính sách nhà hàng",
 								key: "5",
-								children: <ManagePolicy user={user}/>,
+								children: <ManagePolicy user={user} />,
 							},
 							{
 								label: "Đổi mật khẩu",
