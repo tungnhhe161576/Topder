@@ -100,6 +100,7 @@ const ModalUpdateDiscount = ({ open, onCancel, onOk, userId }) => {
 				footer={footer}
 				style={{ marginTop: "-80px" }}
 			>
+				<div className="title-type-1">Chỉnh sửa mã giảm giá</div>
 				<div>
 					<Form form={form} layout="vertical">
 						<Row gutter={24}>
@@ -355,7 +356,7 @@ const ModalUpdateDiscount = ({ open, onCancel, onOk, userId }) => {
 						</Form.Item>
 
 						<Form.Item label="Mô tả" name="description">
-							<Input.TextArea rows={3} />
+							<Input.TextArea rows={3} placeholder="Mô tả" />
 						</Form.Item>
 					</Form>
 

@@ -757,8 +757,8 @@ const RegisterRestaurant = () => {
 
 						<Form.Item>
 							<div className="mb-10 ml-10 fs-16 fw-600 notice">
-								* Lưu ý: Mật khẩu gồm 6 kí tự, bao gồm chữ
-								thường, chữ in hoa và 1 số
+								* Lưu ý: Mật khẩu gồm ít nhất 6 kí tự, bao gồm
+								chữ thường, chữ in hoa và 1 số
 							</div>
 						</Form.Item>
 					</Row>

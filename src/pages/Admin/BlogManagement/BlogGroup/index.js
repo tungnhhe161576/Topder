@@ -7,16 +7,25 @@ import ModalCreateCategory from "./Modal/ModalCreate";
 import ModalUpdateCategory from "./Modal/ModalUpdate";
 import { BlogGroupContainer } from "./styled";
 
-const BlogGroup = ({blogCategory, getAllBlogCategory, getAllBlog, loading, setDataCategorySearch}) => {
-	const [openModalDeleteCategory, setOpenModalDeleteCategory] = useState(false)
-	const [openModalCreateCategory, setOpenModalCreateCategory] = useState(false)
-	const [openModalUpdateCategory, setOpenModalUpdateCategory] = useState(false)
+const BlogGroup = ({
+	blogCategory,
+	getAllBlogCategory,
+	getAllBlog,
+	loading,
+	setDataCategorySearch,
+}) => {
+	const [openModalDeleteCategory, setOpenModalDeleteCategory] =
+		useState(false);
+	const [openModalCreateCategory, setOpenModalCreateCategory] =
+		useState(false);
+	const [openModalUpdateCategory, setOpenModalUpdateCategory] =
+		useState(false);
 	const [form] = Form.useForm();
 
 	const handleSearch = async () => {
 		try {
 			const formValues = await form.validateFields();
-			setDataCategorySearch(prev => ({
+			setDataCategorySearch((prev) => ({
 				...prev,
 				blogGroupName: formValues.title,
 			}));
@@ -24,14 +33,16 @@ const BlogGroup = ({blogCategory, getAllBlogCategory, getAllBlog, loading, setDa
 			console.log(error);
 		}
 	};
-	
 
 	const columns = [
 		{
 			title: "STT",
 			dataIndex: "number",
 			key: "number",
-			render: (_, __, index) => (<div className="fs-16 fw-500">{index+1}</div>)
+			render: (_, __, index) => (
+				// <div className="fs-16 fw-500">{index + 1}</div>
+				<span className="fs-15"> {index + 1} </span>
+			),
 		},
 		{
 			title: "Tên",
@@ -65,25 +76,29 @@ const BlogGroup = ({blogCategory, getAllBlogCategory, getAllBlog, loading, setDa
 		},
 	];
 
-
-
 	return (
 		<BlogGroupContainer>
 			<div>
-				<div className="d-flex justify-content-space-between align-items-center">
-					<div className="pl-20">
-						<Button
-							type="primary"
-							style={{ height: 40 }}
-							onClick={() => setOpenModalCreateCategory(true)}
-						>
-							Thêm loại bài viết
-						</Button>
-					</div>
+				<div className="d-flex align-items-center justify-content-space-between">
+					<Button
+						className="pl-20"
+						type="primary"
+						onClick={() => setOpenModalCreateCategory(true)}
+					>
+						Thêm loại bài viết
+					</Button>
 					<div className="pr-20">
 						<Form form={form} className="d-flex align-items-center">
-							<Form.Item name='title' className="mr-10 search-text" style={{width: '400px'}}>
-								<Input placeholder="Tìm theo tiêu đề" allowClear className="input-text w-100"/>
+							<Form.Item
+								name="title"
+								className="mr-10 search-text"
+								style={{ width: "400px" }}
+							>
+								<Input
+									placeholder="Tìm theo tiêu đề"
+									allowClear
+									className="input-text w-100"
+								/>
 							</Form.Item>
 							<Form.Item>
 								<Button
@@ -134,7 +149,6 @@ const BlogGroup = ({blogCategory, getAllBlogCategory, getAllBlog, loading, setDa
 					getAllBlog={getAllBlog}
 				/>
 			)}
-
 		</BlogGroupContainer>
 	);
 };

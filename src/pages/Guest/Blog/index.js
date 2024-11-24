@@ -10,30 +10,30 @@ import SpinCustom from "../../../components/Common/SpinCustom";
 const { Option } = Select;
 
 const Blog = () => {
-	const [form] = Form.useForm()
-	const [loading, setLoading] = useState(false)
-	const [blogs, setBlogs] = useState([])
+	const [form] = Form.useForm();
+	const [loading, setLoading] = useState(false);
+	const [blogs, setBlogs] = useState([]);
 	const [dataSearch, setDataSearch] = useState({
 		blogGroupId: undefined,
-		title: '',
+		title: "",
 		pageNumber: 1,
 		pageSize: 8,
-	}) 
-	const [blogCategory, setBlogCategory] = useState([])
+	});
+	const [blogCategory, setBlogCategory] = useState([]);
 
 	const handleSearch = async () => {
 		try {
-			setLoading(true)
-			const formValues = await form.validateFields()
-			setDataSearch(prev => ({
+			setLoading(true);
+			const formValues = await form.validateFields();
+			setDataSearch((prev) => ({
 				...prev,
 				blogGroupId: formValues?.category,
-				title: formValues?.title
-			}))
+				title: formValues?.title,
+			}));
 		} catch (error) {
 			console.log(error);
 		}
-	}
+	};
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -52,16 +52,15 @@ const Blog = () => {
 
 	const getBlogCategory = async () => {
 		try {
-			const res = await GuestService.getBlogCategory()	
-			setBlogCategory(res)
+			const res = await GuestService.getBlogCategory();
+			setBlogCategory(res);
 		} catch (error) {
 			console.log(error);
 		}
-	} 
+	};
 	useEffect(() => {
-        getBlogCategory()
-    }, [])
-
+		getBlogCategory();
+	}, []);
 
 	return (
 		<CommonLayout>
@@ -84,13 +83,14 @@ const Blog = () => {
 									allowClear
 									placeholder="Chọn thể loại bài viết"
 								>
-									{
-										blogCategory?.map (bc => (
-											<Option key={bc?.bloggroupId} value={bc?.bloggroupId}> 
-												{bc?.bloggroupName} 
-											</Option>
-										))
-									}
+									{blogCategory?.map((bc) => (
+										<Option
+											key={bc?.bloggroupId}
+											value={bc?.bloggroupId}
+										>
+											{bc?.bloggroupName}
+										</Option>
+									))}
 								</Select>
 							</Form.Item>
 						</Col>
@@ -103,7 +103,7 @@ const Blog = () => {
 									className="search-button"
 									onClick={() => handleSearch()}
 								>
-									Search
+									Tìm kiếm
 								</Button>
 							</Form.Item>
 						</Col>
@@ -111,20 +111,30 @@ const Blog = () => {
 				</Form>
 				<div className="mt-30">
 					<SpinCustom spinning={loading}>
-					{
-						blogs?.length === 0 
-							? <div className="d-flex justify-content-center fs-18 red fw-500"> Không có dữ liệu </div>
-							:  <Row
-									gutter={[24, 32]}
-									className="d-flex justify-content-center"
-								>
-									{blogs?.map(blog => (
-										<Col key={blog.blogId} xs={12} sm={12} md={12} lg={6} xl={6}>
-											<BlogItem data={blog} />
-										</Col>
-									))}
-								</Row>
-					}
+						{blogs?.length === 0 ? (
+							<div className="d-flex justify-content-center fs-18 red fw-500">
+								{" "}
+								Không có dữ liệu{" "}
+							</div>
+						) : (
+							<Row
+								gutter={[24, 32]}
+								className="d-flex justify-content-center"
+							>
+								{blogs?.map((blog) => (
+									<Col
+										key={blog.blogId}
+										xs={12}
+										sm={12}
+										md={12}
+										lg={6}
+										xl={6}
+									>
+										<BlogItem data={blog} />
+									</Col>
+								))}
+							</Row>
+						)}
 					</SpinCustom>
 				</div>
 			</BlogContainer>
