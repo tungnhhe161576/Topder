@@ -87,6 +87,12 @@ export const apiEnableBooking = "Restaurant/IsEnabledBooking"
 export const apiGetAllNoti = "Notification/GetNotificationList?pageNumber"
 export const apiReadNoti = "Notification/IsRead"
 export const apiDeleteNoti = "Notification/Delete"
-export const apiReadAllNoti = "Notification/IsReadAl"
+export const apiReadAllNoti = "Notification/IsReadAll"
+export const apiDeleteAllNoti = "Notification/DeleteDeleteAll"
+export const apiCreateChatBox = "ChatBox/Create"
+export const apiGetChatBox = "ChatBox/GetChatBoxList"
+export const apiGetChatList = "Chat/GetChatList"
+export const apiCreateChat = "Chat/Create"
+export const apiReport = 'Report/Create'
 
 

@@ -89,6 +89,12 @@ import {
 	apiReadNoti,
 	apiDeleteNoti,
 	apiReadAllNoti,
+	apiDeleteAllNoti,
+	apiCreateChatBox,
+	apiGetChatBox,
+	apiGetChatList,
+	apiCreateChat,
+	apiReport,
 } from "./urls";
 
 
@@ -241,6 +247,12 @@ const getAllNoti = (userId) => http.get(`${apiGetAllNoti}?pageNumber=1&pageSize=
 const readNoti = (notiId) => http.put(`${apiReadNoti}/${notiId}`)
 const deleteNoti = (userId, notificationId) => http.delete(`${apiDeleteNoti}/${userId}/${notificationId}`)
 const readAllNoti = (userId) => http.put(`${apiReadAllNoti}/${userId}`)
+const deleteAllNoti = (userId) => http.delete(`${apiDeleteAllNoti}/${userId}`)
+const createChatBox = (body) => http.post(apiCreateChatBox, body)
+const getChatBox = (userId) => http.get(`${apiGetChatBox}/${userId}`)
+const getChatList = (chatBoxId) => http.get(`${apiGetChatList}/${chatBoxId}`)
+const createChat = (body) => http.post(apiCreateChat, body)
+const report = (body) => http.post(apiReport, body)
 
 
 
@@ -336,6 +348,12 @@ const UserService = {
 	readNoti,
 	deleteNoti,
 	readAllNoti,
+	deleteAllNoti,
+	createChatBox,
+	getChatBox,
+	getChatList,
+	createChat,
+	report,
 };
 
 

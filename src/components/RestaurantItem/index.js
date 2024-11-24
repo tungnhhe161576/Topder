@@ -97,6 +97,19 @@ const RestaurantItem = ({
 		}
 	};
 
+	const handleCreateChatBox = async () => {
+		try {
+			await UserService.createChatBox({
+				chatBoxId: 0,
+				customerId: user?.uid,
+				restaurantId: data?.uid
+			})
+			message.success('Tạo cuộc hội thoại thành công');
+		} catch (error) {
+			console.log(error);
+		} finally {}
+	}
+
 	return (
 		<RestaurantItemContainer>
 			<div
@@ -166,17 +179,18 @@ const RestaurantItem = ({
 						className={`drop-heart ${
 							isLiked ? "liked" : "default"
 						}`}
-						onClick={handleLikeClick}
+						onClick={() => handleCreateChatBox()}
 						style={{
 							backgroundColor: isLiked ? "#f55b22" : "",
 						}}
 					>
-						<HeartOutlined
+						{/* <HeartOutlined
 							style={{
 								color: "#fa875c",
 								cursor: "pointer",
 							}}
-						/>
+						/> */}
+						Chat
 					</div>
 					{/* ) : (
 						<></>

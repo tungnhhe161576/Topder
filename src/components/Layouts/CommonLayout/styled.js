@@ -69,7 +69,7 @@ export const CommonLayoutContainer = styled.div`
         width: 100%;
         position: sticky;
         top: 0;
-        z-index: 100;
+        z-index: 10;
         background: linear-gradient(to right, #fff6ee 0%, white 50%, #fff6ee 100%);
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
@@ -419,16 +419,29 @@ export const CommonLayoutContainer = styled.div`
 
     .children {
         width: 100%;
+        position: relative;
     }
 
+    .chat {
+        position: sticky;
+        /* right: 0px;
+        left: 0;
+        top: 200px; */
+        float: right;
+        /* color: white; */
+        top: 150px;
+        margin-top: 50px;
+        /* cursor: pointer; */
+    }
+    
 `;
 
 
 export const CustomMenuItem = styled(Menu.Item)`
     padding: 0;
     border-bottom: 1px solid gray;
-    max-width: 500px;
-    min-width: 400px;
+    max-width: 600px;
+    min-width: 500px;
     display: flex;
     align-items: center;
     background-color: #fff !important;

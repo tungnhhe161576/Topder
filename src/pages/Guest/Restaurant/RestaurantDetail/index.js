@@ -6,6 +6,7 @@ import {
 	Col,
 	DatePicker,
 	Divider,
+	Dropdown,
 	Form,
 	Image,
 	Input,
@@ -37,6 +38,7 @@ import ModalCalFee from "./Modal/ModalCalFee";
 import Policy from "./Description/Policy";
 import ModalSuccess from "../../../../components/Modal/ModalSuccess";
 import { onReceiveNoti, startConnection } from "../../../../hub";
+import ModalReport from "./Modal/ModalReport";
 
 const RestaurantDetail = () => {
 	const [selectedOption, setSelectedOption] = useState("description");
@@ -61,7 +63,7 @@ const RestaurantDetail = () => {
 	const [form] = Form.useForm();
 	const user = useSelector(userInfor);
 	const [showSuccessModal, setShowSuccessModal] = useState(false);
-	const [openModalLoginRequest, setOpenModalLoginRequest] = useState(false);
+	const [openModalReport, setOpenModalReport] = useState(false);
 	// const [text, setText] = useState(false);
 
 	//api get data chi tiet nha hang
@@ -250,6 +252,7 @@ const RestaurantDetail = () => {
 		{ label: "Chính sách", value: "policy" },
 	];
 
+
 	return (
 		<CommonLayout>
 			<RestaurantDetailContainer>
@@ -258,8 +261,13 @@ const RestaurantDetail = () => {
 						<Col span={16}>
 							{/* thong tin nha hang */}
 							<div className="information">
-								<div className="fs-26 fw-700 mb-20">
-									Thông tin cửa hàng
+								<div className="d-flex justify-content-space-between align-items-center">
+									<div className="fs-26 fw-700 mb-20">
+										Thông tin cửa hàng
+									</div>
+									<div className="pr-20">
+										<Button onClick={() => setOpenModalReport(restaurantDetail)}>Báo cáo</Button>
+									</div>
 								</div>
 								<Row gutter={[16, 16]}>
 									<Col
@@ -958,6 +966,14 @@ const RestaurantDetail = () => {
 					open={showSuccessModal}
 					onCancel={() => setShowSuccessModal(false)}
 					text="Bạn đã đặt bàn thành công, kiểm tra lại trong lịch sử đặt bàn hoặc trong mail của bạn đã đăng ký"
+				/>
+			)}
+			{!!openModalReport && (
+				<ModalReport
+					open={openModalReport}
+					onCancel={() => setOpenModalReport(false)}
+					// restaunrant={restaurantDetail}
+					user={user}
 				/>
 			)}
 		</CommonLayout>

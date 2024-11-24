@@ -50,6 +50,8 @@ import { userInfor } from "../redux/Slice/userSlice";
 import CommonRole from "./CommonRole";
 import ManageTransaction from "../pages/Admin/ManageTransaction";
 import AdsManagement from "../pages/Admin/AdsManagement";
+import MassageRestaurant from "../pages/Restaurant/RestaurantManage/MassageRestaurant";
+import ManageReport from "../pages/Admin/ManageReport";
 
 const LazyLoadingComponent = ({ children }) => {
 
@@ -295,6 +297,10 @@ export const router = [
 				path: "wallet",
 				element: <RestaurantWallet />
 			},
+			{
+				path: "massage",
+				element: <MassageRestaurant/>
+			},
 			// {
 			// 	path: "status-transaction",
 			// 	element: <DepositOrWithdraw />,
@@ -342,6 +348,10 @@ export const router = [
 			{
 				path: "manage-ad",
 				element: <AdsManagement />,
+			},
+			{
+				path: "manage-report",
+				element: <ManageReport />,
 			},
 		],
 	},

@@ -65,9 +65,7 @@ const Header = () => {
 			const initSignalR = async () => {
 				await startConnection();
 				onReceiveNoti((data) => {
-					console.log("data", data);
 					const notiData = data.find(i => i?.uid === user?.uid)
-					console.log("noti", notiData);
 					if (!!notiData) {
 						setNotis(prev => [notiData, ...prev])
 					}
@@ -177,7 +175,7 @@ const Header = () => {
 	}
 	const handleDeleteAllNoti = async () => {
 		try {
-			// await UserService.readAllNoti(user?.uid)
+			await UserService.deleteAllNoti(user?.uid)
 			getListNoti()
 		} catch (error) {
 			console.log(error);
@@ -188,7 +186,7 @@ const Header = () => {
 		<Menu>
 			{
 				notis?.length === 0
-					? <div>Không có thông báo nào</div>
+					? <div className="w-100 pt-10 pb-10 pl-20 pr-20 d-flex fw-500" style={{minWidth: '300px'}}>Không có thông báo nào</div>
 					: <SpinCustom spinning={loading2}>
 						<div style={{maxHeight: '600px', overflow: 'auto', position: 'relative'}}>
 							{
@@ -221,7 +219,7 @@ const Header = () => {
 									style={{cursor: 'pointer'}} 
 										onClick={(e) => {
 											handleReadAllNoti()
-											e.stopPropagation();
+											// e.stopPropagation();
 										}}
 									>
 										Đánh dấu đọc tất cả thông báo
@@ -231,7 +229,7 @@ const Header = () => {
 										style={{cursor: 'pointer'}}
 										onClick={(e) => {
 											handleDeleteAllNoti()
-											e.stopPropagation();
+											// e.stopPropagation();
 										}}
 									>
 										Xóa tất cả thông báo
@@ -318,9 +316,6 @@ const Header = () => {
 		dispatch(setUserInformation(null));
 		nav("/login");
 	};
-
-	console.log(ads);
-	
 
 	return (
 		<>
@@ -453,7 +448,7 @@ const Header = () => {
 						</Col>
 						<Col xs={3} sm={3} md={3} lg={3} xl={3} className="d-flex align-items-center">
 							<div className="notification mr-20">
-								<Badge count={notis?.length} size="small">
+								<Badge count={notis?.filter(i => i?.isRead === false).length} size="small">
 									<div className="fs-22 fw-500 w-100 notification">
 										<Dropdown overlay={itemNotis} trigger={['click']}>
 											<BellOutlined />

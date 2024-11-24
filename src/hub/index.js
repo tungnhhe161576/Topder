@@ -22,4 +22,11 @@ const onReceiveNoti = (callback) => {
     });
 };
 
-export { startConnection, onReceiveNoti };
+
+const createChat = (callback) => {
+    connection.on('CreateChat', (chat) => {
+        if(callback) callback(chat);
+    });
+};
+
+export { startConnection, onReceiveNoti, createChat };
