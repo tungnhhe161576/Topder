@@ -68,6 +68,7 @@ const Complete = ({orderHistory, loading, orderDetail, isDetail, setIsDetail, ha
                             : <button 
                                 style={{background: '#8bc34a', borderRadius: '25px', border: 'none', cursor: 'pointer'}} 
                                 className="pt-5 pb-5 pl-10 pr-10"
+                                onClick={() => setOpenModalSendFeedback(record)}
                             >
                                 Xem đánh giá
                             </button>

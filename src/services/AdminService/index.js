@@ -25,6 +25,7 @@ import {
     apiUpdateBookingAds,
     apiActiveBlog,
     apiGetAllOrder,
+    apiGetListReport,
 } from './urls'
 
 
@@ -58,6 +59,7 @@ const getAllBookingAds = () => http.get(apiGetAllBookingAds)
 const updateBookingAds = (bookingId, status) => http.put(`${apiUpdateBookingAds}/${bookingId}?status=${status}`)
 const activeBlog = (blogId , status) => http.put(`${apiActiveBlog}/${blogId}?status=${status}`)
 const getAllOrder = () => http.get(apiGetAllOrder)
+const getListReport = () => http.get(`${apiGetListReport}?pageNumber=1&pageSize=1000`)
 
 
 
@@ -85,6 +87,7 @@ const AdminService = {
     updateBookingAds,
     activeBlog,
     getAllOrder,
+    getListReport,
 }
 
 

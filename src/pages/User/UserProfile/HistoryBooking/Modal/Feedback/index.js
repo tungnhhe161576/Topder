@@ -1,7 +1,7 @@
 import { Button, Form, message, Rate } from "antd";
 import CustomModal from "../../../../../../components/Common/ModalCustom";
 import SpinCustom from "../../../../../../components/Common/SpinCustom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TextArea from "antd/es/input/TextArea";
 import UserService from "../../../../../../services/UserService";
 import { useSelector } from "react-redux";
@@ -10,8 +10,26 @@ import { userInfor } from "../../../../../../redux/Slice/userSlice";
 const ModalFeedback = ({open, onCancel, onOk}) => {
     const [form] = Form.useForm()
     const [loading, setLoading] = useState(false)
+    const [detail, setDetail] = useState()
 
     const user = useSelector(userInfor)
+
+    const getFeedback = async () => {
+        try {
+            const res = await UserService.viewFeedback(open?.orderId)
+            setDetail(res)
+            form.setFieldsValue({
+                rate: res?.star,
+                content: res?.content
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    useEffect(() => {
+        getFeedback()
+    }, [open, form])
+
     
     const handleSendFeedback = async () => {
         try {
@@ -65,24 +83,35 @@ const ModalFeedback = ({open, onCancel, onOk}) => {
             onCancel={onCancel}
             footer={footer}
             width={600}
+            style={{marginTop: '100px'}}
         >
             <SpinCustom spinning={loading}>
-                <Form form={form} className="p-20">
-                    <Form.Item 
-                        name='rate'
-                        rules={[
-                            { required: true, message: "Hãy chọn số sao!"},
-                        ]}
-                    >
-                        <span className="fs-18">Xếp hạng:</span> <Rate className='primary' onChange={(value) => form.setFieldsValue({ rate: value })}/>
-                    </Form.Item> 
+                <Form form={form} layout="vertical" className="p-20">
+                    {
+                        open?.isFeedback
+                            ? <div className="mb-15">
+                                <div>Số sao: </div>
+                                <Rate className='primary' disabled value={detail?.star}/>
+                            </div>
+                            :  <Form.Item 
+                                name='rate'
+                                rules={[
+                                    { required: true, message: "Hãy chọn số sao!"},
+                                ]}
+                            >
+                                <span className="fs-18">Xếp hạng:</span> <Rate  className='primary' onChange={(value) => form.setFieldsValue({ rate: value })}/>
+                            </Form.Item> 
+                    }
+                    
+                   
                     <Form.Item 
                         name='content'
+                        label='Nội dung đánh giá'
                         rules={[
                             { required: true, message: "Hãy viết đánh giá!" },
                         ]}
                     >
-                        <TextArea rows={4} placeholder="Đánh giá của bạn" />
+                        <TextArea disabled={open?.isFeedback ? true : false} rows={4} placeholder="Đánh giá của bạn" />
                     </Form.Item>
                 </Form>
             </SpinCustom>

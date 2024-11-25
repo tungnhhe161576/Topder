@@ -424,14 +424,18 @@ export const CommonLayoutContainer = styled.div`
 
     .chat {
         position: sticky;
-        /* right: 0px;
-        left: 0;
-        top: 200px; */
         float: right;
-        /* color: white; */
+        margin-right: 10px;
         top: 150px;
         margin-top: 50px;
-        /* cursor: pointer; */
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: white;
+        border: 1px solid #ddd;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
     
 `;

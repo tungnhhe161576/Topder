@@ -1,4 +1,4 @@
-import { Table } from "antd";
+import { Button, Table } from "antd";
 import RestaurantLayout from "../../../../components/Layouts/RestaurantLayout";
 import { ManageRateContainer } from "./styled";
 import dayjs from "dayjs";
@@ -7,17 +7,19 @@ import { useSelector } from "react-redux";
 import { userInfor } from "../../../../redux/Slice/userSlice";
 import UserService from '../../../../services/UserService'
 import SpinCustom from '../../../../components/Common/SpinCustom'
+import ModalReply from "./Modal/ModalReply";
 
 const ManageRate = () => {
     const [loading, setLoading] = useState(false)
     const [feedbacks, setFeedbacks] = useState([])
+    const [openModalReply, setOpenModalReply] = useState(false)
     const user = useSelector(userInfor)
 
     const getFeedbacks = async () => {
         try {
             setLoading(true)
             const res = await UserService.getAllFeedbackByRestaurant(user?.uid)
-            setFeedbacks(res?.items)
+            setFeedbacks(res)
         } catch (error) {
             
         } finally {
@@ -65,7 +67,23 @@ const ManageRate = () => {
             title: 'Nội dung',
             dataIndex: 'content',
             key: 'content',
+            align: 'center',
             render: (text) => <span className="fs-14"> {text} </span>,
+        },
+        {
+            title: 'Phản hồi',
+            dataIndex: 'isReply',
+            key: 'isReply',
+            align: 'center',
+            render: (_, record) => (
+                <div>
+                    {
+                        record?.isReply === true
+                            ? <Button type="primary" shape="round" onClick={() => setOpenModalReply(record)}>Xem phản hồi</Button>
+                            : <Button type="primary" shape="round" onClick={() => setOpenModalReply(record)}> Phản hồi</Button>
+                    }
+                </div>
+            ),
         },
     ]
 
@@ -87,6 +105,17 @@ const ManageRate = () => {
                         </div>
                     </SpinCustom>
                 </div>
+
+                {
+                    !!openModalReply && (
+                        <ModalReply
+                            open={openModalReply}
+                            onCancel={() => setOpenModalReply(false)}
+                            onOk={getFeedbacks}
+                            userId={user?.uid}
+                        />
+                    )
+                }
             </ManageRateContainer>
         </RestaurantLayout>
     );

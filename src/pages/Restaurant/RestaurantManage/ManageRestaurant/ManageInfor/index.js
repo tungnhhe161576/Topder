@@ -17,9 +17,10 @@ const ManageInfomation = ({ user }) => {
 	const [logo, setLogo] = useState(null);
 	const [wallet, setWallet] = useState();
 	const [openModalActive, setOpenModalActive] = useState(false);
-	const [active, setActive] = useState(user?.isBookingEnabled);
+	// const [active, setActive] = useState(user?.isBookingEnabled);
 	const [form] = Form.useForm();
 	const dispatch = useDispatch();
+
 
 	const getWalletInfo = async () => {
 		try {
@@ -102,7 +103,7 @@ const ManageInfomation = ({ user }) => {
 					<div className="d-flex align-items-center justify-content-flex-end">
 						<div className="mr-10">
 							<Switch
-								checked={active}
+								checked={user?.isBookingEnabled}
 								onChange={() => setOpenModalActive(true)}
 								title="Bật/Tắt trạng thái đặt bàn"
 							/>
@@ -215,7 +216,7 @@ const ManageInfomation = ({ user }) => {
 										</div>
 										<div className="mb-5 fs-16 w-100">
 											{" "}
-											{user?.categoryRestaurantId}{" "}
+											{user?.categoryRestaurantName}{" "}
 										</div>
 									</div>
 									<div className="d-flex">
@@ -325,8 +326,8 @@ const ManageInfomation = ({ user }) => {
 					<ModalEnabledBooking
 						open={openModalActive}
 						onCancel={() => setOpenModalActive(false)}
-						setActive={setActive}
-						active={active}
+						// setActive={setActive}
+						active={user?.isBookingEnabled}
 						user={user}
 					/>
 				)}

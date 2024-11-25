@@ -1,8 +1,11 @@
 import React, { useEffect } from 'react';
 import { Col, Row } from "antd";
 import { Chart } from '@antv/g2';
+import { useNavigate } from 'react-router-dom';
 
 const RightSide = ({restaurantData}) => {
+    const nav = useNavigate()
+    
     useEffect(() => {
         const data = [
             { Star: '1 sao', value: restaurantData?.feedbackStars?.star1 },
@@ -41,35 +44,35 @@ const RightSide = ({restaurantData}) => {
                                 <div className="wait">
                                     <div className="mb-5"> Đang đợi: {restaurantData?.orderStatus?.pending} </div>
                                     <div className="d-flex">
-                                        <div className="fs-13 w-30 click-to-view">Click to view</div>
+                                        <div className="fs-13 w-30 click-to-view" onClick={() => nav('/restaurant/manage-order')}>Xem chi tiết</div>
                                         <div style={{color: '#b2afaf'}}>Đợi</div>
                                     </div>
                                 </div>
                                 <div className="accept">
                                     <div className="mb-5"> Chấp nhận: {restaurantData?.orderStatus?.confirm} </div>
                                     <div className="d-flex">
-                                        <div className="fs-13 w-30 click-to-view">Click to view</div>
+                                        <div className="fs-13 w-30 click-to-view" onClick={() => nav('/restaurant/manage-order')}>Xem chi tiết</div>
                                         <div style={{color: '#73c2ff'}}>Chấp nhận</div>
                                     </div>
                                 </div>
                                 <div className="process">
                                     <div className="mb-5"> Đã thanh toán: {restaurantData?.orderStatus?.paid} </div>
                                     <div className="d-flex align-items-center">
-                                        <div className="fs-13 w-30 click-to-view">Click to view</div>
+                                        <div className="fs-13 w-30 click-to-view" onClick={() => nav('/restaurant/manage-order')}>Xem chi tiết</div>
                                         <div style={{color: '#e8b240', padding: '5px 6px', borderRadius: '10px', backgroundColor: '#fff2d6'}}>Xử lý</div>
                                     </div>
                                 </div>
                                 <div className="done">
                                     <div className="mb-5"> Hoàn thành: {restaurantData?.orderStatus?.complete} </div>
                                     <div className="d-flex align-items-center">
-                                        <div className="fs-13 w-30 click-to-view">Click to view</div>
+                                        <div className="fs-13 w-30 click-to-view" onClick={() => nav('/restaurant/manage-order')}>Xem chi tiết</div>
                                         <div style={{color: '#6ac0dd', padding: '5px 6px', borderRadius: '10px', backgroundColor: '#cbf0ee'}}>Thành công</div>
                                     </div>
                                 </div>
                                 <div className="cancel">
                                     <div className="mb-5"> Hủy bàn: {restaurantData?.orderStatus?.cancel} </div>
                                     <div className="d-flex">
-                                        <div className="fs-13 w-30 click-to-view">Click to view</div>
+                                        <div className="fs-13 w-30 click-to-view" onClick={() => nav('/restaurant/manage-order')}>Xem chi tiết</div>
                                         <div className="red">Hủy</div>
                                     </div>
                                 </div>

@@ -38,7 +38,7 @@ const getAllRestaurants = (body) => {
 const getAllRestaurantCategory = (body) =>
 	http.get(apiGetAllRestaurantCategory, body);
 const getAllFeedBack = (restaurantId) =>
-	http.get(`${apiGetAllFeedback}/${restaurantId}?pageSize=10000`);
+	http.get(`${apiGetAllFeedback}/${restaurantId}`);
 const getRelatedRestaurant = (restaurantId, categoryRestaurantId) =>
 	http.get(
 		`${apiGetRelatedRestaurants}/${restaurantId}/${categoryRestaurantId}`

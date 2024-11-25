@@ -95,6 +95,10 @@ import {
 	apiGetChatList,
 	apiCreateChat,
 	apiReport,
+	apiCheckExistChatBox,
+	apiReadChatBox,
+	apiCreateReply,
+	apiViewFeedback,
 } from "./urls";
 
 
@@ -115,10 +119,10 @@ const deleteWishlist = (customerId, wishlistId) =>
 	http.delete(`${apiDeleteWishList}/${customerId}/${wishlistId}`);
 const getCurrentUser = (uid) => http.get(`${apigetCurrentUser}/${uid}`);
 const getFeedbacks = (customerId) =>
-	http.get(`${apiGetFeedback}?pageSize=10000&customerId=${customerId}`);
+	http.get(`${apiGetFeedback}?customerId=${customerId}`);
 const createFeedback = (body) => http.post(apiCreateFeedback, body);
 const deleteFeedback = (feedbackId) =>
-	http.delete(`${apiDeleteFeedback}/${feedbackId}`);
+	http.put(`${apiDeleteFeedback}/${feedbackId}`);
 const registerRestaurant = (body) =>
 	http.post(apiRegisterRestaurant, body, {
 		headers: {
@@ -198,7 +202,7 @@ const deleteScheduleTable = (scheduleId) => http.delete(`${apiDeleteScheduleTabl
 const getAllImageRestaurant = (restaurantId) => http.get(`${apiGetAllImageRestaurant}/${restaurantId}?pageNumber=1&PageSize=10000`)
 const updatePolicy = (restaurantId, discountPrice, firstFeePercent, returningFeePercent, cancellationFeePercent) => 
 	http.put(`${apiUpdatePolicy}/${restaurantId}?discountPrice=${discountPrice}&firstFeePercent=${firstFeePercent}&returningFeePercent=${returningFeePercent}&cancellationFeePercent=${cancellationFeePercent}`)
-const getAllFeedbackByRestaurant = (restaurantId) => http.get(`${apiGetAllFeedbackByRestaurant}/${restaurantId}?pageNumber=1&pageSize=10000`)
+const getAllFeedbackByRestaurant = (restaurantId) => http.get(`${apiGetAllFeedbackByRestaurant}/${restaurantId}`)
 const getDiscountByRestaurant = (restaurantId) => http.get(`${apiGetDiscountByRestaurant}/${restaurantId}?pageNumber=1&pageSize=10000`)
 const updateActiveDiscount = (body) => http.put(apiUpdateActiveDiscount, body)
 const deleteDiscount = (restaurantId, discountId) => http.put(`${apiDeleteDiscount}/${restaurantId}/${discountId}`)
@@ -253,6 +257,10 @@ const getChatBox = (userId) => http.get(`${apiGetChatBox}/${userId}`)
 const getChatList = (chatBoxId) => http.get(`${apiGetChatList}/${chatBoxId}`)
 const createChat = (body) => http.post(apiCreateChat, body)
 const report = (body) => http.post(apiReport, body)
+const checkExistChatBox = (customerId, restaunrantId ) => http.get(`${apiCheckExistChatBox}/${customerId}/${restaunrantId}`)
+const readChatBox = (uid, chatBoxId) => http.post(`${apiReadChatBox}?uid=${uid}&chatboxId=${chatBoxId}`)
+const createReply = (body) => http.post(apiCreateReply, body)
+const viewFeedback = (orderId) => http.get(`${apiViewFeedback}/${orderId}`)
 
 
 
@@ -354,6 +362,10 @@ const UserService = {
 	getChatList,
 	createChat,
 	report,
+	checkExistChatBox,
+	readChatBox,
+	createReply,
+	viewFeedback,
 };
 
 

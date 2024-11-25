@@ -37,7 +37,6 @@ import ModalChooseTable from "./Modal/ChooseTable";
 import ModalCalFee from "./Modal/ModalCalFee";
 import Policy from "./Description/Policy";
 import ModalSuccess from "../../../../components/Modal/ModalSuccess";
-import { onReceiveNoti, startConnection } from "../../../../hub";
 import ModalReport from "./Modal/ModalReport";
 
 const RestaurantDetail = () => {
@@ -64,7 +63,13 @@ const RestaurantDetail = () => {
 	const user = useSelector(userInfor);
 	const [showSuccessModal, setShowSuccessModal] = useState(false);
 	const [openModalReport, setOpenModalReport] = useState(false);
-	// const [text, setText] = useState(false);
+
+	useEffect(() => {
+        form.setFieldsValue({
+			phoneReceiver: user?.phone,
+			nameReceiver: user?.name
+		})
+    }, [form, user]);
 
 	//api get data chi tiet nha hang
 	const getDataRestaurantDetail = async () => {
@@ -111,7 +116,7 @@ const RestaurantDetail = () => {
 		if (user?.uid) {
 			getWishlist();
 		}
-	}, [user]);
+	}, [user, restaurantId]);
 
 	useEffect(() => {
 		if (restaurantDetail?.categoryRestaurantId) {
@@ -485,7 +490,7 @@ const RestaurantDetail = () => {
 										/>
 									) : selectedOption === "rate" ? (
 										<RestaurantRate
-											restaurantDetail={restaurantDetail}
+											restaurantId={restaurantId}
 										/>
 									) : (
 										<Policy

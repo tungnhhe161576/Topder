@@ -22,11 +22,25 @@ export const BodyChat = styled.div `
         .item {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             height: 60px;
             cursor: pointer;
         }
         .item:hover {
             background-color: #a39e9e;
+        }
+        .noread {
+            /* font-weight: 500; */
+        }
+        .read {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #ff5722;
+            margin-right: 15px;
+        }
+        .selected {
+            background-color: rgb(193 185 185);
         }
     }
 
@@ -52,6 +66,16 @@ export const BodyChat = styled.div `
             max-height: 90vh;
             min-height: 90vh;
             overflow: auto;
+            display: flex;
+            flex-direction: column;
+
+            .mysefl {
+                align-self: flex-end;
+            }
+            .yours {
+                align-self: flex-start;
+            }
         }
+
     }
 `

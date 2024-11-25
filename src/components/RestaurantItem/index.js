@@ -99,12 +99,17 @@ const RestaurantItem = ({
 
 	const handleCreateChatBox = async () => {
 		try {
-			await UserService.createChatBox({
-				chatBoxId: 0,
-				customerId: user?.uid,
-				restaurantId: data?.uid
-			})
-			message.success('Tạo cuộc hội thoại thành công');
+			const res = await UserService.checkExistChatBox(user?.uid, data?.uid)
+			if (res) {
+				message.success('Cuộc hội thoại đã được tạo');
+			} else {
+				await UserService.createChatBox({
+					chatBoxId: 0,
+					customerId: user?.uid,
+					restaurantId: data?.uid
+				})
+				message.success('Tạo cuộc hội thoại thành công');
+			}
 		} catch (error) {
 			console.log(error);
 		} finally {}

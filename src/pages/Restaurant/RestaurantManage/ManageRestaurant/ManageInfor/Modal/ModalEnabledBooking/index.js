@@ -5,9 +5,12 @@ import UserService from "../../../../../../../services/UserService";
 import { useDispatch } from "react-redux";
 import { updateUserInformation } from "../../../../../../../redux/Slice/userSlice";
 
-const ModalEnabledBooking = ({open, onCancel, setActive, active, user}) => {
+const ModalEnabledBooking = ({open, onCancel, active, user}) => {
     const [loading, setLoading] = useState(false)
     const dispatch = useDispatch()
+
+    console.log(active);
+    
 
     const handleEnabled = async () => {
         try {
@@ -20,7 +23,7 @@ const ModalEnabledBooking = ({open, onCancel, setActive, active, user}) => {
                     marginTop: '10vh',
                 },
             })
-            setActive(!active)
+            // setActive(!active)
             dispatch(updateUserInformation({ isBookingEnabled: !active }));
             onCancel()
         } catch (error) {

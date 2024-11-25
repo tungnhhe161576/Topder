@@ -21,4 +21,5 @@ export const apiGetAllBookingAds = "BookingAdvertisement/GetBookingAdvertisement
 export const apiUpdateBookingAds = "BookingAdvertisement/UpdateStatus"
 export const apiActiveBlog = "Blog/Active"
 export const apiGetAllOrder = "Order/GetOrderListForAdmin"
+export const apiGetListReport = "Report/GetReportList"
 

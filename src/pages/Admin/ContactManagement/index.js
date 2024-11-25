@@ -10,7 +10,7 @@ import ModalDeleteContact from "./Modal/ModalDeleteContact";
 const ContactManagement = () => {
     const [loading, setLoading] = useState(false)
     const [openModalDeleteContact, setOpenModalDeleteContact] = useState(false)
-    const [openModalUpdateContact, setOpenModalUpdateContact] = useState(false)
+    // const [openModalUpdateContact, setOpenModalUpdateContact] = useState(false)
     const [contacts, setContacts] = useState([])
 
     const getAllContact = async () => {
@@ -83,14 +83,14 @@ const ContactManagement = () => {
 			key: "action",
 			render: (text, record) => (
 				<div className="d-flex">
-					<Button
+					{/* <Button
 						type="primary"
 						shape="round"
 						className="mr-3"
 						onClick={() => setOpenModalUpdateContact(record)}
 					>
 						Cập nhật
-					</Button>
+					</Button> */}
 					<Button
 						type="primary"
 						shape="round"

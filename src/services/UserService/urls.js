@@ -6,7 +6,7 @@ export const apiDeleteWishList = "Wishlist/Delete";
 export const apigetCurrentUser = "User/GetProfile";
 export const apiGetFeedback = "Feedback/GetFeedbacksHistory";
 export const apiCreateFeedback = "Feedback/Create";
-export const apiDeleteFeedback = "Feedback/Delete";
+export const apiDeleteFeedback = "Feedback/Invisible";
 export const apiGetListRestaurants =
 	"CategoryRestaurant/GetAllCategoryRestaurants";
 export const apiRegisterRestaurant = "User/RegisterRestaurant";
@@ -94,5 +94,9 @@ export const apiGetChatBox = "ChatBox/GetChatBoxList"
 export const apiGetChatList = "Chat/GetChatList"
 export const apiCreateChat = "Chat/Create"
 export const apiReport = 'Report/Create'
+export const apiCheckExistChatBox = 'ChatBox/CheckExist'
+export const apiReadChatBox = 'ChatBox/IsRead'
+export const apiCreateReply = 'Feedback/CreateFeedbackReply'
+export const apiViewFeedback = 'Feedback/GetFeedback'
 
 

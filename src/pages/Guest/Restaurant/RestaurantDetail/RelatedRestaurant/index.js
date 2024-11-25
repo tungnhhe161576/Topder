@@ -1,21 +1,30 @@
 import { Button, Rate } from "antd";
+import { useNavigate } from "react-router-dom";
 
 const RelatedRestaurant = ( {data} ) => {
+    const nav = useNavigate()
+
     return (  
         <div className="related-restaurant-container">
             <div className="image-container">
-                <img src="https://simexcodl.com.vn/wp-content/uploads/2023/11/cac-loai-ca-phe-o-viet-nam-8.jpg" alt="related-restaunrant"/>
+                <img src={data?.logo} alt="related-restaunrant"/>
             </div>
             <div className="restaurant-container">
                 <div className="name">
-                    Bụi phố cà phê
+                    {data?.nameRes}
                 </div>
                 <div className="rate">
-                    <Rate className='primary fs-14' value={5} disabled/> - (5 đánh giá)
+                    <Rate className='primary fs-14' value={data?.star} disabled/> - ({data?.totalFeedbacks} đánh giá)
                 </div>
-                <div className="button-booking">
-                    <Button className="button" shape="round">
+                <div className="button-booking d-flex">
+                    <Button className="button mr-5" shape="round" onClick={() => nav('/restaurant-detail/' + data?.uid)}>
                         Đặt bàn
+                    </Button>
+                    <Button className="button mr-5" shape="round">
+                        Nhắn tin
+                    </Button>
+                    <Button className="button" shape="round">
+                        Yêu thích
                     </Button>
                 </div>
             </div>

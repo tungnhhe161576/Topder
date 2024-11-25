@@ -6,6 +6,9 @@ import { useState } from "react"
 const ModalDeleteContact = ({open, onCancel, onOk}) => {
     const [loading, setLoading] = useState(false)
 
+    console.log(open);
+    
+
     const handledDelete = async () => {
         try {
             setLoading(true)

@@ -12,7 +12,7 @@ import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import ModalDeleteFeedback from "../Modal/ModalDeleteFeeback";
 
-const RestaurantRate = ( {restaurantDetail} ) => {
+const RestaurantRate = ( {restaurantId} ) => {
     const [form] = Form.useForm()
     const [loading, setLoading] = useState(false)
     const [feedbacks, setFeedbacks] = useState([])
@@ -21,37 +21,11 @@ const RestaurantRate = ( {restaurantDetail} ) => {
     const nav = useNavigate()
     const user = useSelector(userInfor)
 
-    // const handleSubmitFormDating = async () => {
-    //     try {
-    //         setLoading(true)
-    //         const values = await form.validateFields()
-    //         const res = await UserService.createFeedback({
-    //             customerId: user?.uid,
-    //             restaurantId: restaurantDetail?.uid,
-    //             star: values?.rate,
-    //             content: values?.content
-    //         })
-    //         message.open({
-    //             content: res,
-    //             type: 'success',
-    //             style: {
-    //                 marginTop: '10vh',
-    //             },
-    //         })
-    //         await getAllFeedback()
-    //     } catch (error) {
-    //         console.log(error);
-    //     } finally {
-    //         setLoading(false)
-    //         form.resetFields()
-    //     }
-    // }
-
     const getAllFeedback = async () => {
         try {
             setLoading(true)
-            const res = await GuestService.getAllFeedBack(restaurantDetail?.uid)
-            setFeedbacks(res?.items)
+            const res = await GuestService.getAllFeedBack(restaurantId)
+            setFeedbacks(res)
         } catch (error) {
             console.log(error);
         } finally {
@@ -60,8 +34,10 @@ const RestaurantRate = ( {restaurantDetail} ) => {
     }
 
     useEffect(() => {
-        getAllFeedback()
-    }, [form])
+        if (!!restaurantId) {
+            getAllFeedback()
+        }
+    }, [form, restaurantId])
 
     const itemPerPage = 3;
     const startIndex = (currentPage - 1) * itemPerPage;
@@ -75,10 +51,10 @@ const RestaurantRate = ( {restaurantDetail} ) => {
             label: <span onClick={() => setOpenModalDeleteFeedback(feedback)}>Xóa</span>, 
             key: '1' 
         },
-        { 
-            label: <span>Chỉnh sửa</span>, 
-            key: '2' 
-        },
+        // { 
+        //     label: <span>Chỉnh sửa</span>, 
+        //     key: '2' 
+        // },
     ];
 
 
@@ -86,7 +62,7 @@ const RestaurantRate = ( {restaurantDetail} ) => {
         <Row gutter={[40, 0]} className="mt-20">
             <SpinCustom spinning={loading}>
                 <Col xs={24} sm={24} md={17} lg={15} xl={15} style={{ minWidth: '500px' }}>
-                    <div className="fs-22 fw-600 mt-10 mb-15"> {feedbacks.length} Đánh giá </div>
+                    <div className="fs-22 fw-600 mt-10 mb-15"> {feedbacks?.length} Đánh giá </div>
                     {
                         feedbacks?.length === 0
                             ? <div className="fs-18 red fw-500 d-flex justify-content-center">Không có dữ liệu</div>
@@ -94,30 +70,45 @@ const RestaurantRate = ( {restaurantDetail} ) => {
                                 <>
                                     <div style={{minHeight: '520px'}}>
                                         {feedbacks?.slice(startIndex, startIndex + itemPerPage)?.map((feedback, index) => (
-                                            <div key={index} className="rating-container mb-20">
-                                                <div className="pl-20" style={{cursor: 'pointer'}} onClick={() => nav('/')}>
-                                                    <Avatar size={68} src={<img src={feedback?.customerImage} alt="avatar" />} />
-                                                </div>
-                                                <div className="ml-20 w-100">
-                                                    <div className="fs-18 fw-600 mb-5" style={{cursor: 'pointer'}} onClick={() => nav('/')}>{feedback?.customerName}</div>
-                                                    <div className="primary fs-13 mb-10">{dayjs(feedback?.createDate).format('DD-MM-YYYY')}</div>
-                                                    <div className="mb-15"><Rate className='primary fs-14' value={feedback?.star} disabled/></div>
-                                                    <div className="w-70">{feedback?.content}</div>
+                                            <>
+                                                <div key={index} className="rating-container mb-20">
+                                                    <div className="pl-20" style={{cursor: 'pointer'}} onClick={() => nav('/')}>
+                                                        <Avatar size={68} src={<img src={feedback?.customerImage} alt="avatar" />} />
+                                                    </div>
+                                                    <div className="ml-20 w-100">
+                                                        <div className="fs-18 fw-600 mb-5" style={{cursor: 'pointer'}} onClick={() => nav('/')}>{feedback?.customerName}</div>
+                                                        <div className="primary fs-13 mb-10">{dayjs(feedback?.createDate).format('DD-MM-YYYY')}</div>
+                                                        <div className="mb-15"><Rate className='primary fs-14' value={feedback?.star} disabled/></div>
+                                                        <div className="w-70">{feedback?.content}</div>
+                                                    </div>
+                                                    {
+                                                        user?.uid === feedback?.customerId 
+                                                            ? <div className="options">
+                                                                <Dropdown
+                                                                    menu={{items: items(feedback)}}
+                                                                    trigger={['click']}
+                                                                >
+                                                                    <span className="fs-22 fw-500 pr-20">...</span>
+                                                                </Dropdown>
+                                                            </div>
+                                                            : <></>
+                                                    }
                                                 </div>
                                                 {
-                                                    user?.uid === feedback?.customerId 
-                                                        ? <div className="options">
-                                                            <Dropdown
-                                                                menu={{items: items(feedback)}}
-                                                                trigger={['click']}
-                                                            >
-                                                                <span className="fs-22 fw-500 pr-20">...</span>
-                                                            </Dropdown>
+                                                    feedback?.isReply
+                                                        ? <div key={index} className="rating-container mb-20">
+                                                            <div className="pl-20 w-80" style={{cursor: 'pointer'}} onClick={() => nav('/')}>
+                                                                <Avatar size={40} src={<img src={feedback?.feedbackReplyCustomer?.restaurantImage} alt="logo" />} />
+                                                            </div>
+                                                            <div className="ml-20 w-100">
+                                                                <div className="fs-16 fw-600 mb-5" style={{cursor: 'pointer'}} onClick={() => nav('/')}>{feedback?.feedbackReplyCustomer?.restaurantName}</div>
+                                                                <div className="primary fs-12 mb-10">{dayjs(feedback?.feedbackReplyCustomer?.createDate).format('DD-MM-YYYY')}</div>
+                                                                <div className="w-70">{feedback?.content}</div>
+                                                            </div>
                                                         </div>
-                                                        : <></>
+                                                        : null
                                                 }
-                                                
-                                            </div>
+                                            </>
                                         ))}
                                     </div>
                                 
