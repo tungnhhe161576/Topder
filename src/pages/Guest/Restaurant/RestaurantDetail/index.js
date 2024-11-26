@@ -65,11 +65,11 @@ const RestaurantDetail = () => {
 	const [openModalReport, setOpenModalReport] = useState(false);
 
 	useEffect(() => {
-        form.setFieldsValue({
+		form.setFieldsValue({
 			phoneReceiver: user?.phone,
-			nameReceiver: user?.name
-		})
-    }, [form, user]);
+			nameReceiver: user?.name,
+		});
+	}, [form, user]);
 
 	//api get data chi tiet nha hang
 	const getDataRestaurantDetail = async () => {
@@ -129,9 +129,7 @@ const RestaurantDetail = () => {
 		try {
 			if (!user) {
 				setOpenRequestLogin(true);
-				setText(
-					"Bạn phải đăng nhập trước khi đặt bàn"
-				);
+				setText("Bạn phải đăng nhập trước khi đặt bàn");
 			} else {
 				setLoading(true);
 				const menu = foods.map(({ menuId, quantity }) => ({
@@ -145,7 +143,7 @@ const RestaurantDetail = () => {
 					orderMenus: menu,
 				});
 				setTotalAmount(total);
-	
+
 				const formValues = await form.validateFields();
 				const data = {
 					customerId: user?.uid,
@@ -231,8 +229,6 @@ const RestaurantDetail = () => {
 		}
 	};
 
-
-		
 	// useEffect(() => {
 	// 	startConnection();
 	// 	onReceiveNoti()
@@ -257,7 +253,6 @@ const RestaurantDetail = () => {
 		{ label: "Chính sách", value: "policy" },
 	];
 
-
 	return (
 		<CommonLayout>
 			<RestaurantDetailContainer>
@@ -271,7 +266,15 @@ const RestaurantDetail = () => {
 										Thông tin cửa hàng
 									</div>
 									<div className="pr-20">
-										<Button onClick={() => setOpenModalReport(restaurantDetail)}>Báo cáo</Button>
+										<Button
+											onClick={() =>
+												setOpenModalReport(
+													restaurantDetail
+												)
+											}
+										>
+											Báo cáo
+										</Button>
 									</div>
 								</div>
 								<Row gutter={[16, 16]}>
@@ -649,6 +652,17 @@ const RestaurantDetail = () => {
 																}
 																className="input"
 																placeholder="Chọn ngày"
+																disabledDate={(
+																	current
+																) => {
+																	return (
+																		current &&
+																		current <
+																			dayjs().startOf(
+																				"day"
+																			)
+																	);
+																}}
 															/>
 														</Form.Item>
 													</Col>
