@@ -99,6 +99,11 @@ const ModalCreateBooking = ({ open, onCancel, onOk, user }) => {
 								format: "HH",
 							}}
 							format="YYYY-MM-DD HH"
+							disabledDate={(current) => {
+								return (
+									current && current < dayjs().startOf("day")
+								);
+							}}
 						/>
 					</Form.Item>
 				</Form>
