@@ -125,7 +125,7 @@ export const RestaurantItemContainer = styled.div`
 
 			.drop-heart {
 				position: absolute;
-				right: 5%;
+				right: 2%;
 				/* margin-left: 80px; */
 				height: 40px;
 				width: 40px;
@@ -140,9 +140,27 @@ export const RestaurantItemContainer = styled.div`
 			.drop-heart:hover {
 				background-color: #f55b22;
 			}
-
 			.drop-heart:active {
 				background-color: #fa875c;
+			}
+
+
+			.chat-option {
+				position: absolute;
+				right: 15%;
+				/* margin-left: 80px; */
+				height: 40px;
+				width: 40px;
+				border-radius: 5px;
+				border: 1px solid #ff7c08;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				cursor: pointer;
+				transition: background-color 0.3s ease;
+			}
+			.chat-option:hover {
+				background-color: #ddd;
 			}
 		}
 	}

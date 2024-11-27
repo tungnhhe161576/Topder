@@ -1,17 +1,20 @@
 import { Button, Form, message } from "antd"
-import SpinCustom from "../../../../../../components/Common/SpinCustom"
 import TextArea from "antd/es/input/TextArea"
 import CustomModal from "../../../../../../components/Common/ModalCustom"
 import UserService from "../../../../../../services/UserService"
 import { useState } from "react"
 
-const ModalReport = ({open, onCancel, user}) => {
+const ModalReport = ({open, onCancel, user, setOpenRequestLogin, setText}) => {
     const [loading, setLoading] = useState(false)
     const [form] = Form.useForm()
-    console.log('restaurant', open);
-    
     
     const handleReport = async () => {
+        if (!user) {
+            onCancel()
+			setOpenRequestLogin(true);
+			setText("Bạn cần đăng nhập để thực hiện tác vụ này");
+			return;
+		}
         try {
             setLoading(true)
             const formValue = await form.validateFields()

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { RestaurantItemContainer } from "./styled";
 import { useNavigate } from "react-router-dom";
 import { message, Rate } from "antd";
-import { HeartOutlined } from "@ant-design/icons";
+import { HeartOutlined, WechatOutlined } from "@ant-design/icons";
 import { formatNumberToK } from "../../lib/stringUtils";
 import { useSelector } from "react-redux";
 import { userInfor } from "../../redux/Slice/userSlice";
@@ -87,7 +87,13 @@ const RestaurantItem = ({
 
 				setIsLiked(res);
 				await getWishlist();
-				message.success("Đã thêm vào yêu thích", 2);
+				message.open({
+					content: 'Đã thêm vào yêu thích!',
+					type: 'success',
+					style: {
+						marginTop: '10vh',
+					},
+				})
 			}
 		} catch (error) {
 			console.log(error);
@@ -98,17 +104,34 @@ const RestaurantItem = ({
 	};
 
 	const handleCreateChatBox = async () => {
+		if (!user) {
+			setOpenRequestLogin(true);
+			setText("Bạn cần đăng nhập để nhắn tin với cửa hàng này!");
+			return;
+		}
 		try {
 			const res = await UserService.checkExistChatBox(user?.uid, data?.uid)
 			if (res) {
-				message.success('Cuộc hội thoại đã được tạo');
+				message.open({
+					content: 'Cuộc hội thoại đã được tạo!',
+					type: 'success',
+					style: {
+						marginTop: '10vh',
+					},
+				})
 			} else {
 				await UserService.createChatBox({
 					chatBoxId: 0,
 					customerId: user?.uid,
 					restaurantId: data?.uid
 				})
-				message.success('Tạo cuộc hội thoại thành công');
+				message.open({
+					content: 'Tạo cuộc hội thoại thành công!',
+					type: 'success',
+					style: {
+						marginTop: '10vh',
+					},
+				})
 			}
 		} catch (error) {
 			console.log(error);
@@ -184,22 +207,26 @@ const RestaurantItem = ({
 						className={`drop-heart ${
 							isLiked ? "liked" : "default"
 						}`}
-						onClick={() => handleCreateChatBox()}
+						// onClick={() => handleCreateChatBox()}
+						onClick={() => handleLikeClick()}
 						style={{
 							backgroundColor: isLiked ? "#f55b22" : "",
 						}}
 					>
-						{/* <HeartOutlined
+						<HeartOutlined
 							style={{
 								color: "#fa875c",
 								cursor: "pointer",
 							}}
-						/> */}
-						Chat
+						/>
+						{/* Chat */}
 					</div>
-					{/* ) : (
-						<></>
-					)} */}
+					<div
+						className='chat-option'
+						onClick={() => handleCreateChatBox()}
+					>
+						<WechatOutlined className="fs-20 primary"/>
+					</div>
 				</div>
 			</div>
 		</RestaurantItemContainer>

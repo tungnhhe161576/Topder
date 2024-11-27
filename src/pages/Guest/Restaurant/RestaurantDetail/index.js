@@ -6,7 +6,6 @@ import {
 	Col,
 	DatePicker,
 	Divider,
-	Dropdown,
 	Form,
 	Image,
 	Input,
@@ -16,6 +15,7 @@ import {
 	Row,
 	Segmented,
 } from "antd";
+import { WechatOutlined } from "@ant-design/icons";
 import RestaurantDescription from "./Description/RestaurantDescription";
 import RestaurantRate from "./Description/RestaurantRate";
 import {
@@ -126,44 +126,44 @@ const RestaurantDetail = () => {
 
 	//form dat ban
 	const handleSubmitFormBooking = async () => {
+		if (!user) {
+			setOpenRequestLogin(true);
+			setText("Bạn cần đăng nhập để đặt bàn");
+			return;
+		}
 		try {
-			if (!user) {
-				setOpenRequestLogin(true);
-				setText("Bạn phải đăng nhập trước khi đặt bàn");
-			} else {
-				setLoading(true);
-				const menu = foods.map(({ menuId, quantity }) => ({
-					menuId,
-					quantity,
-				}));
-				const table = tables.map((t) => t.tableId);
-				const total = await UserService.calTotalOrder({
-					customerId: user?.uid,
-					restaurantId: restaurantId,
-					orderMenus: menu,
-				});
-				setTotalAmount(total);
+			setLoading(true);
+			const menu = foods.map(({ menuId, quantity }) => ({
+				menuId,
+				quantity,
+			}));
+			const table = tables.map((t) => t.tableId);
+			const total = await UserService.calTotalOrder({
+				customerId: user?.uid,
+				restaurantId: restaurantId,
+				orderMenus: menu,
+			});
+			setTotalAmount(total);
 
-				const formValues = await form.validateFields();
-				const data = {
-					customerId: user?.uid,
-					restaurantId: restaurantId,
-					discountId: undefined,
-					categoryRoomId: undefined,
-					nameReceiver: formValues.nameReceiver,
-					phoneReceiver: formValues.phoneReceiver,
-					timeReservation: formValues?.time,
-					dateReservation: formValues?.date?.$d,
-					numberPerson: formValues?.numberPerson,
-					numberChild: formValues?.numberChild
-						? formValues?.numberChild
-						: 0,
-					contentReservation: formValues?.contentReservation,
-					orderMenus: menu,
-					tableIds: table,
-				};
-				setOpenModalCalFee(data);
-			}
+			const formValues = await form.validateFields();
+			const data = {
+				customerId: user?.uid,
+				restaurantId: restaurantId,
+				discountId: undefined,
+				categoryRoomId: undefined,
+				nameReceiver: formValues.nameReceiver,
+				phoneReceiver: formValues.phoneReceiver,
+				timeReservation: formValues?.time,
+				dateReservation: formValues?.date?.$d,
+				numberPerson: formValues?.numberPerson,
+				numberChild: formValues?.numberChild
+					? formValues?.numberChild
+					: 0,
+				contentReservation: formValues?.contentReservation,
+				orderMenus: menu,
+				tableIds: table,
+			};
+			setOpenModalCalFee(data);
 		} catch (error) {
 			console.log(error);
 		} finally {
@@ -229,10 +229,40 @@ const RestaurantDetail = () => {
 		}
 	};
 
-	// useEffect(() => {
-	// 	startConnection();
-	// 	onReceiveNoti()
-	// }, [showSuccessModal])
+	const handleCreateChatBox = async () => {
+		if (!user) {
+			setOpenRequestLogin(true);
+			setText("Bạn cần đăng nhập để nhắn tin với cửa hàng này");
+			return;
+		}
+		try {
+			const res = await UserService.checkExistChatBox(user?.uid, restaurantId)
+			if (res) {
+				message.open({
+					content: 'Cuộc hội thoại đã được tạo!',
+					type: 'success',
+					style: {
+						marginTop: '10vh',
+					},
+				})
+			} else {
+				await UserService.createChatBox({
+					chatBoxId: 0,
+					customerId: user?.uid,
+					restaurantId: restaurantId
+				})
+				message.open({
+					content: 'Tạo cuộc hội thoại thành công!',
+					type: 'success',
+					style: {
+						marginTop: '10vh',
+					},
+				})
+			}
+		} catch (error) {
+			console.log(error);
+		} finally {}
+	}
 
 	//xu ly slider hinh anh nha hang
 	const nextImage = () => {
@@ -265,15 +295,23 @@ const RestaurantDetail = () => {
 									<div className="fs-26 fw-700 mb-20">
 										Thông tin cửa hàng
 									</div>
-									<div className="pr-20">
+									<div className="pr-20 d-flex align-items-center">
 										<Button
 											onClick={() =>
 												setOpenModalReport(
 													restaurantDetail
 												)
 											}
+											title="Báo cáo nhà hàng"
 										>
 											Báo cáo
+										</Button>
+										<Button
+											className="ml-10"
+											onClick={() => handleCreateChatBox()}
+											title="Nhắn tin với nhà hàng"
+										>
+											<WechatOutlined className="fs-20"/>
 										</Button>
 									</div>
 								</div>
@@ -928,7 +966,7 @@ const RestaurantDetail = () => {
 												lg={6}
 												xl={6}
 											>
-												<RelatedRestaurant data={r} />
+												<RelatedRestaurant data={r} user={user}/>
 											</Col>
 										))}
 								</>
@@ -991,8 +1029,9 @@ const RestaurantDetail = () => {
 				<ModalReport
 					open={openModalReport}
 					onCancel={() => setOpenModalReport(false)}
-					// restaunrant={restaurantDetail}
 					user={user}
+					setOpenRequestLogin={setOpenRequestLogin}
+					setText={setText}
 				/>
 			)}
 		</CommonLayout>
