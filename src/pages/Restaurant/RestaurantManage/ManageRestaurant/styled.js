@@ -2,6 +2,8 @@ import styled from "styled-components";
 
 export const ManageRestaurantContainer = styled.div`
 	width: 100%;
+	height: 100vh;
+	
 	.body {
 		background-color: #fff;
 		border-radius: 10px;

@@ -9,7 +9,7 @@ import ModalUpdateTable from "./Modal/ModalUpdateTable";
 import ModalCreateTableByExcel from "./Modal/ModalCreateByExcel";
 const {Option} = Select
 
-const AllTable = ({user, loading, setLoading, tables, getAllTables, setType}) => {
+const AllTable = ({user, loading, setLoading, tables, getAllTables, setType, setStatus}) => {
 	const [openModalDeleteTable, setOpenModalDeleteTable] = useState(false)
 	const [openModalCreateTable, setOpenModalCreateTable] = useState(false)
 	const [openModalUpdateTable, setOpenModalUpdateTable] = useState(false)
@@ -51,7 +51,7 @@ const AllTable = ({user, loading, setLoading, tables, getAllTables, setType}) =>
 			dataIndex: "roomName",
 			key: "roomName",
 			align: 'center',
-			render: (value) => <span className="fs-15"> {!!value ? value : 'Phòng tự do'} </span>,
+			render: (value) => <span className="fs-15"> {!!value ? value : 'Bàn tự do'} </span>,
 		},
 		{
 			title: "Sức chứa",
@@ -76,22 +76,16 @@ const AllTable = ({user, loading, setLoading, tables, getAllTables, setType}) =>
 				<div className="d-flex justify-content-center">
 					{
 						record?.isBookingEnabled 
-							? <Button
-								className="huy-mo"
-								type="primary"
-								shape="round"
-								onClick={() => handleUpdateStatus(record)}
+							? <div
+								className="status-mo"
 							>
-								Hủy mở bàn
-							</Button>
-							: <Button
-								className="mo"
-								type="primary"
-								shape="round"
-								onClick={() => handleUpdateStatus(record)}
+								Đang phục vụ
+							</div>
+							: <div
+								className="status-huy-mo"
 							>
-								Mở bàn
-							</Button>
+								Dừng phục vụ
+							</div>
 					}
 				</div>
 			),
@@ -101,21 +95,42 @@ const AllTable = ({user, loading, setLoading, tables, getAllTables, setType}) =>
 			key: "note",
 			align: 'center',
 			render: (_, record) => (
-				<div className="d-flex justify-content-center">
+				<div className="d-flex justify-content-start">
 					<Button
-						className="mr-10"
+						className="mr-5"
 						type="primary"
+						shape="round"
 						onClick={() => setOpenModalUpdateTable(record)}
 					>
 						Chỉnh sửa
 					</Button>
 					<Button
 						type="primary"
+						shape="round"
 						danger
 						onClick={() => setOpenModalDeleteTable(record)}
 					>
 						Xóa
 					</Button>
+					{
+						record?.isBookingEnabled 
+							? <Button
+								className="ml-5 huy-mo"
+								type="primary"
+								shape="round"
+								onClick={() => handleUpdateStatus(record)}
+							>
+								Đóng bàn
+							</Button>
+							: <Button
+								className="mo ml-5"
+								type="primary"
+								shape="round"
+								onClick={() => handleUpdateStatus(record)}
+							>
+								Mở bàn
+							</Button>
+					}
 				</div>
 			),
 		},
@@ -134,21 +149,40 @@ const AllTable = ({user, loading, setLoading, tables, getAllTables, setType}) =>
 						</Button>
 					</div>
 
-					<div className="mr-20 select ">
-						<Select
-							className="nice-select w-100" 
-							allowClear  
-							placeholder="Kiểu bàn"
-							onChange={(e) => setType(e)}
-						>
-							<Option key={1} value={'free'}>
-								Bàn tự do
-							</Option>
-							<Option key={2} value='room'>
-								Bàn trong phòng
-							</Option>
-						</Select>
+					<div className="d-flex">
+						<div className="mr-20 select ">
+							<Select
+								className="nice-select w-100" 
+								allowClear  
+								placeholder="Kiểu bàn"
+								onChange={(e) => setType(e)}
+							>
+								<Option key={1} value='free'>
+									Bàn tự do
+								</Option>
+								<Option key={2} value='room'>
+									Bàn trong phòng
+								</Option>
+							</Select>
+						</div>
+						<div className="mr-20 select ">
+							<Select
+								className="nice-select w-100" 
+								allowClear  
+								defaultValue={true}
+								placeholder="Kiểu bàn"
+								onChange={(e) => setStatus(e)}
+							>
+								<Option key={1} value={true}>
+									Đang phục vụ
+								</Option>
+								<Option key={2} value={false}>
+									Đang dừng phục vụ
+								</Option>
+							</Select>
+						</div>
 					</div>
+
 				</div>
 				<div className="table">
 					<Table

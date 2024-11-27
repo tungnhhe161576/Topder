@@ -33,18 +33,22 @@ const CommonLayout = ({ children }) => {
         <CommonLayoutContainer>
             <Header />
             <div className="children">
-                <div className="chat" onClick={() => setOpenChat(true)}>
-                    <Badge
-                        count={
-                            chatBox?.filter(
-                                (i) => i?.isRead === false
-                            ).length
-                        }
-                        size="small"
-                    >
-                        <WechatOutlined className="fs-30"/>
-                    </Badge>    
-                </div>
+                {
+                    !!user 
+                        ? <div className="chat" onClick={() => setOpenChat(true)}>
+                            <Badge
+                                count={
+                                    chatBox?.filter(
+                                        (i) => i?.isRead === false
+                                    ).length
+                                }
+                                size="small"
+                            >
+                                <WechatOutlined className="fs-30"/>
+                            </Badge>    
+                        </div>
+                        : null
+                }
                 <div>
                     {children}
                 </div>

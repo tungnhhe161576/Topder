@@ -14,17 +14,26 @@ const ManageTable = () => {
 	const [loading, setLoading] = useState(false)
 	const [tables, setTables] = useState([])
 	const [type, setType] = useState()
+	const [status, setStatus] = useState(true)
+	
 
 	const getAllTables = async () => {
 		try {
 			setLoading(true)
 			const res = await UserService.getAllRestaurantTable(user?.uid)
+
 			if (type) {
 				type === 'free' 
-					? setTables(res.items.filter(i => i?.roomId === null))
-					: setTables(res.items.filter(i => i?.roomId !== null))
+					? status !== undefined
+						? setTables(res.items.filter(i => {return(i?.roomId === null && i?.isBookingEnabled === status)}))
+						: setTables(res.items.filter(i => {return(i?.roomId === null)}))
+					: status !== undefined
+						? setTables(res.items.filter(i => {return(i?.roomId !== null && i?.isBookingEnabled === status)}))
+						: setTables(res.items.filter(i => {return(i?.roomId !== null)}))
 			} else {
-				setTables(res.items)
+				status !== undefined
+					? setTables(res.items.filter(i => {return(i?.isBookingEnabled === status)}))
+					: setTables(res.items)
 			}
 		} catch (error) {
 			console.log(error);
@@ -36,7 +45,7 @@ const ManageTable = () => {
 		if (!!user?.uid) {
 			getAllTables()
 		}
-	}, [user, type])
+	}, [user, type, status])
 	
 	return (
 		<RestaurantLayout>
@@ -53,7 +62,7 @@ const ManageTable = () => {
 							{
 								label: "Bàn",
 								key: "1",
-								children: <AllTable user={user} getAllTables={getAllTables} loading={loading} setLoading={setLoading} tables={tables} setType={setType}/>,
+								children: <AllTable user={user} getAllTables={getAllTables} loading={loading} setLoading={setLoading} tables={tables} setType={setType} setStatus={setStatus}/>,
 							},
 							{
 								label: "Phòng",

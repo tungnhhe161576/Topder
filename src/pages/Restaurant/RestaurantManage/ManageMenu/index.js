@@ -12,12 +12,15 @@ const ManageMenu = () => {
 	const user = useSelector(userInfor)
 	const [menus, setMenus] = useState([])
 	const [loading, setLoading] = useState(false)
+	const [status, setStatus] = useState('Active')
 	
 	const getMenus = async () => {
 		try {
 			setLoading(true)
 			const res = await UserService.getAllMenu(user?.uid)
-			setMenus(res.items)
+			status
+			 	? setMenus(res.items.filter(i => i?.status === status))
+				: setMenus(res.items)
 		} catch (error) {
             console.log(error)
 		}finally {
@@ -29,7 +32,7 @@ const ManageMenu = () => {
         if (!!user) {
             getMenus()
         }
-    }, [user])
+    }, [user, status])
 
 	return (
 		<RestaurantLayout>
@@ -46,7 +49,7 @@ const ManageMenu = () => {
 							{
 								label: "Thực đơn",
 								key: "1",
-								children: <RestaurantMenu user={user} getMenus={getMenus} loading={loading} setLoading={setLoading} menus={menus}/>,
+								children: <RestaurantMenu user={user} getMenus={getMenus} loading={loading} setLoading={setLoading} menus={menus} status={status} setStatus={setStatus}/>,
 							},
 							{
 								label: "Loại thực đơn",

@@ -7,20 +7,24 @@ import ModalDeleteRoom from "./Modal/ModalDelete";
 import ModalUpdateRoom from "./Modal/ModalUpdate";
 import ModalCreateRoom from "./Modal/ModalCreate";
 import ModalUploadExcel from "./Modal/ModalUploadExcel";
+const {Option} = Select
 
-const RestaurantRoom = ({ user, getAllTables }) => {
+const RestaurantRoom = ({ user, getAllTables, setStatus }) => {
 	const [loading, setLoading] = useState(false);
 	const [rooms, setRooms] = useState([]);
 	const [openModalCreateRoom, setOpenModalCreateRoom] = useState(false);
 	const [openModalUpdateRoom, setOpenModalUpdateRoom] = useState(false);
 	const [openModalDeleteRoom, setOpenModalDeleteRoom] = useState(false);
 	const [openModalUploadExcel, setOpenModalUploadExcel] = useState(false);
+	const [statusRoom, setStatusRoom] = useState(true)
 
 	const getAllRooms = async () => {
 		try {
 			setLoading(true);
 			const res = await UserService.getAllRoom(user?.uid);
-			setRooms(res?.items);
+			statusRoom !== undefined
+				? setRooms(res.items.filter(i => {return(i?.isBookingEnabled === statusRoom)}))
+				: setRooms(res?.items);
 		} catch (error) {
 			console.log(error);
 		} finally {
@@ -31,7 +35,7 @@ const RestaurantRoom = ({ user, getAllTables }) => {
 		if (!!user?.uid) {
 			getAllRooms();
 		}
-	}, [user]);
+	}, [user, statusRoom]);
 
 	const handleUpdateStatus = async (record) => {
 		try {
@@ -104,23 +108,17 @@ const RestaurantRoom = ({ user, getAllTables }) => {
 			render: (_, record) => (
 				<div className="d-flex justify-content-center">
 					{record?.isBookingEnabled ? (
-						<Button
-							className="huy-mo"
-							type="primary"
-							shape="round"
-							onClick={() => handleUpdateStatus(record)}
+						<div
+							className="status-mo"
 						>
-							Hủy mở bàn
-						</Button>
+							Đang hoạt động
+						</div>
 					) : (
-						<Button
-							className="mo"
-							type="primary"
-							shape="round"
-							onClick={() => handleUpdateStatus(record)}
+						<div
+							className="status-huy-mo"
 						>
-							Mở bàn
-						</Button>
+							Đang đóng
+						</div>
 					)}
 				</div>
 			),
@@ -130,10 +128,11 @@ const RestaurantRoom = ({ user, getAllTables }) => {
 			key: "note",
 			align: "center",
 			render: (_, record) => (
-				<div className="d-flex justify-content-center">
+				<div className="d-flex justify-content-start">
 					<Button
-						className="mr-10"
+						className="mr-5"
 						type="primary"
+						shape="round"
 						onClick={() => setOpenModalUpdateRoom(record)}
 					>
 						Chỉnh sửa
@@ -141,10 +140,30 @@ const RestaurantRoom = ({ user, getAllTables }) => {
 					<Button
 						type="primary"
 						danger
+						shape="round"
 						onClick={() => setOpenModalDeleteRoom(record)}
 					>
 						Xóa
 					</Button>
+					{record?.isBookingEnabled ? (
+						<Button
+							className="huy-mo ml-5"
+							type="primary"
+							shape="round"
+							onClick={() => handleUpdateStatus(record)}
+						>
+							Hủy mở bàn
+						</Button>
+					) : (
+						<Button
+							className="mo ml-5"
+							type="primary"
+							shape="round"
+							onClick={() => handleUpdateStatus(record)}
+						>
+							Mở bàn
+						</Button>
+					)}
 				</div>
 			),
 		},
@@ -166,6 +185,23 @@ const RestaurantRoom = ({ user, getAllTables }) => {
 							Tạo bằng File Excel
 						</Button>
 					</div>
+					<div className="mr-20 select ">
+							<Select
+								className="nice-select w-100" 
+								allowClear  
+								placeholder="Kiểu phòng"
+								defaultValue={true}
+								onChange={(e) => setStatusRoom(e)}
+							>
+								<Option key={1} value={true}>
+									Đang phục vụ
+								</Option>
+								<Option key={2} value={false}>
+									Đang dừng phục vụ
+								</Option>
+							</Select>
+						</div>
+
 				</div>
 				<div className="table">
 					<Table

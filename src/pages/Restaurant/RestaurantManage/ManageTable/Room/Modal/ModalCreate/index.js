@@ -62,9 +62,9 @@ const ModalCreateRoom = ({ open, onCancel, onOk, userId }) => {
 			onCancel={onCancel}
 			footer={footer}
 			width={900}
-			style={{ marginTop: "200px" }}
+			style={{ marginTop: "100px" }}
 		>
-			<div className="title-type-1">Cập nhật phòng</div>
+			<div className="title-type-1">Tạo phòng mới</div>
 			<div className="mt-20">
 				<Form
 					form={form}

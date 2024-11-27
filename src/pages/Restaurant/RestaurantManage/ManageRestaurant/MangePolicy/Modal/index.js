@@ -60,7 +60,7 @@ const ModalUpdatePolicy = ({open, onCancel, onOk, userId}) => {
             onCancel={onCancel}
             footer={footer}
             width={800}
-            style={{marginTop: '150px'}}
+            style={{marginTop: '80px'}}
         >
             <ModalCreatePolicyContainer>
                 <div className="title-type-1">Chỉnh sửa chính sách</div>

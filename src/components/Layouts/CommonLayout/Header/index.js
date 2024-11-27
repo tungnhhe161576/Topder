@@ -517,25 +517,29 @@ const Header = () => {
 							xl={3}
 							className="d-flex align-items-center"
 						>
-							<div className="notification mr-20">
-								<Badge
-									count={
-										notis?.filter(
-											(i) => i?.isRead === false
-										).length
-									}
-									size="small"
-								>
-									<div className="fs-22 fw-500 w-100 notification">
-										<Dropdown
-											overlay={itemNotis}
-											trigger={["click"]}
+							{
+								!!user 
+									? <div className="notification mr-20">
+										<Badge
+											count={
+												notis?.filter(
+													(i) => i?.isRead === false
+												).length
+											}
+											size="small"
 										>
-											<BellOutlined />
-										</Dropdown>
+											<div className="fs-22 fw-500 w-100 notification">
+												<Dropdown
+													overlay={itemNotis}
+													trigger={["click"]}
+												>
+													<BellOutlined />
+												</Dropdown>
+											</div>
+										</Badge>
 									</div>
-								</Badge>
-							</div>
+									: null 
+							}
 							<div className="user-info">
 								{!user ? (
 									<div className="lo-re">

@@ -69,7 +69,7 @@ const ModalUpdateRoom = ({ open, onCancel, onOk, getAllTables }) => {
 			onCancel={onCancel}
 			footer={footer}
 			width={900}
-			style={{ marginTop: "200px" }}
+			style={{ marginTop: "100px" }}
 		>
 			<div className="title-type-1">Cập nhật phòng</div>
 			<div className="mt-20">

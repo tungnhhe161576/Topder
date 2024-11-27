@@ -1,4 +1,4 @@
-import {Avatar, Button, Table} from 'antd'
+import {Avatar, Button, Select, Table} from 'antd'
 import SpinCustom from '../.././../../../components/Common/SpinCustom'
 import { formatNumberToK } from "../../../../../lib/stringUtils";
 import { useState } from 'react';
@@ -7,8 +7,10 @@ import ModalDeleteMenu from './Modal/DeleteMenu';
 import ModalUpdateMenu from './Modal/UpdateMenu';
 import ModalCreateMenu from './Modal/CreateMenu';
 import ModalCreateByExcel from './Modal/ModalCreateByExcel';
+import { MenuComponentContainer } from './styled';
+const {Option} = Select
 
-const RestaurantMenu = ({user, getMenus, loading, setLoading, menus}) => {
+const RestaurantMenu = ({user, getMenus, loading, setLoading, menus, status, setStatus}) => {
 	const [openModalDeleteMenu, setOpenModalDeleteMenu] = useState(false)
 	const [modalUpdateMenu, setModalUpdateMenu] = useState(false)
 	const [modalCreateMenu, setModalCreateMenu] = useState(false)
@@ -82,22 +84,16 @@ const RestaurantMenu = ({user, getMenus, loading, setLoading, menus}) => {
 				<div className="d-flex justify-content-center">
 					{
 						record?.status === 'Active'
-							? <Button
-								className="mo"
-								type="primary"
-								shape="round"
-								onClick={() => handleActiveMenu(record)}
+							? <div
+								className="status-mo"
 							>
-								Khóa món ăn
-							</Button>
-							: <Button
-								className="huy-mo"
-								type="primary"
-								shape="round"
-								onClick={() => handleActiveMenu(record)}
+								Đang mở
+							</div>
+							: <div
+								className="status-huy-mo"
 							>
-								Mở món ăn
-							</Button>
+								Đang dừng
+							</div>
 					}
 				</div>
 			),
@@ -124,6 +120,25 @@ const RestaurantMenu = ({user, getMenus, loading, setLoading, menus}) => {
 					>
 						Xóa
 					</Button>
+					{
+						record?.status === 'Active'
+							? <Button
+								className="huy-mo ml-5"
+								shape='round'
+								type="primary"
+								onClick={() => handleActiveMenu(record)}
+							>
+								Đóng phục vụ
+							</Button>
+							: <Button
+								className="mo ml-5"
+								type="primary"
+								shape='round'
+								onClick={() => handleActiveMenu(record)}
+							>
+								Mở phục vụ
+							</Button>
+					}
 				</div>
 			),
 		},
@@ -131,7 +146,7 @@ const RestaurantMenu = ({user, getMenus, loading, setLoading, menus}) => {
 	
 	return (
 		<SpinCustom spinning={loading}>
-			<div>
+			<MenuComponentContainer>
 				<div className="d-flex justify-content-space-between mt-20 mb-30">
 					<div className="d-flex">
 						<Button className="mr-10" type="primary" onClick={() => setModalCreateMenu(true)}>
@@ -143,19 +158,20 @@ const RestaurantMenu = ({user, getMenus, loading, setLoading, menus}) => {
 					</div>
 
 					<div className="mr-20 select ">
-						{/* <Select
+						<Select
 							className="nice-select w-100" 
 							allowClear  
-							placeholder="Kiểu bàn"
-							onChange={(e) => setType(e)}
+							placeholder="Trạng thái bàn"
+							defaultValue={'Active'}
+							onChange={(e) => setStatus(e)}
 						>
-							<Option key={1} value={'free'}>
-								Bàn tự do
+							<Option key={1} value={'Active'}>
+								Đang mở phục vụ
 							</Option>
-							<Option key={2} value='room'>
-								Bàn trong phòng
+							<Option key={2} value='In-Active'>
+								Đang dừng mở phục vụ
 							</Option>
-						</Select> */}
+						</Select>
 					</div>
 				</div>
 				<div className="table">
@@ -166,7 +182,7 @@ const RestaurantMenu = ({user, getMenus, loading, setLoading, menus}) => {
 						pagination={{ pageSize: 5 }}
 					/>
 				</div>
-			</div>
+			</MenuComponentContainer>
 
 			{!!openModalDeleteMenu && (
 				<ModalDeleteMenu

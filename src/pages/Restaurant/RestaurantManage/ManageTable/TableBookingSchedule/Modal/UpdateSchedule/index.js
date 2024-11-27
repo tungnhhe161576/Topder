@@ -180,7 +180,8 @@ const ModalUpdateSchedule = ({open, onCancel, onOk, userId}) => {
             onCancel={onCancel}
             footer={footer}
             width={1000}
-            className='mt-50'
+            // className='mt-50'
+            style={{marginTop: '-80px'}}
         >
             <ModalUpdateScheduleContainer>
                 <div>
