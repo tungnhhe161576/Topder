@@ -1,12 +1,12 @@
 import { Avatar, Button, Divider, Drawer, Form, Input, Space } from "antd";
 import { BodyChat, ChatComponentContainer } from "./styled";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import UserService from "../../../services/UserService";
 import { useSelector } from "react-redux";
 import { userInfor } from "../../../redux/Slice/userSlice";
 import SpinCustom from '../../../components/Common/SpinCustom'
 import dayjs from "dayjs";
-import { createChat, startConnection } from "../../../hub";
+import { createChat } from "../../../hub";
 
 const ChatComponent = ({open, onCancel}) => {
     const [loading, setLoading] = useState(false)
@@ -14,8 +14,9 @@ const ChatComponent = ({open, onCancel}) => {
     const [chatBox, setChatBox] = useState([])
     const [chatList, setChatList] = useState([])
     const [item, setItem] = useState()
+    const [message, setMessage] = useState('')
     const user = useSelector(userInfor)
-    const [form] = Form.useForm()
+    const ref = useRef(null)
 
     const getChatBox = async () => {
         try {
@@ -37,22 +38,14 @@ const ChatComponent = ({open, onCancel}) => {
     const handleSendMessage = async () => {
         try {
             setLoading(true)
-            const formValue = await form.validateFields()
             await UserService.createChat({
                 chatId: 0,
                 chatBoxId: item.chatBoxId,
                 chatBy: user?.uid,
-                content: formValue?.content,
+                content: message,
             }) 
-
-            // createChat((data) => {
-            //     console.log('data', data);
-            //     if (data?.chatBoxId === item?.chatBoxId) {
-            //         setChatList(prev => [...prev, data])
-            //     }
-            // });
-            form.resetFields()
-            // getChatList(item)
+            setMessage('')
+            ref.current?.focus();
         } catch (error) {
             console.log(error);
         } finally {
@@ -77,25 +70,12 @@ const ChatComponent = ({open, onCancel}) => {
     }
     useEffect(() => {
         if (!!item) {
-            // let list 
             const handleNewChat = (data) => {
                 if (data?.chatBoxId === item?.chatBoxId) {
                     setChatList(prev => [...prev, data]);
-                    // list = data
                 }
             };
-            // console.log('list', list);
-            // if (!!list) {
-            // }
-    
-            // Đăng ký listener
             createChat(handleNewChat);
-    
-            // Dọn dẹp listener khi component unmount hoặc item thay đổi
-            return () => {
-                // Có thể cần thêm một hàm hủy để ngắt kết nối trong createChat nếu cần thiết
-                // removeChat(handleNewChat);
-            };
         }
     }, [item]);
     
@@ -175,26 +155,27 @@ const ChatComponent = ({open, onCancel}) => {
                             </div>
                         </SpinCustom>
                         <div className="send-mess p-10">
-                            <Form form={form} className="d-flex align-items-center">
-                                <Form.Item
-                                    name='content'
+                        {
+                            !!item && <Form className="d-flex align-items-center">
+                                <Input
+                                    ref={ref}
+                                    value={message}
+                                    onChange={(e) => setMessage(e.target.value)} // Xử lý thay đổi giá trị
                                     className="w-100 mr-5"
+                                    placeholder="Nhập tin"
+                                />
+                                <Button
+                                    htmlType="submit"
+                                    type="primary"
+                                    shape="round"
+                                    className="send"
+                                    loading={loading}
+                                    onClick={() => handleSendMessage()}
                                 >
-                                    <Input className="w-100" placeholder="Nhập tin"/>
-                                </Form.Item>
-                                <Form.Item>
-                                    <Button
-                                        type="primary"
-                                        htmlType="submit"
-                                        shape="round"
-                                        className="send"
-                                        loading={loading}
-                                        onClick={() => handleSendMessage()}
-                                    >
-                                        Gửi
-                                    </Button>
-                                </Form.Item>
+                                    Gửi
+                                </Button>
                             </Form>
+                        }
                         </div>
                     </div>
                 </BodyChat>

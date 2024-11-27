@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import RestaurantLayout from "../../../../components/Layouts/RestaurantLayout";
 import { MassageRestaurantContainer } from "./styled";
 import { createChat } from "../../../../hub";
@@ -15,8 +15,10 @@ const MassageRestaurant = () => {
     const [chatBox, setChatBox] = useState([])
     const [chatList, setChatList] = useState([])
     const [item, setItem] = useState()
+    const [message, setMessage] = useState('')
     const user = useSelector(userInfor)
-    const [form] = Form.useForm()
+    const ref = useRef()
+
 
     const getChatBox = async () => {
         try {
@@ -38,14 +40,14 @@ const MassageRestaurant = () => {
     const handleSendMessage = async () => {
         try {
             setLoading(true)
-            const formValue = await form.validateFields()
             await UserService.createChat({
                 chatId: 0,
                 chatBoxId: item.chatBoxId,
                 chatBy: user?.uid,
-                content: formValue?.content,
+                content: message,
             }) 
-            form.resetFields()
+            setMessage('')
+            ref.current?.focus();
         } catch (error) {
             console.log(error);
         } finally {
@@ -139,25 +141,18 @@ const MassageRestaurant = () => {
                         </div>
                     </SpinCustom>
                     <div className="send-mess p-10">
-                        <Form form={form} className="d-flex align-items-center">
-                            <Form.Item
-                                name='content'
-                                className="w-100 mr-5"
+                        <Form className="d-flex align-items-center">
+                            <Input ref={ref} className="w-100" placeholder="Nhập tin"/>
+                            <Button
+                                type="primary"
+                                htmlType="submit"
+                                shape="round"
+                                className="send"
+                                loading={loading}
+                                onClick={() => handleSendMessage()}
                             >
-                                <Input className="w-100" placeholder="Nhập tin"/>
-                            </Form.Item>
-                            <Form.Item>
-                                <Button
-                                    type="primary"
-                                    htmlType="submit"
-                                    shape="round"
-                                    className="send"
-                                    loading={loading}
-                                    onClick={() => handleSendMessage()}
-                                >
-                                    Gửi
-                                </Button>
-                            </Form.Item>
+                                Gửi
+                            </Button>
                         </Form>
                     </div>
                 </div>

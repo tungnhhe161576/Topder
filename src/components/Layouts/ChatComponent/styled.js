@@ -63,8 +63,8 @@ export const BodyChat = styled.div `
         }
         
         .list-message {
-            max-height: 90vh;
-            min-height: 90vh;
+            max-height: 78vh;
+            min-height: 78vh;
             overflow: auto;
             display: flex;
             flex-direction: column;
