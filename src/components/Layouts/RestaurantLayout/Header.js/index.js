@@ -12,19 +12,22 @@ import {
 	userInfor,
 } from "../../../../redux/Slice/userSlice";
 import { setAccessToken } from "../../../../redux/Slice/accessTokenSlice";
-import { Badge, Dropdown } from "antd";
+import { Badge, Dropdown, Menu } from "antd";
 import { useEffect, useState } from "react";
 import { onReceiveNoti, startConnection } from "../../../../hub";
-import { addNoti, allNoti } from "../../../../redux/Slice/notiSlice";
 import dayjs from "dayjs";
 import UserService from "../../../../services/UserService";
+import SpinCustom from "../../../Common/SpinCustom";
+import { CustomMenuItem } from "../styled";
 
 const Header = () => {
 	const nav = useNavigate();
 	const dispatch = useDispatch();
 	const user = useSelector(userInfor);
-	// const notis = useSelector(allNoti)
+	const [loading2, setLoading2] = useState(true);
 	const [notis, setNotis] = useState([]);
+	const [numberNoti, setNumberNoti] = useState(6);
+	const [isExpanded, setIsExpanded] = useState(false);
 
 	const items = [
 		{
@@ -53,12 +56,13 @@ const Header = () => {
 
 	const getListNoti = async () => {
 		try {
-			// setLoading(true)
+			setLoading2(true);
 			const notisRes = await UserService.getAllNoti(user?.uid);
 			setNotis(notisRes);
-			// dispatch(updateListNoti(res))
 		} catch (error) {
 			console.log(error);
+		} finally {
+			setLoading2(false);
 		}
 	};
 	useEffect(() => {
@@ -99,19 +103,168 @@ const Header = () => {
 		nav("/login");
 	};
 
-	const itemNotis = notis.map((notification) => ({
-		key: notification?.notificationId,
-		label: (
-			<div className={notification?.isRead ? "no-read" : "read"}>
-				<div> {notification?.type} </div>
-				<div>{notification?.content}</div>
-				<div>
-					{" "}
-					{dayjs(notification?.createdAt).format("DD-MM-YYYY")}{" "}
+	const handleHandleRead = async (notification) => {
+		try {
+			await UserService.readNoti(notification?.notificationId);
+			getListNoti();
+			if (notification.type === "Đơn Hàng") {
+				nav("/restaurant/manage-order");
+			} else if (notification.type === "Hệ Thống Trừ Tiền Từ Ví") {
+				nav("/restaurant/wallet");
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
+	const handleDeleteNotification = async (notification) => {
+		try {
+			await UserService.deleteNoti(
+				user?.uid,
+				notification?.notificationId
+			);
+			getListNoti();
+		} catch (error) {
+			console.log(error);
+		}
+	};
+	const handleReadAllNoti = async () => {
+		try {
+			await UserService.readAllNoti(user?.uid);
+			getListNoti();
+		} catch (error) {
+			console.log(error);
+		}
+	};
+	const handleDeleteAllNoti = async () => {
+		try {
+			await UserService.deleteAllNoti(user?.uid);
+			getListNoti();
+		} catch (error) {
+			console.log(error);
+		}
+	};
+	const handleToggleNoti = () => {
+		if (isExpanded) {
+			setNumberNoti(6);
+		} else {
+			setNumberNoti((prev) => prev + 4);
+		}
+		setIsExpanded(!isExpanded);
+	};
+
+	const itemNotis = (
+		<Menu>
+			{notis?.length === 0 ? (
+				<div
+					className="w-100 pt-10 pb-10 pl-20 pr-20 d-flex fw-500"
+					style={{ minWidth: "300px" }}
+				>
+					Không có thông báo nào
 				</div>
-			</div>
-		),
-	}));
+			) : (
+				<SpinCustom spinning={loading2}>
+					<div
+						style={{
+							maxHeight: "600px",
+							overflow: "auto",
+							position: "relative",
+						}}
+					>
+						{notis.slice(0, numberNoti).map((notification) => (
+							<CustomMenuItem
+								key={notification?.notificationId}
+								style={
+									notification?.isRead
+										? { backgroundColor: "red" }
+										: {
+												fontWeight: "500",
+												color: "#f07d22",
+										  }
+								}
+							>
+								<div
+									className="w-90 mb-10"
+									onClick={() =>
+										handleHandleRead(notification)
+									}
+								>
+									<div className="d-flex justify-content-space-between align-items-center pl-8 pr-8">
+										<div
+											className="fs-12"
+											style={
+												notification?.isRead
+													? { color: "gray" }
+													: { color: "#e9a671" }
+											}
+										>
+											Ngày:{" "}
+											{dayjs(
+												notification?.createdAt
+											).format("DD-MM-YYYY")}{" "}
+										</div>
+										<div className="">
+											{" "}
+											{notification?.type}{" "}
+										</div>
+									</div>
+									<div className="mt-3">
+										{" "}
+										{notification?.content}{" "}
+									</div>
+								</div>
+								<div
+									className="w-10 d-flex justify-content-center align-items-center delete"
+									onClick={(e) => {
+										e.stopPropagation();
+										handleDeleteNotification(notification);
+									}}
+								>
+									x
+								</div>
+							</CustomMenuItem>
+						))}
+						<div
+							className="d-flex justify-content-space-between align-items-center pl-5 pr-5 mt-5"
+							style={{
+								position: "sticky",
+								bottom: 0,
+								height: "40px",
+								background: "#ddd",
+								color: "black",
+							}}
+						>
+							<div
+								style={{ cursor: "pointer" }}
+								onClick={(e) => {
+									handleReadAllNoti();
+									// e.stopPropagation();
+								}}
+							>
+								Đánh dấu đọc tất cả thông báo
+							</div>
+							<div
+								style={{ cursor: "pointer" }}
+								onClick={handleToggleNoti}
+							>
+								{isExpanded
+									? "Ẩn bớt thông báo"
+									: "Hiển thị thêm thông báo"}
+							</div>
+							<div
+								style={{ cursor: "pointer" }}
+								onClick={(e) => {
+									handleDeleteAllNoti();
+									// e.stopPropagation();
+								}}
+							>
+								Xóa tất cả thông báo
+							</div>
+						</div>
+					</div>
+				</SpinCustom>
+			)}
+		</Menu>
+	);
 
 	return (
 		<div className="header">
@@ -126,12 +279,17 @@ const Header = () => {
 					<MailOutlined />
 				</div>
 				<div className="item notification">
-					<Badge count={notis?.length} size="small">
-						<div className="fs-22 fw-500">
+					<Badge
+						count={
+							notis?.filter(
+								(i) => i?.isRead === false
+							).length
+						}
+						size="small"
+					>
+						<div className="fs-22 fw-500 w-100 notification">
 							<Dropdown
-								menu={{
-									items: itemNotis,
-								}}
+								overlay={itemNotis}
 								trigger={["click"]}
 							>
 								<BellOutlined />

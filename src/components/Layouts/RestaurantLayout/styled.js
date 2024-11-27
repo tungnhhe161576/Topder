@@ -1,3 +1,4 @@
+import { Menu } from 'antd'
 import styled from 'styled-components'
 
 export const RestaurantLayoutContainer = styled.div `
@@ -89,5 +90,35 @@ export const RestaurantLayoutContainer = styled.div `
             margin-left: 50px;
             width: 80%;
         }
+    }
+`
+
+export const CustomMenuItem = styled(Menu.Item)`
+    padding: 0;
+    border-bottom: 1px solid gray;
+    max-width: 600px;
+    min-width: 500px;
+    display: flex;
+    align-items: center;
+    background-color: #fff !important;
+
+    &:hover {
+        background-color: #c6e4e1 !important;
+        color: #fff;
+    }
+
+    .delete {
+        font-weight: bold;
+        font-size: 22px;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        transform-origin: center bottom;
+        border-color: transparent !important;
+        box-shadow: none !important;
+    }
+    .delete:hover {
+        color: red;
+        transform: 
+        scale(1.05);
     }
 `

@@ -40,7 +40,6 @@ const Header = () => {
 	const [numberNoti, setNumberNoti] = useState(6);
 	const [isExpanded, setIsExpanded] = useState(false);
 
-	console.log("list", notis);
 	const handleToggleNoti = () => {
 		if (isExpanded) {
 			setNumberNoti(6);
@@ -50,12 +49,13 @@ const Header = () => {
 		setIsExpanded(!isExpanded);
 	};
 
+	console.log('noti', notis);
+	
 	const getListNoti = async () => {
 		try {
 			setLoading2(true);
 			const notisRes = await UserService.getAllNoti(user?.uid);
 			setNotis(notisRes);
-			// dispatch(updateListNoti(res))
 		} catch (error) {
 			console.log(error);
 		} finally {
@@ -160,6 +160,8 @@ const Header = () => {
 				nav("/user-profile/history-booking");
 			} else if (notification.type === "Hệ Thống Trừ Tiền Từ Ví") {
 				nav("/user-profile/transactiom-history");
+			} else if (notification.type === 'Đánh Giá') {
+				nav('/user-profile/rates')
 			}
 		} catch (error) {
 			console.log(error);
