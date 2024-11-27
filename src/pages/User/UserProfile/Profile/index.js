@@ -149,7 +149,7 @@ const Profile = () => {
 							>
 								<Input
 									className="input fs-16"
-									placeholder="Tên"
+									placeholder="Số điện thoại"
 									disabled={!isEdit ? true : false}
 								/>
 							</Form.Item>

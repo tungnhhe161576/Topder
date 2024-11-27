@@ -90,88 +90,91 @@ const ModalUpdateFoods = ({
 						value={selectedFoods.map((f) => f.menuId)}
 						onChange={(e) => handleSelectFood(e.target.value)}
 					>
-						{m?.menusOfCategoryMenu?.map((f) => (
-							<div
-								className="d-flex flex-column"
-								style={{ flex: 1 }}
-								key={f?.menuId}
-							>
-								<div className="item">
-									<Radio
-										className={`ml-5 mb-10 ${
-											selectedFoods?.find(
-												(i) => i?.menuId === f?.menuId
-											)
-												? "selected"
-												: ""
-										}`}
-										value={f}
-										// key={f?.menuId}
-										style={{ height: "120px" }}
-									>
-										<div className="food-detail w-100">
-											<div className="food-img">
-												<Avatar
-													size={110}
-													src={
-														<img
-															src={f?.image}
-															alt="food"
-														/>
+						<div className="item-list">
+							{m?.menusOfCategoryMenu?.map((f) => (
+								<div
+									className="d-flex flex-column"
+									style={{ flex: 1 }}
+									key={f?.menuId}
+								>
+									<div className="item">
+										<Radio
+											className={`ml-5 mb-10 ${
+												selectedFoods?.find(
+													(i) =>
+														i?.menuId === f?.menuId
+												)
+													? "selected"
+													: ""
+											}`}
+											value={f}
+											// key={f?.menuId}
+											style={{ height: "120px" }}
+										>
+											<div className="food-detail w-100">
+												<div className="food-img">
+													<Avatar
+														size={110}
+														src={
+															<img
+																src={f?.image}
+																alt="food"
+															/>
+														}
+													/>
+												</div>
+												<div className="w-100">
+													<div className="d-flex justify-content-space-between pt-20 mb-10">
+														<div className="food-name">
+															{" "}
+															{f?.dishName}{" "}
+														</div>
+														<div className="food-price">
+															{" "}
+															{formatNumberToK(
+																f?.price
+															)}{" "}
+														</div>
+													</div>
+													<div className="food-des">
+														{" "}
+														{f?.description}{" "}
+													</div>
+												</div>
+											</div>
+										</Radio>
+									</div>
+									<div className="pl-30">
+										{selectedFoods?.some(
+											(i) => i?.menuId === f?.menuId
+										) ? (
+											<div>
+												<div>Số lượng</div>
+												<InputNumber
+													className="d-flex align-items-center"
+													min={1}
+													value={
+														selectedFoods.find(
+															(i) =>
+																i?.menuId ===
+																f?.menuId
+														)?.quantity || 1
+													}
+													onChange={(value) =>
+														handleQuantityChange(
+															f.menuId,
+															value
+														)
 													}
 												/>
 											</div>
-											<div className="w-100">
-												<div className="d-flex justify-content-space-between pt-20 mb-10">
-													<div className="food-name">
-														{" "}
-														{f?.dishName}{" "}
-													</div>
-													<div className="food-price">
-														{" "}
-														{formatNumberToK(
-															f?.price
-														)}{" "}
-													</div>
-												</div>
-												<div className="food-des">
-													{" "}
-													{f?.description}{" "}
-												</div>
-											</div>
-										</div>
-									</Radio>
+										) : (
+											<></>
+										)}
+									</div>
 								</div>
-								<div className="pl-30">
-									{selectedFoods?.some(
-										(i) => i?.menuId === f?.menuId
-									) ? (
-										<div>
-											<div>Số lượng</div>
-											<InputNumber
-												className="d-flex align-items-center"
-												min={1}
-												value={
-													selectedFoods.find(
-														(i) =>
-															i?.menuId ===
-															f?.menuId
-													)?.quantity || 1
-												}
-												onChange={(value) =>
-													handleQuantityChange(
-														f.menuId,
-														value
-													)
-												}
-											/>
-										</div>
-									) : (
-										<></>
-									)}
-								</div>
-							</div>
-						))}
+							))}
+						</div>
 					</Radio.Group>
 				</div>
 			),
@@ -206,7 +209,7 @@ const ModalUpdateFoods = ({
 				onCancel={onCancel}
 				width={800}
 				footer={footer}
-				style={{ marginTop: "150px" }}
+				style={{ marginTop: "50x" }}
 				loading={loading}
 			>
 				<ModalChooseFoodContainer>

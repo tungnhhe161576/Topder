@@ -142,6 +142,12 @@ const ModalCreateDiscount = ({ open, onCancel, onOk, userId }) => {
 												"HH:mm"
 											),
 										}}
+										disabledDate={(current) => {
+											return (
+												current &&
+												current < dayjs().startOf("day")
+											);
+										}}
 									/>
 								</Form.Item>
 							</Col>
@@ -163,6 +169,12 @@ const ModalCreateDiscount = ({ open, onCancel, onOk, userId }) => {
 												"00:00:00",
 												"HH:mm"
 											),
+										}}
+										disabledDate={(current) => {
+											return (
+												current &&
+												current < dayjs().startOf("day")
+											);
 										}}
 									/>
 								</Form.Item>
