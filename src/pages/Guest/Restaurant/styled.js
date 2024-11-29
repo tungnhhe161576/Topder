@@ -50,6 +50,43 @@ export const RestaurantContainer = styled.div`
 		height: 40px;
 		margin: 0 5px;
 	}
+	.custom-pagination .ant-pagination-item-active {
+		background-color: #fa8c16;
+		border-color: #fa8c16;
+		color: white;
+	}
+
+	.custom-pagination .ant-pagination-item a {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		color: #000;
+		font-weight: bold;
+	}
+
+	.custom-pagination .ant-pagination-item-active a {
+		color: white;
+	}
+
+	.custom-pagination .ant-pagination-prev,
+	.custom-pagination .ant-pagination-next {
+		border: none;
+	}
+
+	.custom-pagination .ant-pagination-prev:hover,
+	.custom-pagination .ant-pagination-next:hover {
+		color: #fa8c16;
+	}
+
+	.custom-pagination .ant-pagination-prev .anticon,
+	.custom-pagination .ant-pagination-next .anticon {
+		font-size: 16px;
+	}
+
+	.custom-pagination .ant-pagination-prev,
+	.custom-pagination .ant-pagination-next {
+		padding: 0 10px;
+	}
 	:where(
 			.css-dev-only-do-not-override-14qglws
 		).ant-input-group-wrapper-outlined

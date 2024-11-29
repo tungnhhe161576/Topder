@@ -13,6 +13,7 @@ const Blog = () => {
 	const [form] = Form.useForm();
 	const [loading, setLoading] = useState(false);
 	const [blogs, setBlogs] = useState([]);
+	const [currentPage, setCurrentPage] = useState(1);
 	const [dataSearch, setDataSearch] = useState({
 		blogGroupId: undefined,
 		title: "",
@@ -61,7 +62,11 @@ const Blog = () => {
 	useEffect(() => {
 		getBlogCategory();
 	}, []);
-
+	const itemPerPage = 4;
+	const onPageChange = (page) => {
+		setCurrentPage(page);
+	};
+	const startIndex = (currentPage - 1) * itemPerPage;
 	return (
 		<CommonLayout>
 			<BlogContainer>
@@ -121,20 +126,44 @@ const Blog = () => {
 								gutter={[24, 32]}
 								className="d-flex justify-content-center"
 							>
-								{blogs?.map((blog) => (
-									<Col
-										key={blog.blogId}
-										xs={12}
-										sm={12}
-										md={12}
-										lg={6}
-										xl={6}
-									>
-										<BlogItem data={blog} />
-									</Col>
-								))}
+								{blogs
+									?.slice(
+										startIndex,
+										startIndex + itemPerPage
+									)
+									?.map((blog) => (
+										<Col
+											key={blog.blogId}
+											xs={12}
+											sm={12}
+											md={12}
+											lg={6}
+											xl={6}
+										>
+											<BlogItem data={blog} />
+										</Col>
+									))}
 							</Row>
 						)}
+						<div className="pagination">
+							<Pagination
+								className="custom-pagination pb-20"
+								itemRender={(page, type, originalElement) => {
+									if (type === "prev") {
+										return <LeftOutlined />;
+									}
+									if (type === "next") {
+										return <RightOutlined />;
+									}
+									return originalElement;
+								}}
+								defaultCurrent={1}
+								current={currentPage}
+								pageSize={itemPerPage}
+								total={blogs?.length}
+								onChange={onPageChange}
+							/>
+						</div>
 					</SpinCustom>
 				</div>
 			</BlogContainer>

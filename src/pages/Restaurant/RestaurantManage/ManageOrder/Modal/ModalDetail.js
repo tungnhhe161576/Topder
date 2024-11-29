@@ -59,7 +59,15 @@ const ModalDetail = ({ open, onCancel, onOk }) => {
 										<span style={{ color: "gray" }}>
 											SĐT:{" "}
 										</span>
-										{open?.phoneReceiver}
+										<a
+											href={`tel:${open?.phoneReceiver}`}
+											style={{
+												color: "inherit",
+												textDecoration: "none",
+											}}
+										>
+											{open?.phoneReceiver}
+										</a>
 									</div>
 								</div>
 							</div>

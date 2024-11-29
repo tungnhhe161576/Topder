@@ -378,7 +378,20 @@ const ManageOrder = () => {
 															{i?.nameReceiver}
 														</td>
 														<td>
-															{i?.phoneReceiver}
+															<span>
+																<a
+																	href={`tel:${i?.phoneReceiver}`}
+																	style={{
+																		color: "inherit",
+																		textDecoration:
+																			"none",
+																	}}
+																>
+																	{
+																		i?.phoneReceiver
+																	}
+																</a>
+															</span>
 														</td>
 														<td>
 															<span>

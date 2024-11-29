@@ -38,6 +38,7 @@ import ModalCalFee from "./Modal/ModalCalFee";
 import Policy from "./Description/Policy";
 import ModalSuccess from "../../../../components/Modal/ModalSuccess";
 import ModalReport from "./Modal/ModalReport";
+import { SiGooglemaps } from "react-icons/si";
 
 const RestaurantDetail = () => {
 	const [selectedOption, setSelectedOption] = useState("description");
@@ -244,33 +245,37 @@ const RestaurantDetail = () => {
 			return;
 		}
 		try {
-			const res = await UserService.checkExistChatBox(user?.uid, restaurantId)
+			const res = await UserService.checkExistChatBox(
+				user?.uid,
+				restaurantId
+			);
 			if (res) {
 				message.open({
-					content: 'Cuộc hội thoại đã được tạo!',
-					type: 'success',
+					content: "Cuộc hội thoại đã được tạo!",
+					type: "success",
 					style: {
-						marginTop: '10vh',
+						marginTop: "10vh",
 					},
-				})
+				});
 			} else {
 				await UserService.createChatBox({
 					chatBoxId: 0,
 					customerId: user?.uid,
-					restaurantId: restaurantId
-				})
+					restaurantId: restaurantId,
+				});
 				message.open({
-					content: 'Tạo cuộc hội thoại thành công!',
-					type: 'success',
+					content: "Tạo cuộc hội thoại thành công!",
+					type: "success",
 					style: {
-						marginTop: '10vh',
+						marginTop: "10vh",
 					},
-				})
+				});
 			}
 		} catch (error) {
 			console.log(error);
-		} finally {}
-	}
+		} finally {
+		}
+	};
 
 	//xu ly slider hinh anh nha hang
 	const nextImage = () => {
@@ -290,7 +295,74 @@ const RestaurantDetail = () => {
 		{ label: "Đánh giá", value: "rate" },
 		{ label: "Chính sách", value: "policy" },
 	];
+	const getDisabledHours = () => {
+		const openTime = restaurantDetail?.openTime || "08:00";
+		const closeTime = restaurantDetail?.closeTime || "23:00";
 
+		const apiStartTime = dayjs(openTime, "HH:mm");
+		const apiEndTime = dayjs(closeTime, "HH:mm");
+		const currentHour = dayjs().hour();
+		const startHour = apiStartTime.hour();
+		const endHour = apiEndTime.hour();
+		const disabledHours = [];
+
+		for (let i = 0; i < startHour; i++) {
+			disabledHours.push(i);
+		}
+		for (let i = endHour + 1; i < 24; i++) {
+			disabledHours.push(i);
+		}
+		if (dayjs().isSame(dayjs(), "day")) {
+			for (let i = startHour; i < currentHour; i++) {
+				if (!disabledHours.includes(i)) {
+					disabledHours.push(i);
+				}
+			}
+		}
+
+		return disabledHours;
+	};
+
+	const getDisabledMinutes = (selectedHour) => {
+		const openTime = restaurantDetail?.openTime || "08:00";
+		const closeTime = restaurantDetail?.closeTime || "23:00";
+
+		const apiStartTime = dayjs(openTime, "HH:mm");
+		const apiEndTime = dayjs(closeTime, "HH:mm");
+
+		const startHour = apiStartTime.hour();
+		const endHour = apiEndTime.hour();
+
+		const currentTime = dayjs();
+		const currentHour = currentTime.hour();
+		const currentMinute = currentTime.minute();
+
+		const disabledMinutes = [];
+
+		if (selectedHour === startHour) {
+			const startMinute = apiStartTime.minute();
+			for (let i = 0; i < startMinute; i++) {
+				disabledMinutes.push(i);
+			}
+		}
+
+		if (selectedHour === endHour) {
+			const endMinute = apiEndTime.minute();
+			for (let i = endMinute + 1; i < 60; i++) {
+				disabledMinutes.push(i);
+			}
+		}
+
+		if (dayjs().isSame(dayjs(), "day") && selectedHour === currentHour) {
+			for (let i = 0; i < currentMinute; i++) {
+				if (!disabledMinutes.includes(i)) {
+					disabledMinutes.push(i);
+				}
+			}
+		}
+
+		return disabledMinutes;
+	};
 	return (
 		<CommonLayout>
 			<RestaurantDetailContainer>
@@ -316,10 +388,12 @@ const RestaurantDetail = () => {
 										</Button>
 										<Button
 											className="ml-10"
-											onClick={() => handleCreateChatBox()}
+											onClick={() =>
+												handleCreateChatBox()
+											}
 											title="Nhắn tin với nhà hàng"
 										>
-											<WechatOutlined className="fs-20"/>
+											<WechatOutlined className="fs-20" />
 										</Button>
 									</div>
 								</div>
@@ -462,10 +536,31 @@ const RestaurantDetail = () => {
 													Địa chỉ
 												</div>
 												<div>
-													{" "}
-													{
-														restaurantDetail?.address
-													}{" "}
+													<a
+														href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+															restaurantDetail?.address
+														)}`}
+														target="_blank"
+														rel="noopener noreferrer"
+														style={{
+															marginLeft: 8,
+														}}
+													>
+														<SiGooglemaps
+															style={{
+																color: "red",
+																fontSize:
+																	"20px",
+															}}
+														/>
+													</a>{" "}
+													{restaurantDetail?.address}{" "}
+													<div
+														style={{ color: "red" }}
+													>
+														(Nhấn vào icon để xem
+														chỉ đường)
+													</div>
 												</div>
 											</div>
 											<div className="short-des mb-30">
@@ -766,49 +861,9 @@ const RestaurantDetail = () => {
 																			showTime={{
 																				format: "HH:mm",
 																				disabledHours:
-																					() => {
-																						const apiStartTime =
-																							dayjs(
-																								"08:00:00",
-																								"HH:mm:ss"
-																							);
-																						const apiEndTime =
-																							dayjs(
-																								"23:00:00",
-																								"HH:mm:ss"
-																							);
-																						const startHour =
-																							apiStartTime.hour();
-																						const endHour =
-																							apiEndTime.hour();
-																						const disabledHours =
-																							[];
-
-																						for (
-																							let i = 0;
-																							i <
-																							startHour;
-																							i++
-																						) {
-																							disabledHours.push(
-																								i
-																							);
-																						}
-																						for (
-																							let i =
-																								endHour +
-																								1;
-																							i <
-																							24;
-																							i++
-																						) {
-																							disabledHours.push(
-																								i
-																							);
-																						}
-
-																						return disabledHours;
-																					},
+																					getDisabledHours,
+																				disabledMinutes:
+																					getDisabledMinutes,
 																			}}
 																			onChange={(
 																				e
@@ -952,14 +1007,14 @@ const RestaurantDetail = () => {
 
 				{/* Nhà hàng liên quan */}
 				<div className="related-restaurant">
-					<div className="fs-26 fw-700"> Cửa hàng liên quan </div>
-					<div>
+					<SpinCustom spinning={loading}>
+						<div className="fs-26 fw-700"> Cửa hàng liên quan </div>
 						<Row
-							gutter={[24, 24]}
+							gutter={[30, 32]}
 							className="d-dlex justify-content-center"
 						>
 							{relatedRestaurant.length === 0 ? (
-								<div className="red fw-500 fs-18 d-flex justify-content-center">
+								<div className="fs-18 fw-500 d-flex justify-content-center w-100 red mt-30">
 									Không có dữ liệu
 								</div>
 							) : (
@@ -971,17 +1026,20 @@ const RestaurantDetail = () => {
 												key={index}
 												xs={12}
 												sm={12}
-												md={6}
+												md={12}
 												lg={6}
 												xl={6}
 											>
-												<RelatedRestaurant data={r} user={user}/>
+												<RelatedRestaurant
+													data={r}
+													user={user}
+												/>
 											</Col>
 										))}
 								</>
 							)}
 						</Row>
-					</div>
+					</SpinCustom>
 				</div>
 			</RestaurantDetailContainer>
 
