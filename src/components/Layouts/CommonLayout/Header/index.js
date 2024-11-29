@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Avatar, Badge, Col, Dropdown, Menu, Row } from "antd";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
 	BellOutlined,
 	MailOutlined,
@@ -39,6 +39,8 @@ const Header = () => {
 	const [notis, setNotis] = useState([]);
 	const [numberNoti, setNumberNoti] = useState(6);
 	const [isExpanded, setIsExpanded] = useState(false);
+	const [category, setCategory] = useState([]);
+	const location = useLocation()
 
 	const handleToggleNoti = () => {
 		if (isExpanded) {
@@ -105,6 +107,18 @@ const Header = () => {
 		getAds();
 	}, []);
 
+	const getAllRestaurantCategory = async () => {
+		try {
+			const res = await GuestService.getAllRestaurantCategory();
+			setCategory(res);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+	useEffect(() => {
+        getAllRestaurantCategory();
+    }, []);
+
 	const itemsDropdown = [
 		{
 			key: "1",
@@ -151,6 +165,15 @@ const Header = () => {
 			),
 		},
 	];
+
+	const itemsCategory = category?.map((c) => ({
+		key: c?.categoryRestaurantId,
+		label: (
+			<span onClick={() => nav('/restaurant-view', { state: { categoryRestaurantId: c?.categoryRestaurantId } })}>
+				{c?.categoryRestaurantName}
+			</span>
+		),
+	}));
 
 	const handleHandleRead = async (notification) => {
 		try {
@@ -445,20 +468,62 @@ const Header = () => {
 									{" "}
 									Trang Chủ{" "}
 								</span>
-								<span
-									style={
-										activeButton === "restaurant"
-											? { color: "#f07d22" }
-											: {}
-									}
-									onClick={() => {
-										handleButtonClick("restaurant");
-										nav("/restaurant-view");
+
+								{
+									location.pathname.includes('/restaurant-view')
+										? <span
+											style={
+												activeButton === "restaurant"
+													? { color: "#f07d22" }
+													: {}
+											}
+											onClick={() => {
+												handleButtonClick("restaurant");
+												nav("/restaurant-view");
+											}}
+										>
+											Nhà Hàng - Dịch Vụ
+										</span>
+										: <Dropdown
+											menu={{
+												items: itemsCategory,
+											}}
+										>
+											<span
+												style={
+													activeButton === "restaurant"
+														? { color: "#f07d22" }
+														: {}
+												}
+												onClick={() => {
+													handleButtonClick("restaurant");
+													nav("/restaurant-view");
+												}}
+											>
+												Nhà Hàng - Dịch Vụ
+											</span>
+										</Dropdown>
+								}
+
+								{/* <Dropdown
+									menu={{
+										items: itemsCategory,
 									}}
 								>
-									{" "}
-									Nhà Hàng - Dịch Vụ{" "}
-								</span>
+									<span
+										style={
+											activeButton === "restaurant"
+												? { color: "#f07d22" }
+												: {}
+										}
+										onClick={() => {
+											handleButtonClick("restaurant");
+											nav("/restaurant-view");
+										}}
+									>
+										Nhà Hàng - Dịch Vụ
+									</span>
+								</Dropdown> */}
 								<span
 									style={
 										activeButton === "about-us"

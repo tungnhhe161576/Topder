@@ -124,11 +124,19 @@ const RestaurantDetail = () => {
 		}
 	}, [restaurantDetail]);
 
+	console.log("user", user);
+	
+
 	//form dat ban
 	const handleSubmitFormBooking = async () => {
 		if (!user) {
 			setOpenRequestLogin(true);
 			setText("Bạn cần đăng nhập để đặt bàn");
+			return;
+		}
+		if (!!!user.phone || !!!user.dob || !!!user.gender) {
+			setOpenRequestLogin(true);
+			setText("Bạn cần cập nhật đầy đủ thông tin tài khoản trước khi đặt bàn!");
 			return;
 		}
 		try {

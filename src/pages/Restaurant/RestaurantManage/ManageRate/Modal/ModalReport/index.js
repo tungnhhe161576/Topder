@@ -4,28 +4,22 @@ import CustomModal from "../../../../../../components/Common/ModalCustom"
 import UserService from "../../../../../../services/UserService"
 import { useState } from "react"
 
-const ModalReport = ({open, onCancel, user, setOpenRequestLogin, setText}) => {
+const ModalReport = ({open, onCancel, onOk, userId}) => {
     const [loading, setLoading] = useState(false)
     const [form] = Form.useForm()
     
     const handleReport = async () => {
-        if (!user) {
-            onCancel()
-			setOpenRequestLogin(true);
-			setText("Bạn cần đăng nhập để thực hiện tác vụ này");
-			return;
-		}
         try {
             setLoading(true)
             const formValue = await form.validateFields()
             
             await UserService.report({
-                reportedBy: user?.uid,
-                reportedOn: open?.uid,
-                reportType: 'Restaurant',
+                reportedBy: userId,
+                reportedOn: open?.customerId,
+                reportType: 'Feedback',
                 description: formValue?.content,
                 orderId: null,
-                feedbackId: null
+                feedbackId: open?.feedbackId
             })
             
             message.open({
@@ -36,7 +30,7 @@ const ModalReport = ({open, onCancel, user, setOpenRequestLogin, setText}) => {
                 },
             })
             onCancel()
-            // onOk()
+            onOk()
         } catch (error) {
             console.log(error);
         } finally {
@@ -50,7 +44,7 @@ const ModalReport = ({open, onCancel, user, setOpenRequestLogin, setText}) => {
                 <Button className="mr-10 fw-600" onClick={() => onCancel()}>
                     Đóng
                 </Button>
-                <Button 
+                <Button
                     className="mr-10 fw-600" type='primary' 
                     onClick={() => handleReport()}
                     loading={loading}
@@ -69,10 +63,12 @@ const ModalReport = ({open, onCancel, user, setOpenRequestLogin, setText}) => {
             width={600}
             style={{marginTop: '100px'}}
         >
-            <div>
-                <Form form={form} className="p-20">
+            <div className="title-type-1 mb-20">Báo cáo về đơn hàng</div>
+            <div className="mb-30">
+                <Form form={form} className="p-20" layout="vertical">
                     <Form.Item 
                         name='content'
+                        label= 'Lý do'
                         rules={[
                             { required: true, message: "Hãy viết lý do!" },
                         ]}
@@ -84,5 +80,6 @@ const ModalReport = ({open, onCancel, user, setOpenRequestLogin, setText}) => {
         </CustomModal>
     );
 }
+
  
 export default ModalReport;

@@ -16,6 +16,7 @@ const ModalChooseOptionPayment = ({open, onCancel, user, orderHistory}) => {
     const [loading, setLoading] = useState(false)
     const dispatch = useDispatch()
     const [data, setData] = useState()
+    const [returnFee, setReturnFee] = useState()
 
     const getDataPolicy = async () => {
         try {
@@ -28,9 +29,23 @@ const ModalChooseOptionPayment = ({open, onCancel, user, orderHistory}) => {
             setLoading(false)
         }
     }
+    const getReturnFee = async () => {
+        try {
+            setLoading(true)
+            const res = await UserService.returnFee(user?.uid, open?.restaurantId)
+            setReturnFee(res)
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false)
+        }
+    }
     useEffect(() => {
         getDataPolicy()
+        getReturnFee()
     }, [])
+
+    
     
 
     const handlePaidPayment = async () => {
@@ -180,7 +195,7 @@ const ModalChooseOptionPayment = ({open, onCancel, user, orderHistory}) => {
                 </div>
                 {
                     !!data && <div className="mt-10 mb-30 fs-12" style={{fontStyle: 'italic'}}>
-                        Lưu ý: Theo chính sách của nhà hàng, đơn hàng của bạn sẽ được chiết khấu {}% giá trị
+                        Lưu ý: Theo chính sách của nhà hàng, đơn hàng của bạn sẽ được chiết khấu {returnFee}% giá trị
                     </div>
                 }
                 

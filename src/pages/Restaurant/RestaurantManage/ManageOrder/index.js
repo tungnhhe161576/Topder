@@ -23,6 +23,7 @@ import ModalDetail from "./Modal/ModalDetail";
 import ModalUpdateOrder from "./Modal/ModalUpdateOrder";
 import { FileAddOutlined } from "@ant-design/icons";
 import * as XLSX from "xlsx";
+import ModalReport from "./Modal/ModalReport";
 const { Option } = Select;
 
 const ManageOrder = () => {
@@ -31,6 +32,7 @@ const ManageOrder = () => {
 	const [statusOrder, setStatusOrder] = useState("");
 	const [openModalDetail, setOpenModalDetail] = useState(false);
 	const [openModalUpdateOrder, setOpenModalUpdateOrder] = useState(false);
+	const [openModalReport, setOpenModalReport] = useState(false);
 	const [text, setText] = useState("");
 	const [status, setStatus] = useState("");
 	const user = useSelector(userInfor);
@@ -200,6 +202,21 @@ const ManageOrder = () => {
 			),
 		},
 		{
+			title: "Hình thức thanh toán",
+			dataIndex: "paidType",
+			key: "paidType",
+			render: (value, record) => (
+				<div>
+					{
+						record?.totalAmount === 0 
+							? 'Không cần thanh toán' 
+							: <div className="">{value === 'Deposit' ? 'Thanh toán tiền cọc' : (value === 'Entire Order' ? 'Thanh toán toàn bộ đơn hàng' : 'Chưa thanh toán')}</div>
+					}
+				</div>
+				
+			),
+		},
+		{
 			title: "Trạng Thái",
 			dataIndex: "statusOrder",
 			key: "",
@@ -287,7 +304,7 @@ const ManageOrder = () => {
 					record?.statusOrder === "Confirm" ||
 					record?.statusOrder === "Paid" ? (
 						<Button
-							className="huydon"
+							className="huydon mr-5"
 							onClick={() => {
 								setOpenModalUpdateOrder(record);
 								setText(
@@ -304,6 +321,18 @@ const ManageOrder = () => {
 							Hủy
 						</Button>
 					) : null}
+					{
+						record?.paidType === 'Deposit' && record?.statusOrder === 'Paid' && !record?.isReport
+							? <Button
+								onClick={() => setOpenModalReport(record)}
+								shape="round"
+								type="primary"
+								danger
+							>
+								Báo cáo
+							</Button>
+							: null
+					}
 				</div>
 			),
 			// width: 200
@@ -597,6 +626,13 @@ const ManageOrder = () => {
 								onOk={getAllOrders}
 								text={text}
 								status={status}
+								userId={user?.uid}
+							/>
+						)}
+						{!!openModalReport && (
+							<ModalReport
+								open={openModalReport}
+								onCancel={() => setOpenModalReport(false)}
 								userId={user?.uid}
 							/>
 						)}

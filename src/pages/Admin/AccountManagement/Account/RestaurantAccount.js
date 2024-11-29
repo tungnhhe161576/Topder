@@ -10,7 +10,6 @@ const RestaurantAccount = ({loading, accounts, getAccount}) => {
     const [openModalViewDetail, setOpenModalViewDetail] = useState(false)
 	const [openModalBanAccount, setOpenModalBanAccount] = useState(false)
     
-    
     const columns = [
 		{
 			title: 'STT',

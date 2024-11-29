@@ -72,7 +72,10 @@ const Profile = () => {
 						? "Nam"
 						: user.gender === "Female"
 						? "Nữ"
-						: "Khác",
+						: user.gender === "Other"
+						? "Khác"
+						: 'Chưa xác định',
+				phone: user.phone ? user.phone : 'Chưa xác định'
 			});
 		}
 	}, [user, form]);
@@ -189,8 +192,7 @@ const Profile = () => {
 									]}
 									label={
 										<span className="fs-17 fw-600 d-flex justify-content-start">
-											{" "}
-											Giới tính{" "}
+											Giới tính
 										</span>
 									}
 								>
@@ -211,7 +213,7 @@ const Profile = () => {
 										Ngày sinh:
 									</div>
 									<div className="fs-15">
-										{dayjs(user?.dob).format("DD-MM-YYYY")}
+										{user?.dob ? dayjs(user?.dob).format("DD-MM-YYYY") : 'Chưa xác định'}
 									</div>
 								</div>
 							) : (

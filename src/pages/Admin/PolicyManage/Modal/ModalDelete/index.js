@@ -1,17 +1,17 @@
 import { Button, message } from "antd"
-import CustomModal from "../../../../../../../components/Common/ModalCustom"
+import CustomModal from "../../../../../components/Common/ModalCustom"
 import { useState } from "react"
-import UserService from "../../../../../../../services/UserService"
+import AdminService from "../../../../../services/AdminService"
 
-const ModalDeleteMenu = ({open, onCancel, onOk, userId}) => {
+const ModalDelete = ({open, onCancel, onOk}) => {
     const [loading, setLoading] = useState(false)
 
     const handledDelete = async () => {
         try {
             setLoading(true)
-            await UserService.deleteMenu(userId, open?.menuId)
+            await AdminService.deletePolicy(open?.policyId)
             message.open({
-                content: 'Xóa món ăn thành công!',
+                content: 'Xóa thành công!',
                 type: 'success',
                 style: {
                     marginTop: '10vh',
@@ -21,7 +21,7 @@ const ModalDeleteMenu = ({open, onCancel, onOk, userId}) => {
             onCancel()
         } catch (error) {
             message.open({
-                content: 'Xóa món ăn thất bại!',
+                content: 'Xóa thất bại!',
                 type: 'error',
                 style: {
                     marginTop: '10vh',
@@ -54,10 +54,10 @@ const ModalDeleteMenu = ({open, onCancel, onOk, userId}) => {
             style={{marginTop: '100px'}}
         >
             <div className="fw-500 fs-20">
-                Bạn có chắc chắn muốn xóa món ăn này hay không ?
+                Bạn có chắc chắn muốn xóa chính sách này không ?
             </div>
         </CustomModal>
     );
 }
  
-export default ModalDeleteMenu;
+export default ModalDelete;

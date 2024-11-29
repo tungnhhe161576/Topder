@@ -3,20 +3,22 @@ import { Button, Table, message } from "antd";
 import { MangementPolicyContainer } from "./styled";
 import GuestService from "../../../../../services/GuestService";
 import SpinCustom from "../../../../../components/Common/SpinCustom";
-import ModalUpdatePolicy from "./Modal";
+import ModalUpdatePolicy from "./Modal/ModalCreatePolicy";
+import ModalChoosePolicy from "./Modal/ModalChoosePolicy/ModalChoosePolicy";
 
 const ManagePolicy = ({user}) => {
 	const [openModalUpdate, setOpenModalUpdate] = useState(false)
+	const [openModalChoosePolicy, setOpenModalChoosePolicy] = useState(false)
 	const [loading, setLoading] = useState(false);
 	const [data, setData] = useState([])
 
 	const getData = async () => {
 		try {
 			setLoading(true)
-            const response = await GuestService.getRestaurantFee(user.uid);
+            const response = await GuestService.getActivePolicy(user.uid);
             setData([response]);
         } catch (error) {
-            message.error("Lỗi tải dữ liệu");
+            // message.error("Lỗi tải dữ liệu");
         } finally {
 			setLoading(false)
 		}
@@ -29,18 +31,6 @@ const ManagePolicy = ({user}) => {
 
 
 	const columns = [
-		{
-			title: "Chiết khấu của nhà hàng",
-			dataIndex: "discountRestaurant",
-			key: "discountRestaurant",
-			width: 300,
-			align: 'center',
-			render: (value) => (
-				<div className="image-container">
-					{value}%
-				</div>
-			),
-		},
 		{
 			title: "Chiết khấu cho lần đặt bàn đầu tiên",
 			dataIndex: "firstFeePercent",
@@ -83,14 +73,24 @@ const ManagePolicy = ({user}) => {
 	return (
 		<MangementPolicyContainer>
 			<div>
-				<div style={{ marginBottom: "20px", textAlign: "right" }}>
-					<Button
-						type="primary"
-						style={{ height: 40 }}
-						onClick={() => setOpenModalUpdate(data)}
-					>
-						Chỉnh Sửa Chính Sách
-					</Button>
+				<div className="mb-20 d-flex justify-content-flex-end">
+					<div className="d-flex align-items-center">
+						<Button
+							type="primary"
+							className="mr-10"
+							style={{ height: 40 }}
+							onClick={() => setOpenModalUpdate(data)}
+						>
+							Thêm Chính Sách
+						</Button>
+						<Button
+							type="primary"
+							style={{ height: 40 }}
+							onClick={() => setOpenModalChoosePolicy(data)}
+						>
+							Chọn Chính Sách
+						</Button>
+					</div>
 				</div>
 				<SpinCustom spinning={loading}>
 					<Table
@@ -107,6 +107,16 @@ const ManagePolicy = ({user}) => {
 					<ModalUpdatePolicy
 						open={openModalUpdate}
 						onCancel={() => setOpenModalUpdate(false)}
+						onOk={getData}
+						userId={user?.uid}
+					/>
+				)
+			}
+			{
+				!!openModalChoosePolicy && (
+					<ModalChoosePolicy
+						open={openModalChoosePolicy}
+						onCancel={() => setOpenModalChoosePolicy(false)}
 						onOk={getData}
 						userId={user?.uid}
 					/>

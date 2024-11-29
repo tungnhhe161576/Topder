@@ -8,11 +8,13 @@ import { userInfor } from "../../../../redux/Slice/userSlice";
 import UserService from '../../../../services/UserService'
 import SpinCustom from '../../../../components/Common/SpinCustom'
 import ModalReply from "./Modal/ModalReply";
+import ModalReport from "./Modal/ModalReport";
 
 const ManageRate = () => {
     const [loading, setLoading] = useState(false)
     const [feedbacks, setFeedbacks] = useState([])
     const [openModalReply, setOpenModalReply] = useState(false)
+    const [openModalReport, setOpenModalReport] = useState(false)
     const user = useSelector(userInfor)
 
     const getFeedbacks = async () => {
@@ -71,7 +73,7 @@ const ManageRate = () => {
             render: (text) => <span className="fs-14"> {text} </span>,
         },
         {
-            title: 'Phản hồi',
+            title: '',
             dataIndex: 'isReply',
             key: 'isReply',
             align: 'center',
@@ -81,6 +83,11 @@ const ManageRate = () => {
                         record?.isReply === true
                             ? <Button type="primary" shape="round" onClick={() => setOpenModalReply(record)}>Xem phản hồi</Button>
                             : <Button type="primary" shape="round" onClick={() => setOpenModalReply(record)}> Phản hồi</Button>
+                    }
+                    {
+                        record?.isReport
+                            ? null
+                            : <Button className="ml-5" type="primary" shape="round" danger onClick={() => setOpenModalReport(record)}>Báo cáo</Button>
                     }
                 </div>
             ),
@@ -111,6 +118,16 @@ const ManageRate = () => {
                         <ModalReply
                             open={openModalReply}
                             onCancel={() => setOpenModalReply(false)}
+                            onOk={getFeedbacks}
+                            userId={user?.uid}
+                        />
+                    )
+                }
+                {
+                    !!openModalReport && (
+                        <ModalReport
+                            open={openModalReport}
+                            onCancel={() => setOpenModalReport(false)}
                             onOk={getFeedbacks}
                             userId={user?.uid}
                         />

@@ -27,7 +27,7 @@ export const apiGetWalletInfo = "Wallet/GetWalletInfo";
 export const apiAddOTP = "Wallet/AddOTP";
 export const apiCreateOrUpdateBank = "Wallet/CreateOrUpdateBank";
 export const apiDeposit = "WalletTransaction/Recharge";
-export const apiCheckRecharge = "WalletTransaction/CheckRecharge";
+export const apiCheckRecharge = "WalletTra/CheckRecharge";
 export const apiRegisterCustomer = "User/RegisterCustomer";
 export const apiUpdateResInfor = "Restaurant/UpdateRestaurantInfo";
 export const apiCheckEmail = "User/CheckExistEmail";
@@ -84,6 +84,7 @@ export const apiCheckPaymentBooking = "BookingAdvertisement/CheckPayment"
 export const apiCretaeAdsBooking = "BookingAdvertisement/Create"
 export const apiCancelBookingAds = "BookingAdvertisement/UpdateStatus"
 export const apiCreateTableByExcel = "RestaurantTables/CreateByExcel"
+export const apiCreateRoomByExcel = "RestaurantRoom/CreateByExcel"
 export const apiEnableBooking = "Restaurant/IsEnabledBooking"
 export const apiGetAllNoti = "Notification/GetNotificationList?pageNumber"
 export const apiReadNoti = "Notification/IsRead"
@@ -99,5 +100,10 @@ export const apiCheckExistChatBox = 'ChatBox/CheckExist'
 export const apiReadChatBox = 'ChatBox/IsRead'
 export const apiCreateReply = 'Feedback/CreateFeedbackReply'
 export const apiViewFeedback = 'Feedback/GetFeedback'
+export const apiReturnFee = 'Order/ReturnFeePercentApplyCustomerFee'
+export const apiCreatePolicy = 'RestaurantPolicy/Create'
+export const apiGetInActivePolicy = 'RestaurantPolicy/GetInActivePolicies'
+export const apiChoosePolicy = 'RestaurantPolicy/ChoosePolicyToUse'
+
 
 

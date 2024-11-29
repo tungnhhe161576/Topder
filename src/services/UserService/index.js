@@ -100,6 +100,11 @@ import {
 	apiCreateReply,
 	apiViewFeedback,
 	apiAddMenus,
+	apiReturnFee,
+	apiCreatePolicy,
+	apiGetInActivePolicy,
+	apiChoosePolicy,
+	apiCreateRoomByExcel,
 } from "./urls";
 
 
@@ -248,6 +253,12 @@ const createTableByExcel = (restaurantId, file) => {
     formData.append('File', file);
 	http.post(apiCreateTableByExcel, formData);
 }
+const createRoomByExcel = (restaurantId, file) => {
+	const formData = new FormData();
+    formData.append('RestaurantId', restaurantId);
+    formData.append('File', file);
+	http.post(apiCreateRoomByExcel, formData);
+}
 const enableBooking = (restaurantId, isEnabledBooking) => http.put(`${apiEnableBooking}/${restaurantId}?isEnabledBooking=${isEnabledBooking}`)
 const getAllNoti = (userId) => http.get(`${apiGetAllNoti}?pageNumber=1&pageSize=10000&userId=${userId}`)
 const readNoti = (notiId) => http.put(`${apiReadNoti}/${notiId}`)
@@ -263,6 +274,10 @@ const checkExistChatBox = (customerId, restaunrantId ) => http.get(`${apiCheckEx
 const readChatBox = (uid, chatBoxId) => http.post(`${apiReadChatBox}?uid=${uid}&chatboxId=${chatBoxId}`)
 const createReply = (body) => http.post(apiCreateReply, body)
 const viewFeedback = (orderId) => http.get(`${apiViewFeedback}/${orderId}`)
+const returnFee = (customerId, restaurantId) => http.put(`${apiReturnFee}/?customerId=${customerId}&restaurantId=${restaurantId}`)
+const createPolicy = (body) => http.post(apiCreatePolicy, body)
+const getInActivePolicy = (restaurantId) => http.get(`${apiGetInActivePolicy}/${restaurantId}`)
+const choosePolicy = (id) => http.put(`${apiChoosePolicy}/${id}`)
 
 
 
@@ -369,6 +384,11 @@ const UserService = {
 	createReply,
 	viewFeedback,
 	addMenus,
+	returnFee,
+	createPolicy,
+	getInActivePolicy,
+	choosePolicy,
+	createRoomByExcel,
 };
 
 

@@ -5,6 +5,7 @@ import CustomerAccount from "./Account/CustomerAccount";
 import RestaurantAccount from "./Account/RestaurantAccount";
 import { useEffect, useState } from "react";
 import AdminService from "../../../services/AdminService";
+import CategoryRestaurant from "./CategoryRestaurant";
 
 const AccountManagement = () => {
     const [loading, setLoading] = useState(false)
@@ -38,6 +39,11 @@ const AccountManagement = () => {
             key: "2",
             label: "Nhà hàng",
             children: <RestaurantAccount loading={loading} accounts={accounts} getAccount={getAllAccount}/>,
+        },
+        {
+            key: "3",
+            label: "Loại nhà hàng",
+            children: <CategoryRestaurant loading={loading} setLoading={setLoading}/>,
         },
     ]
 

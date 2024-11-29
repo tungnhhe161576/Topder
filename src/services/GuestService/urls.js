@@ -17,4 +17,4 @@ export const apiCreateContact = "Contact/Create";
 export const apiVerifyAccountRequest = "User/VerifyAccount";
 export const apiGetAllCategory = "CategoryRestaurant/GetAllCategoryRestaurants";
 export const apiGetAllAds = "BookingAdvertisement/GetAvailableAdvertisementForRestaurant";
-export const apiGetActivePolicy = '/RestaurantPolicy/GetActivePolicy'
+export const apiGetActivePolicy = 'RestaurantPolicy/GetActivePolicy'

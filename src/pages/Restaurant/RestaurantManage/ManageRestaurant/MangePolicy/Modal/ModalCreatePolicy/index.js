@@ -1,36 +1,36 @@
 import { Button, Form, InputNumber, message } from "antd"
-import CustomModal from "../../../../../../components/Common/ModalCustom"
+import CustomModal from "../../../../../../../components/Common/ModalCustom"
 import { ModalCreatePolicyContainer } from "./styled"
 import { useEffect, useState } from "react"
-import UserService from '../../../../../../services/UserService'
+import UserService from '../../../../../../../services/UserService'
 
 const ModalUpdatePolicy = ({open, onCancel, onOk, userId}) => {
     const [form] = Form.useForm()
     const [loading, setLoading] = useState(false)
     
-    useEffect(() => {
-        form.setFieldsValue({
-            ...open[0]
-        })
-    }, [form, open])
+    // useEffect(() => {
+    //     form.setFieldsValue({
+    //         ...open[0]
+    //     })
+    // }, [form, open])
 
     const handleUpdatePolicy = async () => {
         try {
             setLoading(true)
             const values = await form.validateFields( )
-            await UserService.updatePolicy(userId, values?.discountRestaurant, values?.firstFeePercent, values?.returningFeePercent, values?.cancellationFeePercent)
+            await UserService.createPolicy({restaurantId: userId, ...values})
             message.open({
-				content: 'Cập nhật thành công.',
+				content: 'Tạo chính sách thành công.',
 				type: 'success',
 				style: {
 					marginTop: '10vh',
 				},
 			})
             onCancel()
-            onOk()
+            // onOk()
         } catch (error) {
             message.open({
-				content: 'Cập nhật thất bại!',
+				content: 'Tạo chính sách thất bại!',
 				type: 'error',
 				style: {
 					marginTop: '10vh',
@@ -71,7 +71,7 @@ const ModalUpdatePolicy = ({open, onCancel, onOk, userId}) => {
                         wrapperCol={{ span: 14 }}
                         className="p-40"
                     >
-                        <Form.Item
+                        {/* <Form.Item
                             name="discountRestaurant"
                             label={
                                 <span className="fs-17 fw-600 d-flex justify-content-start">
@@ -84,7 +84,7 @@ const ModalUpdatePolicy = ({open, onCancel, onOk, userId}) => {
                             className="form-item"
                         >
                             <InputNumber className="input fs-16 w-100" min={0} max={100} placeholder="Chiết khấu" />
-                        </Form.Item>
+                        </Form.Item> */}
                         <Form.Item
                             name="firstFeePercent"
                             label={

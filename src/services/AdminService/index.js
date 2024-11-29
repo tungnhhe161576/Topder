@@ -26,6 +26,12 @@ import {
     apiActiveBlog,
     apiGetAllOrder,
     apiGetListReport,
+    apiCreateCategoryRestaurant,
+    apiUpdateCategoryRestaurant,
+    apiGetPolicySystem,
+    apiDeletePolicy,
+    apiCreatePolicy,
+    apiUpdatePolicy,
 } from './urls'
 
 
@@ -60,6 +66,12 @@ const updateBookingAds = (bookingId, status) => http.put(`${apiUpdateBookingAds}
 const activeBlog = (blogId , status) => http.put(`${apiActiveBlog}/${blogId}?status=${status}`)
 const getAllOrder = () => http.get(apiGetAllOrder)
 const getListReport = () => http.get(`${apiGetListReport}?pageNumber=1&pageSize=1000`)
+const createCategoryRestaurant = (body) => http.post(apiCreateCategoryRestaurant, body)
+const updateCategoryRestaurant = (body) => http.put(apiUpdateCategoryRestaurant, body)
+const getPolicySystem = () => http.get(apiGetPolicySystem)
+const deletePolicy = (id) => http.delete(`${apiDeletePolicy}/${id}`)
+const createPolicy = (body) => http.post(apiCreatePolicy, body)
+const updatePolicy = (body) => http.put(apiUpdatePolicy, body)
 
 
 
@@ -88,6 +100,12 @@ const AdminService = {
     activeBlog,
     getAllOrder,
     getListReport,
+    createCategoryRestaurant,
+    updateCategoryRestaurant,
+    getPolicySystem,
+    deletePolicy,
+    createPolicy,
+    updatePolicy,
 }
 
 

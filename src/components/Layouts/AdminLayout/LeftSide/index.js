@@ -24,6 +24,17 @@ const LeftSide = () => {
 			<div className="fs-16 fw-600 mt-15 mb-15 ml-30"> Quản lý </div>
 			<div
 				className={`item admin ${
+					isActive("/admin/manage-policy") ? "active" : ""
+				}`}
+				onClick={() => nav("/admin/manage-policy")}
+			>
+				<div className="item-icon">
+					<InsertRowAboveOutlined />
+				</div>
+				<div className="item-name"> Quản lý chính sách trang web </div>
+			</div>
+			<div
+				className={`item admin ${
 					isActive("/admin/manage-account") ? "active" : ""
 				}`}
 				onClick={() => nav("/admin/manage-account")}

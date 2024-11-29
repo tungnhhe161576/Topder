@@ -34,6 +34,9 @@ const LoginPage = () => {
 			localStorage.setItem("token", res.data.token);
 			dispatch(setUserInformation(res.data.userInfo));
 			dispatch(setAccessToken(res.data.token));
+			if (res?.data?.userInfo?.phone || res?.data?.userInfo?.dob || res?.data?.userInfo?.gender) {
+				nav('user-profile')
+			} 
 			if (res.data.userInfo.role === "Customer") {
 				nav("/");
 			} else if (res.data.userInfo.role === "Restaurant") {

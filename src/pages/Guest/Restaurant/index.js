@@ -20,6 +20,7 @@ import GuestService from "../../../services/GuestService";
 import SpinCustom from "../../../components/Common/SpinCustom";
 import axios from "axios";
 import { formatNumber } from "../../../lib/stringUtils";
+import { useLocation } from "react-router-dom";
 const { Option } = Select;
 
 const Restaurant = () => {
@@ -36,13 +37,15 @@ const Restaurant = () => {
 	const [minPrice, setMinPrice] = useState(0);
 	const [maxPrice, setMaxPrice] = useState(1000000);
 	const [isChange, setIsChange] = useState(false);
+	const location = useLocation();
+    const categoryRestaurantId = location.state?.categoryRestaurantId;
 	const [dataSearch, setDataSearch] = useState({
 		name: "",
 		address: "",
 		provinceCity: "",
 		district: "",
 		commune: "",
-		restaurantCategory: undefined,
+		restaurantCategory: categoryRestaurantId ? categoryRestaurantId : undefined,
 		minPrice: undefined,
 		maxPrice: undefined,
 		maxCapacity: undefined,
@@ -50,6 +53,7 @@ const Restaurant = () => {
 		pageSize: 8,
 	});
 	const inputRef = useRef(null);
+	
 
 	//set up xử lý tìm kiếm bằng giọng nói
 	useEffect(() => {
@@ -174,7 +178,7 @@ const Restaurant = () => {
 		};
 
 		fetchData();
-	}, [dataSearch]);
+	}, [dataSearch, categoryRestaurantId]);
 
 	// slider của giá tiền
 	const items = [
@@ -263,6 +267,7 @@ const Restaurant = () => {
 											className="nice-select w-100"
 											allowClear
 											placeholder="Chọn loại nhà hàng"
+											defaultValue={categoryRestaurantId ? categoryRestaurantId : false}
 										>
 											{category?.map((c) => (
 												<Option

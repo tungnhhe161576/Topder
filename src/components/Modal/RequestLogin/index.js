@@ -7,14 +7,14 @@ import { RequestLoginContainer } from './styled'
 
 const ModalRequestLogin = ({open, onCancel, text}) => {
     const nav = useNavigate()
-    
+
     const footer = () => {
         return (
             <div className="d-flex justify-content-center">
                 <Button className="mr-10 fw-600" onClick={() => onCancel()}>
                     Đóng
                 </Button>
-                <Button className="mr-10 fw-600" type='primary' onClick={() => nav('/login')}>
+                <Button className="mr-10 fw-600" type='primary' onClick={() => {text === 'Bạn cần cập nhật đầy đủ thông tin tài khoản trước khi đặt bàn!' ? nav('/user-profile') : nav('/login')}}>
                     Đồng ý
                 </Button>
             </div>

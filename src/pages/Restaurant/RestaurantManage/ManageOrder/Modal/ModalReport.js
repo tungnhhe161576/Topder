@@ -1,30 +1,24 @@
 import { Button, Form, message } from "antd"
+import CustomModal from "../../../../../components/Common/ModalCustom"
 import TextArea from "antd/es/input/TextArea"
-import CustomModal from "../../../../../../components/Common/ModalCustom"
-import UserService from "../../../../../../services/UserService"
+import UserService from "../../../../../services/UserService"
 import { useState } from "react"
 
-const ModalReport = ({open, onCancel, user, setOpenRequestLogin, setText}) => {
+const ModalReport = ({open, onCancel, userId}) => {
     const [loading, setLoading] = useState(false)
     const [form] = Form.useForm()
     
     const handleReport = async () => {
-        if (!user) {
-            onCancel()
-			setOpenRequestLogin(true);
-			setText("Bạn cần đăng nhập để thực hiện tác vụ này");
-			return;
-		}
         try {
             setLoading(true)
             const formValue = await form.validateFields()
             
             await UserService.report({
-                reportedBy: user?.uid,
-                reportedOn: open?.uid,
-                reportType: 'Restaurant',
+                reportedBy: userId,
+                reportedOn: open?.customerId,
+                reportType: 'Order',
                 description: formValue?.content,
-                orderId: null,
+                orderId: open?.orderId,
                 feedbackId: null
             })
             
@@ -36,7 +30,6 @@ const ModalReport = ({open, onCancel, user, setOpenRequestLogin, setText}) => {
                 },
             })
             onCancel()
-            // onOk()
         } catch (error) {
             console.log(error);
         } finally {
@@ -69,10 +62,12 @@ const ModalReport = ({open, onCancel, user, setOpenRequestLogin, setText}) => {
             width={600}
             style={{marginTop: '100px'}}
         >
-            <div>
-                <Form form={form} className="p-20">
+            <div className="title-type-1 mb-20">Báo cáo về đơn hàng</div>
+            <div className="mb-30">
+                <Form form={form} className="p-20" layout="vertical">
                     <Form.Item 
                         name='content'
+                        label= 'Lý do'
                         rules={[
                             { required: true, message: "Hãy viết lý do!" },
                         ]}

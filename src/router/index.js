@@ -52,6 +52,7 @@ import ManageTransaction from "../pages/Admin/ManageTransaction";
 import AdsManagement from "../pages/Admin/AdsManagement";
 import MassageRestaurant from "../pages/Restaurant/RestaurantManage/MassageRestaurant";
 import ManageReport from "../pages/Admin/ManageReport";
+import PolicyManage from "../pages/Admin/PolicyManage";
 
 const LazyLoadingComponent = ({ children }) => {
 
@@ -352,6 +353,10 @@ export const router = [
 			{
 				path: "manage-report",
 				element: <ManageReport />,
+			},
+			{
+				path: "manage-policy",
+				element: <PolicyManage />,
 			},
 		],
 	},

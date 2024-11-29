@@ -7,6 +7,7 @@ import ModalDeleteRoom from "./Modal/ModalDelete";
 import ModalUpdateRoom from "./Modal/ModalUpdate";
 import ModalCreateRoom from "./Modal/ModalCreate";
 import ModalUploadExcel from "./Modal/ModalUploadExcel";
+import ModalCreateByExcel from "./Modal/ModalCreateByExcel";
 const {Option} = Select
 
 const RestaurantRoom = ({ user, getAllTables, setStatus }) => {
@@ -16,6 +17,7 @@ const RestaurantRoom = ({ user, getAllTables, setStatus }) => {
 	const [openModalUpdateRoom, setOpenModalUpdateRoom] = useState(false);
 	const [openModalDeleteRoom, setOpenModalDeleteRoom] = useState(false);
 	const [openModalUploadExcel, setOpenModalUploadExcel] = useState(false);
+	const [openModalCreateByExcel, setOpenModalCreateByExcel] = useState(false)
 	const [statusRoom, setStatusRoom] = useState(true)
 
 	const getAllRooms = async () => {
@@ -181,7 +183,7 @@ const RestaurantRoom = ({ user, getAllTables, setStatus }) => {
 						>
 							Tạo phòng mới
 						</Button>
-						<Button className="" type="primary">
+						<Button className="" type="primary" onClick={() => setOpenModalCreateByExcel(true)}>
 							Tạo bằng File Excel
 						</Button>
 					</div>
@@ -245,6 +247,14 @@ const RestaurantRoom = ({ user, getAllTables, setStatus }) => {
 						userId={user?.uid}
 					/>
 				)}
+				{!!openModalCreateByExcel && (
+				<ModalCreateByExcel
+					open={openModalCreateByExcel}
+					onCancel={() => setOpenModalCreateByExcel(false)}
+					onOk={getAllRooms}
+					userId={user?.uid}
+				/>
+			)}
 			</TableAllContainer>
 		</SpinCustom>
 	);
