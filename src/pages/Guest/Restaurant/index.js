@@ -11,6 +11,7 @@ import {
 	InputNumber,
 	Dropdown,
 	message,
+	Pagination,
 } from "antd";
 import { RestaurantContainer } from "./styled";
 import RestaurantItem from "../../../components/RestaurantItem";
@@ -20,6 +21,7 @@ import GuestService from "../../../services/GuestService";
 import SpinCustom from "../../../components/Common/SpinCustom";
 import axios from "axios";
 import { formatNumber } from "../../../lib/stringUtils";
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { useLocation } from "react-router-dom";
 const { Option } = Select;
 
@@ -38,14 +40,17 @@ const Restaurant = () => {
 	const [maxPrice, setMaxPrice] = useState(1000000);
 	const [isChange, setIsChange] = useState(false);
 	const location = useLocation();
-    const categoryRestaurantId = location.state?.categoryRestaurantId;
+	const categoryRestaurantId = location.state?.categoryRestaurantId;
+	const [currentPage, setCurrentPage] = useState(1);
 	const [dataSearch, setDataSearch] = useState({
 		name: "",
 		address: "",
 		provinceCity: "",
 		district: "",
 		commune: "",
-		restaurantCategory: categoryRestaurantId ? categoryRestaurantId : undefined,
+		restaurantCategory: categoryRestaurantId
+			? categoryRestaurantId
+			: undefined,
 		minPrice: undefined,
 		maxPrice: undefined,
 		maxCapacity: undefined,
@@ -53,7 +58,6 @@ const Restaurant = () => {
 		pageSize: 8,
 	});
 	const inputRef = useRef(null);
-	
 
 	//set up xử lý tìm kiếm bằng giọng nói
 	useEffect(() => {
@@ -218,6 +222,12 @@ const Restaurant = () => {
 			key: "0",
 		},
 	];
+	const itemPerPage = 4;
+	const onPageChange = (page) => {
+		setCurrentPage(page);
+	};
+	const startIndex = (currentPage - 1) * itemPerPage;
+	console.log("data", data);
 
 	return (
 		<CommonLayout>
@@ -267,7 +277,11 @@ const Restaurant = () => {
 											className="nice-select w-100"
 											allowClear
 											placeholder="Chọn loại nhà hàng"
-											defaultValue={categoryRestaurantId ? categoryRestaurantId : false}
+											defaultValue={
+												categoryRestaurantId
+													? categoryRestaurantId
+													: false
+											}
 										>
 											{category?.map((c) => (
 												<Option
@@ -449,30 +463,54 @@ const Restaurant = () => {
 								gutter={[30, 32]}
 								className="d-flex justify-content-center"
 							>
-								{data?.map((r) => (
-									<Col
-										key={r?.uid}
-										xs={12}
-										sm={12}
-										md={12}
-										lg={6}
-										xl={6}
-									>
-										<RestaurantItem
-											setOpenRequestLogin={
-												setOpenRequestLogin
-											}
-											setOpenModalBooking={
-												setOpenModalBooking
-											}
-											data={r}
-											setText={setText}
-											isWishlist={false}
-										/>
-									</Col>
-								))}
+								{data
+									?.slice(
+										startIndex,
+										startIndex + itemPerPage
+									)
+									?.map((r) => (
+										<Col
+											key={r?.uid}
+											xs={12}
+											sm={12}
+											md={12}
+											lg={6}
+											xl={6}
+										>
+											<RestaurantItem
+												setOpenRequestLogin={
+													setOpenRequestLogin
+												}
+												setOpenModalBooking={
+													setOpenModalBooking
+												}
+												data={r}
+												setText={setText}
+												isWishlist={false}
+											/>
+										</Col>
+									))}
 							</Row>
 						)}
+						<div className="pagination">
+							<Pagination
+								className="custom-pagination pb-20"
+								itemRender={(page, type, originalElement) => {
+									if (type === "prev") {
+										return <LeftOutlined />;
+									}
+									if (type === "next") {
+										return <RightOutlined />;
+									}
+									return originalElement;
+								}}
+								defaultCurrent={1}
+								current={currentPage}
+								pageSize={itemPerPage}
+								total={data?.length}
+								onChange={onPageChange}
+							/>
+						</div>
 					</SpinCustom>
 				</div>
 			</RestaurantContainer>

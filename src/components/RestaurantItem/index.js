@@ -88,12 +88,12 @@ const RestaurantItem = ({
 				setIsLiked(res);
 				await getWishlist();
 				message.open({
-					content: 'Đã thêm vào yêu thích!',
-					type: 'success',
+					content: "Đã thêm vào yêu thích!",
+					type: "success",
 					style: {
-						marginTop: '10vh',
+						marginTop: "10vh",
 					},
-				})
+				});
 			}
 		} catch (error) {
 			console.log(error);
@@ -110,33 +110,37 @@ const RestaurantItem = ({
 			return;
 		}
 		try {
-			const res = await UserService.checkExistChatBox(user?.uid, data?.uid)
+			const res = await UserService.checkExistChatBox(
+				user?.uid,
+				data?.uid
+			);
 			if (res) {
 				message.open({
-					content: 'Cuộc hội thoại đã được tạo!',
-					type: 'success',
+					content: "Cuộc hội thoại đã được tạo!",
+					type: "success",
 					style: {
-						marginTop: '10vh',
+						marginTop: "10vh",
 					},
-				})
+				});
 			} else {
 				await UserService.createChatBox({
 					chatBoxId: 0,
 					customerId: user?.uid,
-					restaurantId: data?.uid
-				})
+					restaurantId: data?.uid,
+				});
 				message.open({
-					content: 'Tạo cuộc hội thoại thành công!',
-					type: 'success',
+					content: "Tạo cuộc hội thoại thành công!",
+					type: "success",
 					style: {
-						marginTop: '10vh',
+						marginTop: "10vh",
 					},
-				})
+				});
 			}
 		} catch (error) {
 			console.log(error);
-		} finally {}
-	}
+		} finally {
+		}
+	};
 
 	return (
 		<RestaurantItemContainer>
@@ -222,10 +226,10 @@ const RestaurantItem = ({
 						{/* Chat */}
 					</div>
 					<div
-						className='chat-option'
+						className="chat-option"
 						onClick={() => handleCreateChatBox()}
 					>
-						<WechatOutlined className="fs-20 primary"/>
+						<WechatOutlined className="fs-20 primary" />
 					</div>
 				</div>
 			</div>

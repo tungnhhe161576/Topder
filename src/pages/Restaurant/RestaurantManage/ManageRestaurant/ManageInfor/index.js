@@ -21,7 +21,6 @@ const ManageInfomation = ({ user }) => {
 	const [form] = Form.useForm();
 	const dispatch = useDispatch();
 
-
 	const getWalletInfo = async () => {
 		try {
 			setLoading(true);
@@ -225,8 +224,15 @@ const ManageInfomation = ({ user }) => {
 											Số điện thoại:{" "}
 										</div>
 										<div className="mb-5 fs-16 w-100">
-											{" "}
-											{user?.phone}{" "}
+											<a
+												href={`tel:${user?.phone}`}
+												style={{
+													color: "inherit",
+													textDecoration: "none",
+												}}
+											>
+												{user?.phone}
+											</a>
 										</div>
 									</div>
 									<div className="d-flex">

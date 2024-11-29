@@ -10,7 +10,11 @@ const OrderDetail = ({
 	getHistoryOrder,
 	handleViewDetail,
 }) => {
-	const [foods, setFoods] = useState(detail?.statusOrder === 'Pending' ? detail?.orderMenus : detail?.orderMenusAdd);
+	const [foods, setFoods] = useState(
+		detail?.statusOrder === "Pending"
+			? detail?.orderMenus
+			: detail?.orderMenusAdd
+	);
 	const [openModalChooseFood, setOpenModalChooseFood] = useState(false);
 
 	const items = [
@@ -86,7 +90,17 @@ const OrderDetail = ({
 				</div>
 				<div>
 					<span className="fs-14 mr-48">SĐT:</span>
-					<span className="fs-13">{detail?.phoneReceiver}</span>
+					<span className="fs-13">
+						<a
+							href={`tel:${detail?.phoneReceiver}`}
+							style={{
+								color: "inherit",
+								textDecoration: "none",
+							}}
+						>
+							{detail?.phoneReceiver}
+						</a>
+					</span>
 				</div>
 				<div>
 					<span className="fs-14 mr-10">Ngày đặt:</span>
@@ -106,9 +120,9 @@ const OrderDetail = ({
 							<th>Số trẻ nhỏ</th>
 							<th>Bàn</th>
 							<th>Món ăn đã chọn</th>
-							{
-								detail?.orderMenusAdd.length > 0 && <th>Món ăn đã thêm</th>
-							}
+							{detail?.orderMenusAdd.length > 0 && (
+								<th>Món ăn đã thêm</th>
+							)}
 							<th>Ghi chú</th>
 						</tr>
 					</thead>
@@ -147,18 +161,17 @@ const OrderDetail = ({
 											.join(", ")
 									: "Chưa chọn món ăn"}
 							</td>
-							{
-								detail?.orderMenusAdd.length > 0 && <td>
-										{detail.orderMenusAdd
-											.map(
-												(menu) =>
-													`${menu.menuName} (x${menu.quantity})`
-											)
-											.join(", ")
-										}
-									</td>
-							}
-							
+							{detail?.orderMenusAdd.length > 0 && (
+								<td>
+									{detail.orderMenusAdd
+										.map(
+											(menu) =>
+												`${menu.menuName} (x${menu.quantity})`
+										)
+										.join(", ")}
+								</td>
+							)}
+
 							<td>
 								{detail?.contentReservation
 									? detail?.contentReservation
@@ -168,7 +181,7 @@ const OrderDetail = ({
 					</tbody>
 				</table>
 			</div>
-			{(detail?.statusOrder === "Pending") && (
+			{detail?.statusOrder === "Pending" && (
 				<div className="mt-20">
 					<div className="update-menu pl-20">
 						<Button
@@ -181,7 +194,7 @@ const OrderDetail = ({
 					</div>
 				</div>
 			)}
-			{(detail?.statusOrder === "Confirm") && (
+			{detail?.statusOrder === "Confirm" && (
 				<div className="mt-20">
 					<div className="update-menu pl-20">
 						<Button

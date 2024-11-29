@@ -7,36 +7,35 @@ import { useEffect, useState } from "react";
 import AdminService from "../../../services/AdminService";
 
 const ManageReport = () => {
-    const [loading, setLoading] = useState(false)
-    const [reports, setReports] = useState([])
+	const [loading, setLoading] = useState(false);
+	const [reports, setReports] = useState([]);
 
-    const getReports = async () => {
-        try {
-            setLoading(true)
-            const res = await AdminService.getListReport()
-            setReports(res)
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setLoading(false)
-        }
-    }
-    useEffect(() => {
-        getReports()
-    }, [])
+	const getReports = async () => {
+		try {
+			setLoading(true);
+			const res = await AdminService.getListReport();
+			setReports(res);
+		} catch (error) {
+			console.log(error);
+		} finally {
+			setLoading(false);
+		}
+	};
+	useEffect(() => {
+		getReports();
+	}, []);
 
-    // public int ReportId { get; set; }
-    //     public int ReportedBy { get; set; }
-    //     public int ReportedByEmail { get; set; }
-    //     public int ReportedOn { get; set; }
-    //     public int ReportedOnEmail { get; set; }
-    //     public string ReportType { get; set; } = null!;
-    //     public string Description { get; set; } = null!;
-    //     public string? Status { get; set; }
-    //     public DateTime? CreatedAt { get; set; }
+	// public int ReportId { get; set; }
+	//     public int ReportedBy { get; set; }
+	//     public int ReportedByEmail { get; set; }
+	//     public int ReportedOn { get; set; }
+	//     public int ReportedOnEmail { get; set; }
+	//     public string ReportType { get; set; } = null!;
+	//     public string Description { get; set; } = null!;
+	//     public string? Status { get; set; }
+	//     public DateTime? CreatedAt { get; set; }
 
-
-    const columns = [
+	const columns = [
 		{
 			title: "Số thứ tự",
 			key: "stt",
@@ -50,6 +49,14 @@ const ManageReport = () => {
 			key: "reportedByEmail",
 			// width: 200,
 			align: "center",
+			render: (reportedByEmail) => (
+				<a
+					href={`mailto:${reportedByEmail}`}
+					style={{ color: "inherit", textDecoration: "none" }}
+				>
+					{reportedByEmail}
+				</a>
+			),
 		},
 		{
 			title: "Tài khoản bị tố cáo",
@@ -57,6 +64,14 @@ const ManageReport = () => {
 			key: "reportedOnEmail",
 			// width: 200,
 			align: "center",
+			render: (reportedOnEmail) => (
+				<a
+					href={`mailto:${reportedOnEmail}`}
+					style={{ color: "inherit", textDecoration: "none" }}
+				>
+					{reportedOnEmail}
+				</a>
+			),
 		},
 		{
 			title: "Loại tố cáo",
@@ -64,16 +79,13 @@ const ManageReport = () => {
 			key: "reportType",
 			// width: 200,
 			align: "center",
-            render: (value) => (
+			render: (value) => (
 				<>
-                    {
-                      value === 'Restaurant' 
-                        ?    
-                            <span>
-                                Tố cáo nhà hàng
-                            </span>
-                        : <span></span>
-                    }
+					{value === "Restaurant" ? (
+						<span>Tố cáo nhà hàng</span>
+					) : (
+						<span></span>
+					)}
 				</>
 			),
 		},
@@ -87,9 +99,7 @@ const ManageReport = () => {
 				dayjs(a.createdAt).unix() - dayjs(b.createdAt).unix(),
 			render: (value) => (
 				<>
-					<span>
-						Ngày: {dayjs(value).format("DD-MM-YYYY")}
-					</span>
+					<span>Ngày: {dayjs(value).format("DD-MM-YYYY")}</span>
 				</>
 			),
 		},
@@ -109,7 +119,9 @@ const ManageReport = () => {
 				<div className="fw-500">
 					{value === "Active" ? (
 						<div className="Active">Chờ xử lý</div>
-					) : <div>Đã xử lý</div>}
+					) : (
+						<div>Đã xử lý</div>
+					)}
 				</div>
 			),
 		},
@@ -120,16 +132,18 @@ const ManageReport = () => {
 			align: "center",
 			render: (value) => (
 				<div className="fw-500">
-					<Button className="xu-ly" shape="round" type="primary">Xử lý</Button>
+					<Button className="xu-ly" shape="round" type="primary">
+						Xử lý
+					</Button>
 				</div>
 			),
 		},
 	];
-    
-    return (  
-        <AdminLayout>
-            <ManageReportContainer>
-            <SpinCustom spinning={loading}>
+
+	return (
+		<AdminLayout>
+			<ManageReportContainer>
+				<SpinCustom spinning={loading}>
 					<div>
 						<div className="d-flex align-items-center justify-content-space-between">
 							<div className="fs-20 fw-500">Báo cáo</div>
@@ -168,9 +182,9 @@ const ManageReport = () => {
 						</div>
 					</div>
 				</SpinCustom>
-            </ManageReportContainer>
-        </AdminLayout>
-    );
-}
- 
+			</ManageReportContainer>
+		</AdminLayout>
+	);
+};
+
 export default ManageReport;

@@ -31,14 +31,14 @@ const ModalWarning = ({ open, onCancel, text, onConfirm }) => {
 		>
 			<ModalSuccessContainer>
 				<div>
-					<div>
+					{/* <div>
 						<img
 							width={100}
 							style={{ alignSelf: "center" }}
 							src={warning}
 							alt="warning"
 						/>
-					</div>
+					</div> */}
 					<div className="fs-22 fw-500 mb-20">{text}</div>
 				</div>
 			</ModalSuccessContainer>

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const RestaurantItemContainer = styled.div`
+export const RelatedRestaurantContainer = styled.div`
 	width: 100%;
 	height: 440px;
 	background: #fff;
@@ -97,10 +97,9 @@ export const RestaurantItemContainer = styled.div`
 			width: 100%;
 			top: 84%;
 			display: flex;
-			justify-content: space-evenly;
+			justify-content: space-between;
 
 			.booking {
-				position: absolute;
 				right: 5%;
 				width: 70%;
 				left: 0%;
