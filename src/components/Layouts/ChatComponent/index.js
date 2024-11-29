@@ -17,6 +17,7 @@ const ChatComponent = ({open, onCancel}) => {
     const [message, setMessage] = useState('')
     const user = useSelector(userInfor)
     const ref = useRef(null)
+    const chatHandlerRef = useRef()
 
     const getChatBox = async () => {
         try {
@@ -68,14 +69,32 @@ const ChatComponent = ({open, onCancel}) => {
             setLoading2(false)
         }
     }
+    // useEffect(() => {
+    //     if (!!item) {
+    //         const handleNewChat = (data) => {
+    //             if (data?.chatBoxId === item?.chatBoxId) {
+    //                 setChatList(prev => [...prev, data]);
+    //             }
+    //         };
+    //         createChat(handleNewChat);
+    //     }
+    // }, [item]);
+
+    const updateChatHandler = (currentItem) => {
+        // Nếu có handle trước đó, không cần phải hủy bởi không có cách nào để xóa
+        chatHandlerRef.current = (data) => {
+            if (data?.chatBoxId === currentItem?.chatBoxId) {
+                setChatList(prev => [...prev, data]);
+            }
+        };
+        
+        createChat(chatHandlerRef.current);
+    };
+    
     useEffect(() => {
         if (!!item) {
-            const handleNewChat = (data) => {
-                if (data?.chatBoxId === item?.chatBoxId) {
-                    setChatList(prev => [...prev, data]);
-                }
-            };
-            createChat(handleNewChat);
+            getChatList(item);
+            updateChatHandler(item); // Cập nhật handler cho item mới
         }
     }, [item]);
     
@@ -160,7 +179,7 @@ const ChatComponent = ({open, onCancel}) => {
                                 <Input
                                     ref={ref}
                                     value={message}
-                                    onChange={(e) => setMessage(e.target.value)} // Xử lý thay đổi giá trị
+                                    onChange={(e) => setMessage(e.target.value)}
                                     className="w-100 mr-5"
                                     placeholder="Nhập tin"
                                 />

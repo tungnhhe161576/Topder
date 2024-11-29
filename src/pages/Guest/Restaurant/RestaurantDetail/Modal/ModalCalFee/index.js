@@ -33,7 +33,7 @@ const ModalCalFee = ({
 			const res = await UserService.getAllDiscount(
 				restaurantId,
 				userId,
-				totalPrice
+				totalPrice?.foodAmount
 			);
 			setDiscounts(res);
 		} catch (error) {
@@ -65,30 +65,6 @@ const ModalCalFee = ({
 		}
     }, [userId]);
 
-
-	// useEffect(() => {
-    //     const initSignalR = async () => {
-    //         await startConnection();
-    //         onReceiveNoti(); // Đăng ký listener cho thông báo
-    //     };
-
-    //     initSignalR();
-
-    //     return () => {
-    //         // Nếu cần, bạn có thể ngắt kết nối ở đây
-    //         // connection.stop();
-    //     };
-    // }, [startConnection, onReceiveNoti]);
-
-	// onReceiveNoti()
-
-    // const onReceiveNoti = () => {
-    //     connection.on('CreateNotification', (notification) => {
-    //         console.log('be send data: ', notification);
-    //     });
-    // };
-
-
 	const handleCreateOrder = async () => {
 		try {
 			setLoading(true);
@@ -96,7 +72,7 @@ const ModalCalFee = ({
 				customerId: userId,
 				restaurantId: restaurantId,
 				discountId: selectedVoucher?.discountId,
-				categoryRoomId: null,
+				// categoryRoomId: null,
 				nameReceiver: open.nameReceiver,
 				phoneReceiver: open.phoneReceiver,
 				timeReservation: dayjs(open?.timeReservation).format(
@@ -230,41 +206,39 @@ const ModalCalFee = ({
 								</span>
 							</div>
 							<div>
-								<span className="mt-20 fs-16 fw-500">
-									Tổng tiền:{" "}
-								</span>
-								<span> {formatNumberToK(totalPrice)} </span>
+								<div className="mt-20 fs-16 fw-500">
+									Tiền đặt cọc: {formatNumberToK(totalPrice?.depositAmount)}
+								</div>
+								<div className="fs-16 fw-500"> Tiền món ăn: {formatNumberToK(totalPrice?.foodAmount)} </div>
 							</div>
 						</div>
 					</div>
-					<div className="mt-20 mb-40">
-						<div>
-							<Button
-								type="primary"
-								onClick={() => setOpenModalDiscount(discounts)}
-							>
-								{" "}
-								Chọn Voucher{" "}
-							</Button>
-						</div>
-						{totalPrice !== 0 ? (
-							<div>
-								{selectedVoucher && (
-									<div>
-										<span className="red fw-500">
-											Voucher đã chọn:{" "}
-										</span>
-										<span>
-											{" "}
-											{selectedVoucher?.discountName}{" "}
-										</span>
-									</div>
-								)}
-							</div>
-						) : (
-							<></>
-						)}
-					</div>
+					{
+						(totalPrice?.foodAmount > 0 && discounts.length > 0) && (
+							<div className="mt-20 mb-40">
+								<div>
+									<Button
+										type="primary"
+										onClick={() => setOpenModalDiscount(discounts)}
+									>
+										Chọn Voucher
+									</Button>
+								</div>
+								<div>
+									{selectedVoucher && (
+										<div>
+											<span className="red fw-500">
+												Voucher đã chọn:
+											</span>
+											<span>
+												{selectedVoucher?.discountName}
+											</span>
+										</div>
+									)}
+								</div>
+							</div>)
+					}
+					
 				</SpinCustom>
 			</CustomModal>
 

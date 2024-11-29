@@ -142,7 +142,7 @@ const MassageRestaurant = () => {
                     </SpinCustom>
                     <div className="send-mess p-10">
                         <Form className="d-flex align-items-center">
-                            <Input ref={ref} className="w-100" placeholder="Nhập tin"/>
+                            <Input ref={ref} className="w-100" value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Nhập tin"/>
                             <Button
                                 type="primary"
                                 htmlType="submit"

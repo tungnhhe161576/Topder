@@ -10,7 +10,7 @@ const OrderDetail = ({
 	getHistoryOrder,
 	handleViewDetail,
 }) => {
-	const [foods, setFoods] = useState(detail?.orderMenus);
+	const [foods, setFoods] = useState(detail?.statusOrder === 'Pending' ? detail?.orderMenus : detail?.orderMenusAdd);
 	const [openModalChooseFood, setOpenModalChooseFood] = useState(false);
 
 	const items = [
@@ -106,23 +106,24 @@ const OrderDetail = ({
 							<th>Số trẻ nhỏ</th>
 							<th>Bàn</th>
 							<th>Món ăn đã chọn</th>
+							{
+								detail?.orderMenusAdd.length > 0 && <th>Món ăn đã thêm</th>
+							}
 							<th>Ghi chú</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr>
 							<td>
-								{" "}
 								{dayjs(detail?.dateReservation).format(
 									"DD-MM-YYYY"
-								)}{" "}
+								)}
 							</td>
 							<td>
-								{" "}
 								{dayjs(
 									detail?.timeReservation,
 									"HH:mm:ss"
-								).format("HH:mm")}{" "}
+								).format("HH:mm")}
 							</td>
 							<td> {detail?.numberPerson} </td>
 							<td> {detail?.numberChild} </td>
@@ -146,17 +147,28 @@ const OrderDetail = ({
 											.join(", ")
 									: "Chưa chọn món ăn"}
 							</td>
+							{
+								detail?.orderMenusAdd.length > 0 && <td>
+										{detail.orderMenusAdd
+											.map(
+												(menu) =>
+													`${menu.menuName} (x${menu.quantity})`
+											)
+											.join(", ")
+										}
+									</td>
+							}
+							
 							<td>
-								{" "}
 								{detail?.contentReservation
 									? detail?.contentReservation
-									: "Không có"}{" "}
+									: "Không có"}
 							</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
-			{detail?.statusOrder === "Pending" && (
+			{(detail?.statusOrder === "Pending") && (
 				<div className="mt-20">
 					<div className="update-menu pl-20">
 						<Button
@@ -165,6 +177,19 @@ const OrderDetail = ({
 							onClick={() => setOpenModalChooseFood(true)}
 						>
 							Thay đổi món ăn
+						</Button>
+					</div>
+				</div>
+			)}
+			{(detail?.statusOrder === "Confirm") && (
+				<div className="mt-20">
+					<div className="update-menu pl-20">
+						<Button
+							type="primary"
+							shape="round"
+							onClick={() => setOpenModalChooseFood(true)}
+						>
+							Thêm món ăn
 						</Button>
 					</div>
 				</div>

@@ -99,6 +99,7 @@ import {
 	apiReadChatBox,
 	apiCreateReply,
 	apiViewFeedback,
+	apiAddMenus,
 } from "./urls";
 
 
@@ -168,9 +169,9 @@ const getOrderHistory = (customerId) =>
 	http.get(`${apiGetOrderHistory}/${customerId}?pageSize=10000`);
 const getOrderDetail = (customerId, orderId) =>
 	http.get(`${apiViewOrderDetail}/${customerId}/${orderId}`);
-const paidOrder = (orderId, userId, paymentGateway) =>
+const paidOrder = (orderId, userId, paymentGateway, typeOrder) =>
 	http.post(
-		`${apiPaidOrder}?orderId=${orderId}&userId=${userId}&paymentGateway=${paymentGateway}`
+		`${apiPaidOrder}?orderId=${orderId}&userId=${userId}&paymentGateway=${paymentGateway}&typeOrder=${typeOrder}`
 	);
 const getWalletInfo = (userId) => http.get(`${apiGetWalletInfo}/${userId}`);
 const addOTP = (body) => http.post(apiAddOTP, body);
@@ -191,6 +192,7 @@ const cancelOrder = (body) => http.put(apiCancelOrder, body);
 const getRestaurantDashboard = (restaurantId) =>
 	http.get(`${apiGetRestaurantDashboard}/${restaurantId}`);
 const changeMenus = (body) => http.put(apiChangeMenus, body);
+const addMenus = (body) => http.put(apiAddMenus, body);
 const getAllOrderByRestaurant = (restaurantId) => http.get(`${apiGetAllOrderByRestaurant}/${restaurantId}?pageNumber=1&pageSize=10000`)
 const updateOrderForConfirm = (orderId, status) => http.put(`${apiUpdateOrderForConfirm}/${orderId}?status=${status}`)
 const createTableOrder = (body) => http.post(apiCreateTableOrder, body)
@@ -366,6 +368,7 @@ const UserService = {
 	readChatBox,
 	createReply,
 	viewFeedback,
+	addMenus,
 };
 
 

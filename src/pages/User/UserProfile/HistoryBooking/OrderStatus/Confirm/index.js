@@ -36,10 +36,31 @@ const Confirm = ({getHistoryOrder, orderHistory, loading, orderDetail, isDetail,
             render: (value) => <span> {dayjs(value).format('DD-MM-YYYY HH:mm')} </span>,
         },
         {
-            title: 'Giá trị đơn hàng',
+            title: 'Giá trị cọc bàn',
+            dataIndex: 'depositAmount',
+            key: 'depositAmount',
+            width: 150,
+            render: (value) => <span> {formatNumberToK(value)} </span>,
+        },
+        {
+            title: 'Giá trị món ăn',
+            dataIndex: 'foodAmount',
+            key: 'foodAmount',
+            width: 150,
+            render: (value) => <span> {formatNumberToK(value)} </span>,
+        },
+        {
+            title: 'Giá trị món ăn thêm',
+            dataIndex: 'foodAddAmount',
+            key: 'foodAddAmount',
+            width: 150,
+            render: (value) => <span> {!!value ? formatNumberToK(value) : '0đ'} </span>,
+        },
+        {
+            title: 'Tổng giá trị đơn hàng',
             dataIndex: 'totalAmount',
             key: 'totalAmount',
-            width: 180,
+            width: 150,
             render: (value) => <span> {formatNumberToK(value)} </span>,
         },
         {
@@ -82,7 +103,7 @@ const Confirm = ({getHistoryOrder, orderHistory, loading, orderDetail, isDetail,
                             pagination={{pageSize: 5}}
                             bordered
                         />
-                        : <OrderDetail setIsDetail={setIsDetail} detail={orderDetail}/>
+                        : <OrderDetail setIsDetail={setIsDetail} detail={orderDetail} getHistoryOrder={getHistoryOrder} handleViewDetail={handleViewDetail}/>
                 }
             </SpinCustom>
 

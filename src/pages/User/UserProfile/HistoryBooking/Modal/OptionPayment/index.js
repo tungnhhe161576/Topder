@@ -4,22 +4,40 @@ import { ModalChooseOptionPaymentContainer } from "./styled";
 import vnpay from '../../../../../../assets/images/vnpay-logo.jpg'
 import vietqr from '../../../../../../assets/images/icon-payos.png'
 import balance from '../../../../../../assets/images/430509.png'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UserService from "../../../../../../services/UserService";
 import SpinCustom from "../../../../../../components/Common/SpinCustom";
 import { useDispatch } from "react-redux";
 import { updateUserInformation } from "../../../../../../redux/Slice/userSlice";
+import GuestService from "../../../../../../services/GuestService";
 
 const ModalChooseOptionPayment = ({open, onCancel, user, orderHistory}) => {
     const [form] = Form.useForm()
     const [loading, setLoading] = useState(false)
     const dispatch = useDispatch()
+    const [data, setData] = useState()
+
+    const getDataPolicy = async () => {
+        try {
+            setLoading(true)
+            const res = await GuestService.getActivePolicy(open?.restaurantId)
+            setData(res)
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false)
+        }
+    }
+    useEffect(() => {
+        getDataPolicy()
+    }, [])
+    
 
     const handlePaidPayment = async () => {
         try {
             setLoading(true)
             const formValue = await form.validateFields()
-            const res = await UserService.paidOrder(open?.orderId, user?.uid, formValue?.option)
+            const res = await UserService.paidOrder(open?.orderId, user?.uid, formValue?.option, formValue?.type)
             const wallet = await UserService.getWalletInfo(user?.uid)
             message.open({
                 content: "Thanh toán thành công!",
@@ -73,12 +91,46 @@ const ModalChooseOptionPayment = ({open, onCancel, user, orderHistory}) => {
         >
             <SpinCustom spinning={loading}>
                 <ModalChooseOptionPaymentContainer>
-                    <div className='fs-22 fw-600 d-flex justify-content-center mb-30'>
-                        Chọn phương thức thanh toán
+                <div>
+                    <div className='mb-20 fs-20 fw-500'>
+                        Thanh toán
                     </div>
-                    <div className="mb-20">
-                        <Form form={form}>
+                    <div className="">
+                        <Form form={form} layout='vertical'>
+                            <Form.Item name="type"
+                                label='Hình thức thanh toán'
+                                rules={[
+									{
+										required: true,
+										message: "Hãy chọn hình thức thanh toán!",
+									},
+								]}
+                            >
+                                <Radio.Group
+                                    block 
+                                    optionType="button" 
+                                    className="d-flex flex-column"
+                                >
+                                    <Radio value="Entire Order" className="mb-10">
+                                        <div className="d-flex align-items-center">
+                                            <div className="total">
+                                                
+                                            </div>
+                                            <div className="fs-16 fw-500">Thanh toán toàn bộ đơn hàng</div>
+                                        </div>
+                                    </Radio>
+                                    <Radio value="Deposit" className="mb-10">
+                                        <div className="d-flex align-items-center">
+                                            <div className="total">
+                                                
+                                            </div>
+                                            <div className="fs-16 fw-500">Thanh toán tiền đặt cọc</div>
+                                        </div>
+                                    </Radio>
+                                </Radio.Group>
+                            </Form.Item>
                             <Form.Item name="option"
+                                label='Phương thức thanh toán'
                                 rules={[
 									{
 										required: true,
@@ -122,10 +174,16 @@ const ModalChooseOptionPayment = ({open, onCancel, user, orderHistory}) => {
                                         </div>
                                     </Radio>
                                 </Radio.Group>
-
                             </Form.Item>
                         </Form>
                     </div>
+                </div>
+                {
+                    !!data && <div className="mt-10 mb-30 fs-12" style={{fontStyle: 'italic'}}>
+                        Lưu ý: Theo chính sách của nhà hàng, đơn hàng của bạn sẽ được chiết khấu {}% giá trị
+                    </div>
+                }
+                
                 </ModalChooseOptionPaymentContainer>
             </SpinCustom>
         </CustomModal>

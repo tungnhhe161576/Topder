@@ -27,7 +27,7 @@ const ModalWarning = ({ open, onCancel, text, onConfirm }) => {
 			onCancel={onCancel}
 			footer={footer}
 			width={600}
-			style={{ marginTop: "60px" }}
+			style={{ marginTop: "150px" }}
 		>
 			<ModalSuccessContainer>
 				<div>

@@ -65,8 +65,13 @@ const ModalUpdateFoods = ({
 				restaurantId: restaurantId,
 				orderMenus: selectedFoods,
 			};
-			await UserService.changeMenus(updateData);
-			message.success("Cập nhật thành công", 2);
+			if (detail?.statusOrder === 'Confirm') {
+				await UserService.addMenus(updateData);
+				message.success("Thêm món ăn thành công", 2);
+			} else {
+				await UserService.changeMenus(updateData);
+				message.success("Cập nhật thành công", 2);
+			}
 			handleViewDetail(detail);
 			getHistoryOrder();
 			onCancel();
@@ -227,7 +232,7 @@ const ModalUpdateFoods = ({
 				<ModalWarning
 					open={showWarningModal}
 					onCancel={() => setShowWarningModal(false)}
-					text="Bạn chắc chắn có muốn thay đổi lại món ăn đã chọn hay không? Sẽ ảnh hưởng đến giá tiền và mất đi discount mà bạn đã chọn!!!"
+					text={detail?.statusOrder === 'Pending' ? "Bạn chắc chắn có muốn thay đổi lại món ăn đã chọn hay không?" : "Bạn chắc chắn có muốn thêm món ăn đã chọn hay không?"}
 					onConfirm={() => {
 						setShowWarningModal(false);
 						handleUpdate();

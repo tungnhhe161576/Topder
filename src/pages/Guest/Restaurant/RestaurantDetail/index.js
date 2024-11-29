@@ -150,7 +150,7 @@ const RestaurantDetail = () => {
 				customerId: user?.uid,
 				restaurantId: restaurantId,
 				discountId: undefined,
-				categoryRoomId: undefined,
+				// categoryRoomId: undefined,
 				nameReceiver: formValues.nameReceiver,
 				phoneReceiver: formValues.phoneReceiver,
 				timeReservation: formValues?.time,
@@ -535,6 +535,7 @@ const RestaurantDetail = () => {
 										/>
 									) : (
 										<Policy
+											restaurantId={restaurantId}
 											restaurantDetail={restaurantDetail}
 										/>
 									)}
