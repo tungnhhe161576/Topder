@@ -40,7 +40,7 @@ const Header = () => {
 	const [numberNoti, setNumberNoti] = useState(6);
 	const [isExpanded, setIsExpanded] = useState(false);
 	const [category, setCategory] = useState([]);
-	const location = useLocation()
+	const location = useLocation();
 
 	const handleToggleNoti = () => {
 		if (isExpanded) {
@@ -51,8 +51,8 @@ const Header = () => {
 		setIsExpanded(!isExpanded);
 	};
 
-	console.log('noti', notis);
-	
+	console.log("noti", notis);
+
 	const getListNoti = async () => {
 		try {
 			setLoading2(true);
@@ -116,8 +116,8 @@ const Header = () => {
 		}
 	};
 	useEffect(() => {
-        getAllRestaurantCategory();
-    }, []);
+		getAllRestaurantCategory();
+	}, []);
 
 	const itemsDropdown = [
 		{
@@ -169,7 +169,16 @@ const Header = () => {
 	const itemsCategory = category?.map((c) => ({
 		key: c?.categoryRestaurantId,
 		label: (
-			<span onClick={() => nav('/restaurant-view', { state: { categoryRestaurantId: c?.categoryRestaurantId } })}>
+			<span
+				className="fs-16 fw-600"
+				onClick={() =>
+					nav("/restaurant-view", {
+						state: {
+							categoryRestaurantId: c?.categoryRestaurantId,
+						},
+					})
+				}
+			>
 				{c?.categoryRestaurantName}
 			</span>
 		),
@@ -183,8 +192,8 @@ const Header = () => {
 				nav("/user-profile/history-booking");
 			} else if (notification.type === "Hệ Thống Trừ Tiền Từ Ví") {
 				nav("/user-profile/transactiom-history");
-			} else if (notification.type === 'Đánh Giá') {
-				nav('/user-profile/rates')
+			} else if (notification.type === "Đánh Giá") {
+				nav("/user-profile/rates");
 			}
 		} catch (error) {
 			console.log(error);
@@ -469,9 +478,29 @@ const Header = () => {
 									Trang Chủ{" "}
 								</span>
 
-								{
-									location.pathname.includes('/restaurant-view')
-										? <span
+								{location.pathname.includes(
+									"/restaurant-view"
+								) ? (
+									<span
+										style={
+											activeButton === "restaurant"
+												? { color: "#f07d22" }
+												: {}
+										}
+										onClick={() => {
+											handleButtonClick("restaurant");
+											nav("/restaurant-view");
+										}}
+									>
+										Nhà Hàng - Dịch Vụ
+									</span>
+								) : (
+									<Dropdown
+										menu={{
+											items: itemsCategory,
+										}}
+									>
+										<span
 											style={
 												activeButton === "restaurant"
 													? { color: "#f07d22" }
@@ -484,26 +513,8 @@ const Header = () => {
 										>
 											Nhà Hàng - Dịch Vụ
 										</span>
-										: <Dropdown
-											menu={{
-												items: itemsCategory,
-											}}
-										>
-											<span
-												style={
-													activeButton === "restaurant"
-														? { color: "#f07d22" }
-														: {}
-												}
-												onClick={() => {
-													handleButtonClick("restaurant");
-													nav("/restaurant-view");
-												}}
-											>
-												Nhà Hàng - Dịch Vụ
-											</span>
-										</Dropdown>
-								}
+									</Dropdown>
+								)}
 
 								{/* <Dropdown
 									menu={{
@@ -584,29 +595,27 @@ const Header = () => {
 							xl={3}
 							className="d-flex align-items-center"
 						>
-							{
-								!!user 
-									? <div className="notification mr-20">
-										<Badge
-											count={
-												notis?.filter(
-													(i) => i?.isRead === false
-												).length
-											}
-											size="small"
-										>
-											<div className="fs-22 fw-500 w-100 notification">
-												<Dropdown
-													overlay={itemNotis}
-													trigger={["click"]}
-												>
-													<BellOutlined />
-												</Dropdown>
-											</div>
-										</Badge>
-									</div>
-									: null 
-							}
+							{!!user ? (
+								<div className="notification mr-20">
+									<Badge
+										count={
+											notis?.filter(
+												(i) => i?.isRead === false
+											).length
+										}
+										size="small"
+									>
+										<div className="fs-22 fw-500 w-100 notification">
+											<Dropdown
+												overlay={itemNotis}
+												trigger={["click"]}
+											>
+												<BellOutlined />
+											</Dropdown>
+										</div>
+									</Badge>
+								</div>
+							) : null}
 							<div className="user-info">
 								{!user ? (
 									<div className="lo-re">
