@@ -1,20 +1,26 @@
-import { Button, Table } from "antd";
+import { Button, Select, Table } from "antd";
 import AdminLayout from "../../../components/Layouts/AdminLayout";
 import { ManageReportContainer } from "./styled";
 import dayjs from "dayjs";
 import SpinCustom from "../../../components/Common/SpinCustom";
 import { useEffect, useState } from "react";
 import AdminService from "../../../services/AdminService";
+import ModalHandleReport from "./Modal";
+const {Option} = Select
 
 const ManageReport = () => {
 	const [loading, setLoading] = useState(false);
 	const [reports, setReports] = useState([]);
+	const [type, setType] = useState()
+	const [openModalHandleReport, setOpenModalHandleReport] = useState(false)
 
 	const getReports = async () => {
 		try {
 			setLoading(true);
 			const res = await AdminService.getListReport();
-			setReports(res);
+			type 
+				? setReports(res.filter(i => i?.reportType === type))
+				: setReports(res);
 		} catch (error) {
 			console.log(error);
 		} finally {
@@ -23,7 +29,7 @@ const ManageReport = () => {
 	};
 	useEffect(() => {
 		getReports();
-	}, []);
+	}, [type]);
 
 	// public int ReportId { get; set; }
 	//     public int ReportedBy { get; set; }
@@ -83,9 +89,10 @@ const ManageReport = () => {
 				<>
 					{value === "Restaurant" ? (
 						<span>Tố cáo nhà hàng</span>
-					) : (
-						<span></span>
-					)}
+					) : value === "Feedback" 
+						? <span> Tố cáo về phản hồi </span>
+						: <span> Tố cáo về đơn hàng </span>
+					}
 				</>
 			),
 		},
@@ -130,11 +137,18 @@ const ManageReport = () => {
 			dataIndex: "a",
 			key: "a",
 			align: "center",
-			render: (value) => (
+			render: (_, record) => (
 				<div className="fw-500">
-					<Button className="xu-ly" shape="round" type="primary">
-						Xử lý
-					</Button>
+					{
+						record?.status === 'Active'
+							? <Button className="xu-ly" shape="round" type="primary" onClick={() => setOpenModalHandleReport(record)}>
+								Xử lý
+							</Button>
+							: <Button shape="round" type="primary" disabled>
+								Đã xử lý
+							</Button>
+					}
+					
 				</div>
 			),
 		},
@@ -148,28 +162,25 @@ const ManageReport = () => {
 						<div className="d-flex align-items-center justify-content-space-between">
 							<div className="fs-20 fw-500">Báo cáo</div>
 							<div className="d-flex">
-								{/* <div className="pr-40 select">
+								<div className="pr-40 select">
 									<Select
 										className="nice-select w-100"
 										allowClear
-										placeholder="Loại giao dịch"
-										defaultValue="Withdraw"
+										placeholder="Loại báo cáo"
+										// defaultValue="Withdraw"
 										onChange={(e) => setType(e)}
 									>
-										<Option key={1} value="Withdraw">
-											Rút tiền
+										<Option key={1} value="Restaurant">
+											Báo cáo nhà hàng
 										</Option>
-										<Option key={2} value="Recharge">
-											Nạp tiền
+										<Option key={2} value="Feedback">
+											Báo cáo phản hồi
 										</Option>
-										<Option key={3} value="SystemSubtract">
-											Hệ thống trừ tiền
-										</Option>
-										<Option key={3} value="SystemAdd">
-											Hệ thống cộng tiền
+										<Option key={3} value="Order">
+											Báo cáo đơn hàng
 										</Option>
 									</Select>
-								</div> */}
+								</div>
 							</div>
 						</div>
 						<div className="mt-30">
@@ -182,6 +193,16 @@ const ManageReport = () => {
 						</div>
 					</div>
 				</SpinCustom>
+
+				{
+					!!openModalHandleReport && (
+						<ModalHandleReport
+							open={openModalHandleReport}
+							onCancel={() => setOpenModalHandleReport(false)}
+							onOk={getReports}
+						/>
+					)
+				}
 			</ManageReportContainer>
 		</AdminLayout>
 	);

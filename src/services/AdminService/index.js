@@ -32,6 +32,9 @@ import {
     apiDeletePolicy,
     apiCreatePolicy,
     apiUpdatePolicy,
+    apiHandleReport,
+    apiHandleOrderReport,
+    apiDeleteCategory,
 } from './urls'
 
 
@@ -72,6 +75,9 @@ const getPolicySystem = () => http.get(apiGetPolicySystem)
 const deletePolicy = (id) => http.delete(`${apiDeletePolicy}/${id}`)
 const createPolicy = (body) => http.post(apiCreatePolicy, body)
 const updatePolicy = (body) => http.put(apiUpdatePolicy, body)
+const handleReport = (body) => http.put(apiHandleReport, body)
+const handleOrderReport = (id) => http.put(`${apiHandleOrderReport}/${id}`)
+const deleteCategory = (id) => http.delete(`${apiDeleteCategory}/${id}`)
 
 
 
@@ -106,6 +112,9 @@ const AdminService = {
     deletePolicy,
     createPolicy,
     updatePolicy,
+    handleReport,
+    handleOrderReport,
+    deleteCategory,
 }
 
 

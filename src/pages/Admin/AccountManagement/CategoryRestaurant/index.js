@@ -4,6 +4,7 @@ import SpinCustom from "../../../../components/Common/SpinCustom";
 import { Button, Table } from "antd";
 import GuestService from "../../../../services/GuestService";
 import ModalUpdateOrCreate from "./Modal";
+import ModalDelete from "./Modal/ModalDelete";
 // import { useSelector } from "react-redux";
 // import { userInfor } from "../../../../redux/Slice/userSlice";
 
@@ -11,6 +12,7 @@ const CategoryRestaurant = ({loading, setLoading}) => {
     const [data, setData] = useState([])
     const [openModalUpdate, setOpenModalUpdate] = useState(false)
     const [openModalCreate, setOpenModalCreate] = useState(false)
+    const [openModalDelete, setOpenModalDelete] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
     // const user = useSelector(userInfor)
 
@@ -36,13 +38,14 @@ const CategoryRestaurant = ({loading, setLoading}) => {
 			dataIndex: 'number',
 			key: 'number',
 			align: 'center',
+            width: 150,
 			render: (_, __, index) => <span className="fs-15"> {index + 1} </span>,
 		},
         {
             title: "Tên",
             dataIndex: "categoryRestaurantName",
             key: "categoryRestaurantName",
-            width: 150,
+            width: 800,
 			align: 'center',
         },
 		{
@@ -51,18 +54,29 @@ const CategoryRestaurant = ({loading, setLoading}) => {
 			key: "action",
 			align: 'center',
 			render: (value, record) => (
-				<div className='d-flex flex-column align-items-center'>
-					<div className="d-flex mb-3">
-						<Button
-							type="primary"
-							shape="round"
-							className="mr-3"
-							onClick={() => {setOpenModalUpdate(record); setIsEdit(true)}}
-						>
-							Cập nhật
-						</Button>
-					</div>
-				</div>
+                <div className="d-flex mb-3 align-items-center">
+                    <Button
+                        type="primary"
+                        shape="round"
+                        className="mr-3"
+                        onClick={() => {setOpenModalUpdate(record); setIsEdit(true)}}
+                    >
+                        Cập nhật
+                    </Button>
+                    {
+                    !record?.isDelete
+                        ? <Button
+                            type="primary"
+                            shape="round"
+                            className="mr-3"
+                            danger
+                            onClick={() => {setOpenModalDelete(record)}}
+                        >
+                            Xóa
+                        </Button>
+                        : null
+                }
+                </div>
 			),
 		},
 	];
@@ -101,6 +115,16 @@ const CategoryRestaurant = ({loading, setLoading}) => {
                     <ModalUpdateOrCreate
                         open={openModalUpdate}
                         onCancel={() => setOpenModalUpdate(false)}
+                        onOk={getData}
+                        isEdit={isEdit}
+                    />
+                )
+            }
+            {
+                !!openModalDelete && (
+                    <ModalDelete
+                        open={openModalDelete}
+                        onCancel={() => setOpenModalDelete(false)}
                         onOk={getData}
                         isEdit={isEdit}
                     />

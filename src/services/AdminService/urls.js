@@ -28,4 +28,7 @@ export const apiGetPolicySystem = "PolicySystem/GetAllPolicies"
 export const apiDeletePolicy = "PolicySystem/Delete"
 export const apiCreatePolicy = "PolicySystem/Create"
 export const apiUpdatePolicy = "PolicySystem/Update"
+export const apiHandleReport = "Report/HandleReport"
+export const apiHandleOrderReport = "Order/HandleReportOrder"
+export const apiDeleteCategory = "CategoryRestaurant/Delete"
 

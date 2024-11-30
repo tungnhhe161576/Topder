@@ -646,6 +646,7 @@ const ManageOrder = () => {
 							<ModalReport
 								open={openModalReport}
 								onCancel={() => setOpenModalReport(false)}
+								onOk={getAllOrders}
 								userId={user?.uid}
 							/>
 						)}

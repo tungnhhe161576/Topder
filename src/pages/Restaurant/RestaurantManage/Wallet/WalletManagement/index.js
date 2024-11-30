@@ -62,7 +62,7 @@ const WalletManagement = ({user}) => {
                 otpCode: formValue?.otp
             })
             message.open({
-                content: 'Tạo mã OTP thành công!',
+                content: 'Tạo mã PIN thành công!',
                 type: 'success',
                 style: {
                     marginTop: '10vh',
@@ -71,7 +71,7 @@ const WalletManagement = ({user}) => {
             getWalletInfo()
         } catch (error) {
             message.open({
-                content: 'Tạo mã OTP thất bại',
+                content: 'Tạo mã PIN thất bại',
                 type: 'error',
                 style: {
                     marginTop: '10vh',
@@ -156,10 +156,10 @@ const WalletManagement = ({user}) => {
                                                         <Form.Item 
                                                             name="otp"
                                                             rules={[
-                                                                { required: true, message: "Hãy nhập mã OTP!" },
-                                                                { pattern: getRegexNumber(), message: "Mã OTP phải là số!" },
+                                                                { required: true, message: "Hãy nhập mã PIN!" },
+                                                                { pattern: getRegexNumber(), message: "Mã PIN phải là số!" },
                                                             ]}
-                                                            label={<span className="fw-600 ml-10"> Tạo OTP </span>}
+                                                            label={<span className="fw-600 ml-10"> Tạo Mã PIN </span>}
                                                         >
                                                             <Input.OTP
                                                                 type="password" 
@@ -169,7 +169,7 @@ const WalletManagement = ({user}) => {
                                                                     }
                                                                 }}
                                                                 className="ml-40" 
-                                                                length={4} 
+                                                                length={6}  
                                                             />
                                                         </Form.Item>
                                                         <div className="d-flex pl-40 pb-20">
@@ -356,7 +356,7 @@ const WalletManagement = ({user}) => {
                             //otp
                             : <div className="otp">
                                 <div className="mt-20 text-center fw-500 fs-18 mb-30">
-                                    Tạo mã OTP cho ví của bạn
+                                    Tạo mã PIN cho ví của bạn
                                 </div>
                                 <div className="d-flex justify-content-center">
                                     <Form 
@@ -376,30 +376,30 @@ const WalletManagement = ({user}) => {
                                         <Form.Item 
                                             name="otp"
                                             rules={[
-                                                { required: true, message: "Hãy nhập mã OTP!" },
-                                                { pattern: getRegexNumber(), message: "Mã OTP phải là số!" },
+                                                { required: true, message: "Hãy nhập mã PIN!" },
+                                                { pattern: getRegexNumber(), message: "Mã PIN phải là số!" },
                                             ]}
-                                            label={<span className="fw-600 ml-10"> Tạo OTP </span>}
+                                            label={<span className="fw-600 ml-10"> Tạo mã PIN </span>}
                                         >
-                                            <Input.OTP type="password" length={4} />
+                                            <Input.OTP type="password" length={6}  />
                                         </Form.Item>
                                         <Form.Item
                                             name="confirmOTP"
                                             rules={[
-                                                { required: true, message: "Nhập lại mã OTP" },
+                                                { required: true, message: "Nhập lại mã PIN" },
                                                 ({ getFieldValue }) => ({
                                                     validator(_, value) {
                                                     if (!value || getFieldValue('otp') === value) {
                                                         return Promise.resolve();
                                                     }
-                                                    return Promise.reject(new Error('OTP chưa đúng!'));
+                                                    return Promise.reject(new Error('Mã PIN chưa đúng!'));
                                                     },
                                                 }),
                                             ]}
                                             dependencies={['otp']}
-                                            label={<span className="fw-600 ml-10"> Nhập lại OTP </span>}
+                                            label={<span className="fw-600 ml-10"> Nhập lại mã PIN </span>}
                                         >
-                                            <Input.OTP type="password" length={4} />
+                                            <Input.OTP type="password" length={6}  />
                                         </Form.Item>
                                         <Form.Item className="d-flex justify-content-center"> 
                                             <Button

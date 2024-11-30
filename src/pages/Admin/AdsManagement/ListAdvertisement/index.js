@@ -101,18 +101,9 @@ const columns = [
         render: (value, record) => (
             <>
                 {
-                    value === "Active" 
-                        ? <div className="active">
-                            <Button disabled type="primary" shape="round"> Đã chấp nhận </Button>
-                        </div> 
-                        :  value === "In-Active" 
-                            ? <div className="d-flex">
-                                <Button type="primary" shape="round" className='mr-3' onClick={() => {setOpenModalActive(record); setValue('Active')}}> Chấp nhận </Button>
-                                <Button type="primary" shape="round" danger onClick={() => {setOpenModalActive(record); setValue('Cancelled')}}> Hủy </Button>
-                            </div>
-                            : <div className="button-cancel">
-                                <Button disabled type="primary" shape="round">Đã hủy</Button>
-                            </div> 
+                    record?.status === 'Cancelled' 
+                        ? <Button disabled type="primary" shape="round">Đã hủy</Button>
+                        : <Button type="primary" shape="round" danger onClick={() => {setOpenModalActive(record); setValue('Cancelled')}}> Hủy </Button>
                 }
             </>
         ),
@@ -134,15 +125,15 @@ const columns = [
                                     className="nice-select w-100" 
                                     allowClear  
                                     placeholder="Trạng thái"
-                                    defaultValue='In-Active'
+                                    defaultValue='Active'
                                     onChange={(e) => setStatus(e)}
                                 >
                                     <Option key={1} value="Active">
-                                        Đã chấp nhận
+                                        Đang hoạt động
                                     </Option>
-                                    <Option key={2} value="In-Active">
+                                    {/* <Option key={2} value="In-Active">
                                         Chờ duyệt
-                                    </Option>
+                                    </Option> */}
                                     <Option key={3} value="Cancelled">
                                         Đã hủy
                                     </Option>

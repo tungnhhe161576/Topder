@@ -4,7 +4,7 @@ import TextArea from "antd/es/input/TextArea"
 import UserService from "../../../../../services/UserService"
 import { useState } from "react"
 
-const ModalReport = ({open, onCancel, userId}) => {
+const ModalReport = ({open, onCancel, onOk, userId}) => {
     const [loading, setLoading] = useState(false)
     const [form] = Form.useForm()
     
@@ -29,6 +29,7 @@ const ModalReport = ({open, onCancel, userId}) => {
                     marginTop: '10vh',
                 },
             })
+            onOk()
             onCancel()
         } catch (error) {
             console.log(error);

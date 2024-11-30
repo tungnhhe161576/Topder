@@ -107,10 +107,8 @@ const Contact = () => {
                 <div className='d-flex justify-content-center align-items-center'>
                     {
                         value === "Active" 
-                            ? <div className="status active"> Đã chấp nhận  </div> 
-                            :  value === "In-Active" 
-                                ? <div className="status in-active"> Chưa chấp nhận </div>
-                                : <div className="status cancel"> Đã hủy </div> 
+                            ? <div className="status active"> Đang hoạt động </div> 
+                            : <div className="status cancel"> Đã hủy </div> 
                     }
                 </div>
             ),
@@ -141,11 +139,12 @@ const Contact = () => {
             render: (_, record) => (
                 <div className='d-flex justify-content-center align-items-center'>
                     {
-                        record.status === "Active" && record?.statusPayment === 'Pending'
-                            ? <Button type="primary" shape="round" onClick={() => setOpenModalPayment(record)}> Thanh toán </Button>
-                            : record.status === "In-Active"
-                                ? <Button type="primary" danger shape="round" onClick={() => setOpenModalCancelBooking(record)}> Hủy </Button>
-                                : null
+                        (record?.status === 'Active' && record?.statusPayment === 'Pending')
+                            ? <div className='d-flex justify-content-center align-items-center'>
+                                <Button className="mr-5" type="primary" shape="round" onClick={() => setOpenModalPayment(record)}> Thanh toán </Button>
+                                <Button type="primary" danger shape="round" onClick={() => setOpenModalCancelBooking(record)}> Hủy </Button>
+                            </div>
+                            : null
                     }
                 </div>
             ),
@@ -178,11 +177,11 @@ const Contact = () => {
                                         onChange={(e) => setStatus(e)}
                                     >
                                         <Option key={1} value="Active">
-                                            Đã chấp nhận
+                                            Đang hoạt động
                                         </Option>
-                                        <Option key={2} value="In-Active">
+                                        {/* <Option key={2} value="In-Active">
                                             Chờ duyệt
-                                        </Option>
+                                        </Option> */}
                                         <Option key={3} value="Cancelled">
                                             Đã hủy
                                         </Option>

@@ -72,10 +72,10 @@ const ModalWithDraw = ({open, onCancel, customerId, verifiedOTP, setVerifiedOTP,
                                     <Form.Item 
                                         name="otp"
                                         rules={[
-                                            { required: true, message: "Hãy nhập mã OTP!" },
-                                            { pattern: getRegexNumber(), message: "Mã OTP phải là số!" },
+                                            { required: true, message: "Hãy nhập mã PIN!" },
+                                            { pattern: getRegexNumber(), message: "Mã PIN phải là số!" },
                                         ]}
-                                        label={<span className="fw-600 ml-40"> Nhập mã OTP </span>}
+                                        label={<span className="fw-600 ml-40"> Nhập mã PIN </span>}
                                     >
                                         <Input.OTP
                                             type="password" 
@@ -85,7 +85,7 @@ const ModalWithDraw = ({open, onCancel, customerId, verifiedOTP, setVerifiedOTP,
                                                 }
                                             }}
                                             className="ml-40" 
-                                            length={4} 
+                                            length={6}  
                                         />
                                     </Form.Item>
                                 </div>
