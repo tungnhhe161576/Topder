@@ -414,6 +414,9 @@ const Header = () => {
 		nav("/login");
 	};
 
+	console.log(ads);
+	
+
 	return (
 		<>
 			<div className="header">
