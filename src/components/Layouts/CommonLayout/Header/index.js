@@ -420,20 +420,46 @@ const Header = () => {
 				<div className="header-content">
 					<div className="parallelogram">
 						<span>
-							<MailOutlined style={{ transform: "skew(0deg)" }} />{" "}
-							topder.vn@gmail.com
+							<a
+								style={{
+									color: "inherit",
+									textDecoration: "none",
+								}}
+								href="mailto:topder.vn@gmail.com"
+							>
+								<MailOutlined
+									style={{ transform: "skew(0deg)" }}
+								/>{" "}
+								topder.vn@gmail.com
+							</a>
 						</span>
 						<span>
-							<PhoneOutlined
-								style={{ transform: "skew(0deg)" }}
-							/>{" "}
-							0828 290 092
+							<a
+								style={{
+									color: "inherit",
+									textDecoration: "none",
+								}}
+								href="tel:0828290092"
+							>
+								<PhoneOutlined
+									style={{ transform: "skew(0deg)" }}
+								/>{" "}
+								0828 290 092
+							</a>
 						</span>
 						<span>
-							<PhoneOutlined
-								style={{ transform: "skew(0deg)" }}
-							/>{" "}
-							0931 589 123
+							<a
+								style={{
+									color: "inherit",
+									textDecoration: "none",
+								}}
+								href="tel:0931589123"
+							>
+								<PhoneOutlined
+									style={{ transform: "skew(0deg)" }}
+								/>{" "}
+								0931 589 123
+							</a>
 						</span>
 					</div>
 					<div className="contact-icon">
