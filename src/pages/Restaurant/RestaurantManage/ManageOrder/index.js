@@ -145,6 +145,20 @@ const ManageOrder = () => {
 			title: "SĐT Người Đặt",
 			dataIndex: "phoneReceiver",
 			key: "phoneReceiver",
+			render: (value) => (
+				<span>
+					{" "}
+					<a
+						href={`tel:${value}`}
+						style={{
+							color: "inherit",
+							textDecoration: "none",
+						}}
+					>
+						{value}
+					</a>{" "}
+				</span>
+			),
 		},
 		{
 			title: "Thời gian nhận bàn",
@@ -207,13 +221,18 @@ const ManageOrder = () => {
 			key: "paidType",
 			render: (value, record) => (
 				<div>
-					{
-						record?.totalAmount === 0 
-							? 'Không cần thanh toán' 
-							: <div className="">{value === 'Deposit' ? 'Thanh toán tiền cọc' : (value === 'Entire Order' ? 'Thanh toán toàn bộ đơn hàng' : 'Chưa thanh toán')}</div>
-					}
+					{record?.totalAmount === 0 ? (
+						"Không cần thanh toán"
+					) : (
+						<div className="">
+							{value === "Deposit"
+								? "Thanh toán tiền cọc"
+								: value === "Entire Order"
+								? "Thanh toán toàn bộ đơn hàng"
+								: "Chưa thanh toán"}
+						</div>
+					)}
 				</div>
-				
 			),
 		},
 		{
@@ -321,18 +340,18 @@ const ManageOrder = () => {
 							Hủy
 						</Button>
 					) : null}
-					{
-						record?.paidType === 'Deposit' && record?.statusOrder === 'Paid' && !record?.isReport
-							? <Button
-								onClick={() => setOpenModalReport(record)}
-								shape="round"
-								type="primary"
-								danger
-							>
-								Báo cáo
-							</Button>
-							: null
-					}
+					{record?.paidType === "Deposit" &&
+					record?.statusOrder === "Paid" &&
+					!record?.isReport ? (
+						<Button
+							onClick={() => setOpenModalReport(record)}
+							shape="round"
+							type="primary"
+							danger
+						>
+							Báo cáo
+						</Button>
+					) : null}
 				</div>
 			),
 			// width: 200
@@ -378,20 +397,7 @@ const ManageOrder = () => {
 															{i?.nameReceiver}
 														</td>
 														<td>
-															<span>
-																<a
-																	href={`tel:${i?.phoneReceiver}`}
-																	style={{
-																		color: "inherit",
-																		textDecoration:
-																			"none",
-																	}}
-																>
-																	{
-																		i?.phoneReceiver
-																	}
-																</a>
-															</span>
+															{i?.phoneReceiver}
 														</td>
 														<td>
 															<span>

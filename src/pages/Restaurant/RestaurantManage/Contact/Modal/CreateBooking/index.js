@@ -104,6 +104,18 @@ const ModalCreateBooking = ({ open, onCancel, onOk, user }) => {
 									current && current < dayjs().startOf("day")
 								);
 							}}
+							disabledTime={(date) => {
+								if (date && date.isSame(dayjs(), "day")) {
+									return {
+										disabledHours: () =>
+											Array.from(
+												{ length: dayjs().hour() },
+												(_, i) => i
+											),
+									};
+								}
+								return {};
+							}}
 						/>
 					</Form.Item>
 				</Form>
