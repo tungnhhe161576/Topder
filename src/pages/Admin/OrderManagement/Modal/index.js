@@ -4,8 +4,12 @@ import { ModalViewDetailContainer } from "./styled";
 import table2 from "../../../../assets/images/table2.jpg";
 import { formatNumberToK } from "../../../../lib/stringUtils";
 import dayjs from "dayjs";
+import { useState } from "react";
 
 const ModalViewDetail = ({ open, onCancel }) => {
+	const [showAllTable, setShowAllTable] = useState(false);
+	const [showAllMenus, setShowAllMenus] = useState(false);
+	const [showAllMenusAdd, setShowMenusAdd] = useState(false);
 	const footer = () => {
 		return (
 			<div className="d-flex justify-content-center">
@@ -20,14 +24,22 @@ const ModalViewDetail = ({ open, onCancel }) => {
 		);
 	};
 
-	console.log(open);
+	const visibleItems = showAllMenus
+		? open?.orderMenus
+		: open?.orderMenus.slice(0, 2);
+	const visibleTables = showAllTable
+		? open?.orderTables
+		: open?.orderTables.slice(0, 2);
+	const visibleMenusAdd = showAllMenusAdd
+		? open?.orderMenusAdd
+		: open?.orderMenusAdd.slice(0, 2);
 
 	return (
 		<CustomModal
 			open={!!open}
 			onCancel={onCancel}
 			footer={footer}
-			width={800}
+			width={1200}
 			// style={{marginTop: '-80px'}}
 		>
 			<ModalViewDetailContainer>
@@ -43,19 +55,31 @@ const ModalViewDetail = ({ open, onCancel }) => {
 									<span> Tên nhà hàng: </span>
 									<span> Người nhận: </span>
 									<span> SĐT người nhận: </span>
-									<span> Tổng tiền: </span>
+									<span> Giá trị cọc bàn: </span>
+									<span> Giá trị món ăn: </span>
+									<span> Giá trị món ăn thêm: </span>
 									<span> Thời gian đặt: </span>
 									<span> Số người: </span>
 									<span> Lời nhắc: </span>
 								</div>
 								<div className="fs-16 fw-500 d-flex flex-column">
-									<span> abc </span>
+									<span> {open?.nameRes} </span>
 									<span> {open?.nameReceiver} </span>
 									<span> {open?.phoneReceiver} </span>
 									<span>
 										{" "}
 										{formatNumberToK(
-											open?.totalAmount
+											open?.depositAmount
+										)}{" "}
+									</span>
+									<span>
+										{" "}
+										{formatNumberToK(open?.foodAmount)}{" "}
+									</span>
+									<span>
+										{" "}
+										{formatNumberToK(
+											open?.foodAddAmount
 										)}{" "}
 									</span>
 									<span>
@@ -80,15 +104,15 @@ const ModalViewDetail = ({ open, onCancel }) => {
 							</div>
 							<div className="pl-20 fw-500 fs-18 mb-10 mt-20">
 								<Row gutter={[16, 16]}>
-									<Col span={12}>
+									<Col span={8}>
 										<div className="pl-20 fw-500 fs-18 mb-10">
 											- Danh sách bàn
 										</div>
 										<Row
 											gutter={[16, 16]}
-											className="w-100 "
+											className="w-100"
 										>
-											{open?.orderTables.length === 0 ? (
+											{visibleTables.length === 0 ? (
 												<div
 													className="w-100 text-center"
 													style={{
@@ -99,15 +123,14 @@ const ModalViewDetail = ({ open, onCancel }) => {
 													Chưa chọn bàn
 												</div>
 											) : (
-												open?.orderTables
-													.slice(0, 10)
-													.map((t, index) => (
+												visibleTables.map(
+													(t, index) => (
 														<Col
 															span={12}
 															key={index}
 															className="w-100"
 														>
-															<div className="table-item d-flex flex-column justify-content-center align-items-center">
+															<div className="table-item">
 																<Avatar
 																	size={100}
 																	src={
@@ -120,9 +143,14 @@ const ModalViewDetail = ({ open, onCancel }) => {
 																	}
 																/>
 																<div className="des">
-																	<div className="fs-16 fw-500">
+																	<div
+																		className="fs-18 fw-500"
+																		style={{
+																			color: "gray",
+																		}}
+																	>
 																		Tên
-																		phòng:
+																		phòng:{" "}
 																		{
 																			t?.roomName
 																		}
@@ -164,11 +192,36 @@ const ModalViewDetail = ({ open, onCancel }) => {
 																</div>
 															</div>
 														</Col>
-													))
+													)
+												)
 											)}
 										</Row>
+										{open?.orderTables.length > 2 && (
+											<div className="w-100 text-center mt-16">
+												<button
+													onClick={() =>
+														setShowAllTable(
+															!showAllTable
+														)
+													}
+													style={{
+														backgroundColor:
+															"transparent",
+														border: "none",
+														color: "black",
+														cursor: "pointer",
+														fontSize: "16px",
+														fontWeight: "500",
+													}}
+												>
+													{showAllTable
+														? "Ẩn bớt"
+														: "Xem thêm"}
+												</button>
+											</div>
+										)}
 									</Col>
-									<Col span={12}>
+									<Col span={8}>
 										<div className="pl-20 fw-500 fs-18 mb-10">
 											- Danh sách món ăn
 										</div>
@@ -176,20 +229,127 @@ const ModalViewDetail = ({ open, onCancel }) => {
 											gutter={[16, 16]}
 											className="w-100"
 										>
-											{open?.orderMenus.length === 0 ? (
-												<div className="w-100 text-center red fs-20">
+											{visibleItems.length === 0 ? (
+												<div
+													className="w-100 text-center"
+													style={{
+														color: "red",
+														fontSize: "20px",
+													}}
+												>
 													Chưa chọn món ăn
 												</div>
 											) : (
-												open?.orderMenus
-													.slice(0, 20)
-													.map((t, index) => (
+												visibleItems.map((t, index) => (
+													<Col
+														span={12}
+														key={index}
+														className="w-100"
+													>
+														<div className="table-item">
+															<Avatar
+																size={100}
+																src={
+																	<img
+																		src={
+																			t?.menuImage
+																		}
+																		alt={
+																			t?.menuName
+																		}
+																	/>
+																}
+															/>
+															<div className="des">
+																<div
+																	className="fs-18 fw-500"
+																	style={{
+																		color: "gray",
+																	}}
+																>
+																	{
+																		t?.menuName
+																	}
+																</div>
+																<div
+																	className="fs-16 fw-500"
+																	style={{
+																		color: "gray",
+																	}}
+																>
+																	Số lượng:{" "}
+																	{
+																		t?.quantity
+																	}
+																</div>
+																<div
+																	className="quantity"
+																	style={{
+																		color: "gray",
+																	}}
+																>
+																	Giá:{" "}
+																	{t?.price}{" "}
+																	VNĐ
+																</div>
+															</div>
+														</div>
+													</Col>
+												))
+											)}
+										</Row>
+										{open?.orderMenus.length > 2 && (
+											<div className="w-100 text-center mt-16">
+												<button
+													onClick={() =>
+														setShowAllMenus(
+															!showAllMenus
+														)
+													}
+													style={{
+														backgroundColor:
+															"transparent",
+														border: "none",
+														color: "black",
+														cursor: "pointer",
+														fontSize: "16px",
+														fontWeight: "500",
+													}}
+												>
+													{showAllMenus
+														? "Ẩn bớt"
+														: "Xem thêm"}
+												</button>
+											</div>
+										)}
+									</Col>
+									<Col span={8}>
+										<div className="pl-20 fw-500 fs-18 mb-10">
+											- Danh sách món ăn
+										</div>
+										<Row
+											gutter={[16, 16]}
+											className="w-100"
+										>
+											{visibleMenusAdd.length === 0 ? (
+												<div
+													className="w-100 text-center"
+													style={{
+														color: "red",
+														fontSize: "20px",
+													}}
+												>
+													Chưa chọn món ăn
+												</div>
+											) : (
+												visibleMenusAdd.map(
+													(t, index) => (
 														<Col
-															span={10}
+															span={12}
 															key={index}
 															className="w-100"
 														>
-															<div className="table-item d-flex flex-column justify-content-center align-items-center">
+															<div className="table-item">
 																<Avatar
 																	size={100}
 																	src={
@@ -204,7 +364,12 @@ const ModalViewDetail = ({ open, onCancel }) => {
 																	}
 																/>
 																<div className="des">
-																	<div className="fs-16 fw-500">
+																	<div
+																		className="fs-18 fw-500"
+																		style={{
+																			color: "gray",
+																		}}
+																	>
 																		{
 																			t?.menuName
 																		}
@@ -228,16 +393,42 @@ const ModalViewDetail = ({ open, onCancel }) => {
 																		}}
 																	>
 																		Giá:{" "}
-																		{formatNumberToK(
+																		{
 																			t?.price
-																		)}
+																		}{" "}
+																		VNĐ
 																	</div>
 																</div>
 															</div>
 														</Col>
-													))
+													)
+												)
 											)}
 										</Row>
+										{open?.orderMenusAdd.length > 2 && (
+											<div className="w-100 text-center mt-16">
+												<button
+													onClick={() =>
+														setShowMenusAdd(
+															!showAllMenusAdd
+														)
+													}
+													style={{
+														backgroundColor:
+															"transparent",
+														border: "none",
+														color: "black",
+														cursor: "pointer",
+														fontSize: "16px",
+														fontWeight: "500",
+													}}
+												>
+													{showAllMenusAdd
+														? "Ẩn bớt"
+														: "Xem thêm"}
+												</button>
+											</div>
+										)}
 									</Col>
 								</Row>
 							</div>
