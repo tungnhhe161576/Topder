@@ -126,7 +126,6 @@ const RestaurantDetail = () => {
 	}, [restaurantDetail]);
 
 	console.log("user", user);
-	
 
 	//form dat ban
 	const handleSubmitFormBooking = async () => {
@@ -137,7 +136,9 @@ const RestaurantDetail = () => {
 		}
 		if (!!!user.phone || !!!user.dob || !!!user.gender) {
 			setOpenRequestLogin(true);
-			setText("Bạn cần cập nhật đầy đủ thông tin tài khoản trước khi đặt bàn!");
+			setText(
+				"Bạn cần cập nhật đầy đủ thông tin tài khoản trước khi đặt bàn!"
+			);
 			return;
 		}
 		try {

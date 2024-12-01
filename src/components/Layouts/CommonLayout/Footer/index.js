@@ -167,9 +167,6 @@ const Footer = () => {
 								</div>
 								<div>
 									<a
-										// href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-										// 	"Khu GD&ĐT, khu CNC Hòa Lạc, KM29, Đại lộ Thăng Long, huyện Thạch Thất, TP Hà Nội, Việt Nam"
-										// )}`}
 										href="https://maps.app.goo.gl/u7CurDx4nRzX759AA"
 										target="_blank"
 										rel="noopener noreferrer"
