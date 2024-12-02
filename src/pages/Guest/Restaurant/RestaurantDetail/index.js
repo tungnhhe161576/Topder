@@ -64,6 +64,7 @@ const RestaurantDetail = () => {
 	const user = useSelector(userInfor);
 	const [showSuccessModal, setShowSuccessModal] = useState(false);
 	const [openModalReport, setOpenModalReport] = useState(false);
+	const [numberPerson, setNumberPerson] = useState(0)
 
 	useEffect(() => {
 		form.setFieldsValue({
@@ -174,6 +175,7 @@ const RestaurantDetail = () => {
 				tableIds: table,
 			};
 			setOpenModalCalFee(data);
+			// setNumberPerson(data?.numberPerson + data?.numberChild)
 		} catch (error) {
 			console.log(error);
 		} finally {
@@ -364,6 +366,9 @@ const RestaurantDetail = () => {
 
 		return disabledMinutes;
 	};
+
+
+	
 	return (
 		<CommonLayout>
 			<RestaurantDetailContainer>
@@ -913,6 +918,7 @@ const RestaurantDetail = () => {
 																min={0}
 																className="input w-100"
 																placeholder="Nhập số người lớn"
+																onChange={(e) => setNumberPerson(prev => prev + e)}
 															/>
 														</Form.Item>
 													</Col>
@@ -925,21 +931,12 @@ const RestaurantDetail = () => {
 																	Số trẻ em
 																</span>
 															}
-															// rules={[
-															// 	{
-															// 		required: true,
-															// 		message: (
-															// 			<span style={{color: "black", marginLeft: "15px"}}>
-															// 				Hãy nhập số trẻ em!
-															// 			</span>
-															// 		),
-															// 	},
-															// ]}
 														>
 															<InputNumber
 																min={0}
 																className="input w-100"
 																placeholder="Nhập số trẻ em"
+																onChange={(e) => setNumberPerson(prev => prev + e)}
 															/>
 														</Form.Item>
 													</Col>
@@ -1053,6 +1050,7 @@ const RestaurantDetail = () => {
 					restaurantId={restaurantId}
 					date={date}
 					time={time}
+					numberPerson={numberPerson}
 				/>
 			)}
 			{!!openModalChooseFood && (

@@ -8,11 +8,12 @@ import table1 from "../../../../../../assets/images/table1.jpg"
 import table2 from "../../../../../../assets/images/table2.jpg" 
 import dayjs from "dayjs";
 
-const ModalChooseTable = ({open, onCancel, setTables, tables, restaurantId, date, time}) => {
+const ModalChooseTable = ({open, onCancel, setTables, tables, restaurantId, date, time, numberPerson}) => {
     const [tableTudo, setTableTodu] = useState([])
     const [tablePhong, setTablePhong] = useState([])
     const [loading, setLoading] = useState(false)
     const [selectedTable, setSelectedTable] = useState(tables)
+    
 
     const dateChooseTable = dayjs(date?.$d).format('YYYY-MM-DD')
     const timeChooseTable = dayjs(time?.$d).format('HH:mm')
@@ -65,6 +66,7 @@ const ModalChooseTable = ({open, onCancel, setTables, tables, restaurantId, date
                                 className={`w-100 ${selectedTable?.find(i => i?.tableId === t?.tableId) ? 'selected' : ''}`}
                                 style={{height: '200px'}}
                                 value={t}
+                                disabled={t?.maxCapacity < numberPerson ? true : false}
                             >
                                 <div className="table-item">
                                     <div className="table-image">
@@ -79,6 +81,13 @@ const ModalChooseTable = ({open, onCancel, setTables, tables, restaurantId, date
                                         <div className="fs-16 fw-500"> Tên bàn: {t?.tableName} </div>
                                         <div className="quantity"> Sức chứa: {t?.maxCapacity} người</div>
                                         <div className="description"> {t?.description} </div>
+                                        {
+                                            t?.maxCapacity < numberPerson
+                                                ? <div className="fs-12 red" style={{fontStyle: 'italic'}}>
+                                                    Sức chứa của bàn không đủ!
+                                                </div>
+                                                : null
+                                        }
                                     </div>
                                 </div>
                             </Radio>
@@ -105,6 +114,7 @@ const ModalChooseTable = ({open, onCancel, setTables, tables, restaurantId, date
                                 className={`w-100 ${selectedTable?.find(i => i?.tableId === t?.tableId) ? 'selected' : ''}`}
                                 style={{height: '200px'}}
                                 value={t}
+                                disabled={t?.maxCapacity < numberPerson ? true : false}
                             >
                                 <div className="table-item">
                                     <div className="table-image">
@@ -118,6 +128,13 @@ const ModalChooseTable = ({open, onCancel, setTables, tables, restaurantId, date
                                         <div className="name"> Tên bàn: {t?.tableName} </div>
                                         <div className="quantity"> Sức chứa: {t?.maxCapacity} người</div>
                                         <div className="description"> {t?.description} </div>
+                                        {
+                                            t?.maxCapacity < numberPerson
+                                                ? <div className="fs-12 red" style={{fontStyle: 'italic'}}>
+                                                    Sức chứa của bàn không đủ!
+                                                </div>
+                                                : null
+                                        }
                                     </div>
                                 </div>
                             </Radio>

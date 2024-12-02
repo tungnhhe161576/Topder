@@ -24,6 +24,7 @@ import ModalUpdateOrder from "./Modal/ModalUpdateOrder";
 import { FileAddOutlined } from "@ant-design/icons";
 import * as XLSX from "xlsx";
 import ModalReport from "./Modal/ModalReport";
+import ModalViewPrice from "./Modal/ModalViewPrice";
 const { Option } = Select;
 
 const ManageOrder = () => {
@@ -32,6 +33,7 @@ const ManageOrder = () => {
 	const [statusOrder, setStatusOrder] = useState("");
 	const [openModalDetail, setOpenModalDetail] = useState(false);
 	const [openModalUpdateOrder, setOpenModalUpdateOrder] = useState(false);
+	const [openModalViewPrice, setOpenModalViewPrice] = useState(false);
 	const [openModalReport, setOpenModalReport] = useState(false);
 	const [text, setText] = useState("");
 	const [status, setStatus] = useState("");
@@ -375,6 +377,9 @@ const ManageOrder = () => {
 								</div>
 							</div>
 							<div>
+								<Button type="primary" className="mr-10" onClick={() => setOpenModalViewPrice(true)}>
+									Quy định về bảng giá
+								</Button>
 								<Button
 									type="primary"
 									className="white fs-15"
@@ -658,6 +663,12 @@ const ManageOrder = () => {
 								onCancel={() => setOpenModalReport(false)}
 								onOk={getAllOrders}
 								userId={user?.uid}
+							/>
+						)}
+						{!!openModalViewPrice && (
+							<ModalViewPrice
+								open={openModalViewPrice}
+								onCancel={() => setOpenModalViewPrice(false)}
 							/>
 						)}
 					</SpinCustom>
