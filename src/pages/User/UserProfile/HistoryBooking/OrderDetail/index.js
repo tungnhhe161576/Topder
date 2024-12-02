@@ -105,7 +105,7 @@ const OrderDetail = ({
 				<div>
 					<span className="fs-14 mr-10">Ngày đặt:</span>
 					<span className="fs-13 primary">
-						{dayjs(detail?.dateReservation).format("DD-MM-YYYY")}
+						{dayjs(detail?.createdAt).format("DD-MM-YYYY")}
 					</span>
 				</div>
 			</div>
@@ -129,9 +129,7 @@ const OrderDetail = ({
 					<tbody>
 						<tr>
 							<td>
-								{dayjs(detail?.dateReservation).format(
-									"DD-MM-YYYY"
-								)}
+								{dayjs(detail?.createdAt).format("DD-MM-YYYY")}
 							</td>
 							<td>
 								{dayjs(
@@ -146,7 +144,10 @@ const OrderDetail = ({
 									? detail.orderTables
 											.map(
 												(table) =>
-													`${table.tableName} (${table.roomName})`
+													`${table.tableName} (${
+														table.roomName ??
+														"Bàn tự do"
+													})`
 											)
 											.join(", ")
 									: "Chưa chọn bàn"}

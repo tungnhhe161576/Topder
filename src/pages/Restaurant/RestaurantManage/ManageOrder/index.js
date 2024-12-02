@@ -99,7 +99,6 @@ const ManageOrder = () => {
 			setLoading(false);
 		}
 	};
-
 	useEffect(() => {
 		if (!!user) {
 			getAllOrders();
@@ -301,12 +300,14 @@ const ManageOrder = () => {
 							Xác nhận đơn
 						</Button>
 					)}
+
 					{(record?.statusOrder === "Confirm" &&
 						record?.totalAmount === 0) ||
 					(record?.statusOrder === "Paid" &&
 						dayjs(
-							`${record?.dateReservation}T${record?.timeReservation}`
-						).isAfter(dayjs())) ? (
+							`${record?.dateReservation} ${record?.timeReservation}`,
+							"YYYY-MM-DD HH:mm:ss"
+						).isBefore(dayjs())) ? (
 						<Button
 							onClick={() => {
 								setOpenModalUpdateOrder(record);
