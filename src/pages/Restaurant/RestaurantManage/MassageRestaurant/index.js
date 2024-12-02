@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import RestaurantLayout from "../../../../components/Layouts/RestaurantLayout";
 import { MassageRestaurantContainer } from "./styled";
-import { createChat } from "../../../../hub";
+import { connection, createChat } from "../../../../hub";
 import { Avatar, Button, Divider, Form, Input } from "antd";
 import dayjs from "dayjs";
 import SpinCustom from "../../../../components/Common/SpinCustom";
@@ -18,6 +18,7 @@ const MassageRestaurant = () => {
     const [message, setMessage] = useState('')
     const user = useSelector(userInfor)
     const ref = useRef()
+    const chatRef   = useRef(null)
 
 
     const getChatBox = async () => {
@@ -56,16 +57,24 @@ const MassageRestaurant = () => {
     }
 
     useEffect(() => {
-        if(!!item) {
-            const handleNewChat = (data) => {
-                console.log('data', data);
-                if (data?.chatBoxId === item?.chatBoxId) {
-                    setChatList(prev => [...prev, data]);
+        connection.on('CreateChat', (chat) => {
+                if (chat?.chatBoxId === chatRef.current?.chatBoxId) {
+                    setChatList(prev => [...prev, chat]);
                 }
-            };
-            createChat(handleNewChat);
-        }
-    }, [item?.chatId, item?.chatBoxId, item]);
+            });
+    }, []);
+
+    // useEffect(() => {
+    //     if(!!item) {
+    //         const handleNewChat = (data) => {
+    //             console.log('data', data);
+    //             if (data?.chatBoxId === item?.chatBoxId) {
+    //                 setChatList(prev => [...prev, data]);
+    //             }
+    //         };
+    //         createChat(handleNewChat);
+    //     }
+    // }, [item?.chatId, item?.chatBoxId, item]);
 
     const getChatList = async (chatBox) => {
         try {
@@ -91,7 +100,7 @@ const MassageRestaurant = () => {
                     <div className="list">
                         {
                             chatBox?.map(i => (
-                                <div className="item" key={i?.chatBoxId} onClick={() => {setItem(i); getChatList(i)}}> 
+                                <div className="item" key={i?.chatBoxId} onClick={() => {setItem(i); getChatList(i); chatRef.current = i}}> 
                                     <div>
                                         <Avatar size={30} src={<img src={i?.customerImage} alt="avatar"/>} />
                                     </div>

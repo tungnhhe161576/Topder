@@ -25,8 +25,6 @@ const onReceiveNoti = (callback) => {
 
 const createChat = (callback) => {
     connection.on('CreateChat', (chat) => {
-        console.log("chat", chat);
-        
         if(callback) callback(chat);
     });
 };
