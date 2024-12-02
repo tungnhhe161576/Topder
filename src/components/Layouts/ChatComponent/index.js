@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { userInfor } from "../../../redux/Slice/userSlice";
 import SpinCustom from '../../../components/Common/SpinCustom'
 import dayjs from "dayjs";
-import { createChat } from "../../../hub";
+import { connection, createChat } from "../../../hub";
 
 const ChatComponent = ({open, onCancel}) => {
     const [loading, setLoading] = useState(false)
@@ -17,7 +17,8 @@ const ChatComponent = ({open, onCancel}) => {
     const [message, setMessage] = useState('')
     const user = useSelector(userInfor)
     const ref = useRef(null)
-    const chatHandlerRef = useRef()
+    const chatRef   = useRef(null)
+    // const chatHandlerRef = useRef()
 
     const getChatBox = async () => {
         try {
@@ -69,36 +70,15 @@ const ChatComponent = ({open, onCancel}) => {
             setLoading2(false)
         }
     }
-    // useEffect(() => {
-    //     if (!!item) {
-    //         const handleNewChat = (data) => {
-    //             if (data?.chatBoxId === item?.chatBoxId) {
-    //                 setChatList(prev => [...prev, data]);
-    //             }
-    //         };
-    //         createChat(handleNewChat);
-    //     }
-    // }, [item]);
 
-    const updateChatHandler = (currentItem) => {
-        // Nếu có handle trước đó, không cần phải hủy bởi không có cách nào để xóa
-        chatHandlerRef.current = (data) => {
-            if (data?.chatBoxId === currentItem?.chatBoxId) {
-                setChatList(prev => [...prev, data]);
-            }
-        };
-        
-        createChat(chatHandlerRef.current);
-    };
-    
     useEffect(() => {
-        if (!!item) {
-            getChatList(item);
-            updateChatHandler(item); // Cập nhật handler cho item mới
-        }
-    }, [item]);
-    
-    
+            connection.on('CreateChat', (chat) => {
+                if (chat?.chatBoxId === chatRef.current?.chatBoxId) {
+                    setChatList(prev => [...prev, chat]);
+                }
+            });
+    }, []);
+
     return (  
         <ChatComponentContainer>
             <Drawer
@@ -118,7 +98,7 @@ const ChatComponent = ({open, onCancel}) => {
                         {/* i?.chatBoxId */}
                             {
                                 chatBox?.map(i => (
-                                    <div className={`${!i?.isRead ? 'noread' : ''} item ${i?.chatBoxId === item?.chatBoxId ? 'selected' : ''}`} key={i?.chatBoxId} onClick={() => {setItem(i); getChatList(i)}}> 
+                                    <div className={`${!i?.isRead ? 'noread' : ''} item ${i?.chatBoxId === item?.chatBoxId ? 'selected' : ''}`} key={i?.chatBoxId} onClick={() => { setItem(i); chatRef.current = i; getChatList(i)} } > 
                                         <div className="d-flex align-items-center">
                                             <div>
                                                 <Avatar size={30} src={<img src={i?.restaurantImage} alt="avatar"/>} />

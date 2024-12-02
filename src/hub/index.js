@@ -1,7 +1,7 @@
 import { HubConnectionBuilder } from '@microsoft/signalr';
 
 
-const connection = new HubConnectionBuilder()
+export const connection = new HubConnectionBuilder()
     .withUrl("https://localhost:7134/signalR") 
     .withAutomaticReconnect()
     .build();
@@ -25,6 +25,8 @@ const onReceiveNoti = (callback) => {
 
 const createChat = (callback) => {
     connection.on('CreateChat', (chat) => {
+        console.log("chat", chat);
+        
         if(callback) callback(chat);
     });
 };
