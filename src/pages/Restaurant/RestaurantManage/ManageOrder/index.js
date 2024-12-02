@@ -303,7 +303,10 @@ const ManageOrder = () => {
 					)}
 					{(record?.statusOrder === "Confirm" &&
 						record?.totalAmount === 0) ||
-					record?.statusOrder === "Paid" ? (
+					(record?.statusOrder === "Paid" &&
+						dayjs(
+							`${record?.dateReservation}T${record?.timeReservation}`
+						).isAfter(dayjs())) ? (
 						<Button
 							onClick={() => {
 								setOpenModalUpdateOrder(record);
