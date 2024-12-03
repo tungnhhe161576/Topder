@@ -11,6 +11,9 @@ const ModalChooseMenus = ({ open, onCancel, userId, setMenus, menus }) => {
 	const [menu, setMenu] = useState([]);
 	const [selectedFoods, setSelectedFoods] = useState(open);
 
+	console.log("open", open);
+	console.log("menus", menus);
+
 	const getMenu = async () => {
 		try {
 			setLoading(true);
@@ -32,7 +35,7 @@ const ModalChooseMenus = ({ open, onCancel, userId, setMenus, menus }) => {
 			if (exists) {
 				return prev.filter((f) => f.menuId !== food.menuId);
 			} else {
-				return [...prev, { ...food, quantity: 1 }];
+				return [...prev, { ...food, discountMenuPercentage: 1 }];
 			}
 		});
 	};
@@ -133,12 +136,12 @@ const ModalChooseMenus = ({ open, onCancel, userId, setMenus, menus }) => {
 															?.discountMenuPercentage ||
 														1
 													}
-													onChange={(value) =>
+													onChange={(value) => {
 														handleQuantityChange(
 															f.menuId,
 															value
-														)
-													}
+														);
+													}}
 												/>
 											</div>
 										) : (

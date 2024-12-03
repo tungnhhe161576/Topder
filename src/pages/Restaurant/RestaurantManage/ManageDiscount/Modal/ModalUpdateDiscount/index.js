@@ -23,8 +23,6 @@ const ModalUpdateDiscount = ({ open, onCancel, onOk, userId }) => {
 	const [menus, setMenus] = useState(open?.discountMenuDtos);
 	const [form] = Form.useForm();
 
-	console.log(open);
-
 	const handleUpdateDiscount = async () => {
 		try {
 			setLoading(false);
