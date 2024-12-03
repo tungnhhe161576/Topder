@@ -17,6 +17,7 @@ const ModalChooseTable = ({open, onCancel, setTables, tables, restaurantId, date
 
     const dateChooseTable = dayjs(date?.$d).format('YYYY-MM-DD')
     const timeChooseTable = dayjs(time?.$d).format('HH:mm')
+
     
     const getTable = async () => {
         try {

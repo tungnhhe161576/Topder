@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CommonLayout from "../../../../components/Layouts/CommonLayout";
 import { RestaurantDetailContainer } from "./styled";
 import {
@@ -65,6 +65,8 @@ const RestaurantDetail = () => {
 	const [showSuccessModal, setShowSuccessModal] = useState(false);
 	const [openModalReport, setOpenModalReport] = useState(false);
 	const [numberPerson, setNumberPerson] = useState(0)
+	const numberPersonRef = useRef()
+	const numberChildRef = useRef()
 
 	useEffect(() => {
 		form.setFieldsValue({
@@ -157,6 +159,7 @@ const RestaurantDetail = () => {
 			setTotalAmount(total);
 
 			const formValues = await form.validateFields();
+			
 			const data = {
 				customerId: user?.uid,
 				restaurantId: restaurantId,
@@ -174,6 +177,7 @@ const RestaurantDetail = () => {
 				orderMenus: menu,
 				tableIds: table,
 			};
+			console.log('data', data);
 			setOpenModalCalFee(data);
 			// setNumberPerson(data?.numberPerson + data?.numberChild)
 		} catch (error) {
@@ -367,6 +371,11 @@ const RestaurantDetail = () => {
 		return disabledMinutes;
 	};
 
+	const handleChangePerson = () => {
+		setNumberPerson(numberPersonRef.current + numberChildRef.current)
+	}
+	
+	
 
 	
 	return (
@@ -798,6 +807,7 @@ const RestaurantDetail = () => {
 																onChange={(e) =>
 																	setDate(e)
 																}
+																format="DD-MM-YYYY"
 																className="input"
 																placeholder="Chọn ngày"
 																disabledDate={(
@@ -912,13 +922,20 @@ const RestaurantDetail = () => {
 																		</span>
 																	),
 																},
+																// { 
+																// 	validator: (_, value) => 
+																// 		value > restaurantDetail?.maxCapicity
+																// 			? Promise.reject("Vượt quá sức chứa của nhà hàng!")
+																// 			: Promise.resolve(),
+																// }
 															]}
 														>
 															<InputNumber
 																min={0}
 																className="input w-100"
 																placeholder="Nhập số người lớn"
-																onChange={(e) => setNumberPerson(prev => prev + e)}
+																// onChange={(e) => setNumberPerson(prev => prev + e)}
+																onChange={(e) => {numberPersonRef.current = e; handleChangePerson()}}
 															/>
 														</Form.Item>
 													</Col>
@@ -936,7 +953,8 @@ const RestaurantDetail = () => {
 																min={0}
 																className="input w-100"
 																placeholder="Nhập số trẻ em"
-																onChange={(e) => setNumberPerson(prev => prev + e)}
+																// onChange={(e) => setNumberPerson(prev => prev + e)}
+																onChange={(e) => {numberChildRef.current = e; handleChangePerson()}}
 															/>
 														</Form.Item>
 													</Col>
