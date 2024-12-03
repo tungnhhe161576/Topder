@@ -129,7 +129,9 @@ const OrderDetail = ({
 					<tbody>
 						<tr>
 							<td>
-								{dayjs(detail?.createdAt).format("DD-MM-YYYY")}
+								{dayjs(detail?.dateReservation).format(
+									"DD-MM-YYYY"
+								)}
 							</td>
 							<td>
 								{dayjs(
