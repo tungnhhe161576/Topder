@@ -11,9 +11,6 @@ const ModalChooseMenus = ({ open, onCancel, userId, setMenus, menus }) => {
 	const [menu, setMenu] = useState([]);
 	const [selectedFoods, setSelectedFoods] = useState(open);
 
-	console.log("open", open);
-	console.log("menus", menus);
-
 	const getMenu = async () => {
 		try {
 			setLoading(true);

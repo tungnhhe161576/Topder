@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const RestaurantDesLayoutContainer = styled.div`
 	.restaurant-reply {
+		margin-bottom: 20px;
 		margin-left: 110px;
 		background-color: #f9f9f9;
 		padding: 10px;
