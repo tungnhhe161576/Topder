@@ -51,7 +51,6 @@ const Header = () => {
 		setIsExpanded(!isExpanded);
 	};
 
-	console.log("noti", notis);
 
 	const getListNoti = async () => {
 		try {

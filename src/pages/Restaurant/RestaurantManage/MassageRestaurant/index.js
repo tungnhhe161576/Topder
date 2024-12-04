@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import RestaurantLayout from "../../../../components/Layouts/RestaurantLayout";
 import { MassageRestaurantContainer } from "./styled";
 import { connection, createChat } from "../../../../hub";
-import { Avatar, Button, Divider, Form, Input } from "antd";
+import { Avatar, Badge, Button, Divider, Form, Input } from "antd";
 import dayjs from "dayjs";
 import SpinCustom from "../../../../components/Common/SpinCustom";
 import { useSelector } from "react-redux";
@@ -32,6 +32,7 @@ const MassageRestaurant = () => {
             setLoading(false)
         }
     }
+    
     useEffect(() => {
         if (!!user) {
             getChatBox()
@@ -58,27 +59,21 @@ const MassageRestaurant = () => {
 
     useEffect(() => {
         connection.on('CreateChat', (chat) => {
-                if (chat?.chatBoxId === chatRef.current?.chatBoxId) {
-                    setChatList(prev => [...prev, chat]);
-                }
-            });
+            if (chat?.chatBoxId === chatRef.current?.chatBoxId) {
+                setChatList(prev => [...prev, chat]);
+            }
+            getChatBox()
+        });
     }, []);
 
-    // useEffect(() => {
-    //     if(!!item) {
-    //         const handleNewChat = (data) => {
-    //             console.log('data', data);
-    //             if (data?.chatBoxId === item?.chatBoxId) {
-    //                 setChatList(prev => [...prev, data]);
-    //             }
-    //         };
-    //         createChat(handleNewChat);
-    //     }
-    // }, [item?.chatId, item?.chatBoxId, item]);
 
     const getChatList = async (chatBox) => {
         try {
             setLoading2(true)
+            if (!chatBox?.isRead) {
+                await UserService.readChatBox(user?.uid, chatBox?.chatBoxId)
+                getChatBox()
+            }
             const res = await UserService.getChatList(chatBox?.chatBoxId)
             setChatList(res)
         } catch (error) {
@@ -100,13 +95,19 @@ const MassageRestaurant = () => {
                     <div className="list">
                         {
                             chatBox?.map(i => (
-                                <div className="item" key={i?.chatBoxId} onClick={() => {setItem(i); getChatList(i); chatRef.current = i}}> 
-                                    <div>
-                                        <Avatar size={30} src={<img src={i?.customerImage} alt="avatar"/>} />
+                                <div className={`${!i?.isRead ? 'noread' : ''} item ${i?.chatBoxId === item?.chatBoxId ? 'selected' : ''}`} key={i?.chatBoxId} onClick={() => {setItem(i); getChatList(i); chatRef.current = i}}> 
+                                    <div className="d-flex align-items-center">
+                                        <div>
+                                            <Avatar size={30} src={<img src={i?.customerImage} alt="avatar"/>} />
+                                        </div>
+                                        <div className="fs-14 fw-500">
+                                            {i?.customerName}
+                                        </div>
                                     </div>
-                                    <div className="fs-14 fw-500">
-                                        {i?.customerName}
-                                    </div>
+                                    {!i?.isRead 
+                                        ? <div className="read"></div>
+                                        : null
+                                    }
                                 </div>
                             ))
                         }
@@ -150,19 +151,21 @@ const MassageRestaurant = () => {
                         </div>
                     </SpinCustom>
                     <div className="send-mess p-10">
-                        <Form className="d-flex align-items-center">
-                            <Input ref={ref} className="w-100" value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Nhập tin"/>
-                            <Button
-                                type="primary"
-                                htmlType="submit"
-                                shape="round"
-                                className="send"
-                                loading={loading}
-                                onClick={() => handleSendMessage()}
-                            >
-                                Gửi
-                            </Button>
-                        </Form>
+                        {
+                            !!item && <Form className="d-flex align-items-center">
+                                <Input ref={ref} className="w-100" value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Nhập tin"/>
+                                <Button
+                                    type="primary"
+                                    htmlType="submit"
+                                    shape="round"
+                                    className="send"
+                                    loading={loading}
+                                    onClick={() => handleSendMessage()}
+                                >
+                                    Gửi
+                                </Button>
+                            </Form>
+                        }
                     </div>
                 </div>
             </MassageRestaurantContainer>

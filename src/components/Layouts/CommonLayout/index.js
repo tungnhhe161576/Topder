@@ -26,8 +26,11 @@ const CommonLayout = ({ children }) => {
     }
 
     useEffect(() => {
+        if (!!user) {
+            getChatBox()
+        }
         connection.on('CreateChat', (chat) => {
-            if (!!chat && !!user) {
+            if (!!chat) {
                 getChatBox()
             }
         });

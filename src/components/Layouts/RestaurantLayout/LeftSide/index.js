@@ -1,11 +1,38 @@
 import { InsertRowAboveOutlined, TableOutlined } from "@ant-design/icons";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { userInfor } from "../../../../redux/Slice/userSlice";
+import { useSelector } from "react-redux";
+import UserService from "../../../../services/UserService";
+import { Badge } from "antd";
+import { connection } from "../../../../hub";
 
 const LeftSide = () => {
 	const nav = useNavigate();
 	const location = useLocation();
+	const user = useSelector(userInfor)
+	const [chatBox, setChatBox] = useState([])
 
 	const isActive = (path) => location.pathname === path;
+	console.log(location);
+	
+
+	const getChatBox = async () => {
+        try {
+            const res = await UserService.getChatBox(user?.uid)
+            setChatBox(res)
+        } catch (error) {
+            console.log(error);
+        } finally {
+        }
+    }
+    useEffect(() => {
+		connection.on('CreateChat', (chat) => {
+            if (!!chat && !!user && location.pathname !== '/restaurant/massage') {
+                getChatBox()
+            }
+        });
+    }, [user])
 
 
 	return (
@@ -51,10 +78,19 @@ const LeftSide = () => {
 				}`}
 				onClick={() => nav("/restaurant/massage")}
 			>
-				<div className="item-icon">
-					<InsertRowAboveOutlined />
-				</div>
-				<div className="item-name"> Nhắn tin </div>
+					<div className="item-icon">
+						<InsertRowAboveOutlined />
+					</div>
+				<Badge
+					count={
+						chatBox?.filter(
+							(i) => i?.isRead === false
+						).length
+					}
+					size="large"
+				>
+					<div className="item-name"> Nhắn tin </div>
+				</Badge>
 			</div>
 			<div
 				className={`item order ${

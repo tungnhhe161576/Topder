@@ -12,11 +12,23 @@ export const MassageRestaurantContainer = styled.div `
         .item {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             height: 60px;
             cursor: pointer;
         }
         .item:hover {
             background-color: #a39e9e;
+        }
+
+        .read {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #ff5722;
+            margin-right: 15px;
+        }
+        .selected {
+            background-color: rgb(193 185 185);
         }
     }
 

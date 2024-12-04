@@ -18,6 +18,11 @@ const ChatComponent = ({open, onCancel, getChatBox, chatBox}) => {
     const user = useSelector(userInfor)
     const ref = useRef(null)
     const chatRef   = useRef(null)
+
+    console.log("user chat", user);
+    console.log("chatList", chatList);
+    
+
     // const chatHandlerRef = useRef()
 
     // const getChatBox = async () => {
@@ -141,7 +146,7 @@ const ChatComponent = ({open, onCancel, getChatBox, chatBox}) => {
                             <div className="list-message">
                                 {
                                     chatList?.map(i => (
-                                        <div key={i?.chatId} className={i?.chatBy === user?.uid ? 'mysefl' : 'yours'}>
+                                        <div key={i?.chatId} className={i?.chatBy === parseInt(user?.uid) ? 'mysefl' : 'yours'}>
                                             <div>
                                                 {i?.content}
                                             </div>
