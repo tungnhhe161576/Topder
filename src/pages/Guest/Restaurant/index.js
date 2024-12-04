@@ -222,7 +222,7 @@ const Restaurant = () => {
 			key: "0",
 		},
 	];
-	const itemPerPage = 4;
+	const itemPerPage = 8;
 	const onPageChange = (page) => {
 		setCurrentPage(page);
 	};
