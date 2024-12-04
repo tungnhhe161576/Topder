@@ -18,9 +18,6 @@ const ChatComponent = ({open, onCancel, getChatBox, chatBox}) => {
     const user = useSelector(userInfor)
     const ref = useRef(null)
     const chatRef   = useRef(null)
-
-    console.log("user chat", user);
-    console.log("chatList", chatList);
     
 
     // const chatHandlerRef = useRef()
