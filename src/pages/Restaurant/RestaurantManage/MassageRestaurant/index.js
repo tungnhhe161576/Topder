@@ -2,12 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import RestaurantLayout from "../../../../components/Layouts/RestaurantLayout";
 import { MassageRestaurantContainer } from "./styled";
 import { connection, createChat } from "../../../../hub";
-import { Avatar, Badge, Button, Divider, Form, Input } from "antd";
+import { Avatar, Badge, Button, Divider, Dropdown, Form, Input } from "antd";
 import dayjs from "dayjs";
 import SpinCustom from "../../../../components/Common/SpinCustom";
 import { useSelector } from "react-redux";
 import { userInfor } from "../../../../redux/Slice/userSlice";
 import UserService from "../../../../services/UserService";
+import ModalDeleteChatBox from "../../../../components/Layouts/ChatComponent/Modal/ModaldeleteChatBox";
 
 const MassageRestaurant = () => {
     const [loading, setLoading] = useState(false)
@@ -16,6 +17,7 @@ const MassageRestaurant = () => {
     const [chatList, setChatList] = useState([])
     const [item, setItem] = useState()
     const [message, setMessage] = useState('')
+    const [modalDeleteChatBox, setModalDeleteChatBox] = useState(false)
     const user = useSelector(userInfor)
     const ref = useRef()
     const chatRef   = useRef(null)
@@ -83,6 +85,36 @@ const MassageRestaurant = () => {
         }
     }
 
+    const items = [
+		{
+			key: "1",
+			label: (
+				<span onClick={() => setModalDeleteChatBox(true)}>
+					Xóa đoạn chat
+				</span>
+			),
+		},
+	];
+    const item2 = (i) => [
+		{
+			key: "1",
+			label: (
+				<span onClick={() => handleDeleteChat(i)}>
+					Xóa
+				</span>
+			),
+		},
+	];
+
+    const handleDeleteChat = async (i) => {
+        try {
+            await UserService.deleteChat(i.chatId)
+            setChatList(prev => prev.filter(item => item.chatId!== i.chatId))
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     
     return (  
         <RestaurantLayout>
@@ -118,7 +150,7 @@ const MassageRestaurant = () => {
                         {
                             !item 
                                 ? <div> Chọn cuộc hội thoại </div>
-                                : <>
+                                : <div className="w-100 d-flex justify-content-space-between">
                                     <div className="d-flex align-items-center">
                                         <div className="d-flex flex-column align-items-center mr-20 pl-10">
                                             <div style={{cursor: 'pointer'}}>
@@ -130,7 +162,18 @@ const MassageRestaurant = () => {
                                             {item?.customerName}
                                         </div>
                                     </div>
-                                </>
+                                    <div>
+                                        <Dropdown
+                                            menu={{
+                                                items: items,
+                                            }}
+                                        >
+                                            <div className="fw-500 fs-22">
+                                                ...
+                                            </div>
+                                        </Dropdown>
+                                    </div>
+                                </div>
                         }
                     </div>
                     <Divider className="mt-5"/>
@@ -139,11 +182,29 @@ const MassageRestaurant = () => {
                             {
                                 chatList?.map(i => (
                                     <div key={i?.chatId} className={i?.chatBy === user?.uid ? 'mysefl' : 'yours'}>
-                                        <div>
-                                            {i?.content}
+                                        <div className="mr-20">
+                                            {i?.chatBy === parseInt(user?.uid) && (
+                                                <div>
+                                                    <Dropdown
+                                                        menu={{
+                                                            items: item2(i),
+                                                        }}
+                                                        trigger={'click'}
+                                                    >
+                                                        <div className="fw-500 fs-16">
+                                                            ...
+                                                        </div>
+                                                    </Dropdown>
+                                                </div>
+                                            )}
                                         </div>
-                                        <div className="gray fs-10">
-                                            {dayjs(i?.chatTime).format('DD-MM-YYYY HH:mm')}
+                                        <div className="d-flex flex-column pr-10" style={{textAlign: 'right'}}>
+                                            <div>
+                                                {i?.content}
+                                            </div>
+                                            <div className="gray fs-10">
+                                                {dayjs(i?.chatTime).format('DD-MM-YYYY HH:mm')}
+                                            </div>
                                         </div>
                                     </div>
                                 ))
@@ -168,6 +229,18 @@ const MassageRestaurant = () => {
                         }
                     </div>
                 </div>
+
+                {
+                    !!modalDeleteChatBox && (
+                        <ModalDeleteChatBox
+                            open={modalDeleteChatBox}
+                            onCancel={() => setModalDeleteChatBox(false)}
+                            item={item}
+                            setItem={() => setItem(null)}
+                            getChatBox={getChatBox}
+                        />
+                    )
+                }
             </MassageRestaurantContainer>
         </RestaurantLayout>
     );

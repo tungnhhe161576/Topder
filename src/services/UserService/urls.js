@@ -104,6 +104,8 @@ export const apiReturnFee = 'Order/ReturnFeePercentApplyCustomerFee'
 export const apiCreatePolicy = 'RestaurantPolicy/Create'
 export const apiGetInActivePolicy = 'RestaurantPolicy/GetInActivePolicies'
 export const apiChoosePolicy = 'RestaurantPolicy/ChoosePolicyToUse'
+export const apiDeleteChatBox = 'ChatBox/Delete'
+export const apiDeleteChat = 'Chat/Delete'
 
 
 

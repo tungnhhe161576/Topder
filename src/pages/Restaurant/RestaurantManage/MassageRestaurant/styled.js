@@ -57,6 +57,8 @@ export const MassageRestaurantContainer = styled.div `
             flex-direction: column;
 
             .mysefl {
+                display: flex;
+                align-items: center;
                 align-self: flex-end;
             }
             .yours {

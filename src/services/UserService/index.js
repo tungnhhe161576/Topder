@@ -105,6 +105,8 @@ import {
 	apiGetInActivePolicy,
 	apiChoosePolicy,
 	apiCreateRoomByExcel,
+	apiDeleteChatBox,
+	apiDeleteChat,
 } from "./urls";
 
 
@@ -278,6 +280,8 @@ const returnFee = (customerId, restaurantId) => http.put(`${apiReturnFee}/?custo
 const createPolicy = (body) => http.post(apiCreatePolicy, body)
 const getInActivePolicy = (restaurantId) => http.get(`${apiGetInActivePolicy}/${restaurantId}`)
 const choosePolicy = (id) => http.put(`${apiChoosePolicy}/${id}`)
+const deleteChatBox = (id) => http.delete(`${apiDeleteChatBox}/${id}`)
+const deleteChat = (id) => http.delete(`${apiDeleteChat}/${id}`)
 
 
 
@@ -389,6 +393,8 @@ const UserService = {
 	getInActivePolicy,
 	choosePolicy,
 	createRoomByExcel,
+	deleteChatBox,
+	deleteChat,
 };
 
 

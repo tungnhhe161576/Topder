@@ -70,9 +70,13 @@ export const BodyChat = styled.div `
             flex-direction: column;
 
             .mysefl {
+                /* width: 60%; */
+                display: flex;
+                align-items: center;
                 align-self: flex-end;
             }
             .yours {
+                /* width: 60%; */
                 align-self: flex-start;
             }
         }

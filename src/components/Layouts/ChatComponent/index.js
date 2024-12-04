@@ -1,4 +1,4 @@
-import { Avatar, Button, Divider, Drawer, Form, Input, Space } from "antd";
+import { Avatar, Button, Divider, Drawer, Dropdown, Form, Input, Space } from "antd";
 import { BodyChat, ChatComponentContainer } from "./styled";
 import { useEffect, useRef, useState } from "react";
 import UserService from "../../../services/UserService";
@@ -7,6 +7,7 @@ import { userInfor } from "../../../redux/Slice/userSlice";
 import SpinCustom from '../../../components/Common/SpinCustom'
 import dayjs from "dayjs";
 import { connection } from "../../../hub";
+import ModalDeleteChatBox from "./Modal/ModaldeleteChatBox";
 
 const ChatComponent = ({open, onCancel, getChatBox, chatBox}) => {
     const [loading, setLoading] = useState(false)
@@ -14,10 +15,11 @@ const ChatComponent = ({open, onCancel, getChatBox, chatBox}) => {
     // const [chatBox, setChatBox] = useState([])
     const [chatList, setChatList] = useState([])
     const [item, setItem] = useState()
+    const [modalDeleteChatBox, setModalDeleteChatBox] = useState(false)
     const [message, setMessage] = useState('')
     const user = useSelector(userInfor)
     const ref = useRef(null)
-    const chatRef   = useRef(null)
+    const chatRef  = useRef(null)
     
 
     // const chatHandlerRef = useRef()
@@ -33,11 +35,11 @@ const ChatComponent = ({open, onCancel, getChatBox, chatBox}) => {
     //         setLoading(false)
     //     }
     // }
-    // useEffect(() => {
-    //     if (!!user) {
-    //         getChatBox()
-    //     }
-    // }, [user])
+    useEffect(() => {
+        if (!!user) {
+            getChatBox()
+        }
+    }, [user])
 
     const handleSendMessage = async () => {
         try {
@@ -81,6 +83,37 @@ const ChatComponent = ({open, onCancel, getChatBox, chatBox}) => {
             });
     }, []);
 
+
+    const items = [
+		{
+			key: "1",
+			label: (
+				<span onClick={() => setModalDeleteChatBox(true)}>
+					Xóa đoạn chat
+				</span>
+			),
+		},
+	];
+    const item2 = (i) => [
+		{
+			key: "1",
+			label: (
+				<span onClick={() => handleDeleteChat(i)}>
+					Xóa
+				</span>
+			),
+		},
+	];
+
+    const handleDeleteChat = async (i) => {
+        try {
+            await UserService.deleteChat(i.chatId)
+            setChatList(prev => prev.filter(item => item.chatId!== i.chatId))
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return (  
         <ChatComponentContainer>
             <Drawer
@@ -123,7 +156,7 @@ const ChatComponent = ({open, onCancel, getChatBox, chatBox}) => {
                             {
                                 !item 
                                     ? <div> Chọn cuộc hội thoại </div>
-                                    : <>
+                                    : <div className="w-100 d-flex justify-content-space-between">
                                         <div className="d-flex align-items-center">
                                             <div className="d-flex flex-column align-items-center mr-20 pl-10">
                                                 <div style={{cursor: 'pointer'}}>
@@ -135,7 +168,18 @@ const ChatComponent = ({open, onCancel, getChatBox, chatBox}) => {
                                                 {item?.restaurantName}
                                             </div>
                                         </div>
-                                    </>
+                                        <div>
+                                            <Dropdown
+                                                menu={{
+                                                    items: items,
+                                                }}
+                                            >
+                                                <div className="fw-500 fs-22">
+                                                    ...
+                                                </div>
+                                            </Dropdown>
+                                        </div>
+                                    </div>
                             }
                         </div>
                         <Divider className="mt-5"/>
@@ -144,11 +188,29 @@ const ChatComponent = ({open, onCancel, getChatBox, chatBox}) => {
                                 {
                                     chatList?.map(i => (
                                         <div key={i?.chatId} className={i?.chatBy === parseInt(user?.uid) ? 'mysefl' : 'yours'}>
-                                            <div>
-                                                {i?.content}
+                                            <div className="mr-20">
+                                                {i?.chatBy === parseInt(user?.uid) && (
+                                                    <div>
+                                                        <Dropdown
+                                                            menu={{
+                                                                items: item2(i),
+                                                            }}
+                                                            trigger={'click'}
+                                                        >
+                                                            <div className="fw-500 fs-16">
+                                                                ...
+                                                            </div>
+                                                        </Dropdown>
+                                                    </div>
+                                                )}
                                             </div>
-                                            <div className="gray fs-10">
-                                                {dayjs(i?.chatTime).format('DD-MM-YYYY HH:mm')}
+                                            <div className="d-flex flex-column pr-10" style={{textAlign: 'right'}}>
+                                                <div>
+                                                    {i?.content}
+                                                </div>
+                                                <div className="gray fs-10">
+                                                    {dayjs(i?.chatTime).format('DD-MM-YYYY HH:mm')}
+                                                </div>
                                             </div>
                                         </div>
                                     ))
@@ -180,6 +242,19 @@ const ChatComponent = ({open, onCancel, getChatBox, chatBox}) => {
                         </div>
                     </div>
                 </BodyChat>
+
+                {
+                    !!modalDeleteChatBox && (
+                        <ModalDeleteChatBox
+                            open={modalDeleteChatBox}
+                            onCancel={() => setModalDeleteChatBox(false)}
+                            item={item}
+                            setItem={() => setItem(null)}
+                            getChatBox={getChatBox}
+                            setChatList={() => setChatList([])}
+                        />
+                    )
+                }
             </Drawer>
         </ChatComponentContainer>
     );
