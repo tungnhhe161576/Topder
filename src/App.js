@@ -22,11 +22,12 @@ function App() {
             const user = jwtDecode(localStorage.getItem('token'))
             const res = await UserService.getCurrentUser(user?.uid)
             dispatch(setUserInformation(res))
-            if (res?.role === "Customer") {
-				nav("/");
-			} else if (res?.role === "Restaurant") {
+            // if (res?.role === "Customer") {
+			// 	nav("/");
+			// } else 
+            if (res?.role === "Restaurant") {
 				nav("/restaurant/dashboard");
-			} else {
+			} else if(res?.role === "Admin"){
 				nav("/admin/dashboard");
 			}
         } catch (error) {
