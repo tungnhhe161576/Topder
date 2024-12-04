@@ -19,8 +19,6 @@ const Header = () => {
 	const dispatch = useDispatch();
 	const user = useSelector(userInfor);
 
-
-
 	const items = [
 		{
 			key: "2",
@@ -34,14 +32,14 @@ const Header = () => {
 			),
 		},
 	];
-	
+
 	const handleLogout = () => {
 		localStorage.removeItem("token");
 		dispatch(setAccessToken(null));
 		dispatch(setUserInformation(null));
 		nav("/login");
 	};
-	
+
 	return (
 		<div className="header">
 			<div className="logo" onClick={() => nav("/admin/dashboard")}>
@@ -75,7 +73,7 @@ const Header = () => {
 						}}
 					>
 						<div className="user-info">
-							<UserOutlined /> {user?.nameRes}
+							<UserOutlined /> {user?.name}
 						</div>
 					</Dropdown>
 				</div>

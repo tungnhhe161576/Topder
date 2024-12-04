@@ -138,7 +138,7 @@ export const RestaurantItemContainer = styled.div`
 				transition: background-color 0.3s ease;
 			}
 			.drop-heart:hover {
-				background-color: #f55b22;
+				background-color: #ddd;
 			}
 			.drop-heart:active {
 				background-color: #fa875c;
