@@ -62,7 +62,7 @@ const Blog = () => {
 	useEffect(() => {
 		getBlogCategory();
 	}, []);
-	const itemPerPage = 4;
+	const itemPerPage = 8;
 	const onPageChange = (page) => {
 		setCurrentPage(page);
 	};

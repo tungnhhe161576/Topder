@@ -112,7 +112,10 @@ const HomePage = () => {
 										nút "Đặt Bàn Ngay" và bàn của bạn sẽ
 										được xác nhận
 									</div>
-									<div className="booking">
+									<div
+										className="booking"
+										onClick={() => nav("/restaurant-view")}
+									>
 										Đặt Bàn Ngay -{">"}
 									</div>
 								</div>
@@ -141,7 +144,10 @@ const HomePage = () => {
 										thời. Không bao giờ phải lo lắng về việc
 										đến muộn nữa
 									</div>
-									<div className="booking">
+									<div
+										className="booking"
+										onClick={() => nav("/restaurant-view")}
+									>
 										Đặt Bàn Ngay -{">"}
 									</div>
 								</div>

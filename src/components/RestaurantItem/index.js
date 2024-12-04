@@ -7,7 +7,7 @@ import { formatNumberToK } from "../../lib/stringUtils";
 import { useSelector } from "react-redux";
 import { userInfor } from "../../redux/Slice/userSlice";
 import UserService from "../../services/UserService";
-
+import { FaHeart } from "react-icons/fa";
 const RestaurantItem = ({
 	data,
 	setOpenRequestLogin,
@@ -15,6 +15,8 @@ const RestaurantItem = ({
 	setText,
 	isWishlist,
 	onRemove,
+	wishlist,
+	updateWishlist,
 }) => {
 	const nav = useNavigate();
 	const user = useSelector(userInfor);
@@ -60,6 +62,7 @@ const RestaurantItem = ({
 			}
 		}
 	};
+
 	useEffect(() => {
 		getWishlist();
 	}, [user, data?.uid]);
@@ -67,7 +70,7 @@ const RestaurantItem = ({
 	const handleLikeClick = async () => {
 		if (!user) {
 			setOpenRequestLogin(true);
-			setText("Bạn cần đăng nhập để thêm cửa hàng này vào mục yêu thích");
+			setText("Đăng nhập để thêm cửa hàng này vào mục yêu thích");
 			return;
 		}
 		setLoading(true);
@@ -213,16 +216,27 @@ const RestaurantItem = ({
 						}`}
 						// onClick={() => handleCreateChatBox()}
 						onClick={() => handleLikeClick()}
-						style={{
-							backgroundColor: isLiked ? "#f55b22" : "",
-						}}
+						style={
+							{
+								// backgroundColor: isLiked ? "#fa875c" : "",
+							}
+						}
 					>
-						<HeartOutlined
-							style={{
-								color: "#fa875c",
-								cursor: "pointer",
-							}}
-						/>
+						{isLiked ? (
+							<FaHeart
+								style={{
+									color: "#fa875c",
+									cursor: "pointer",
+								}}
+							/>
+						) : (
+							<HeartOutlined
+								style={{
+									color: "#fa875c",
+									cursor: "pointer",
+								}}
+							/>
+						)}
 						{/* Chat */}
 					</div>
 					<div
