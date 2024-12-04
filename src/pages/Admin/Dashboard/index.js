@@ -36,7 +36,7 @@ const AdminDashboard = () => {
                     <div className='part1'>
                             <div className="d-flex justify-content-space-between align-items-center">
                                 <div className="overview"> Tổng quam </div>
-                                <div className="d-flex"> 
+                                {/* <div className="d-flex"> 
                                     <Button className="black fs-15 mr-15">
                                         <ShareAltOutlined /> Share
                                     </Button>
@@ -46,7 +46,7 @@ const AdminDashboard = () => {
                                     <Button type="primary" className="white fs-15">
                                         <FileAddOutlined /> Export
                                     </Button>
-                                </div>
+                                </div> */}
                             </div>
                             <Divider className="m-0"/>
                             <div className="mt-30">

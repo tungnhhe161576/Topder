@@ -49,7 +49,7 @@ const RightSide = ({data}) => {
                                 <div>
                                     {
                                         data?.topRestaurantDTOs.slice(0, 4).map((i, index) => (
-                                            <div className="item" key={index}>
+                                            <div className="item mt-10" key={index}>
                                                 <div className="d-flex justify-content-space-between align-items-center">
                                                     <div className="d-flex align-items-center flex-column">
                                                         <div>
@@ -59,7 +59,7 @@ const RightSide = ({data}) => {
                                                             Thu nhập: {formatNumberToK(i.totalInCome)} 
                                                         </div>
                                                     </div>
-                                                    <div className='pr-30'>
+                                                    <div className='pr-30' style={{textAlign: 'right'}}>
                                                         <div className="fw-600 fs-15 mb-5"> {i.name} </div>
                                                         <div style={{color: 'gray'}}> Số đơn: {i.totalOrder} </div>
                                                     </div>
