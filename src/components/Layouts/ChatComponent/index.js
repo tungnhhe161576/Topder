@@ -6,12 +6,12 @@ import { useSelector } from "react-redux";
 import { userInfor } from "../../../redux/Slice/userSlice";
 import SpinCustom from '../../../components/Common/SpinCustom'
 import dayjs from "dayjs";
-import { connection, createChat } from "../../../hub";
+import { connection } from "../../../hub";
 
-const ChatComponent = ({open, onCancel}) => {
+const ChatComponent = ({open, onCancel, getChatBox, chatBox}) => {
     const [loading, setLoading] = useState(false)
     const [loading2, setLoading2] = useState(false)
-    const [chatBox, setChatBox] = useState([])
+    // const [chatBox, setChatBox] = useState([])
     const [chatList, setChatList] = useState([])
     const [item, setItem] = useState()
     const [message, setMessage] = useState('')
@@ -20,22 +20,22 @@ const ChatComponent = ({open, onCancel}) => {
     const chatRef   = useRef(null)
     // const chatHandlerRef = useRef()
 
-    const getChatBox = async () => {
-        try {
-            setLoading(true)
-            const res = await UserService.getChatBox(user?.uid)
-            setChatBox(res)
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setLoading(false)
-        }
-    }
-    useEffect(() => {
-        if (!!user) {
-            getChatBox()
-        }
-    }, [user])
+    // const getChatBox = async () => {
+    //     try {
+    //         setLoading(true)
+    //         const res = await UserService.getChatBox(user?.uid)
+    //         setChatBox(res)
+    //     } catch (error) {
+    //         console.log(error);
+    //     } finally {
+    //         setLoading(false)
+    //     }
+    // }
+    // useEffect(() => {
+    //     if (!!user) {
+    //         getChatBox()
+    //     }
+    // }, [user])
 
     const handleSendMessage = async () => {
         try {

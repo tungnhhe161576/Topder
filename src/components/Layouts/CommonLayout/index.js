@@ -8,6 +8,7 @@ import ChatComponent from "../ChatComponent";
 import UserService from "../../../services/UserService";
 import { useSelector } from "react-redux";
 import { userInfor } from "../../../redux/Slice/userSlice";
+import { connection } from "../../../hub";
 
 const CommonLayout = ({ children }) => {
     const [openChat, setOpenChat] = useState(false)
@@ -23,11 +24,19 @@ const CommonLayout = ({ children }) => {
         } finally {
         }
     }
+
     useEffect(() => {
-        if (!!user) {
-            getChatBox()
-        }
-    }, [user])
+        connection.on('CreateChat', (chat) => {
+            if (!!chat && !!user) {
+                getChatBox()
+            }
+        });
+    }, [user]);
+    // useEffect(() => {
+    //     if (!!user) {
+    //         getChatBox()
+    //     }
+    // }, [user])
     
     return (
         <CommonLayoutContainer>
@@ -42,7 +51,8 @@ const CommonLayout = ({ children }) => {
                                         (i) => i?.isRead === false
                                     ).length
                                 }
-                                size="small"
+                                size="large"
+                                style={{marginRight: '-10px', marginTop: '-5px'}}
                             >
                                 <WechatOutlined className="fs-30"/>
                             </Badge>    
@@ -60,6 +70,8 @@ const CommonLayout = ({ children }) => {
                     <ChatComponent
                         open={openChat}
                         onCancel={() => setOpenChat(false)}
+                        getChatBox={getChatBox}
+                        chatBox={chatBox}
                     />
                 )
             }
