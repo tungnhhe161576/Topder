@@ -64,9 +64,9 @@ const RestaurantDetail = () => {
 	const user = useSelector(userInfor);
 	const [showSuccessModal, setShowSuccessModal] = useState(false);
 	const [openModalReport, setOpenModalReport] = useState(false);
-	const [numberPerson, setNumberPerson] = useState(0)
-	const numberPersonRef = useRef()
-	const numberChildRef = useRef()
+	const [numberPerson, setNumberPerson] = useState(0);
+	const numberPersonRef = useRef();
+	const numberChildRef = useRef();
 
 	useEffect(() => {
 		form.setFieldsValue({
@@ -159,7 +159,7 @@ const RestaurantDetail = () => {
 			setTotalAmount(total);
 
 			const formValues = await form.validateFields();
-			
+
 			const data = {
 				customerId: user?.uid,
 				restaurantId: restaurantId,
@@ -177,7 +177,7 @@ const RestaurantDetail = () => {
 				orderMenus: menu,
 				tableIds: table,
 			};
-			console.log('data', data);
+			console.log("data", data);
 			setOpenModalCalFee(data);
 			// setNumberPerson(data?.numberPerson + data?.numberChild)
 		} catch (error) {
@@ -308,22 +308,27 @@ const RestaurantDetail = () => {
 
 		const apiStartTime = dayjs(openTime, "HH:mm");
 		const apiEndTime = dayjs(closeTime, "HH:mm");
-		const currentHour = dayjs().hour();
+		const selectedDate = form.getFieldValue("date");
+		const currentDate = dayjs().startOf("day");
+
 		const startHour = apiStartTime.hour();
 		const endHour = apiEndTime.hour();
+		const currentHour = dayjs().hour();
+
 		const disabledHours = [];
 
-		for (let i = 0; i < startHour; i++) {
-			disabledHours.push(i);
-		}
-		for (let i = endHour + 1; i < 24; i++) {
-			disabledHours.push(i);
-		}
-		if (dayjs().isSame(dayjs(), "day")) {
-			for (let i = startHour; i < currentHour; i++) {
-				if (!disabledHours.includes(i)) {
+		if (selectedDate.isSame(currentDate, "day")) {
+			for (let i = 0; i < currentHour; i++) {
+				if (i < startHour || i > endHour) {
 					disabledHours.push(i);
 				}
+			}
+		} else {
+			for (let i = 0; i < startHour; i++) {
+				disabledHours.push(i);
+			}
+			for (let i = endHour + 1; i < 24; i++) {
+				disabledHours.push(i);
 			}
 		}
 
@@ -336,15 +341,25 @@ const RestaurantDetail = () => {
 
 		const apiStartTime = dayjs(openTime, "HH:mm");
 		const apiEndTime = dayjs(closeTime, "HH:mm");
+		const selectedDate = form.getFieldValue("date");
+		const currentDate = dayjs().startOf("day");
 
 		const startHour = apiStartTime.hour();
 		const endHour = apiEndTime.hour();
 
-		const currentTime = dayjs();
-		const currentHour = currentTime.hour();
-		const currentMinute = currentTime.minute();
+		const currentHour = dayjs().hour();
+		const currentMinute = dayjs().minute();
 
 		const disabledMinutes = [];
+
+		if (
+			selectedDate.isSame(currentDate, "day") &&
+			selectedHour === currentHour
+		) {
+			for (let i = 0; i < currentMinute; i++) {
+				disabledMinutes.push(i);
+			}
+		}
 
 		if (selectedHour === startHour) {
 			const startMinute = apiStartTime.minute();
@@ -360,24 +375,13 @@ const RestaurantDetail = () => {
 			}
 		}
 
-		if (dayjs().isSame(dayjs(), "day") && selectedHour === currentHour) {
-			for (let i = 0; i < currentMinute; i++) {
-				if (!disabledMinutes.includes(i)) {
-					disabledMinutes.push(i);
-				}
-			}
-		}
-
 		return disabledMinutes;
 	};
 
 	const handleChangePerson = () => {
-		setNumberPerson(numberPersonRef.current + numberChildRef.current)
-	}
-	
-	
+		setNumberPerson(numberPersonRef.current + numberChildRef.current);
+	};
 
-	
 	return (
 		<CommonLayout>
 			<RestaurantDetailContainer>
@@ -550,7 +554,13 @@ const RestaurantDetail = () => {
 												<span className="fs-16 fw-600">
 													Sức chứa:
 												</span>
-												<span className="fs-16 fw-500 primary"> {restaurantDetail?.maxCapacity} người</span>
+												<span className="fs-16 fw-500 primary">
+													{" "}
+													{
+														restaurantDetail?.maxCapacity
+													}{" "}
+													người
+												</span>
 											</div>
 											<div className="address mb-20">
 												<div className="fs-16 fw-600 mb-5">
@@ -908,14 +918,33 @@ const RestaurantDetail = () => {
 																		</span>
 																	),
 																},
-																{ 
-																	validator: (_, value) => 
-																		numberPerson > restaurantDetail?.maxCapacity
-																			? Promise.reject(<span style={{color: 'black'}} className="ml-15">Vượt quá sức chứa của nhà hàng!</span>)
+																{
+																	validator: (
+																		_,
+																		value
+																	) =>
+																		numberPerson >
+																		restaurantDetail?.maxCapacity
+																			? Promise.reject(
+																					<span
+																						style={{
+																							color: "black",
+																						}}
+																						className="ml-15"
+																					>
+																						Vượt
+																						quá
+																						sức
+																						chứa
+																						của
+																						nhà
+																						hàng!
+																					</span>
+																			  )
 																			: Promise.resolve(),
 																},
-																// { 
-																// 	validator: (_, value) => 
+																// {
+																// 	validator: (_, value) =>
 																// 		(value && value <= 0)
 																// 			? Promise.reject(<span style={{color: 'black'}} className="ml-15">Số người lớn phải lớn hơn 0!</span>)
 																// 			: Promise.resolve(),
@@ -927,7 +956,13 @@ const RestaurantDetail = () => {
 																className="input w-100"
 																placeholder="Nhập số người lớn"
 																// onChange={(e) => setNumberPerson(prev => prev + e)}
-																onChange={(e) => {numberPersonRef.current = e; handleChangePerson()}}
+																onChange={(
+																	e
+																) => {
+																	numberPersonRef.current =
+																		e;
+																	handleChangePerson();
+																}}
 															/>
 														</Form.Item>
 													</Col>
@@ -941,12 +976,31 @@ const RestaurantDetail = () => {
 																</span>
 															}
 															rules={[
-																{ 
-																	validator: (_, value) => 
-																		numberPerson > restaurantDetail?.maxCapacity
-																			? Promise.reject(<span style={{color: 'black'}} className="ml-15">Vượt quá sức chứa của nhà hàng!</span>)
+																{
+																	validator: (
+																		_,
+																		value
+																	) =>
+																		numberPerson >
+																		restaurantDetail?.maxCapacity
+																			? Promise.reject(
+																					<span
+																						style={{
+																							color: "black",
+																						}}
+																						className="ml-15"
+																					>
+																						Vượt
+																						quá
+																						sức
+																						chứa
+																						của
+																						nhà
+																						hàng!
+																					</span>
+																			  )
 																			: Promise.resolve(),
-																}
+																},
 															]}
 														>
 															<InputNumber
@@ -954,7 +1008,13 @@ const RestaurantDetail = () => {
 																className="input w-100"
 																placeholder="Nhập số trẻ em"
 																// onChange={(e) => setNumberPerson(prev => prev + e)}
-																onChange={(e) => {numberChildRef.current = e; handleChangePerson()}}
+																onChange={(
+																	e
+																) => {
+																	numberChildRef.current =
+																		e;
+																	handleChangePerson();
+																}}
 															/>
 														</Form.Item>
 													</Col>
@@ -982,7 +1042,10 @@ const RestaurantDetail = () => {
 															{({
 																getFieldValue,
 															}) => {
-																const selectedNumberPerson = getFieldValue('numberPerson')
+																const selectedNumberPerson =
+																	getFieldValue(
+																		"numberPerson"
+																	);
 																return selectedNumberPerson ? (
 																	<Form.Item name="chooseTable">
 																		<Button
@@ -993,7 +1056,8 @@ const RestaurantDetail = () => {
 																				)
 																			}
 																		>
-																			Chọn bàn
+																			Chọn
+																			bàn
 																		</Button>
 																	</Form.Item>
 																) : null;
@@ -1036,7 +1100,10 @@ const RestaurantDetail = () => {
 				{/* Nhà hàng liên quan */}
 				<div className="related-restaurant mt-50">
 					<SpinCustom spinning={loading}>
-						<div className="fs-26 fw-700 mb-30"> Cửa hàng liên quan </div>
+						<div className="fs-26 fw-700 mb-30">
+							{" "}
+							Cửa hàng liên quan{" "}
+						</div>
 						<Row
 							gutter={[30, 32]}
 							className="d-dlex justify-content-center"
