@@ -18,8 +18,8 @@ const ModalViewDetail = ({open, onCancel}) => {
             open={!!open}
             onCancel={onCancel}
             footer={footer}
-            width={800}
-            style={{marginTop: '60px'}}
+            width={1000}
+            style={{marginTop: '-70px'}}
         >
             <div className="title-type-1">
                 Chi tiết bài viết
@@ -43,7 +43,7 @@ const ModalViewDetail = ({open, onCancel}) => {
                                 </div>
                                 <div className="fs-16 fw-500 pr-10">{open?.bloggroupName}</div>
                             </div>
-                            <div dangerouslySetInnerHTML={{ __html: open?.content }} />
+                            <div dangerouslySetInnerHTML={{ __html: open?.content }} style={{maxHeight: '450px', overflowY: 'auto'}}/>
                         </div>
                     </Col>
                 </Row>

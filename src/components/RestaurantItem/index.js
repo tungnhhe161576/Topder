@@ -184,7 +184,7 @@ const RestaurantItem = ({
 				<div className="price fs-18 fw-600 primary">
 					<div>
 						<span style={{ color: "black" }}>Giá bàn: </span>{" "}
-						{formatNumberToK(data?.price)}
+						{data?.price === 0 ? <span>Miễn phí</span> : formatNumberToK(data?.price)}
 					</div>
 					<div>
 						{data?.discount > 0 ? (

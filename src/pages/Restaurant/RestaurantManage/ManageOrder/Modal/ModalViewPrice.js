@@ -46,7 +46,7 @@ const ModalViewPrice = ({open, onCancel}) => {
 			align: 'center',
 			render: (_, record) => (
 				<div>
-                    Từ {formatNumberToK(record?.minOrderValue)} {record?.minOrderValue ? <span>- Đến: {formatNumberToK(record?.maxOrderValue)}</span>: null}
+                    Từ {formatNumberToK(record?.minOrderValue)} {!!record?.maxOrderValue ? <span>- Đến: {formatNumberToK(record?.maxOrderValue)}</span>: null}
                 </div>
 			),
 		},

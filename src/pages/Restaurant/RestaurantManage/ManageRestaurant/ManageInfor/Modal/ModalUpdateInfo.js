@@ -172,8 +172,8 @@ const ModalUpdateInfo = ({open, onCancel}) => {
             open={!!open}
             onCancel={onCancel}
             footer={footer}
-            width={1600}
-            style={{marginTop: '-80px'}}
+            width={1400}
+            style={{marginTop: '-50px'}}
         >
             <ModalUpdateContainer>
                 <div className="title-type-1">
@@ -384,38 +384,7 @@ const ModalUpdateInfo = ({open, onCancel}) => {
                                     </Select>
                                 </Form.Item>
                             </Col>
-                            <Col span={12}>
-                                <Form.Item
-                                    name="subDescription"
-                                    labelCol={0}
-                                >
-                                    <div className="pl-20 fw-500 fs-18 mb-10">
-                                       Mô tả ngắn gọn 
-                                    </div>
-                                    <Editor
-                                        onEditorChange={handleEditorChange}
-                                        apiKey='mbse8bnylyttkkcul3b8wf174fumv1dwoe7romoif6cirr9f'
-                                        init={{
-                                            height: 300,
-                                            width: '100%',
-                                        menubar: false,
-                                        plugins: [
-                                            'advlist autolink lists link image charmap print preview anchor',
-                                            'searchreplace visualblocks code fullscreen',
-                                            'insertdatetime media table paste code help wordcount'
-                                        ],
-                                        toolbar:
-                                            // eslint-disable-next-line no-multi-str
-                                            'undo redo | formatselect | bold italic backcolor | \
-                                            alignleft aligncenter alignright alignjustify | \
-                                            bullist numlist outdent indent | removeformat | help'
-                                        }}
-                                        initialValue={open?.subdescription}
-                                        // initialValue="Welcome to TinyMCE!"
-                                    />
-                                </Form.Item>
-                            </Col>
-                            <Col span={12}>
+                            <Col span={24}>
                                 <Form.Item
                                     name="description"
                                     labelCol={0}

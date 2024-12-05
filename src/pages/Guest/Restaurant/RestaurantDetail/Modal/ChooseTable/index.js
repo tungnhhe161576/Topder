@@ -14,14 +14,6 @@ const ModalChooseTable = ({open, onCancel, setTables, tables, restaurantId, date
     const [loading, setLoading] = useState(false)
     const [selectedTable, setSelectedTable] = useState(tables)
     const [text, setText] = useState(false)
-    const [capicity, setCapicity] = useState(
-        tables 
-            ? (tables.reduce((acc, curr) => acc + curr.maxCapacity, 0) - numberPerson < 0 
-                ? tables.reduce((acc, curr) => acc + curr.maxCapacity, 0) - numberPerson 
-                : -Math.abs(tables.reduce((acc, curr) => acc + curr.maxCapacity, 0)) - numberPerson
-            ) 
-            : numberPerson
-    );
     
 
     const dateChooseTable = dayjs(date?.$d).format('YYYY-MM-DD')
@@ -46,34 +38,17 @@ const ModalChooseTable = ({open, onCancel, setTables, tables, restaurantId, date
         getTable()
     }, [])
     
-    console.log('capicity', capicity);
-    const handleSelectTable = (table) => {
-        // setCapicity(prev => prev - table?.maxCapacity)
-        
-        
-        // setCapicity((prev) => {
-        //     const exists = prev.find(f => f.tableId === table.tableId);
-        //     if (exists) {
-        //         return prev + table?.maxCapacity 
-        //     } else {
-        //         return prev - table?.maxCapacity 
-        //     }
-        // });
     
+    const handleSelectTable = (table) => {
         setSelectedTable((prev) => {
             const exists = prev.find(f => f.tableId === table.tableId);
             if (exists) {
-                setCapicity(prev => prev + table?.maxCapacity)
                 return prev.filter(f => f.tableId !== table.tableId); 
             } else {
-                setCapicity(prev => prev - table?.maxCapacity)
                 return [...prev, { ...table }];
             }
         });
     }
-    // console.log('selected table ref', selectedTableRef.current);
-    
-    
 
     const items = [
         {
@@ -108,13 +83,6 @@ const ModalChooseTable = ({open, onCancel, setTables, tables, restaurantId, date
                                         <div className="fs-16 fw-500"> Tên bàn: {t?.tableName} </div>
                                         <div className="quantity"> Sức chứa: {t?.maxCapacity} người</div>
                                         <div className="description"> {t?.description} </div>
-                                        {/* {
-                                            t?.maxCapacity < numberPerson
-                                                ? <div className="fs-12 red" style={{fontStyle: 'italic'}}>
-                                                    Sức chứa của bàn không đủ!
-                                                </div>
-                                                : null
-                                        } */}
                                     </div>
                                 </div>
                             </Radio>
@@ -155,13 +123,6 @@ const ModalChooseTable = ({open, onCancel, setTables, tables, restaurantId, date
                                         <div className="name"> Tên bàn: {t?.tableName} </div>
                                         <div className="quantity"> Sức chứa: {t?.maxCapacity} người</div>
                                         <div className="description"> {t?.description} </div>
-                                        {/* {
-                                            t?.maxCapacity < numberPerson
-                                                ? <div className="fs-12 red" style={{fontStyle: 'italic'}}>
-                                                    Sức chứa của bàn không đủ!
-                                                </div>
-                                                : null
-                                        } */}
                                     </div>
                                 </div>
                             </Radio>
@@ -181,7 +142,7 @@ const ModalChooseTable = ({open, onCancel, setTables, tables, restaurantId, date
                 </Button>
                 <Button className="mr-10 fw-600" type='primary' 
                     onClick={() => {
-                        if (capicity > 0) {
+                        if (selectedTable.reduce((acc, curr) => acc + curr.maxCapacity, 0) - numberPerson  < 0 && selectedTable.length !== 0) {
                             setText(true)
                         } else {
                             setText(false)

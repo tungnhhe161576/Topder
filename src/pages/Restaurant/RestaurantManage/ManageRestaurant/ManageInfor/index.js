@@ -288,7 +288,7 @@ const ManageInfomation = ({ user }) => {
 									Mô tả chi tiết
 								</div>
 								<div className="">
-									<div className="primary fs-16 fw-500">
+									{/* <div className="primary fs-16 fw-500">
 										Mô tả ngắn gọn
 									</div>
 									<div>
@@ -301,11 +301,11 @@ const ManageInfomation = ({ user }) => {
 										) : (
 											"Chưa có mô tả"
 										)}
-									</div>
-									<div className="primary fs-16 fw-500">
+									</div> */}
+									{/* <div className="primary fs-16 fw-500">
 										Mô tả chi tiết
-									</div>
-									<div>
+									</div> */}
+									<div style={{maxHeight: '500px', overflowY: 'auto'}}>
 										{user?.description ? (
 											<div
 												dangerouslySetInnerHTML={{

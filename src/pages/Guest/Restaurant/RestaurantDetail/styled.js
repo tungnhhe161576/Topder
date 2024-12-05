@@ -74,7 +74,7 @@ export const RestaurantDetailContainer = styled.div`
 
 	.description {
 		margin-top: 50px;
-		height: 750px;
+		height: 1000px;
 
 		.segment {
 			font-weight: bold;

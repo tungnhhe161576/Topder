@@ -50,7 +50,7 @@ const AccountManagement = () => {
     return (  
         <AdminLayout>
             <AccountManagementContainer>
-                <Tabs items={items} />
+                <Tabs items={items} defaultActiveKey="2"/>
             </AccountManagementContainer>
         </AdminLayout>
     );

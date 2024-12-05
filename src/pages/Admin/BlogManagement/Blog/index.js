@@ -100,9 +100,9 @@ const AllBlogs = ({blogs, loading, setDataSearch, getAllBlog, blogCategory}) => 
 			title: "Nội dung",
 			dataIndex: "content",
 			key: "content",
-			width: 200,
+			width: 500,
 			render: (value) => (
-				<div dangerouslySetInnerHTML={{ __html: value }} />
+				<div style={{maxHeight: '150px', overflowY: 'auto'}} dangerouslySetInnerHTML={{ __html: value }} />
 			)
 		},
 		{

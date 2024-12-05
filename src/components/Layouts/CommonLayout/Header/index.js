@@ -189,7 +189,7 @@ const Header = () => {
 			getListNoti();
 			if (notification.type === "Đơn Hàng") {
 				nav("/user-profile/history-booking");
-			} else if (notification.type === "Hệ Thống Trừ Tiền Từ Ví") {
+			} else if (notification.type === "Hệ Thống Trừ Tiền Từ Ví" || notification.type === 'Nạp Tiền' || notification.type === 'Rút Tiền') {
 				nav("/user-profile/transactiom-history");
 			} else if (notification.type === "Đánh Giá") {
 				nav("/user-profile/rates");

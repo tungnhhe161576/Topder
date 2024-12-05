@@ -9,7 +9,7 @@ const RestaurantDescription = ( {restaurantDetail} ) => {
     
     return (  
         <div>
-            <div className="des">
+            <div className="des" style={{maxHeight: '500px', overflowY: 'auto'}}>
                 {restaurantDetail?.description ? (
                     <div dangerouslySetInnerHTML={{ __html: restaurantDetail?.description }} />
                 ) : (
@@ -17,6 +17,7 @@ const RestaurantDescription = ( {restaurantDetail} ) => {
                 )}
             </div>
             <div className="map mt-20 w-100">
+                <div className="mb-10 fs-22 fw-500">Địa chỉ nhà hàng</div>
                 <iframe 
                     style={{height: '400px', border: 'none', borderRadius: '8px'}}
                     id="mapFrame" 

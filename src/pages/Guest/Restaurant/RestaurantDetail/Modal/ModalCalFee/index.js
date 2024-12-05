@@ -20,6 +20,7 @@ const ModalCalFee = ({
 	totalPrice,
 	form,
 	openSucces,
+	numberPerson,
 }) => {
 	const [loading, setLoading] = useState(false);
 	const [discounts, setDiscounts] = useState([]);

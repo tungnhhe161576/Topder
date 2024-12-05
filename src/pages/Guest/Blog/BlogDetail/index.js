@@ -68,7 +68,12 @@ const BlogDetail = () => {
                   {blogDetail?.blogListCustomer?.title}
                 </h1>
                 <p className="blog-description">
-                  {blogDetail?.blogListCustomer?.content}
+                  {blogDetail?.blogListCustomer?.content ? (
+                      <div dangerouslySetInnerHTML={{ __html: blogDetail?.blogListCustomer?.content }} />
+                  ) : (
+                      'Không có nội dung'
+                  )}
+                  {/* {blogDetail?.blogListCustomer?.content} */}
                 </p>
 
                 <div className="blog-footer d-flex flex-wrap justify-content-between align-items-center">

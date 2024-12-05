@@ -546,6 +546,12 @@ const RestaurantDetail = () => {
 													)}
 												</span>
 											</div>
+											<div className="short-des mb-20">
+												<span className="fs-16 fw-600">
+													Sức chứa:
+												</span>
+												<span className="fs-16 fw-500 primary"> {restaurantDetail?.maxCapacity} người</span>
+											</div>
 											<div className="address mb-20">
 												<div className="fs-16 fw-600 mb-5">
 													Địa chỉ
@@ -576,26 +582,6 @@ const RestaurantDetail = () => {
 														(Nhấn vào icon để xem
 														chỉ đường)
 													</div>
-												</div>
-											</div>
-											<div className="short-des mb-30">
-												<div className="fs-16 fw-600 mb-5">
-													Mô tả ngắn gọn:
-												</div>
-												<div
-													style={{
-														fontStyle: "italic",
-													}}
-												>
-													{restaurantDetail?.subdescription ? (
-														<div
-															dangerouslySetInnerHTML={{
-																__html: restaurantDetail?.subdescription,
-															}}
-														/>
-													) : (
-														"Nhà hàng chưa có mô tả ngắn gọn"
-													)}
 												</div>
 											</div>
 											<div>
@@ -922,12 +908,12 @@ const RestaurantDetail = () => {
 																		</span>
 																	),
 																},
-																// { 
-																// 	validator: (_, value) => 
-																// 		value > restaurantDetail?.maxCapicity
-																// 			? Promise.reject("Vượt quá sức chứa của nhà hàng!")
-																// 			: Promise.resolve(),
-																// }
+																{ 
+																	validator: (_, value) => 
+																		numberPerson > restaurantDetail?.maxCapacity
+																			? Promise.reject(<span style={{color: 'black'}} className="ml-15">Vượt quá sức chứa của nhà hàng!</span>)
+																			: Promise.resolve(),
+																}
 															]}
 														>
 															<InputNumber
@@ -948,6 +934,14 @@ const RestaurantDetail = () => {
 																	Số trẻ em
 																</span>
 															}
+															rules={[
+																{ 
+																	validator: (_, value) => 
+																		numberPerson > restaurantDetail?.maxCapacity
+																			? Promise.reject(<span style={{color: 'black'}} className="ml-15">Vượt quá sức chứa của nhà hàng!</span>)
+																			: Promise.resolve(),
+																}
+															]}
 														>
 															<InputNumber
 																min={0}
@@ -1022,7 +1016,7 @@ const RestaurantDetail = () => {
 				</SpinCustom>
 
 				{/* Nhà hàng liên quan */}
-				<div className="related-restaurant">
+				<div className="related-restaurant mt-50">
 					<SpinCustom spinning={loading}>
 						<div className="fs-26 fw-700"> Cửa hàng liên quan </div>
 						<Row
@@ -1093,6 +1087,7 @@ const RestaurantDetail = () => {
 					userId={user?.uid}
 					totalPrice={totalAmount}
 					form={form}
+					numberPerson={numberPerson}
 				/>
 			)}
 			{!!openRequestLogin && (

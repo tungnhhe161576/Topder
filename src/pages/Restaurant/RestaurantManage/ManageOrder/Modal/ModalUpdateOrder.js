@@ -281,9 +281,9 @@ const ModalUpdateOrder = ({ open, onCancel, onOk, text, status, userId }) => {
 				open={!!open}
 				onCancel={onCancel}
 				footer={footer}
-				width={800}
+				width={1000}
 				// className="mt-100"
-				style={{marginTop: '100px'}}
+				style={{marginTop: '-50px'}}
 			>
 				<div>
 					<div className=" d-flex-center mb-30 fs-16 fw-500">
