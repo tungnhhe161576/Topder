@@ -66,6 +66,10 @@ const ModalPayment = ({open, onCancel, onOk, user}) => {
             </div>
         )
     }
+
+    console.log('open', open);
+    console.log('user', user);
+    
     
     
     return (  

@@ -11,6 +11,9 @@ function App() {
     const dispatch = useDispatch();
     const nav = useNavigate()
     const location = useLocation()
+
+    // console.log('location', location);
+    
     
     
     useEffect(() => {
@@ -24,9 +27,6 @@ function App() {
             const user = jwtDecode(localStorage.getItem('token'))
             const res = await UserService.getCurrentUser(user?.uid)
             dispatch(setUserInformation(res))
-            // if(location.pathname) {
-
-            // }
             if (location.pathname.includes('transaction/vnpay') || location.pathname.includes('vietqr')) {
                 return
             } else {
@@ -34,10 +34,10 @@ function App() {
                     nav(location.pathname);
                 } else if (res?.role === "Restaurant") {
                     // nav("/restaurant/dashboard");
-                    nav(location.pathname);
+                    location.pathname === '/' ? nav("/restaurant/dashboard") : nav(location.pathname);
                 } else if(res?.role === "Admin"){
                     // nav("/admin/dashboard");
-                    nav(location.pathname);
+                    location.pathname === '/' ? nav("/admin/dashboard") : nav(location.pathname);
                 }
             }
         } catch (error) {

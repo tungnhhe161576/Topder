@@ -46,7 +46,7 @@ const Header = () => {
 				<img src={logo} alt="logo-topder" />
 			</div>
 			<div className="options">
-				<div className="item search">
+				{/* <div className="item search">
 					<SearchOutlined />
 				</div>
 				<div className="item mail">
@@ -54,7 +54,7 @@ const Header = () => {
 				</div>
 				<div className="item notification">
 					<BellOutlined />
-				</div>
+				</div> */}
 				{/* <div className="item user">
 					{user ? (
 						<div className="user-info">
@@ -73,7 +73,7 @@ const Header = () => {
 						}}
 					>
 						<div className="user-info">
-							<UserOutlined /> {user?.name}
+							<UserOutlined />
 						</div>
 					</Dropdown>
 				</div>

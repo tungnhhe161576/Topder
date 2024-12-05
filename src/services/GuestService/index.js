@@ -16,6 +16,7 @@ import {
 	apiVerifyAccountRequest,
 	apiGetAllCategory,
 	apiGetActivePolicy,
+	apiGetAllAds,
 } from "./urls";
 
 const apiHomePageData = (body) => http.get(apiGetDataInHomePage, body);
@@ -55,6 +56,8 @@ const createContact = (body) => http.post(apiCreateContact, body);
 const verifyAccount = (uId) => http.get(`${apiVerifyAccountRequest}/${uId}`);
 const getAllCategory = () => http.get(apiGetAllCategory);
 const getActivePolicy = (id) => http.get(`${apiGetActivePolicy}/${id}`);
+const getAllAds = () => http.get(apiGetAllAds);
+
 
 const GuestService = {
 	apiHomePageData,
@@ -71,6 +74,7 @@ const GuestService = {
 	verifyAccount,
 	getAllCategory,
 	getActivePolicy,
+	getAllAds,
 };
 
 export default GuestService;

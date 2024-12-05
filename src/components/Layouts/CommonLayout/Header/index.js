@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getNav, setActiveButton } from "../../../../redux/Slice/navSlice";
 import topder from "../../../../assets/images/LOGO-TOPDER_qonl9l.png";
 import logo2 from "../../../../assets/images/Logo2.png";
+import LOGOADS from "../../../../assets/images/LOGOADS.png";
 import {
 	setUserInformation,
 	userInfor,
@@ -344,67 +345,142 @@ const Header = () => {
 		dispatch(setActiveButton(buttonName));
 	};
 
+	// useEffect(() => {
+	// 	let prevBtn = document.getElementById("prev");
+	// 	let nextBtn = document.getElementById("next");
+	// 	let carousel = document.querySelector(".carousel");
+	// 	if (carousel) {
+	// 		let items = carousel.querySelectorAll(".list .item");
+	// 		let indicator = carousel.querySelector(".indicators");
+	// 		let dots = indicator.querySelectorAll(".indicators ul li");
+	// 		let active = 0;
+	// 		let firstPosition = 0;
+	// 		let lastPosition = items.length - 1;
+	// 		let autoPlay;
+
+	// 		const startAutoPlay = () => {
+	// 			clearInterval(autoPlay);
+	// 			autoPlay = setInterval(() => {
+	// 				nextBtn.click();
+	// 			}, 5000);
+	// 		};
+	// 		startAutoPlay();
+
+	// 		const setSlider = () => {
+	// 			let itemActiveOld =
+	// 				carousel.querySelector(".list .item.active");
+	// 			if (itemActiveOld) itemActiveOld.classList.remove("active");
+	// 			items[active].classList.add("active");
+
+	// 			let dotActiveOld = indicator.querySelector(
+	// 				".indicators ul li.active"
+	// 			);
+	// 			if (dotActiveOld) dotActiveOld.classList.remove("active");
+	// 			dots[active].classList.add("active");
+
+	// 			indicator.querySelector(".number").innerText =
+	// 				"0" + (active + 1);
+	// 			startAutoPlay();
+	// 		};
+	// 		setSlider();
+
+	// 		nextBtn.onclick = () => {
+	// 			active = active + 1 > lastPosition ? 0 : active + 1;
+	// 			carousel.style.setProperty("--calculation", 1);
+	// 			setSlider();
+	// 		};
+	// 		prevBtn.onclick = () => {
+	// 			active = active - 1 < firstPosition ? lastPosition : active - 1;
+	// 			carousel.style.setProperty("--calculation", -1);
+	// 			setSlider();
+	// 			clearInterval(autoPlay);
+	// 			autoPlay = setInterval(() => {
+	// 				nextBtn.click();
+	// 			}, 5000);
+	// 		};
+	// 		dots.forEach((item, position) => {
+	// 			item.onclick = () => {
+	// 				active = position;
+	// 				setSlider();
+	// 			};
+	// 		});
+	// 	}
+	// }, [ads]);
+
 	useEffect(() => {
 		let prevBtn = document.getElementById("prev");
 		let nextBtn = document.getElementById("next");
 		let carousel = document.querySelector(".carousel");
-		if (carousel) {
+	
+		// Khai báo biến autoPlay
+		let autoPlay;
+	
+		if (carousel && ads.length > 0) {  // Chỉ chạy nếu có quảng cáo
 			let items = carousel.querySelectorAll(".list .item");
 			let indicator = carousel.querySelector(".indicators");
-			let dots = indicator.querySelectorAll(".indicators ul li");
+			let dotsContainer = indicator.querySelector("ul");
 			let active = 0;
-			let firstPosition = 0;
-			let lastPosition = items.length - 1;
-			let autoPlay;
-
+	
+			// Tạo dots cho số lượng quảng cáo
+			dotsContainer.innerHTML = ""; // Reset nội dung
+			ads.forEach((_, index) => {
+				const dot = document.createElement("li");
+				if (index === active) dot.classList.add("active");
+				dotsContainer.appendChild(dot);
+			});
+			
+			const updateDotIndicators = () => {
+				const dots = dotsContainer.querySelectorAll("li");
+				dots.forEach((dot, index) => {
+					if (index === active) dot.classList.add("active");
+					else dot.classList.remove("active");
+				});
+				indicator.querySelector(".number").innerText = `0${active + 1}`; // Cập nhật số thứ tự
+			};
+	
 			const startAutoPlay = () => {
 				clearInterval(autoPlay);
 				autoPlay = setInterval(() => {
 					nextBtn.click();
 				}, 5000);
 			};
-			startAutoPlay();
-
+	
 			const setSlider = () => {
-				let itemActiveOld =
-					carousel.querySelector(".list .item.active");
-				if (itemActiveOld) itemActiveOld.classList.remove("active");
-				items[active].classList.add("active");
-
-				let dotActiveOld = indicator.querySelector(
-					".indicators ul li.active"
-				);
-				if (dotActiveOld) dotActiveOld.classList.remove("active");
-				dots[active].classList.add("active");
-
-				indicator.querySelector(".number").innerText =
-					"0" + (active + 1);
+				items.forEach((item, index) => {
+					item.classList.remove("active");
+					if (index === active) item.classList.add("active");
+				});
+				updateDotIndicators();
 				startAutoPlay();
 			};
 			setSlider();
-
+	
 			nextBtn.onclick = () => {
-				active = active + 1 > lastPosition ? 0 : active + 1;
+				active = (active + 1) % ads.length;  // Cuộn lại từ đầu
 				carousel.style.setProperty("--calculation", 1);
 				setSlider();
 			};
 			prevBtn.onclick = () => {
-				active = active - 1 < firstPosition ? lastPosition : active - 1;
+				active = (active - 1 + ads.length) % ads.length;  // Cuộn về đầu
 				carousel.style.setProperty("--calculation", -1);
 				setSlider();
-				clearInterval(autoPlay);
-				autoPlay = setInterval(() => {
-					nextBtn.click();
-				}, 5000);
 			};
-			dots.forEach((item, position) => {
-				item.onclick = () => {
+	
+			const dots = dotsContainer.querySelectorAll("li");
+			dots.forEach((dot, position) => {
+				dot.onclick = () => {
 					active = position;
 					setSlider();
 				};
 			});
 		}
-	}, []);
+	
+		// Dọn dẹp interval khi component unmount hoặc ads thay đổi
+		return () => {
+			clearInterval(autoPlay);
+		};
+	}, [ads]);
+
 
 	const handleLogout = () => {
 		localStorage.removeItem("token");
@@ -412,8 +488,6 @@ const Header = () => {
 		dispatch(setUserInformation(null));
 		nav("/login");
 	};
-
-	console.log(ads);
 	
 
 	return (
@@ -543,26 +617,6 @@ const Header = () => {
 										</span>
 									</Dropdown>
 								)}
-
-								{/* <Dropdown
-									menu={{
-										items: itemsCategory,
-									}}
-								>
-									<span
-										style={
-											activeButton === "restaurant"
-												? { color: "#f07d22" }
-												: {}
-										}
-										onClick={() => {
-											handleButtonClick("restaurant");
-											nav("/restaurant-view");
-										}}
-									>
-										Nhà Hàng - Dịch Vụ
-									</span>
-								</Dropdown> */}
 								<span
 									style={
 										activeButton === "about-us"
@@ -703,7 +757,7 @@ const Header = () => {
 										>
 											{i?.categoryName}
 										</p>
-										<h2>{i?.nameRes}</h2>
+										<h2 className="primary">{i?.nameRes}</h2>
 										<p className="description">
 											{i?.title}
 										</p>
@@ -735,7 +789,7 @@ const Header = () => {
 						) : (
 							<div className="item ">
 								<figure>
-									<img src={topder} alt="img" />
+									<img src={LOGOADS} alt="img" />
 								</figure>
 								<div className="content">
 									<p
@@ -752,7 +806,7 @@ const Header = () => {
 							</div>
 						)}
 					</div>
-					<div className="arrows">
+					{/* <div className="arrows">
 						<button id="prev"> {"<"} </button>
 						<button id="next"> {">"} </button>
 					</div>
@@ -762,6 +816,18 @@ const Header = () => {
 							<li className="active"></li>
 							<li></li>
 							<li></li>
+						</ul>
+					</div> */}
+					<div className="arrows">
+						<button id="prev"> {"<"} </button>
+						<button id="next"> {">"} </button>
+					</div>
+					<div className="indicators">
+						<div className="number">0{ads.length > 0 ? 1 : 0}</div> {/* Mặc định là 1 nếu không có quảng cáo */}
+						<ul>
+							{ads.map((_, index) => (
+								<li key={index} className={index === 0 ? "active" : ""}></li>
+							))}
 						</ul>
 					</div>
 				</div>

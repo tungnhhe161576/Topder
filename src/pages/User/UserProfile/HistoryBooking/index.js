@@ -17,6 +17,7 @@ const HistoryBooking = () => {
 	const [orderDetail, setOrderDetail] = useState();
 	const [isDetail, setIsDetail] = useState(false);
 	const user = useSelector(userInfor);
+	
 
 	const getHistoryOrder = async () => {
 		try {
