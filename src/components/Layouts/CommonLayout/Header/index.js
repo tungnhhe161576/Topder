@@ -92,20 +92,6 @@ const Header = () => {
 		}
 	}, [user]);
 
-	const getAds = async () => {
-		try {
-			// setLoading(true)
-			const res = await GuestService.getAllAds();
-			setAds(res);
-		} catch (error) {
-			console.log(error);
-		} finally {
-			setLoading(false);
-		}
-	};
-	useEffect(() => {
-		getAds();
-	}, []);
 
 	const getAllRestaurantCategory = async () => {
 		try {
@@ -345,84 +331,38 @@ const Header = () => {
 		dispatch(setActiveButton(buttonName));
 	};
 
-	// useEffect(() => {
-	// 	let prevBtn = document.getElementById("prev");
-	// 	let nextBtn = document.getElementById("next");
-	// 	let carousel = document.querySelector(".carousel");
-	// 	if (carousel) {
-	// 		let items = carousel.querySelectorAll(".list .item");
-	// 		let indicator = carousel.querySelector(".indicators");
-	// 		let dots = indicator.querySelectorAll(".indicators ul li");
-	// 		let active = 0;
-	// 		let firstPosition = 0;
-	// 		let lastPosition = items.length - 1;
-	// 		let autoPlay;
 
-	// 		const startAutoPlay = () => {
-	// 			clearInterval(autoPlay);
-	// 			autoPlay = setInterval(() => {
-	// 				nextBtn.click();
-	// 			}, 5000);
-	// 		};
-	// 		startAutoPlay();
-
-	// 		const setSlider = () => {
-	// 			let itemActiveOld =
-	// 				carousel.querySelector(".list .item.active");
-	// 			if (itemActiveOld) itemActiveOld.classList.remove("active");
-	// 			items[active].classList.add("active");
-
-	// 			let dotActiveOld = indicator.querySelector(
-	// 				".indicators ul li.active"
-	// 			);
-	// 			if (dotActiveOld) dotActiveOld.classList.remove("active");
-	// 			dots[active].classList.add("active");
-
-	// 			indicator.querySelector(".number").innerText =
-	// 				"0" + (active + 1);
-	// 			startAutoPlay();
-	// 		};
-	// 		setSlider();
-
-	// 		nextBtn.onclick = () => {
-	// 			active = active + 1 > lastPosition ? 0 : active + 1;
-	// 			carousel.style.setProperty("--calculation", 1);
-	// 			setSlider();
-	// 		};
-	// 		prevBtn.onclick = () => {
-	// 			active = active - 1 < firstPosition ? lastPosition : active - 1;
-	// 			carousel.style.setProperty("--calculation", -1);
-	// 			setSlider();
-	// 			clearInterval(autoPlay);
-	// 			autoPlay = setInterval(() => {
-	// 				nextBtn.click();
-	// 			}, 5000);
-	// 		};
-	// 		dots.forEach((item, position) => {
-	// 			item.onclick = () => {
-	// 				active = position;
-	// 				setSlider();
-	// 			};
-	// 		});
-	// 	}
-	// }, [ads]);
+	const getAds = async () => {
+		try {
+			setLoading(true)
+			const res = await GuestService.getAllAds();
+			res.length === 0 
+			    ? setAds([1])
+				: setAds(res);
+		} catch (error) {
+			console.log(error);
+		} finally {
+			setLoading(false);
+		}
+	};
+	useEffect(() => {
+		getAds();
+	}, []);
 
 	useEffect(() => {
 		let prevBtn = document.getElementById("prev");
 		let nextBtn = document.getElementById("next");
 		let carousel = document.querySelector(".carousel");
 	
-		// Khai báo biến autoPlay
 		let autoPlay;
 	
-		if (carousel && ads.length > 0) {  // Chỉ chạy nếu có quảng cáo
+		if (carousel && ads.length > 0) { 
 			let items = carousel.querySelectorAll(".list .item");
 			let indicator = carousel.querySelector(".indicators");
 			let dotsContainer = indicator.querySelector("ul");
 			let active = 0;
 	
-			// Tạo dots cho số lượng quảng cáo
-			dotsContainer.innerHTML = ""; // Reset nội dung
+			dotsContainer.innerHTML = "";
 			ads.forEach((_, index) => {
 				const dot = document.createElement("li");
 				if (index === active) dot.classList.add("active");
@@ -435,7 +375,7 @@ const Header = () => {
 					if (index === active) dot.classList.add("active");
 					else dot.classList.remove("active");
 				});
-				indicator.querySelector(".number").innerText = `0${active + 1}`; // Cập nhật số thứ tự
+				indicator.querySelector(".number").innerText = `0${active + 1}`; 
 			};
 	
 			const startAutoPlay = () => {
@@ -456,12 +396,12 @@ const Header = () => {
 			setSlider();
 	
 			nextBtn.onclick = () => {
-				active = (active + 1) % ads.length;  // Cuộn lại từ đầu
+				active = (active + 1) % ads.length;  
 				carousel.style.setProperty("--calculation", 1);
 				setSlider();
 			};
 			prevBtn.onclick = () => {
-				active = (active - 1 + ads.length) % ads.length;  // Cuộn về đầu
+				active = (active - 1 + ads.length) % ads.length;
 				carousel.style.setProperty("--calculation", -1);
 				setSlider();
 			};
@@ -475,7 +415,6 @@ const Header = () => {
 			});
 		}
 	
-		// Dọn dẹp interval khi component unmount hoặc ads thay đổi
 		return () => {
 			clearInterval(autoPlay);
 		};
@@ -488,6 +427,7 @@ const Header = () => {
 		dispatch(setUserInformation(null));
 		nav("/login");
 	};
+	
 	
 
 	return (
@@ -738,7 +678,7 @@ const Header = () => {
 			<SpinCustom spinning={loading}>
 				<div className="carousel">
 					<div className="list">
-						{!loading && ads.length > 0 ? (
+						{ads[0] !== 1 ? (
 							ads?.map((i, index) => (
 								<div className="item " key={index}>
 									<figure>
@@ -763,22 +703,12 @@ const Header = () => {
 										</p>
 										<div className="more">
 											<button
-												onClick={() =>
-													nav(
-														"/restaurant-detail/" +
-															i?.uid
-													)
-												}
+												onClick={() => nav("/restaurant-detail/" + i?.uid)}
 											>
 												Đặt bàn
 											</button>
 											<button
-												onClick={() =>
-													nav(
-														"/restaurant-detail/" +
-															i?.uid
-													)
-												}
+												onClick={() => nav("/restaurant-detail/" + i?.uid)}
 											>
 												Xem chi tiết
 											</button>
@@ -787,43 +717,26 @@ const Header = () => {
 								</div>
 							))
 						) : (
-							<div className="item ">
+							<div className="item" key='topder'>
 								<figure>
 									<img src={LOGOADS} alt="img" />
 								</figure>
 								<div className="content">
-									<p
-										className="category"
-										onClick={() => nav("/restaurant-view")}
-									>
+									<p className="category" onClick={() => nav("/restaurant-view")}>
 										Việt Nam
 									</p>
-									<h2>Topder</h2>
-									<p className="description">
-										Nền tàng đặt bàn và món ăn
-									</p>
+									<h2 className="primary">Topder</h2>
+									<p className="description"> Nền tàng đặt bàn và món ăn </p>
 								</div>
 							</div>
 						)}
 					</div>
-					{/* <div className="arrows">
-						<button id="prev"> {"<"} </button>
-						<button id="next"> {">"} </button>
-					</div>
-					<div className="indicators">
-						<div className="number">02</div>
-						<ul>
-							<li className="active"></li>
-							<li></li>
-							<li></li>
-						</ul>
-					</div> */}
 					<div className="arrows">
 						<button id="prev"> {"<"} </button>
 						<button id="next"> {">"} </button>
 					</div>
 					<div className="indicators">
-						<div className="number">0{ads.length > 0 ? 1 : 0}</div> {/* Mặc định là 1 nếu không có quảng cáo */}
+						<div className="number primary">0{ads.length > 0 ? 1 : 0}</div>
 						<ul>
 							{ads.map((_, index) => (
 								<li key={index} className={index === 0 ? "active" : ""}></li>

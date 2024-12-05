@@ -145,7 +145,7 @@ export const CommonLayoutContainer = styled.div`
                     left: 10%;
                     transform: translateY(-50%);
                     & img{
-                        width: 75%;
+                        width: 65%;
                         transform: rotate(-20deg);
                     }
                     &::before{

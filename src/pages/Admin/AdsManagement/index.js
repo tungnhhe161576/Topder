@@ -10,7 +10,7 @@ const AdsManagement = () => {
     const [loading, setLoading] = useState(false)
     const [price, setPrice] = useState([])
     const [ads, setAds] = useState([])
-    const [status, setStatus] = useState('In-Active')
+    const [status, setStatus] = useState('Active')
     const [statusPayment, setStatusPayment] = useState('')
 
     const getAllAdsPrice = async () => {
@@ -47,6 +47,9 @@ const AdsManagement = () => {
     useEffect(() => {
         getAllAdsPrice()
     }, [])
+
+    console.log('status', status);
+    
 
 
 
