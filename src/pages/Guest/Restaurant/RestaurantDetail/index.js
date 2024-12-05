@@ -913,11 +913,17 @@ const RestaurantDetail = () => {
 																		numberPerson > restaurantDetail?.maxCapacity
 																			? Promise.reject(<span style={{color: 'black'}} className="ml-15">Vượt quá sức chứa của nhà hàng!</span>)
 																			: Promise.resolve(),
-																}
+																},
+																// { 
+																// 	validator: (_, value) => 
+																// 		(value && value <= 0)
+																// 			? Promise.reject(<span style={{color: 'black'}} className="ml-15">Số người lớn phải lớn hơn 0!</span>)
+																// 			: Promise.resolve(),
+																// }
 															]}
 														>
 															<InputNumber
-																min={0}
+																min={1}
 																className="input w-100"
 																placeholder="Nhập số người lớn"
 																// onChange={(e) => setNumberPerson(prev => prev + e)}
@@ -969,17 +975,29 @@ const RestaurantDetail = () => {
 														</Form.Item>
 													</Col>
 													<div className="d-flex justify-content-center">
-														<Form.Item name="chooseTable">
-															<Button
-																className="choose fs-16 fw-500 mr-10"
-																onClick={() =>
-																	setOpenModalChooseTable(
-																		true
-																	)
-																}
-															>
-																Chọn bàn
-															</Button>
+														<Form.Item
+															noStyle
+															shouldUpdate
+														>
+															{({
+																getFieldValue,
+															}) => {
+																const selectedNumberPerson = getFieldValue('numberPerson')
+																return selectedNumberPerson ? (
+																	<Form.Item name="chooseTable">
+																		<Button
+																			className="choose fs-16 fw-500 mr-10"
+																			onClick={() =>
+																				setOpenModalChooseTable(
+																					true
+																				)
+																			}
+																		>
+																			Chọn bàn
+																		</Button>
+																	</Form.Item>
+																) : null;
+															}}
 														</Form.Item>
 														<Form.Item name="ChooseFoods">
 															<Button
@@ -1018,7 +1036,7 @@ const RestaurantDetail = () => {
 				{/* Nhà hàng liên quan */}
 				<div className="related-restaurant mt-50">
 					<SpinCustom spinning={loading}>
-						<div className="fs-26 fw-700"> Cửa hàng liên quan </div>
+						<div className="fs-26 fw-700 mb-30"> Cửa hàng liên quan </div>
 						<Row
 							gutter={[30, 32]}
 							className="d-dlex justify-content-center"

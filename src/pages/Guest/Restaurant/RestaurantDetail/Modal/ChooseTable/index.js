@@ -164,6 +164,7 @@ const ModalChooseTable = ({open, onCancel, setTables, tables, restaurantId, date
                 onCancel={onCancel}
                 width={1000}
                 footer={footer}
+                style={{marginTop: '-70px'}}
             >
                 <ModalChooseTableContainer>
                     <div className='title-type-1 mb-20'>
@@ -175,7 +176,7 @@ const ModalChooseTable = ({open, onCancel, setTables, tables, restaurantId, date
                         </div>
                     </SpinCustom>
                     {
-                        text && <div className="mt-20 mb-30">Sức chứa của bàn không đủ! Vui lòng chọn thêm bàn hoặc đổi lại số người</div>
+                        text && <div className="mt-20 mb-30 red" style={{fontStyle: 'italic'}}>Sức chứa của bàn không đủ! Vui lòng chọn thêm bàn hoặc đổi lại số người!</div>
                     }
                 </ModalChooseTableContainer>
             </CustomModal>

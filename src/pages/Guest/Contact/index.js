@@ -19,7 +19,7 @@ const Contact = () => {
 	const [form] = Form.useForm();
 	const [loading, setLoading] = useState(false);
 	const user = useSelector(userInfor);
-	console.log(user);
+	console.log('user', user);
 
 	const handleSendForm = async () => {
 		try {
@@ -34,6 +34,7 @@ const Contact = () => {
 				content: values?.content,
 				phone: user ? user?.phone : values?.phone,
 			});
+			form.resetFields();
 			message.open({
 				content:
 					values?.subject === "RestaurantRegister"
