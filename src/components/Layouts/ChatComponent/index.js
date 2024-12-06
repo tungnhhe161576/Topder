@@ -224,7 +224,6 @@ const ChatComponent = ({ open, onCancel, getChatBox, chatBox }) => {
 								</div>
 							)}
 						</div>
-						<Divider className="mt-5" />
 						<SpinCustom spinning={loading2}>
 							<div className="list-message">
 								{chatList?.map((i) => (

@@ -128,8 +128,6 @@ const RestaurantDetail = () => {
 		}
 	}, [restaurantDetail]);
 
-	console.log("user", user);
-
 	//form dat ban
 	const handleSubmitFormBooking = async () => {
 		if (!user) {
@@ -177,7 +175,6 @@ const RestaurantDetail = () => {
 				orderMenus: menu,
 				tableIds: table,
 			};
-			console.log("data", data);
 			setOpenModalCalFee(data);
 			// setNumberPerson(data?.numberPerson + data?.numberChild)
 		} catch (error) {
@@ -323,6 +320,14 @@ const RestaurantDetail = () => {
 					disabledHours.push(i);
 				}
 			}
+			for (let i = endHour + 1; i < 24; i++) {
+				disabledHours.push(i);
+			}
+			for (let i = startHour; i < currentHour; i++) {
+				if (!disabledHours.includes(i)) {
+					disabledHours.push(i);
+				}
+			}
 		} else {
 			for (let i = 0; i < startHour; i++) {
 				disabledHours.push(i);
@@ -346,7 +351,6 @@ const RestaurantDetail = () => {
 
 		const startHour = apiStartTime.hour();
 		const endHour = apiEndTime.hour();
-
 		const currentHour = dayjs().hour();
 		const currentMinute = dayjs().minute();
 
@@ -371,6 +375,12 @@ const RestaurantDetail = () => {
 		if (selectedHour === endHour) {
 			const endMinute = apiEndTime.minute();
 			for (let i = endMinute + 1; i < 60; i++) {
+				disabledMinutes.push(i);
+			}
+		}
+
+		if (selectedHour < startHour || selectedHour > endHour) {
+			for (let i = 0; i < 60; i++) {
 				disabledMinutes.push(i);
 			}
 		}
