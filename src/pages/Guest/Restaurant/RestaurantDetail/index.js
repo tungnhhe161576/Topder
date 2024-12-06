@@ -320,6 +320,9 @@ const RestaurantDetail = () => {
 					disabledHours.push(i);
 				}
 			}
+			for (let i = 0; i < startHour; i++) {
+				disabledHours.push(i);
+			}
 			for (let i = endHour + 1; i < 24; i++) {
 				disabledHours.push(i);
 			}
