@@ -2,16 +2,17 @@ import styled from "styled-components";
 
 export const MassageRestaurantContainer = styled.div`
 	width: 100%;
-	margin: auto;
-	height: 80vh;
 	display: flex;
 	background: #ebebeb;
+	max-height: 35%;
+	min-height: 35%;
 
 	.left {
 		width: 30%;
-		height: 100%;
+		max-height: 35%;
+		min-height: 35%;
 		overflow-y: auto;
-		background-color: #ffffff;
+		background-color: #ebebeb;
 
 		.item {
 			display: flex;
@@ -40,21 +41,30 @@ export const MassageRestaurantContainer = styled.div`
 
 	.right {
 		width: 70%;
+		max-height: 35%;
+		min-height: 35%;
+		overflow-y: auto;
 		display: flex;
 		flex-direction: column;
 		background-color: white;
 
 		.header {
 			padding: 15px;
+			border-bottom: 1px solid #e0e0e0;
 			flex-shrink: 0;
+			position: sticky;
+			top: 0;
+			z-index: 1;
+			background-color: white;
 		}
 
 		.list-message {
-			overflow: auto;
+			overflow-y: auto;
+			flex-grow: 1;
 			padding: 15px;
-			background: #f9f9f9;
 			display: flex;
 			flex-direction: column;
+			max-height: calc(100% - 70px);
 
 			.mysefl {
 				max-width: 70%;
@@ -72,12 +82,14 @@ export const MassageRestaurantContainer = styled.div`
 		}
 
 		.send-mess {
-			padding: 10px 15px;
-			background: #ffffff;
-			border-top: 1px solid #e0e0e0;
+			position: absolute;
+			bottom: 0;
+			right: 0;
+			left: 770px;
+			margin-bottom: 5px;
 			.ant-input {
+				max-width: 88%;
 				border-radius: 20px;
-				margin-right: 10px;
 			}
 
 			.ant-btn {
@@ -116,10 +128,10 @@ export const MassageRestaurantContainer = styled.div`
 			display: none;
 			position: absolute;
 			right: 20%;
-			top: 100%;
+			top: 0;
 			background: #fff;
 			color: black;
-			font-size: 15px;
+			font-size: 13px;
 			padding: 2px 5px;
 			border-radius: 4px;
 			box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
