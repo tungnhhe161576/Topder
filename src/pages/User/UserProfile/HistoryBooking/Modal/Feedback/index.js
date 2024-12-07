@@ -65,7 +65,7 @@ const ModalFeedback = ({ open, onCancel, onOk }) => {
 				<Button className="mr-10 fw-600" onClick={() => onCancel()}>
 					Đóng
 				</Button>
-				{open?.isFeedback && (
+				{!open?.isFeedback && (
 					<Button
 						className="mr-10 fw-600"
 						type="primary"

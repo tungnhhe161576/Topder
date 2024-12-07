@@ -3,39 +3,98 @@ import { OrderManagementContainer } from "./styled";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Row, Table, Tag, DatePicker, Select, Input } from "antd";
 import { FileAddOutlined } from "@ant-design/icons";
-import AdminService from '../../../services/AdminService'
+import AdminService from "../../../services/AdminService";
 import SpinCustom from "../../../components/Common/SpinCustom";
 import { formatNumberToK } from "../../../lib/stringUtils";
 import dayjs from "dayjs";
 import ModalViewDetail from "./Modal";
-const {Option} = Select
+const { Option } = Select;
 const OrderManagement = () => {
-	const [loading, setLoading] = useState(false)
+	const [loading, setLoading] = useState(false);
 	const [orders, setOrders] = useState([]);
 	const [statusOrder, setStatusOrder] = useState("");
-	const [nameReceiver, setNameReceiver] = useState("")
-	const [selectedDate, setSelectedDate] = useState()
+	const [nameReceiver, setNameReceiver] = useState("");
+	const [selectedDate, setSelectedDate] = useState();
 	const [openModalDetail, setOpenModalDetail] = useState(false);
 
 	const getAllOrders = async () => {
 		try {
 			setLoading(true);
 			const res = await AdminService.getAllOrder();
-			statusOrder 
+			statusOrder
 				? nameReceiver
 					? selectedDate
-						? setOrders(res.filter((o) => {return o?.statusOrder === statusOrder && o.nameReceiver.toLowerCase().includes(nameReceiver.toLowerCase()) && dayjs(o?.dateReservation).isSame(dayjs(selectedDate))}))
-						: setOrders(res.filter(o => {return o?.statusOrder === statusOrder && o.nameReceiver.toLowerCase().includes(nameReceiver.toLowerCase())}))
+						? setOrders(
+								res.filter((o) => {
+									return (
+										o?.statusOrder === statusOrder &&
+										o.nameReceiver
+											.toLowerCase()
+											.includes(
+												nameReceiver.toLowerCase()
+											) &&
+										dayjs(o?.dateReservation).isSame(
+											dayjs(selectedDate)
+										)
+									);
+								})
+						  )
+						: setOrders(
+								res.filter((o) => {
+									return (
+										o?.statusOrder === statusOrder &&
+										o.nameReceiver
+											.toLowerCase()
+											.includes(
+												nameReceiver.toLowerCase()
+											)
+									);
+								})
+						  )
 					: selectedDate
-						? setOrders(res.filter((o) => {return o?.statusOrder === statusOrder && dayjs(o?.dateReservation).isSame(dayjs(selectedDate))}))
-						: setOrders(res.filter(o => o?.statusOrder === statusOrder))
+					? setOrders(
+							res.filter((o) => {
+								return (
+									o?.statusOrder === statusOrder &&
+									dayjs(o?.dateReservation).isSame(
+										dayjs(selectedDate)
+									)
+								);
+							})
+					  )
+					: setOrders(
+							res.filter((o) => o?.statusOrder === statusOrder)
+					  )
 				: nameReceiver
-					? selectedDate
-						? setOrders(res.filter((o) => {return o.nameReceiver.toLowerCase().includes(nameReceiver.toLowerCase()) && dayjs(o?.dateReservation).isSame(dayjs(selectedDate))}))
-						: setOrders(res.filter(o => {return o.nameReceiver.toLowerCase().includes(nameReceiver.toLowerCase())}))
-					: selectedDate
-						? setOrders(res.filter((o) => {return dayjs(o?.dateReservation).isSame(selectedDate)}))
-						: setOrders(res)
+				? selectedDate
+					? setOrders(
+							res.filter((o) => {
+								return (
+									o.nameReceiver
+										.toLowerCase()
+										.includes(nameReceiver.toLowerCase()) &&
+									dayjs(o?.dateReservation).isSame(
+										dayjs(selectedDate)
+									)
+								);
+							})
+					  )
+					: setOrders(
+							res.filter((o) => {
+								return o.nameReceiver
+									.toLowerCase()
+									.includes(nameReceiver.toLowerCase());
+							})
+					  )
+				: selectedDate
+				? setOrders(
+						res.filter((o) => {
+							return dayjs(o?.dateReservation).isSame(
+								selectedDate
+							);
+						})
+				  )
+				: setOrders(res);
 		} catch (error) {
 			console.log(error);
 		} finally {
@@ -47,24 +106,23 @@ const OrderManagement = () => {
 		getAllOrders();
 	}, [statusOrder, nameReceiver, selectedDate]);
 
-	
 	const columns = [
 		{
 			title: "Tên Người Đặt",
 			key: "nameReceiver",
 			dataIndex: "nameReceiver",
-			align: 'center',
+			align: "center",
 			width: 150,
 		},
 		{
 			title: "SĐT Người Đặt",
 			dataIndex: "phoneReceiver",
-			align: 'center',
+			align: "center",
 			key: "phoneReceiver",
 		},
 		{
 			title: "Thời gian nhận bàn",
-			align: 'center',
+			align: "center",
 			dataIndex: "orderDate",
 			key: "orderDate",
 			sorter: (a, b) =>
@@ -91,7 +149,7 @@ const OrderManagement = () => {
 			title: "Số lượng",
 			dataIndex: "number",
 			key: "number",
-			align: 'center',
+			align: "center",
 			render: (_, record) => (
 				<div>
 					<div>
@@ -109,13 +167,13 @@ const OrderManagement = () => {
 			title: "Lời nhắc",
 			dataIndex: "contentReservation",
 			key: "contentReservation",
-			align: 'center',
+			align: "center",
 			wdith: 300,
 		},
 		{
 			title: "Tổng tiền",
 			dataIndex: "totalAmount",
-			align: 'center',
+			align: "center",
 			key: "totalAmount",
 			render: (value) => (
 				<div className="fw-500 fs-16">{formatNumberToK(value)}</div>
@@ -123,7 +181,7 @@ const OrderManagement = () => {
 		},
 		{
 			title: "Trạng Thái",
-			align: 'center',
+			align: "center",
 			dataIndex: "statusOrder",
 			key: "",
 			render: (value) => {
@@ -150,7 +208,7 @@ const OrderManagement = () => {
 		},
 		{
 			title: "Chi tiết",
-			align: 'center',
+			align: "center",
 			dataIndex: "update",
 			key: "update",
 			render: (_, record) => (
@@ -171,7 +229,6 @@ const OrderManagement = () => {
 
 	// console.log(nameReceiver);
 	console.log(selectedDate);
-	
 
 	return (
 		<AdminLayout>
@@ -183,11 +240,6 @@ const OrderManagement = () => {
 								Đơn Hàng
 							</h3>
 						</div>
-						<div className="d-flex-end">
-							<Button type="primary" className="white fs-15">
-								<FileAddOutlined /> Xuất file excel
-							</Button>
-						</div>
 					</div>
 
 					<div>
@@ -197,22 +249,31 @@ const OrderManagement = () => {
 							className="search-container"
 						>
 							<Col span={12} className="input-search">
-							    <label className="pl-10">Tên người đặt</label>
-								<Input allowClear className="w-100 mt-5 input" placeholder="Tên người đặt" onChange={(e) => setNameReceiver(e.target.value)}/>
+								<label className="pl-10">Tên người đặt</label>
+								<Input
+									allowClear
+									className="w-100 mt-5 input"
+									placeholder="Tên người đặt"
+									onChange={(e) =>
+										setNameReceiver(e.target.value)
+									}
+								/>
 							</Col>
 
 							<Col span={6} className="picker">
 								<label className="pl-10">Ngày/Tháng/Năm</label>
 								<DatePicker
 									allowClear
-									className='mt-5'
+									className="mt-5"
 									placeholder="----/--/--"
 									onChange={(e) => setSelectedDate(e)}
 								/>
 							</Col>
 
 							<Col className="d-flex flex-column" span={6}>
-							<label className="pl-10">Trạng thái đơn hàng</label>
+								<label className="pl-10">
+									Trạng thái đơn hàng
+								</label>
 								<div className="select">
 									<Select
 										className="nice-select w-100 mt-5"
@@ -244,9 +305,7 @@ const OrderManagement = () => {
 					<div>
 						<div className="pl-30">
 							{!statusOrder ? (
-								<div className="fs-18 fw-500">
-									Danh sách:
-								</div>
+								<div className="fs-18 fw-500">Danh sách:</div>
 							) : (
 								<div>
 									<span className="fs-18 fw-500">
@@ -280,14 +339,12 @@ const OrderManagement = () => {
 					</div>
 				</SpinCustom>
 
-				{
-					!!openModalDetail && (
-						<ModalViewDetail
-							open={openModalDetail}
-							onCancel={() => setOpenModalDetail(false)}
-						/>
-					)
-				}
+				{!!openModalDetail && (
+					<ModalViewDetail
+						open={openModalDetail}
+						onCancel={() => setOpenModalDetail(false)}
+					/>
+				)}
 			</OrderManagementContainer>
 		</AdminLayout>
 	);
