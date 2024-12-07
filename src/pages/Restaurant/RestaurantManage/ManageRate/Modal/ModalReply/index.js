@@ -56,7 +56,7 @@ const ModalReply = ({ open, onCancel, onOk, userId }) => {
 				>
 					Đóng
 				</Button>
-				{open?.isReply && (
+				{!open?.isReply && (
 					<Button
 						className="mr-10 fw-600"
 						type="primary"

@@ -232,13 +232,13 @@ const RegisterRestaurant = () => {
 					...data,
 					File: fileList[0].originFileObj,
 				});
-				message.open({
-					content: res.message || "Đăng ký nhà hàng thành công.",
-					type: "success",
-					style: {
-						marginTop: "20vh",
-					},
-				});
+				// message.open({
+				// 	content: res.message || "Đăng ký nhà hàng thành công.",
+				// 	type: "success",
+				// 	style: {
+				// 		marginTop: "20vh",
+				// 	},
+				// });
 				toast.success(
 					"Đăng ký thành công. Vui lòng kiểm tra email để xác minh tài khoản",
 					{
