@@ -1,8 +1,8 @@
 import { useLocation, useNavigate, useRoutes } from 'react-router-dom';
 import './App.css';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { setUserInformation } from './redux/Slice/userSlice';
+import { setUserInformation, userInfor } from './redux/Slice/userSlice';
 import { jwtDecode } from "jwt-decode"
 import UserService from './services/UserService';
 import { router } from './router';
@@ -12,7 +12,28 @@ function App() {
     const nav = useNavigate()
     const location = useLocation()
 
-    // console.log('location', location);
+    
+    useEffect(() => {
+        const script = document.createElement('script');
+        script.src = 'https://sf-cdn.coze.com/obj/unpkg-va/flow-platform/chat-app-sdk/1.0.0-beta.4/libs/oversea/index.js';
+        script.async = true;
+    
+        script.onload = () => {
+            new window.CozeWebSDK.WebChatClient({
+                config: {
+                    bot_id: '7444619342701953031',
+                },
+                componentProps: {
+                    title: 'Topder',
+                },
+            });
+        };
+    
+        document.body.appendChild(script);
+        return () => {
+            document.body.removeChild(script);
+        };
+    }, []);
     
     
     

@@ -1,9 +1,11 @@
-import { Space, Table } from "antd";
+import { Button, Space, Table } from "antd";
 import SpinCustom from "../../../../../../components/Common/SpinCustom";
 import OrderDetail from "../../OrderDetail";
 import dayjs from "dayjs";
 import { formatNumberToK } from "../../../../../../lib/stringUtils";
 import { SiGooglemaps } from "react-icons/si";
+import { useState } from "react";
+import ModalViewReason from "../../Modal/ModalViewReason";
 
 const Cancel = ({
 	orderHistory,
@@ -13,6 +15,8 @@ const Cancel = ({
 	setIsDetail,
 	handleViewDetail,
 }) => {
+	const [openModalViewReason, setOpenModalViewReason] = useState(false)
+
 	const columns = [
 		{
 			title: "Tên Cửa Hàng",
@@ -128,6 +132,12 @@ const Cancel = ({
 					>
 						Chi Tiết
 					</button>
+					<button
+						className="ml-5 btn cancel-btn"
+						onClick={() => setOpenModalViewReason(record)}
+					>
+						Xem lý do
+					</button>
 				</Space>
 			),
 		},
@@ -157,6 +167,16 @@ const Cancel = ({
 					/>
 				)}
 			</SpinCustom>
+
+				{
+					openModalViewReason && (
+						<ModalViewReason
+							open={openModalViewReason}
+							onCancel={() => setOpenModalViewReason(false)}
+						/>
+					)
+				}
+
 		</div>
 	);
 };

@@ -36,7 +36,7 @@ const Profile = () => {
 						: "Other",
 			};
 
-			const res = await UserService.updateProfile({
+			await UserService.updateProfile({
 				Uid: user.uid,
 				Name: updatedUser.name,
 				Phone: updatedUser.phone,
@@ -44,7 +44,7 @@ const Profile = () => {
 				Gender: updatedUser.gender,
 			});
 			message.open({
-				content: res.message,
+				content: 'Cập nhật thành công',
 				type: "success",
 				style: {
 					marginTop: "20vh",
@@ -54,8 +54,8 @@ const Profile = () => {
 			setIsEdit(false);
 		} catch (error) {
 			message.open({
-				error: error.message,
-				type: "success",
+				error: 'Cập nhật thất bại!',
+				type: "error",
 			});
 		} finally {
 			setLoading(false);

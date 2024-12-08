@@ -281,9 +281,8 @@ const ModalUpdateOrder = ({ open, onCancel, onOk, text, status, userId }) => {
 				open={!!open}
 				onCancel={onCancel}
 				footer={footer}
-				width={1000}
-				// className="mt-100"
-				style={{marginTop: '-50px'}}
+				width={(open?.statusOrder === "Pending" && status === "Confirm" && open?.isTableBooking === false) ? 1000 : 600}
+				style={(open?.statusOrder === "Pending" && status === "Confirm" && open?.isTableBooking === false) ? {marginTop: '-30px'} : {marginTop: '100px'}}
 			>
 				<div>
 					<div className=" d-flex-center mb-30 fs-16 fw-500">

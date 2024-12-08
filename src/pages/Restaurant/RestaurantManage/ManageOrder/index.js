@@ -25,6 +25,7 @@ import { FileAddOutlined } from "@ant-design/icons";
 import * as XLSX from "xlsx";
 import ModalReport from "./Modal/ModalReport";
 import ModalViewPrice from "./Modal/ModalViewPrice";
+import ModalViewReason from "./Modal/ModalViewReason";
 const { Option } = Select;
 
 const ManageOrder = () => {
@@ -35,6 +36,7 @@ const ManageOrder = () => {
 	const [openModalUpdateOrder, setOpenModalUpdateOrder] = useState(false);
 	const [openModalViewPrice, setOpenModalViewPrice] = useState(false);
 	const [openModalReport, setOpenModalReport] = useState(false);
+	const [openModalViewReason, setOpenModalViewReason] = useState(false);
 	const [text, setText] = useState("");
 	const [status, setStatus] = useState("");
 	const user = useSelector(userInfor);
@@ -303,8 +305,7 @@ const ManageOrder = () => {
 						</Button>
 					)}
 
-					{(record?.statusOrder === "Confirm" &&
-						record?.totalAmount === 0) ||
+					{(record?.statusOrder === "Confirm" && record?.totalAmount === 0) ||
 					(record?.statusOrder === "Paid" &&
 						dayjs(
 							`${record?.dateReservation} ${record?.timeReservation}`,
@@ -336,7 +337,7 @@ const ManageOrder = () => {
 									`${
 										record?.statusOrder !== "Paid"
 											? "Bạn có chắc chắn muốn hủy đơn hàng này không ?"
-											: "Bạn sẽ mất đi 100% số tiền đơn hàng này và sẽ hoàn về ví của khách hàng!"
+											: "Bạn sẽ mất đi 100% số tiền đơn hàng này và sẽ hoàn về ví của khách hàng và bị trừ điểm uy tín!"
 									}`
 								);
 								setStatus("Cancel");
@@ -358,6 +359,18 @@ const ManageOrder = () => {
 							Báo cáo
 						</Button>
 					) : null}
+					{
+						record?.statusOrder === 'Cancel' && (
+							<Button
+								onClick={() => setOpenModalViewReason(record)}
+								shape="round"
+								type="primary"
+								danger
+							>
+								Xem lý do
+							</Button>
+						)
+					}
 				</div>
 			),
 			// width: 200
@@ -669,6 +682,12 @@ const ManageOrder = () => {
 							<ModalViewPrice
 								open={openModalViewPrice}
 								onCancel={() => setOpenModalViewPrice(false)}
+							/>
+						)}
+						{!!openModalViewReason && (
+							<ModalViewReason
+								open={openModalViewReason}
+								onCancel={() => setOpenModalViewReason(false)}
 							/>
 						)}
 					</SpinCustom>

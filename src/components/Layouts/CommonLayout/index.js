@@ -14,6 +14,7 @@ const CommonLayout = ({ children }) => {
     const [openChat, setOpenChat] = useState(false)
     const user = useSelector(userInfor)
     const [chatBox, setChatBox] = useState([])
+    
 
     const getChatBox = async () => {
         try {
@@ -34,34 +35,8 @@ const CommonLayout = ({ children }) => {
                 getChatBox()
             }
         });
-    }, [user]);
-    // useEffect(() => {
-    //     if (!!user) {
-    //         getChatBox()
-    //     }
-    // }, [user])
+    }, [user])
 
-    useEffect(() => {
-        const script = document.createElement('script');
-        script.src = 'https://sf-cdn.coze.com/obj/unpkg-va/flow-platform/chat-app-sdk/1.0.0-beta.4/libs/oversea/index.js';
-        script.async = true;
-    
-        script.onload = () => {
-            new window.CozeWebSDK.WebChatClient({
-                config: {
-                    bot_id: '7444619342701953031',
-                },
-                componentProps: {
-                    title: 'Topder',
-                },
-            });
-        };
-    
-        document.body.appendChild(script);
-        return () => {
-            document.body.removeChild(script);
-        };
-    }, []);
     
     return (
         <CommonLayoutContainer>
