@@ -38,8 +38,6 @@ const ManageInfomation = ({ user }) => {
 		}
 	}, [user]);
 
-	console.log(user);
-
 	const handleBeforeUpload = (file) => {
 		const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
 		const isAllowedType = allowedImageTypes.includes(file.type);

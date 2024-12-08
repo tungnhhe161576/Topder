@@ -67,6 +67,15 @@ const RestaurantDetail = () => {
 	const [numberPerson, setNumberPerson] = useState(0);
 	const numberPersonRef = useRef();
 	const numberChildRef = useRef();
+	// let hoursStep = 0
+	// let minuteStep = 0
+
+	// useEffect(() => {
+    //     if (restaurantDetail?.tableGapTime) {
+	// 		hoursStep = restaurantDetail.tableGapTime / 60;
+	// 		minuteStep = restaurantDetail.tableGapTime % 60;
+	// 	}
+    // }, [restaurantDetail]);
 
 	useEffect(() => {
 		form.setFieldsValue({
@@ -880,6 +889,8 @@ const RestaurantDetail = () => {
 																	>
 																		<DatePicker
 																			picker="time"
+																			minuteStep={restaurantDetail?.tableGapTime % 60}
+																			hourStep={restaurantDetail?.tableGapTime ? (1 + restaurantDetail?.tableGapTime / 60) : 1}
 																			placeholder="Chọn giờ"
 																			className="input"
 																			format="HH:mm"
@@ -936,8 +947,7 @@ const RestaurantDetail = () => {
 																		_,
 																		value
 																	) =>
-																		numberPerson >
-																		restaurantDetail?.maxCapacity
+																		(value > restaurantDetail?.maxCapacity || numberPerson > restaurantDetail?.maxCapacity)
 																			? Promise.reject(
 																					<span
 																						style={{
@@ -956,12 +966,6 @@ const RestaurantDetail = () => {
 																			  )
 																			: Promise.resolve(),
 																},
-																// {
-																// 	validator: (_, value) =>
-																// 		(value && value <= 0)
-																// 			? Promise.reject(<span style={{color: 'black'}} className="ml-15">Số người lớn phải lớn hơn 0!</span>)
-																// 			: Promise.resolve(),
-																// }
 															]}
 														>
 															<InputNumber
@@ -994,8 +998,7 @@ const RestaurantDetail = () => {
 																		_,
 																		value
 																	) =>
-																		numberPerson >
-																		restaurantDetail?.maxCapacity
+																		(value > restaurantDetail?.maxCapacity || numberPerson > restaurantDetail?.maxCapacity)
 																			? Promise.reject(
 																					<span
 																						style={{

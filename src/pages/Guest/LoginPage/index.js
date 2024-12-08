@@ -120,12 +120,12 @@ const LoginPage = () => {
 			setLoading(false);
 		}
 	};
-	useEffect(() => {
-		window.google.accounts.id.initialize({
-			client_id: process.env.REACT_APP_GG_CLIENT_ID,
-			callback: handleGoogleLoginSuccess,
-		});
-	}, []);
+	// useEffect(() => {
+	// 	window.google.accounts.id.initialize({
+	// 		client_id: process.env.REACT_APP_GG_CLIENT_ID,
+	// 		callback: handleGoogleLoginSuccess,
+	// 	});
+	// }, []);
 	const handleGoogleLoginFailure = (error) => {
 		console.error("Google Login Failed:", error);
 		toast.error("Đăng nhập bằng Google thất bại. Vui lòng thử lại.");

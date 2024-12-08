@@ -1,7 +1,6 @@
 import { Tabs } from "antd";
 import RestaurantLayout from "../../../../components/Layouts/RestaurantLayout";
 import { ManageRestaurantContainer } from "./styled";
-import ManageDescription from "../ManageRestaurant/ManageDes";
 import ManageImages from "../ManageRestaurant/ManageImg";
 import ManageInformation from "../ManageRestaurant/ManageInfor";
 import ChangePassword from "../ManageRestaurant/ChangePassword";
@@ -10,6 +9,8 @@ import { useSelector } from "react-redux";
 import { userInfor } from "../../../../redux/Slice/userSlice";
 const ManageRestaurant = () => {
 	const user = useSelector(userInfor);
+	console.log('user', user);
+	
 
 	return (
 		<RestaurantLayout>

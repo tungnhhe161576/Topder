@@ -17,6 +17,21 @@ const ModalChooseOptionPayment = ({ open, onCancel, user, orderHistory }) => {
 	const dispatch = useDispatch();
 	const [data, setData] = useState();
 	const [returnFee, setReturnFee] = useState();
+	const [wallet, setWallet] = useState();
+
+	const getWalletInfo = async () => {
+        try {
+            const res = await UserService.getWalletInfo(user?.uid)
+            setWallet(res)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    useEffect(() => {
+        if (!!user?.uid) {
+            getWalletInfo()
+        }
+    }, [user])
 
 	const getDataPolicy = async () => {
 		try {
@@ -173,8 +188,7 @@ const ModalChooseOptionPayment = ({ open, onCancel, user, orderHistory }) => {
 										{
 											validator: (_, value) =>
 												value === "ISBALANCE" &&
-												open?.totalAmount >
-													user?.walletBalance
+												open?.totalAmount > wallet
 													? Promise.reject(
 															"Số dư trong ví không đủ để thanh toán!"
 													  )

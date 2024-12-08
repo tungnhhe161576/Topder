@@ -23,6 +23,10 @@ const ModalUpdateInfo = ({open, onCancel}) => {
     const [form] = Form.useForm()
     const dispatch = useDispatch()
 
+    console.log('open', open);
+    
+    
+
     useEffect(() => {
         const fetchData = async () => {
             await getAllRestaurantCategory();
@@ -85,6 +89,7 @@ const ModalUpdateInfo = ({open, onCancel}) => {
                 ...open,
                 openTime: open.openTime ? dayjs(open.openTime, "HH:mm") : null,
                 closeTime: open.closeTime ? dayjs(open.closeTime, "HH:mm") : null,
+                tableGapTime: open?.tableGapTime ? open?.tableGapTime : 1
             });
             
             getDistricts(open.provinceCity).then(() => {
@@ -118,6 +123,7 @@ const ModalUpdateInfo = ({open, onCancel}) => {
                 closeTime: dayjs(formValues?.closeTime?.$d).format('HH:mm:ss'),
                 subdescription: subDescription,
                 description: description,
+                tableGapTime: formValues?.tableGapTime ? formValues?.tableGapTime : 1
             }
 
             await UserService.updateRestaurantProfile(updateUser)  
@@ -280,6 +286,17 @@ const ModalUpdateInfo = ({open, onCancel}) => {
                                     className="form-item"
                                 >
                                     <InputNumber className='input fs-16 w-100' formatter={(value) => formatNumber(value.toString())} parser={(value) => value.replace(/\./g, '')} defaultValue={10000} min={10000} placeholder="Nhập số tiền"/>
+                                </Form.Item>
+                                <Form.Item
+                                    name="tableGapTime"
+                                    label={
+                                        <span className="fs-17 fw-600 d-flex justify-content-start">
+                                            Thời gian giữa các lần đặt bàn (phút)
+                                        </span>
+                                    }
+                                    className="form-item"
+                                >
+                                    <InputNumber className='input fs-16 w-100' defaultValue={1} min={1} placeholder="Nhập thời gian"/>
                                 </Form.Item>
                             </Col>
 
