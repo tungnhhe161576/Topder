@@ -163,17 +163,21 @@ const ModalChooseOptionPayment = ({ open, onCancel, user, orderHistory }) => {
 												</div>
 											</div>
 										</Radio>
-										<Radio
-											value="Deposit"
-											className="mb-10"
-										>
-											<div className="d-flex align-items-center">
-												<div className="total"></div>
-												<div className="fs-16 fw-500">
-													Thanh toán tiền đặt cọc
-												</div>
-											</div>
-										</Radio>
+										{
+											open?.depositAmount !== 0 && (
+												<Radio
+													value="Deposit"
+													className="mb-10"
+												>
+													<div className="d-flex align-items-center">
+														<div className="total"></div>
+														<div className="fs-16 fw-500">
+															Thanh toán tiền đặt cọc
+														</div>
+													</div>
+												</Radio>
+											)
+										}
 									</Radio.Group>
 								</Form.Item>
 								<Form.Item

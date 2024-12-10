@@ -124,12 +124,16 @@ const Confirm = ({
 					>
 						Chi Tiết
 					</button>
-					<button
-						className="btn payment"
-						onClick={() => setOpenModalOpenPayment(record)}
-					>
-						Thanh toán
-					</button>
+					{
+						record?.totalAmount !== 0 && (
+							<button
+								className="btn payment"
+								onClick={() => setOpenModalOpenPayment(record)}
+							>
+								Thanh toán
+							</button>
+						)
+					}
 					<button
 						className="btn cancel-btn"
 						onClick={() => setOpenModalCancelOrder(record)}

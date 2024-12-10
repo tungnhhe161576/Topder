@@ -75,6 +75,10 @@ const ModalCreateDiscount = ({ open, onCancel, onOk, userId }) => {
 		);
 	};
 
+	const formatNumber = (value) => {
+        return value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    };
+
 	return (
 		<div>
 			<CustomModal
@@ -246,10 +250,7 @@ const ModalCreateDiscount = ({ open, onCancel, onOk, userId }) => {
 												},
 											]}
 										>
-											<InputNumber
-												min={0}
-												style={{ width: "100%" }}
-											/>
+											<InputNumber formatter={(value) => formatNumber(value.toString())} min={0} parser={(value) => value.replace(/\./g, '')} className="w-100" placeholder="Nhập số tiền"/>
 										</Form.Item>
 										<Form.Item
 											style={{ flex: "1" }}
@@ -261,12 +262,22 @@ const ModalCreateDiscount = ({ open, onCancel, onOk, userId }) => {
 													message:
 														"Hãy nhập khoảng giá tối đa!",
 												},
+												({ getFieldValue }) => ({
+													validator(_, value) {
+														const min = getFieldValue("minOrderValue")
+														if (value > min) {
+															return Promise.resolve();
+														}
+														return Promise.reject(
+															new Error(
+																"Số tiền phải lớn hơn số tiền tối thiểu!"
+															)
+														);
+													},
+												}),
 											]}
 										>
-											<InputNumber
-												min={0}
-												style={{ width: "100%" }}
-											/>
+											<InputNumber formatter={(value) => formatNumber(value.toString())} min={0} parser={(value) => value.replace(/\./g, '')} className="w-100" placeholder="Nhập số tiền"/>
 										</Form.Item>
 									</div>
 								) : null;

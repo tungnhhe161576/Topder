@@ -85,6 +85,7 @@ const ModalCreateOrUpdate = ({open, onCancel, onOk, isEdit, userId}) => {
                         label={<span className="ml-10 fw-500">Số tiền đơn hàng từ</span>}
                         rules={[
                             { pattern: getRegexNumber(), message: "Ký tự không hợp lệ!" },
+                            { required: true, message: 'Hãy nhập giá tiền!' }
                         ]}
                     >
                         <InputNumber formatter={(value) => formatNumber(value.toString())} min={0} parser={(value) => value.replace(/\./g, '')} className="w-100" placeholder="Nhập số tiền"/>
@@ -94,13 +95,27 @@ const ModalCreateOrUpdate = ({open, onCancel, onOk, isEdit, userId}) => {
                         label={<span className="ml-10 fw-500">Số tiền đơn hàng đến</span>}
                         rules={[
                             { pattern: getRegexNumber(), message: "Ký tự không hợp lệ!" },
-                            // { 
-                            //     validator: (_, value) => 
-                            //         value && value < 10000
-                            //             ? Promise.reject("Hãy nhập số tiền từ 10.000đ trở lên!")
-                            //             : Promise.resolve(),
-                            // }
+                            { 
+                                validator: (_, value) => 
+                                    value && value < 10000
+                                        ? Promise.reject("Hãy nhập số tiền từ 10.000đ trở lên!")
+                                        : Promise.resolve()
+                            },
+                            ({ getFieldValue }) => ({
+                                validator(_, value) {
+                                    const min = getFieldValue("minOrderValue")
+                                    if (value > min) {
+                                        return Promise.resolve();
+                                    }
+                                    return Promise.reject(
+                                        new Error(
+                                            "Số tiền đến phải lớn hơn số tiền tối thiểu!"
+                                        )
+                                    );
+                                },
+                            }),
                         ]}
+                        
                     >
                         <InputNumber formatter={(value) => formatNumber(value.toString())} min={0} parser={(value) => value.replace(/\./g, '')} className="w-100" placeholder="Nhập số tiền"/>
                     </Form.Item>
