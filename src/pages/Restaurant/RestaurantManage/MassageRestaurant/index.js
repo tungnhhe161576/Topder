@@ -117,7 +117,7 @@ const MassageRestaurant = () => {
 				<div className="w-30 left">
 					<div
 						className="d-flex justify-content-center align-items-center fs-14 fw-500"
-						style={{ height: "41px" }}
+						style={{ height: "100px" }}
 					>
 						Danh sách
 					</div>
@@ -138,9 +138,10 @@ const MassageRestaurant = () => {
 									getChatList(i);
 									chatRef.current = i;
 								}}
+								style={{cursor: 'pointer'}}
 							>
 								<div className="d-flex align-items-center">
-									<div>
+									<div className="pl-20 mr-20">
 										<Avatar
 											size={30}
 											src={
@@ -203,66 +204,66 @@ const MassageRestaurant = () => {
 							</div>
 						)}
 					</div>
-					<SpinCustom spinning={loading2}>
-						<div className="list-message">
-							{chatList?.map((i) => (
+					{/* <SpinCustom spinning={loading2}> */}
+					<div className="list-message">
+						{chatList?.map((i) => (
+							<div
+								key={i?.chatId}
+								className={
+									i?.chatBy === parseInt(user?.uid)
+										? "mysefl"
+										: "yours"
+								}
+							>
 								<div
-									key={i?.chatId}
-									className={
-										i?.chatBy === parseInt(user?.uid)
-											? "mysefl"
-											: "yours"
-									}
+									className="message-content d-flex-end pr-10"
+									style={{ textAlign: "right" }}
 								>
-									<div
-										className="message-content d-flex-end pr-10"
-										style={{ textAlign: "right" }}
-									>
-										<div className="avatar-chat">
-											<Avatar
-												size={30}
-												src={
-													<img
-														src={i?.chatByImage}
-														alt="avatar"
-													/>
-												}
-											/>
-										</div>
-										<div className="chat-message">
-											{i?.content}
-										</div>
-										<div className="chat-time">
-											{dayjs(i?.chatTime).format(
-												"DD-MM-YYYY HH:mm"
-											)}
-										</div>
+									<div className="avatar-chat">
+										<Avatar
+											size={30}
+											src={
+												<img
+													src={i?.chatByImage}
+													alt="avatar"
+												/>
+											}
+										/>
 									</div>
-									<div className="mr-20">
-										{i?.chatBy === parseInt(user?.uid) && (
-											<div>
-												<Dropdown
-													menu={{
-														items: item2(i),
-													}}
-													trigger={"click"}
-												>
-													<div
-														className="fw-500 fs-16"
-														style={{
-															cursor: "pointer",
-														}}
-													>
-														...
-													</div>
-												</Dropdown>
-											</div>
+									<div className="chat-message">
+										{i?.content}
+									</div>
+									<div className="chat-time">
+										{dayjs(i?.chatTime).format(
+											"DD-MM-YYYY HH:mm"
 										)}
 									</div>
 								</div>
-							))}
-						</div>
-					</SpinCustom>
+								<div className="mr-20">
+									{i?.chatBy === parseInt(user?.uid) && (
+										<div>
+											<Dropdown
+												menu={{
+													items: item2(i),
+												}}
+												trigger={"click"}
+											>
+												<div
+													className="fw-500 fs-16"
+													style={{
+														cursor: "pointer",
+													}}
+												>
+													...
+												</div>
+											</Dropdown>
+										</div>
+									)}
+								</div>
+							</div>
+						))}
+					</div>
+					{/* </SpinCustom> */}
 					<div className="send-mess p-10">
 						{!!item && (
 							<Form className="d-flex align-items-center">
