@@ -13,15 +13,20 @@ export const LoginContainer = styled.div`
 	}
 
 	.left-side {
-		background-color: #ff7c08;
+		/* background-color: #ff7c08; */
+		background-color: rgb(246 242 233);
 		height: 100vh;
 		position: relative;
+	}
+
+	.haAclf {
+		width: 1000px !important;
 	}
 
 	.login-img {
 		width: 80%;
 		position: absolute;
-		top: 30%;
+		/* top: 30%; */
 		left: 10%;
 	}
 

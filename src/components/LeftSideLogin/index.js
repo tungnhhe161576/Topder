@@ -3,6 +3,7 @@ import { Col } from 'antd'
 import { IoStorefront } from "react-icons/io5";
 import { IconContext } from 'react-icons/lib';
 import { useNavigate } from 'react-router-dom';
+import logo from '../../assets/images/LOGOADS.png'
 
 
 const LeftSide = () => {
@@ -11,10 +12,11 @@ const LeftSide = () => {
     return (
         <Col span={12} className='left-side'>
             <IconContext.Provider value={{ color: "white", size: "3em" }}>
-                <IoStorefront className='ml-20 mt-10' style={{cursor: 'pointer'}}  onClick={() => { nav('/') }}/>
+                <IoStorefront className='ml-20 mt-10 primary' style={{cursor: 'pointer'}}  onClick={() => { nav('/') }}/>
             </IconContext.Provider>
-            <h2>TOPDER</h2>
-            <img src='/login.webp' alt='error' className='login-img' />
+            {/* <h2>TOPDER</h2> */}
+            {/* <img src='/login.webp' alt='error' className='login-img' /> */}
+            <img src={logo} alt='error' className='login-img' />
         </Col>
     )
 }

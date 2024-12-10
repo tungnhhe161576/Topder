@@ -255,6 +255,7 @@ const LoginPage = () => {
 										shape="round"
 										onClick={renderProps.onClick}
 										disabled={renderProps.disabled}
+										className="w-100"
 									>
 										Tiếp tục với{" "}
 										<GoogleOutlined className="fs-20" />
