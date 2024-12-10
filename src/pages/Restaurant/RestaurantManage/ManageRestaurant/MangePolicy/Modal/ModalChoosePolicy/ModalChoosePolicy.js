@@ -118,7 +118,14 @@ const ModalChoosePolicy = ({ open, onCancel, onOk, userId }) => {
 									<Row gutter={[32, 32]}>
 										{" "}
 										{inActicePolicy?.map((i) => (
-											<Col key={i?.policyId} span={12}>
+											<Col
+												key={i?.policyId}
+												span={
+													inActicePolicy.length === 1
+														? 24
+														: 12
+												}
+											>
 												{" "}
 												<Radio
 													value={i?.policyId}
