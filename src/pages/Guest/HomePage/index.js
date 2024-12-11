@@ -258,7 +258,7 @@ const HomePage = () => {
 							<img src={logo} alt="logo" />
 						</div>
 						<div className="d-flex justify-content-space-between align-items-center mb-30">
-							<span className="title">Bác Blog Mới Nhất</span>
+							<span className="title">Các Blog Mới Nhất</span>
 							<Button
 								style={{ width: "150px", height: "40px" }}
 								onClick={() => nav("/blog")}
