@@ -109,8 +109,12 @@ const Header = () => {
 			getListNoti();
 			if (notification.type === "Đơn Hàng") {
 				nav("/restaurant/manage-order");
-			} else if (notification.type === "Hệ Thống Trừ Tiền Từ Ví") {
+			} else if (notification.type === "Hệ Thống Trừ Tiền Từ Ví" || notification.type === "Hệ Thống Cộng Tiền Từ Ví") {
 				nav("/restaurant/wallet");
+			} else if (notification.type === "Đánh Giá") {
+				nav("/restaurant/manage-rate");
+			} else if (notification.type === "Quảng Cáo") {
+				nav("/restaurant/contact");
 			}
 		} catch (error) {
 			console.log(error);

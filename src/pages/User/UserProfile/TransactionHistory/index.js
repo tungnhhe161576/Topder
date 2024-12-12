@@ -70,7 +70,7 @@ const TransactionHistory = () => {
             key: 'transactionType',
             width: 200,
             align: 'center',
-            render: (value) => <span className="fs-15 fw-500">{value === "Recharge" ? "Nạp tiền" : (value === "Withdraw" ? "Rút tiền" : "Thanh toán")}</span>,
+            render: (value) => <span className="fs-15 fw-500">{value === "Recharge" ? "Nạp tiền" : (value === "Withdraw" ? "Rút tiền" : (value === "SystemAdd" ? 'Hệ thống cộng tiền' : "Thanh toán"))}</span>,
         },
         {
             title: 'Mệnh giá',
@@ -142,6 +142,9 @@ const TransactionHistory = () => {
                                     </Option>
                                     <Option key={3} value="SystemSubtract">
                                         Thanh toán
+                                    </Option>
+                                    <Option key={4} value="SystemAdd">
+                                        Cộng tiền
                                     </Option>
                                 </Select>
                             </div>

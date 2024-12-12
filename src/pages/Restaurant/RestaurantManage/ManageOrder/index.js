@@ -229,9 +229,9 @@ const ManageOrder = () => {
 					) : (
 						<div className="">
 							{value === "Deposit"
-								? "Thanh toán tiền cọc"
+								? `Thanh toán tiền cọc: ${formatNumberToK(record?.totalPaymentAmount)}`
 								: value === "Entire Order"
-								? "Thanh toán toàn bộ đơn hàng"
+								? `Thanh toán toàn bộ đơn hàng: ${formatNumberToK(record?.totalPaymentAmount)}`
 								: "Chưa thanh toán"}
 						</div>
 					)}

@@ -227,9 +227,6 @@ const OrderManagement = () => {
 		},
 	];
 
-	// console.log(nameReceiver);
-	console.log(selectedDate);
-
 	return (
 		<AdminLayout>
 			<OrderManagementContainer>

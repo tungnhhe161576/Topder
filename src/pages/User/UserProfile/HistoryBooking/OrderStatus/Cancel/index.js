@@ -99,12 +99,11 @@ const Cancel = ({
 			dataIndex: "paidType",
 			key: "paidType",
 			width: 150,
-			render: (value) => (
+			render: (value, record) => (
 				<span>
-					{" "}
 					{!!value === "Entire Order"
-						? "Thanh toán toàn bộ đơn hàng"
-						: "Thanh toán tiền cọc"}{" "}
+						? `hanh toán toàn bộ đơn hàng: ${formatNumberToK(record?.totalPaymentAmount)}`
+						: `Thanh toán tiền cọc: ${formatNumberToK(record?.totalPaymentAmount)}`}
 				</span>
 			),
 		},
