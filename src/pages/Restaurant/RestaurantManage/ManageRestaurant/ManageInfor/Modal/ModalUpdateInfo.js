@@ -89,7 +89,7 @@ const ModalUpdateInfo = ({open, onCancel}) => {
                 ...open,
                 openTime: open.openTime ? dayjs(open.openTime, "HH:mm") : null,
                 closeTime: open.closeTime ? dayjs(open.closeTime, "HH:mm") : null,
-                tableGapTime: open?.tableGapTime ? open?.tableGapTime : 1
+                tableGapTime: open?.tableGapTime ? open?.tableGapTime : 1,
             });
             
             getDistricts(open.provinceCity).then(() => {
@@ -110,7 +110,6 @@ const ModalUpdateInfo = ({open, onCancel}) => {
         try {
             setLoading(true);
             const formValues = await form.validateFields();
-            console.log("form", formValues);
             const categoryName = category.find(i => i.categoryRestaurantId === formValues.categoryRestaurantId).categoryRestaurantName
             
 
@@ -123,7 +122,8 @@ const ModalUpdateInfo = ({open, onCancel}) => {
                 closeTime: dayjs(formValues?.closeTime?.$d).format('HH:mm:ss'),
                 subdescription: subDescription,
                 description: description,
-                tableGapTime: formValues?.tableGapTime ? formValues?.tableGapTime : 1
+                tableGapTime: formValues?.tableGapTime ? formValues?.tableGapTime : 1,
+                discount: formValues?.discount ? formValues?.discount : 0,
             }
 
             await UserService.updateRestaurantProfile(updateUser)  
@@ -399,6 +399,17 @@ const ModalUpdateInfo = ({open, onCancel}) => {
                                             <Option key={c.id} value={c.id}>{c.full_name}</Option>
                                         ))}
                                     </Select>
+                                </Form.Item>
+                                <Form.Item
+                                    name="discount"
+                                    label={
+                                        <span className="fs-17 fw-600 d-flex justify-content-start">
+                                            Chiết khấu giá đặt bàn
+                                        </span>
+                                    }
+                                    className="form-item"
+                                >
+                                    <InputNumber className='input fs-16 w-100' defaultValue={0} min={0} max={100} placeholder="Nhập chiết khấu"/>
                                 </Form.Item>
                             </Col>
                             <Col span={24}>

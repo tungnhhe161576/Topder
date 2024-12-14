@@ -151,7 +151,8 @@ const RelatedRestaurant = ({ data, user, isWishlist, onRemove }) => {
 				<div className="price fs-18 fw-600 primary">
 					<div>
 						<span style={{ color: "black" }}>Giá bàn: </span>{" "}
-						{formatNumberToK(data?.price)}
+						{data?.price === 0 ? <span>Miễn phí</span> : (data?.discount > 0 ? <span><s style={{color: 'gray'}}>{formatNumberToK(data?.price)}</s> <span className="ml-10">{formatNumberToK(data?.price * (1 - data?.discount/100))}</span> </span> : <span>{formatNumberToK(data?.price)}</span>) }
+						{/* {formatNumberToK(data?.price)} */}
 					</div>
 					<div>
 						{data?.discount > 0 ? (

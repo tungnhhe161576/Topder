@@ -555,9 +555,10 @@ const RestaurantDetail = () => {
 											<div className="fs-16 fw-500">
 												Giá đặt bàn:{" "}
 												<span className="primary">
-													{formatNumberToK(
+													{restaurantDetail?.price === 0 ? <span>Miễn phí</span> : (restaurantDetail?.discount > 0 ? <span><s style={{color: 'gray'}}>{formatNumberToK(restaurantDetail?.price)}</s> <span className="ml-10">{formatNumberToK(restaurantDetail?.price * (1 - restaurantDetail?.discount/100))}</span> </span> : <span>{formatNumberToK(restaurantDetail?.price)}</span>) }
+													{/* {formatNumberToK(
 														restaurantDetail?.price
-													)}
+													)} */}
 												</span>
 											</div>
 											<div className="fs-16 fw-500 mb-15">
