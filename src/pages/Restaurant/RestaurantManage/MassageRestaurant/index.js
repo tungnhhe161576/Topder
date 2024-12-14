@@ -138,7 +138,7 @@ const MassageRestaurant = () => {
 									getChatList(i);
 									chatRef.current = i;
 								}}
-								style={{cursor: 'pointer'}}
+								style={{cursor: 'pointer', marginBottom: '20px'}}
 							>
 								<div className="d-flex align-items-center">
 									<div className="pl-20 mr-20">
