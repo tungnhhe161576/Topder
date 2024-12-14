@@ -29,6 +29,7 @@ const ChatComponent = ({ open, onCancel, getChatBox, chatBox }) => {
 	const user = useSelector(userInfor);
 	const ref = useRef(null);
 	const chatRef = useRef(null);
+	const messagesEndRef = useRef(null);
 
 	// const chatHandlerRef = useRef()
 
@@ -59,6 +60,7 @@ const ChatComponent = ({ open, onCancel, getChatBox, chatBox }) => {
 				content: message,
 			});
 			setMessage("");
+			scrollToBottom()
 			ref.current?.focus();
 		} catch (error) {
 			console.log(error);
@@ -90,7 +92,6 @@ const ChatComponent = ({ open, onCancel, getChatBox, chatBox }) => {
 			}
 		});
 	}, []);
-	console.log("dsd", chatList);
 
 	const items = [
 		{
@@ -119,6 +120,16 @@ const ChatComponent = ({ open, onCancel, getChatBox, chatBox }) => {
 			console.log(error);
 		}
 	};
+
+	const scrollToBottom = () => {
+		messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+	};
+
+	useEffect(() => {
+		if (chatList.length > 0) {
+		  	scrollToBottom();
+		}
+	}, [chatList]);
 
 	return (
 		<ChatComponentContainer>
@@ -283,6 +294,7 @@ const ChatComponent = ({ open, onCancel, getChatBox, chatBox }) => {
 										</div>
 									</div>
 								))}
+								<div ref={messagesEndRef} />
 							</div>
 						</SpinCustom>
 						<div className="send-mess p-10">

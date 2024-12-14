@@ -20,7 +20,8 @@ const MassageRestaurant = () => {
 	const [modalDeleteChatBox, setModalDeleteChatBox] = useState(false);
 	const user = useSelector(userInfor);
 	const ref = useRef();
-	const chatRef = useRef(null);
+	const chatRef = useRef(null)
+	const messagesEndRef = useRef(null)
 
 	const getChatBox = async () => {
 		try {
@@ -50,6 +51,7 @@ const MassageRestaurant = () => {
 				content: message,
 			});
 			setMessage("");
+			scrollToBottom();
 			ref.current?.focus();
 		} catch (error) {
 			console.log(error);
@@ -110,6 +112,16 @@ const MassageRestaurant = () => {
 			console.log(error);
 		}
 	};
+
+	const scrollToBottom = () => {
+		messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+	};
+
+	useEffect(() => {
+		if (chatList.length > 0) {
+		  	scrollToBottom();
+		}
+	}, [chatList]);
 
 	return (
 		<RestaurantLayout>
@@ -262,6 +274,7 @@ const MassageRestaurant = () => {
 								</div>
 							</div>
 						))}
+						<div ref={messagesEndRef} />
 					</div>
 					{/* </SpinCustom> */}
 					<div className="send-mess p-10">
