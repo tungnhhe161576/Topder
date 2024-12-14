@@ -2,7 +2,7 @@ import { HubConnectionBuilder } from '@microsoft/signalr';
 
 
 export const connection = new HubConnectionBuilder()
-    .withUrl("https://localhost:7134/signalR") 
+    .withUrl("https://dovandat1611-001-site1.mtempurl.com/signalR") 
     .withAutomaticReconnect()
     .build();
 
