@@ -174,7 +174,7 @@ const ModalChooseFood = ({ open, onCancel, foods, setFoods, restaurantId }) => {
 				onCancel={onCancel}
 				width={800}
 				footer={footer}
-				style={{ marginTop: "50px" }}
+				style={{ marginTop: "-80px" }}
 			>
 				<ModalChooseFoodContainer>
 					<div className="fs-22 fw-600 d-flex justify-content-center">

@@ -898,10 +898,11 @@ const RestaurantDetail = () => {
 																			showTime={{
 																				format: "HH:mm",
 																				disabledHours:
-																					getDisabledHours,
+																				getDisabledHours,
 																				disabledMinutes:
-																					getDisabledMinutes,
+																				getDisabledMinutes,
 																			}}
+																			showNow={false}
 																			onChange={(
 																				e
 																			) =>
