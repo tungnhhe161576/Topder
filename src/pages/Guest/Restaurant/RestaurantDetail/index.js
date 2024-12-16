@@ -39,6 +39,7 @@ import Policy from "./Description/Policy";
 import ModalSuccess from "../../../../components/Modal/ModalSuccess";
 import ModalReport from "./Modal/ModalReport";
 import { SiGooglemaps } from "react-icons/si";
+import Menus from "./Description/Menus";
 
 const RestaurantDetail = () => {
 	const [selectedOption, setSelectedOption] = useState("description");
@@ -305,6 +306,7 @@ const RestaurantDetail = () => {
 	};
 	const options = [
 		{ label: "Mô Tả", value: "description" },
+		{ label: "Món ăn", value: "menu" },
 		{ label: "Đánh giá", value: "rate" },
 		{ label: "Chính sách", value: "policy" },
 	];
@@ -645,9 +647,8 @@ const RestaurantDetail = () => {
 								</Row>
 							</div>
 
-							{/* chi tiet: mô tả và đánh giá */}
 							<div className="description">
-								<div className="segment w-20">
+								<div className="segment w-60">
 									<Segmented
 										options={options}
 										block
@@ -670,12 +671,16 @@ const RestaurantDetail = () => {
 										<RestaurantRate
 											restaurantId={restaurantId}
 										/>
-									) : (
+									) : selectedOption === 'policy' ? (
 										<Policy
 											restaurantId={restaurantId}
 											restaurantDetail={restaurantDetail}
 										/>
-									)}
+									) : <Menus
+											restaurantId={restaurantId}
+											restaurantDetail={restaurantDetail}
+										/>
+									}
 								</div>
 							</div>
 						</Col>
