@@ -104,7 +104,7 @@ const Complete = ({
 				<span>
 					{" "}
 					{value === "Entire Order"
-						? `hanh toán toàn bộ đơn hàng: ${formatNumberToK(record?.totalPaymentAmount)}`
+						? `Thanh toán toàn bộ đơn hàng: ${formatNumberToK(record?.totalPaymentAmount)}`
 						: `Thanh toán tiền cọc: ${formatNumberToK(record?.totalPaymentAmount)}`}
 				</span>
 			),

@@ -57,7 +57,7 @@ const ModalDiscount = ({
 													{open?.map((d) => (
 														<Col
 															key={d?.discountId}
-															span={12}
+															span={open?.length === 1 ? 24 : 12}
 														>
 															<Radio
 																value={d}
