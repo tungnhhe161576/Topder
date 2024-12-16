@@ -12,7 +12,7 @@ import {
 	InputNumber,
 	message,
 } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { CameraOutlined, PlusOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { RegisterRestaurantContainer } from "./styled";
 import {
@@ -24,6 +24,7 @@ import logo from "../../../assets/images/logo.png";
 import dayjs from "dayjs";
 import axios from "axios";
 import UserService from "../../../services/UserService";
+import ImageService from "../../../services/ImageService";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const getBase64 = (file) =>
@@ -46,7 +47,7 @@ const RegisterRestaurant = () => {
 	const [previewOpen, setPreviewOpen] = useState(false);
 	const [previewImage, setPreviewImage] = useState("");
 	const [fileList, setFileList] = useState([]);
-
+	const [giayPhepKinhDoanh, setGiayPhepKinhDoanh] = useState(null)
 	const [cities, setCities] = useState([]);
 	const [districts, setDistricts] = useState([]);
 	const [wards, setWards] = useState([]);
@@ -132,7 +133,6 @@ const RegisterRestaurant = () => {
 
 		fetchCategories();
 	}, []);
-	console.log("user", categories);
 
 	const handlePreview = async (file) => {
 		if (!file.url && !file.preview) {
@@ -203,9 +203,27 @@ const RegisterRestaurant = () => {
 	};
 
 	const onFinish = (values) => {
-		console.log("Form values: ", values);
 		form.resetFields();
 	};
+
+	const handleBeforeUpload = (file) => {
+		const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
+		const isAllowedType = allowedImageTypes.includes(file.type);
+		if (!isAllowedType) {
+			message.open({
+				content:
+					"Vui lòng chọn file hình ảnh đúng định dạng (JPG, PNG, GIF).",
+				type: "error",
+				style: {
+					marginTop: "10vh",
+				},
+			});
+		} else {
+			setGiayPhepKinhDoanh(URL.createObjectURL(file));
+		}
+		return isAllowedType ? false : Upload.LIST_IGNORE;
+	};
+
 	const handleRegister = async () => {
 		const values = await form.validateFields();
 		try {
@@ -228,17 +246,18 @@ const RegisterRestaurant = () => {
 					openTime: dayjs(values?.openTime).format("HH:mm"),
 					closeTime: dayjs(values?.closeTime).format("HH:mm"),
 				};
-				const res = await UserService.registerRestaurant({
+				
+				const fileGiayPhep = values.subdescription.file;
+				const formData = new FormData();
+				formData.append("file", fileGiayPhep);
+				const getImage = await ImageService.uploadImage(formData);
+				setGiayPhepKinhDoanh(getImage.url);
+
+				await UserService.registerRestaurant({
 					...data,
 					File: fileList[0].originFileObj,
+					subdescription: getImage?.url,
 				});
-				// message.open({
-				// 	content: res.message || "Đăng ký nhà hàng thành công.",
-				// 	type: "success",
-				// 	style: {
-				// 		marginTop: "20vh",
-				// 	},
-				// });
 				toast.success(
 					"Đăng ký thành công. Vui lòng kiểm tra email để xác minh tài khoản",
 					{
@@ -341,10 +360,10 @@ const RegisterRestaurant = () => {
 					</Row>
 
 					<Row gutter={[24, 16]}>
-						<Col xs={24} sm={24} md={12} lg={12}>
+						<Col xs={12} sm={12} md={6} lg={6}>
 							<Form.Item
 								name="logo"
-								label="Logo hoặc Ảnh Trang Đầu"
+								label="Ảnh nhà hàng"
 								value="fileList"
 							>
 								<Upload
@@ -372,6 +391,32 @@ const RegisterRestaurant = () => {
 										src={previewImage}
 									/>
 								)}
+							</Form.Item>
+						</Col>
+						<Col xs={12} sm={12} md={6} lg={6}>
+							<Image src={giayPhepKinhDoanh} alt="avatar" />
+							<Form.Item
+								name="subdescription"
+								label="Giấy phép kinh doanh"
+								value="fileList"
+							>
+								<Upload.Dragger
+									className="dragger"
+									beforeUpload={(file) =>
+										handleBeforeUpload(file)
+									}
+									style={{
+										width: "100%",
+										height: "150px",
+										border: "none",
+									}}
+									accept="image/*"
+									multiple={false}
+									maxCount={1}
+									fileList={[]}
+								>
+									<CameraOutlined className="fs-20" />
+								</Upload.Dragger>
 							</Form.Item>
 						</Col>
 

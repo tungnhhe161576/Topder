@@ -79,7 +79,7 @@ const ModalCalFee = ({
 				timeReservation: dayjs(open?.timeReservation).format(
 					"HH:mm:ss"
 				),
-				dateReservation: dayjs(open?.dateReservation).format(),
+				dateReservation: dayjs(open?.dateReservation).format('YYYY-MM-DD'),
 				numberPerson: open?.numberPerson,
 				numberChild: open?.numberChild,
 				contentReservation: open?.contentReservation,

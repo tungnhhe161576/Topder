@@ -151,7 +151,8 @@ const ModalViewDetail = ({ open, onCancel }) => {
 								className="fs-14"
 								style={{ fontStyle: "italic" }}
 							>
-								{open?.subdescription ? (
+								<Image className="mt-10" width={200} src={open?.subdescription} alt="giayphepkinhdoanh" />
+								{/* {open?.subdescription ? (
 									<span
 										dangerouslySetInnerHTML={{
 											__html: open?.subdescription,
@@ -159,7 +160,7 @@ const ModalViewDetail = ({ open, onCancel }) => {
 									/>
 								) : (
 									"Nhà hàng chưa có mô tả ngắn gọn"
-								)}
+								)} */}
 							</div>
 						</div>
 					</Col>
