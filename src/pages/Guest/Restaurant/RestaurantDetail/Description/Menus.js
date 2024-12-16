@@ -21,7 +21,7 @@ const Menus = ({restaurantId, restaurantDetail}) => {
 	};
 	useEffect(() => {
 		getMenu();
-	}, []);
+	}, [restaurantId]);
 
 
     
