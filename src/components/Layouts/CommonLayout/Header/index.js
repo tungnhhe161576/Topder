@@ -43,6 +43,9 @@ const Header = () => {
 	const [category, setCategory] = useState([]);
 	const location = useLocation();
 
+	console.log('user', user);
+	
+
 	const handleToggleNoti = () => {
 		if (isExpanded) {
 			setNumberNoti(6);
@@ -75,7 +78,7 @@ const Header = () => {
 			const initSignalR = async () => {
 				await startConnection();
 				onReceiveNoti((data) => {
-					const notiData = data.find((i) => i?.uid === user?.uid);
+					const notiData = data.find((i) => i?.uid === parseInt(user?.uid));
 					if (!!notiData) {
 						setNotis((prev) => [notiData, ...prev]);
 					}
