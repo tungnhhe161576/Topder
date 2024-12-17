@@ -53,6 +53,7 @@ import AdsManagement from "../pages/Admin/AdsManagement";
 import MassageRestaurant from "../pages/Restaurant/RestaurantManage/MassageRestaurant";
 import ManageReport from "../pages/Admin/ManageReport";
 import PolicyManage from "../pages/Admin/PolicyManage";
+import OrderDetail from "../pages/Transaction/OrderDetail";
 
 const LazyLoadingComponent = ({ children }) => {
 
@@ -193,6 +194,10 @@ export const router = [
 				element: <DepositOrWithdraw />,
 			},
 		],
+	},
+	{
+		path: "order-detail/:id",
+		element: <OrderDetail />,
 	},
 	{
 		path: "user-profile",

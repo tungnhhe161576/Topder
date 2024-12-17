@@ -96,6 +96,12 @@ export const HistoryContainer = styled.div `
     .cancel-btn:hover {
         background-color: #4f5152;
     }
+    .qr-btn {
+        background-color: #8bc34a;
+    }
+    .qr-btn:hover {
+        background-color:rgb(149, 228, 59);
+    }
 
 
 

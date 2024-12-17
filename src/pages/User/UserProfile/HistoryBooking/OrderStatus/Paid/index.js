@@ -6,6 +6,7 @@ import ModalCancelOrder from "../../Modal/CancelOrder";
 import { useState } from "react";
 import { formatNumberToK } from "../../../../../../lib/stringUtils";
 import { SiGooglemaps } from "react-icons/si";
+import ModalShowQR from "../../Modal/ModalShowQR";
 
 const Paid = ({
 	getHistoryOrder,
@@ -17,6 +18,7 @@ const Paid = ({
 	handleViewDetail,
 }) => {
 	const [openModalCancelOrder, setOpenModalCancelOrder] = useState(false);
+	const [openModalShowQR, setOpenModalShowQR] = useState(false);
 
 	const columns = [
 		{
@@ -134,6 +136,12 @@ const Paid = ({
 						Chi Tiết
 					</button>
 					<button
+						className="btn qr-btn"
+						onClick={() => setOpenModalShowQR(record)}
+					>
+						Mã QR
+					</button>
+					<button
 						className="btn cancel-btn"
 						onClick={() => setOpenModalCancelOrder(record)}
 					>
@@ -173,6 +181,13 @@ const Paid = ({
 					open={openModalCancelOrder}
 					onCancel={() => setOpenModalCancelOrder(false)}
 					onOk={getHistoryOrder}
+				/>
+			)}
+			{!!openModalShowQR && (
+				<ModalShowQR
+					open={openModalShowQR}
+					onCancel={() => setOpenModalShowQR(false)}
+					// onOk={getHistoryOrder}
 				/>
 			)}
 		</div>
