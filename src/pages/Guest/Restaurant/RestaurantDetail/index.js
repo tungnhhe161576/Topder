@@ -888,7 +888,7 @@ const RestaurantDetail = () => {
 																						.hour(value.hour())
 																						.minute(value.minute());
 																					const diffInMinutes = selectedTime.diff(now, 'minute');
-																					if (diffInMinutes >= 20) {
+																					if (diffInMinutes >= 30) {
 																						return Promise.resolve()
 																					}
 																					return Promise.reject(
