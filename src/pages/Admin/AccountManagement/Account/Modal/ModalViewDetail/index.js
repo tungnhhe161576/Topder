@@ -146,12 +146,19 @@ const ModalViewDetail = ({ open, onCancel }) => {
 						</div>
 
 						<div>
-							<div className="fs-16 fw-500">Mô tả ngắn gọn: </div>
+							<div className="fs-16 fw-500">
+								Giấy phép kinh doanh:{" "}
+							</div>
 							<div
 								className="fs-14"
 								style={{ fontStyle: "italic" }}
 							>
-								<Image className="mt-10" width={200} src={open?.subdescription} alt="giayphepkinhdoanh" />
+								<Image
+									className="mt-10"
+									width={200}
+									src={open?.subdescription}
+									alt="giayphepkinhdoanh"
+								/>
 								{/* {open?.subdescription ? (
 									<span
 										dangerouslySetInnerHTML={{
