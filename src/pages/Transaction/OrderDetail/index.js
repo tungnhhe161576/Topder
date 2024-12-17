@@ -44,7 +44,7 @@ const OrderDetail = () => {
                 {/* <div className="info-item"><strong>Nhà hàng:</strong> <span><strong>{detail?.}</strong></span></div> */}
                 <div className="info-item"><strong>Số lượng khách:</strong> <span><strong>{detail?.numberPerson + detail?.numberChild}</strong></span></div>
                 <div className="info-item"><strong>Ngày đặt bàn:</strong> <span>{dayjs(detail?.createdAt).format('DD-MM-YYYY')}</span></div>
-                <div className="info-item"><strong>Thời gian nhận bàn:</strong> <span>Ngày: {dayjs(detail?.dateReservation).format('DD-YY-MMMM')}</span> <span className="ml-8">{detail?.timeReservation}</span></div>
+                <div className="info-item"><strong>Thời gian nhận bàn:</strong> <span>Ngày: {dayjs(detail?.dateReservation).format('DD-MM-YYYY')}</span> <span className="ml-8">{detail?.timeReservation}</span></div>
                 <div className="info-item"><strong>Tổng tiền đã thanh toán:</strong> <span> {formatNumberToK(detail?.totalPaymentAmount)}</span></div>
                 </div>
                 <div className="room-info">
