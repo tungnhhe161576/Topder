@@ -20,7 +20,7 @@ const Policy = ({restaurantId, restaurantDetail}) => {
     }
     useEffect(() => {
         getDataPolicy()
-    }, [])
+    }, [restaurantId])
     
     return (  
         <SpinCustom spinning={loading} >
