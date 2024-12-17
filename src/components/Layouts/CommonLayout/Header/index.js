@@ -43,9 +43,6 @@ const Header = () => {
 	const [category, setCategory] = useState([]);
 	const location = useLocation();
 
-	console.log('user', user);
-	
-
 	const handleToggleNoti = () => {
 		if (isExpanded) {
 			setNumberNoti(6);
@@ -476,17 +473,17 @@ const Header = () => {
 							>
 								<PhoneOutlined
 									style={{ transform: "skew(0deg)" }}
-								/>{" "}
+								/>
 								0931 589 123
 							</a>
 						</span>
 					</div>
 					<div className="contact-icon">
-						<div className="icon">
-							<TikTokOutlined />{" "}
+						<div style={{cursor: 'pointer'}} className="icon" onClick={() => window.location.href = 'https://www.facebook.com/TopderVietnam'}>
+							<TikTokOutlined />
 						</div>
-						<div className="icon">
-							<IconFont type="icon-facebook" />{" "}
+						<div style={{cursor: 'pointer'}} className="icon" onClick={() => window.location.href = 'https://www.facebook.com/TopderVietnam'}>
+							<IconFont type="icon-facebook" />
 						</div>
 					</div>
 				</div>

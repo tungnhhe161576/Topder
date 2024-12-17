@@ -854,21 +854,15 @@ const RestaurantDetail = () => {
 															noStyle
 															shouldUpdate
 														>
-															{({
-																getFieldValue,
-															}) => {
+															{({getFieldValue}) => {
 																const selectedDate =
-																	getFieldValue(
-																		"date"
-																	);
+																	getFieldValue("date")
 																return selectedDate ? (
 																	<Form.Item
 																		name="time"
 																		label={
 																			<span className="fs-14 white ml-8">
-																				Giờ
-																				đặt
-																				bàn
+																				Giờ đặt bàn
 																			</span>
 																		}
 																		rules={[
@@ -877,20 +871,36 @@ const RestaurantDetail = () => {
 																				message:
 																					(
 																						<span
-																							style={{
-																								color: "black",
-																								marginLeft:
-																									"15px",
-																							}}
+																							style={{ color: "black", marginLeft: "15px"}}
 																						>
-																							Hãy
-																							chọn
-																							giờ
-																							cụ
-																							thể!
+																							Hãy chọn giờ cụ thể!
 																						</span>
 																					),
 																			},
+																			({ getFieldValue }) => ({
+																				validator(_, value) {
+																					const now = dayjs();
+																					const selectedDate = getFieldValue('date');
+																					if (!selectedDate || !value) {
+																						return Promise.resolve(); 
+																					}
+																					const selectedTime = dayjs(selectedDate)
+																						.hour(value.hour())
+																						.minute(value.minute());
+																					const diffInMinutes = selectedTime.diff(now, 'minute');
+																					if (diffInMinutes >= 20) {
+																						return Promise.resolve()
+																					}
+																					return Promise.reject(
+																						<span
+																						style={{
+																							color: "black",
+																						}}
+																						className="ml-15"
+																					> Thời gian chọn phải lớn hơn 30 phút so với hiện tại! </span>
+																					);
+																				},
+																			}),
 																		]}
 																	>
 																		<DatePicker

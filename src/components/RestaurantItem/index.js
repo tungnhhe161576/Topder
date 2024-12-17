@@ -208,18 +208,11 @@ const RestaurantItem = ({
 							<span>Xem chi tiết</span>
 						)}
 					</div>
-					{/* {!isWishlist ? ( */}
 					<div
 						className={`drop-heart ${
 							isLiked ? "liked" : "default"
 						}`}
-						// onClick={() => handleCreateChatBox()}
 						onClick={() => handleLikeClick()}
-						style={
-							{
-								// backgroundColor: isLiked ? "#fa875c" : "",
-							}
-						}
 					>
 						{isLiked ? (
 							<FaHeart
@@ -236,7 +229,6 @@ const RestaurantItem = ({
 								}}
 							/>
 						)}
-						{/* Chat */}
 					</div>
 					<div
 						className="chat-option"

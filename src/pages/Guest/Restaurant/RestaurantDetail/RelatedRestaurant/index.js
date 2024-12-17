@@ -7,6 +7,7 @@ import { RelatedRestaurantContainer } from "./styled";
 import { HeartOutlined, WechatOutlined } from "@ant-design/icons";
 import ModalRequestLogin from "../../../../../components/Modal/RequestLogin";
 import { formatNumberToK } from "../../../../../lib/stringUtils";
+import { FaHeart } from "react-icons/fa";
 
 const RelatedRestaurant = ({ data, user, isWishlist, onRemove }) => {
 	const nav = useNavigate();
@@ -180,24 +181,27 @@ const RelatedRestaurant = ({ data, user, isWishlist, onRemove }) => {
 							<span>Xem chi tiết</span>
 						)}
 					</div>
-					{/* {!isWishlist ? ( */}
 					<div
 						className={`drop-heart ${
 							isLiked ? "liked" : "default"
 						}`}
-						// onClick={() => handleCreateChatBox()}
 						onClick={() => handleLikeClick()}
-						style={{
-							backgroundColor: isLiked ? "#f55b22" : "",
-						}}
 					>
-						<HeartOutlined
-							style={{
-								color: "#fa875c",
-								cursor: "pointer",
-							}}
-						/>
-						{/* Chat */}
+						{isLiked ? (
+							<FaHeart
+								style={{
+									color: "#fa875c",
+									cursor: "pointer",
+								}}
+							/>
+						) : (
+							<HeartOutlined
+								style={{
+									color: "#fa875c",
+									cursor: "pointer",
+								}}
+							/>
+						)}
 					</div>
 					<div
 						className="chat-option"
